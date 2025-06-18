@@ -1,0 +1,256 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "name": "Delivery Driver",
+      "emoji": "🚚",
+      "traditional_equivalent": "The Rider",
+      "core_meaning": "News, incoming changes, arrivals, messages",
+      "duck_question": "What's heading your way?",
+      "visual_description": "A delivery driver in a recognizable uniform (think Amazon, UPS vibes) holding a package, with a delivery truck in the background. The package has a question mark on it, and there's a subtle sense of motion - maybe some dust clouds or speed lines. The driver has a friendly but hurried expression, checking their phone/scanner.",
+      "perspective_prompts": [
+        "What information are you avoiding that's trying to reach you?",
+        "What change is already in motion that you haven't acknowledged?",
+        "Who's trying to communicate something important that you've been missing?",
+        "What 'delivery' are you expecting that might not arrive as planned?",
+        "What news would actually help you move forward right now?"
+      ],
+      "block_applications": {
+        "creative": "Something new is coming to break your stalemate - a collaboration, feedback, or inspiration from an unexpected source. Stop waiting and start looking.",
+        "decision": "The information you need to decide is already en route. Check your messages, ask that person, or admit what you already know deep down.",
+        "work": "A project update, client feedback, or team communication is about to shift your priorities. Prepare for pivot mode.",
+        "life": "Someone's reaching out or something's changing in your environment. Pay attention to what's actually arriving instead of what you think should arrive.",
+        "relationship": "Communication is coming - but are you ready to receive it? Clear the channel and listen for what's really being said."
+      },
+      "duck_wisdom": "Just like that package you've been tracking obsessively, sometimes the solution is already on its way. Stop refreshing the status page and prepare to receive what's coming. And hey - maybe check your spam folder while you're at it.",
+      "reversed_meaning": "Delayed information, missed messages, refusing to acknowledge incoming changes, or being so focused on what you expect that you miss what's actually arriving.",
+      "tags": ["communication", "change", "information", "arrival", "news"]
+    },
+    {
+      "id": 2,
+      "name": "Lottery Ticket",
+      "emoji": "🎫",
+      "traditional_equivalent": "The Clover",
+      "core_meaning": "Chance, opportunity, calculated risks, luck",
+      "duck_question": "What risk might pay off?",
+      "visual_description": "A scratch-off lottery ticket in the process of being scratched, with a coin beside it. Some numbers are revealed, others still hidden under the silver coating. There's a subtle glow or shimmer around the unscratched areas, suggesting potential. The ticket sits on a desk next to a coffee cup and keyboard, making it feel like an everyday decision moment.",
+      "perspective_prompts": [
+        "What small bet could you make that has asymmetric upside?",
+        "What opportunity are you dismissing because the odds seem low?",
+        "What would you attempt if you knew you couldn't fail completely?",
+        "What 'lottery ticket' have you already bought but haven't scratched yet?",
+        "What chance are you not taking because you're focused on guaranteed outcomes?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to guarantee success and start experimenting. Your next breakthrough might come from the project you think is 'just for fun.'",
+        "decision": "You're paralyzed by trying to pick the sure thing. Make a small, reversible bet on the wild card option and see what happens.",
+        "work": "That side project, skill, or networking opportunity you've been putting off might be your ticket out. Start small, but start.",
+        "life": "You're stuck in the safe zone. What's one low-risk experiment that could open unexpected doors?",
+        "relationship": "Someone or something unexpected might be worth a chance. Stop calculating and start connecting."
+      },
+      "duck_wisdom": "You're coding like every function needs 100% test coverage. Sometimes you need to deploy the feature and see if users actually want it. Make small bets, fail fast, iterate. That weird idea you dismissed? Maybe scratch that ticket first.",
+      "reversed_meaning": "Gambling away certainty for false hope, taking reckless risks without strategy, or being so focused on the big win that you miss the small opportunities already in front of you.",
+      "tags": ["risk", "opportunity", "chance", "experiment", "potential"]
+    },
+    {
+      "id": 3,
+      "name": "Airplane",
+      "emoji": "✈️",
+      "traditional_equivalent": "The Ship",
+      "core_meaning": "Movement, escape, journey, departure",
+      "duck_question": "What needs to change location?",
+      "visual_description": "A commercial airplane mid-takeoff, angled upward against a sky with scattered clouds. The plane is modern and sleek, with subtle motion blur on the wings. Below, you can see a small airport terminal and runway getting smaller. There's a sense of momentum and leaving something behind, with the horizon suggesting new destinations ahead.",
+      "perspective_prompts": [
+        "What are you trying to fix that would be better off relocated entirely?",
+        "What environment is holding you back that you could simply leave?",
+        "What would happen if you moved this problem to a completely different context?",
+        "What are you trying to optimize when you should be migrating?",
+        "What destination are you avoiding because the journey feels too big?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to force creativity in the same environment. Change your physical space, tools, or medium entirely. Sometimes the block isn't in you, it's in your setup.",
+        "decision": "You're stuck because you're trying to choose between bad options in the same framework. Zoom out - what if you changed the entire context of the decision?",
+        "work": "That toxic team, outdated tech stack, or dead-end role isn't going to magically improve. Sometimes the best debugging is a clean migration to something better.",
+        "life": "You're optimizing a life situation that fundamentally doesn't work. What would moving (literally or metaphorically) solve that no amount of local fixes can?",
+        "relationship": "Stop trying to have the same conversation in the same setting. Change the venue, medium, or timing entirely."
+      },
+      "duck_wisdom": "You're spending way too much time trying to optimize a system that's fundamentally broken. Sometimes the best refactor is a complete rewrite in a new environment. Stop trying to patch legacy code and start fresh somewhere else.",
+      "reversed_meaning": "Running away from problems that would follow you anywhere, avoiding commitment to see things through, or being so focused on escape that you miss local solutions.",
+      "tags": ["movement", "change", "environment", "migration", "escape"]
+    },
+    {
+      "id": 4,
+      "name": "Smart Home",
+      "emoji": "🏠",
+      "traditional_equivalent": "The House",
+      "core_meaning": "Foundation, security, base operations, stability",
+      "duck_question": "What's your safe base?",
+      "visual_description": "A modern smart home with subtle tech indicators - doorbell camera, solar panels, smart windows with a soft glow. The house looks secure and well-maintained, surrounded by a neat yard. There's a sense of both traditional stability and modern efficiency. The front door is slightly open, suggesting welcome but also control over who enters.",
+      "perspective_prompts": [
+        "What foundation do you keep taking for granted until it breaks?",
+        "What 'home base' do you need to establish before taking bigger risks?",
+        "What security do you have that you're not leveraging properly?",
+        "What would give you enough stability to experiment more freely?",
+        "What basic infrastructure are you neglecting while chasing shiny objects?"
+      ],
+      "block_applications": {
+        "creative": "Your creative foundation is shaky - inconsistent workspace, unreliable tools, or unstable routine. Lock down your basics before expecting breakthrough work.",
+        "decision": "You're making big choices without a solid fallback plan. What safety net do you need to feel confident taking the leap?",
+        "work": "Your professional foundation needs attention - skills, network, or financial runway. Shore up your base before making dramatic moves.",
+        "life": "You're trying to build excitement on an unstable foundation. What core life infrastructure needs your attention first?",
+        "relationship": "The relationship lacks a solid foundation of trust, communication, or shared values. Address the basics before tackling the complex stuff."
+      },
+      "duck_wisdom": "You're trying to deploy to production with a broken CI/CD pipeline. Fix your infrastructure first - reliable backup systems, clear documentation, and solid foundations. Once your base is stable, everything else gets easier.",
+      "reversed_meaning": "Over-focusing on security and stability to the point of stagnation, using 'foundation building' as an excuse to avoid taking action, or clinging to outdated infrastructure.",
+      "tags": ["foundation", "security", "stability", "infrastructure", "base"]
+    },
+    {
+      "id": 5,
+      "name": "Solar Panel",
+      "emoji": "🌞",
+      "traditional_equivalent": "The Tree",
+      "core_meaning": "Growth, sustainability, long-term energy, patience",
+      "duck_question": "What energizes you long-term?",
+      "visual_description": "A sleek solar panel installation on a rooftop, gleaming in bright sunlight. The panels are angled optimally, with subtle electrical connections visible. In the background, you can see a power meter running backward, and there's a sense of clean, efficient energy conversion. The sun is prominent but not overwhelming, suggesting consistent, reliable power generation.",
+      "perspective_prompts": [
+        "What investment of time now would pay energy dividends for years?",
+        "What are you burning out on that could be made sustainable instead?",
+        "What skill or system could you build once and benefit from forever?",
+        "What's draining your energy that you keep manually fixing instead of automating?",
+        "What would give you more energy if you approached it differently?"
+      ],
+      "block_applications": {
+        "creative": "You're burning creative energy on the wrong things. What systems, skills, or workflows could you build once to make future creative work effortless?",
+        "decision": "You're stuck in short-term thinking. What choice sets you up for sustainable success rather than quick wins that burn you out?",
+        "work": "You're in an energy-draining cycle. What career investment now would compound into easier, more fulfilling work later?",
+        "life": "You're running on willpower instead of building sustainable systems. What lifestyle change would give you more energy rather than requiring it?",
+        "relationship": "You're putting in constant effort to maintain something. What foundation could you build to make the relationship naturally energizing instead of exhausting?"
+      },
+      "duck_wisdom": "You're writing the same bug fix over and over instead of refactoring the root cause. Think infrastructure, not patches. What system could you build once that solves this class of problems forever? Stop being a human cron job.",
+      "reversed_meaning": "Waiting for perfect conditions before starting, over-investing in systems that never pay off, or being so focused on future sustainability that you ignore immediate energy needs.",
+      "tags": ["sustainability", "energy", "automation", "long-term", "systems"]
+    },
+    {
+      "id": 6,
+      "name": "Weather App",
+      "emoji": "📱",
+      "traditional_equivalent": "The Clouds",
+      "core_meaning": "Uncertainty, mood, atmospheric conditions, forecasting",
+      "duck_question": "What's unclear right now?",
+      "visual_description": "A smartphone displaying a weather app with conflicting forecasts - multiple weather services showing different predictions for the same day. The screen shows partly cloudy with a chance of rain, but there's disagreement in the details. Behind the phone, you can see an actual window with ambiguous weather - could be clearing up or getting worse.",
+      "perspective_prompts": [
+        "What are you trying to predict that you should just prepare for instead?",
+        "What uncertainty are you treating like a problem to solve rather than a condition to navigate?",
+        "What 'forecast' are you trusting that might be completely wrong?",
+        "What would you do differently if you accepted you can't know the outcome?",
+        "What clarity are you waiting for that's never coming?"
+      ],
+      "block_applications": {
+        "creative": "You're waiting for perfect creative conditions that don't exist. Start working with the uncertainty instead of waiting for inspiration to clear up.",
+        "decision": "You're trying to predict outcomes with incomplete data. Make the best reversible decision with what you know now.",
+        "work": "You're paralyzed by unclear project requirements or shifting priorities. Build adaptable systems instead of perfect plans.",
+        "life": "You're waiting for life circumstances to become clear before making moves. Start navigating the ambiguity instead of waiting it out.",
+        "relationship": "You're trying to read unclear signals instead of creating clear communication. Stop forecasting their mood and start stating your needs."
+      },
+      "duck_wisdom": "You're trying to write perfect code for requirements that keep changing. Build flexible systems that can handle multiple scenarios instead of waiting for the product manager to make up their mind.",
+      "reversed_meaning": "Avoiding necessary uncertainty, over-relying on predictions that can't be made, or creating false clarity to avoid dealing with real ambiguity.",
+      "tags": [
+        "uncertainty",
+        "prediction",
+        "ambiguity",
+        "flexibility",
+        "adaptation"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Charging Cable",
+      "emoji": "🔌",
+      "traditional_equivalent": "The Snake",
+      "core_meaning": "Connection, complexity, entanglement, energy transfer",
+      "duck_question": "What's tangled up?",
+      "visual_description": "A charging cable that's impossibly knotted and twisted, lying on a desk next to a laptop with a low battery warning. Despite the mess, you can see both ends - the power source and the device that needs charging. There's a sense that untangling it would solve the immediate problem, but it looks like it would take forever.",
+      "perspective_prompts": [
+        "What complex situation could be solved by finding the right connection point?",
+        "What are you overcomplicating that has a simple linking solution?",
+        "What tangled mess are you avoiding because untangling feels impossible?",
+        "What energy transfer is being blocked by unnecessary complexity?",
+        "What would happen if you started from both ends and worked toward the middle?"
+      ],
+      "block_applications": {
+        "creative": "Your creative process is tangled up in too many tools, steps, or requirements. Find the direct path from idea to output.",
+        "decision": "You've created a complex decision matrix when you need to find the core connection between your values and options.",
+        "work": "Your workflow is tangled up in unnecessary complexity. What's the simplest path from input to deliverable?",
+        "life": "You're dealing with interconnected problems that feel impossible to separate. Pick one thread and follow it.",
+        "relationship": "Communication is tangled up in old issues and misunderstandings. Find the direct connection point and start there."
+      },
+      "duck_wisdom": "You've got spaghetti code when you need a clean function. Stop trying to debug the whole mess at once - trace one connection from input to output and refactor from there.",
+      "reversed_meaning": "Creating unnecessary complexity to avoid simple solutions, getting lost in details instead of following the main connection, or avoiding untangling because the mess feels manageable.",
+      "tags": [
+        "complexity",
+        "connection",
+        "simplification",
+        "debugging",
+        "entanglement"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Recycle Bin",
+      "emoji": "🗑️",
+      "traditional_equivalent": "The Coffin",
+      "core_meaning": "Endings, renewal, clearing out, transformation",
+      "duck_question": "What needs to be cleared out?",
+      "visual_description": "A desktop recycle bin icon that's full and needs to be emptied, sitting on a computer screen. Around it, you can see file icons and folders - some clearly outdated (old project names, deprecated formats). The recycle bin has that 'full' appearance with papers slightly spilling out the top. There's a cursor hovering over 'Empty Recycle Bin' but not quite clicking.",
+      "perspective_prompts": [
+        "What are you keeping around that's taking up mental space for no reason?",
+        "What ended that you're still treating like it's active?",
+        "What would you have room for if you cleared out the digital/mental clutter?",
+        "What are you afraid to delete permanently?",
+        "What old version of yourself are you still running instead of upgrading?"
+      ],
+      "block_applications": {
+        "creative": "Your creative space is cluttered with old projects, tools, or ideas that are draining your energy. Clean house first, create second.",
+        "decision": "You're weighing options that include things that are already dead. Stop considering the zombie choices and focus on what's actually alive.",
+        "work": "You're maintaining legacy systems, relationships, or responsibilities that should have been deprecated long ago.",
+        "life": "You're carrying around old identities, habits, or commitments that don't fit your current life. Time for a major cleanup.",
+        "relationship": "Old conflicts, grudges, or patterns are cluttering up the present relationship. Clear the cache and start fresh."
+      },
+      "duck_wisdom": "You're keeping dead code in production because you're afraid to break something. That deprecated function isn't helping anyone - delete it and see what actually breaks. Spoiler: probably nothing important.",
+      "reversed_meaning": "Deleting things impulsively without consideration, being afraid to let go of anything, or constantly clearing out without building anything new to replace what's gone.",
+      "tags": ["cleanup", "deletion", "renewal", "legacy", "transformation"]
+    }
+  ],
+  "block_types": [
+    {
+      "id": "creative",
+      "name": "Creative Block",
+      "description": "Stuck on a project? Let's break it open.",
+      "emoji": "🎨"
+    },
+    {
+      "id": "decision",
+      "name": "Decision Block",
+      "description": "Can't choose? Let's find a fresh angle.",
+      "emoji": "🤔"
+    },
+    {
+      "id": "work",
+      "name": "Work Block",
+      "description": "Career crossroads? Duck debugging activated.",
+      "emoji": "💼"
+    },
+    {
+      "id": "life",
+      "name": "Life Block",
+      "description": "Feeling stuck in routine? Time to shake things up.",
+      "emoji": "🔄"
+    },
+    {
+      "id": "relationship",
+      "name": "Relationship Block",
+      "description": "Communication stuck? Duck's got perspective.",
+      "emoji": "💬"
+    }
+  ]
+}
