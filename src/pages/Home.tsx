@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NewReading from '../components/NewReading';
-import QuickDrawSpread from '../components/QuickDrawSpread';
-import mockData from '../../data/cards.json';
-import { Card } from '../shared/interfaces';
+// import QuickDrawSpread from '../components/QuickDrawSpread'; // No longer used here
+// import FullPondSpread from '../components/FullPondSpread'; // No longer directly used here
+import { useNavigate } from 'react-router-dom'; // Import for navigation
+import { cardQueries, blockTypeQueries } from '../db/queries';
+import type { Card, BlockType } from '../db/schema';
 
 const Hero = () => {
   return (
@@ -21,34 +23,67 @@ const Hero = () => {
 export default function Home() {
   const isUserLoggedIn = true;
 
-  const [step, setStep] = useState<'setup' | 'drawing' | 'revealed'>('setup');
+  const [step, setStep] = useState<'setup' | 'drawing'>('setup'); // Simplified steps
+  const navigate = useNavigate(); // Hook for navigation
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
-  const [drawnCard, setDrawnCard] = useState<Card | null>(null);
+  // const [drawnCards, setDrawnCards] = useState<Card[]>([]); // Removed, not used in Home anymore
+  const [selectedSpread, setSelectedSpread] = useState<string>('');
+  const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);
+
+  useEffect(() => {
+    // Load block types from database
+    const loadedBlockTypes = blockTypeQueries.getAll();
+    setBlockTypes(loadedBlockTypes);
+  }, []);
 
   const handleBlockSelection = (blockId: string) => {
     setSelectedBlockType(blockId);
   };
 
   const handleDrawCard = () => {
-    if (!selectedBlockType || !userContext.trim()) return;
+    if (!selectedBlockType || !selectedSpread) return;
 
     setStep('drawing');
 
-    // Simulate card shuffle/draw animation
     setTimeout(() => {
-      const randomCard =
-        mockData.cards[Math.floor(Math.random() * mockData.cards.length)];
-      setDrawnCard(randomCard);
-      setStep('revealed');
-    }, 2000);
+      const cardsToDraw: Card[] = [];
+
+      if (selectedSpread === 'quick-draw') {
+        const randomCard = cardQueries.getRandomCard();
+        cardsToDraw.push(randomCard);
+        // Navigate to Reading page with data
+        navigate('/reading', {
+          state: {
+            drawnCards: cardsToDraw,
+            selectedBlockTypeId: selectedBlockType,
+            spreadType: 'quick-draw',
+          },
+        });
+        setStep('setup'); // Reset step after navigating
+      } else if (selectedSpread === 'full-pond') {
+        // Draw 3 cards. For simplicity, allowing duplicates.
+        const randomCards = cardQueries.getRandomCards(3);
+        cardsToDraw.push(...randomCards);
+        // Navigate to Reading page with data
+        navigate('/reading', {
+          state: {
+            drawnCards: cardsToDraw,
+            selectedBlockTypeId: selectedBlockType,
+            spreadType: 'full-pond',
+          },
+        });
+        setStep('setup'); // Reset step after navigating
+      }
+    }, 1000); // Simulate drawing time
   };
 
-  const handleReset = () => {
-    setStep('setup');
-    setSelectedBlockType('');
-    setUserContext('');
-    setDrawnCard(null);
+  // Reset functionality is now handled by navigating to the Reading page and then back to Home,
+  // which re-initializes the Home component's state.
+  // No explicit handleReset function is needed here anymore.
+
+  const handleSpreadSelection = (spread: string) => {
+    setSelectedSpread(spread);
   };
 
   const renderContent = () => {
@@ -59,23 +94,33 @@ export default function Home() {
     if (step === 'setup') {
       return (
         <NewReading
-          blockTypes={mockData.block_types}
+          blockTypes={blockTypes}
           selectedBlockType={selectedBlockType}
           userContext={userContext}
           onBlockSelect={handleBlockSelection}
           onUserContextChange={setUserContext}
+          onSpreadSelect={handleSpreadSelection}
           onDrawCard={handleDrawCard}
+          selectedSpread={selectedSpread}
         />
       );
     }
 
+    if (step === 'drawing') {
+      return (
+        <div className="text-center py-10">
+          <p className="text-2xl text-gray-700 animate-pulse">
+            Shuffling the deck and drawing your cards...
+          </p>
+          {/* You could add a spinner or animation here */}
+        </div>
+      );
+    }
+
     return (
-      <QuickDrawSpread
-        step={step}
-        drawnCard={drawnCard}
-        selectedBlockTypeId={selectedBlockType}
-        onReset={handleReset}
-      />
+      <div className="text-center py-10">
+        <p>Loading...</p>
+      </div>
     );
   };
 

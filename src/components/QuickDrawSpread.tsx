@@ -1,8 +1,6 @@
-import React from 'react';
-import mockData from '../../data/cards.json';
-
-// Types based on our JSON structure
-import type { Card } from '../shared/interfaces';
+import React, { useEffect, useState } from 'react';
+import { blockTypeQueries } from '../db/queries';
+import type { Card, BlockType } from '../db/schema';
 
 interface QuickDrawSpreadProps {
   step: 'drawing' | 'revealed';
@@ -17,9 +15,13 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
   selectedBlockTypeId,
   onReset,
 }) => {
-  const selectedBlock = mockData.block_types.find(
-    (bt) => bt.id === selectedBlockTypeId
-  );
+  const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
+
+  useEffect(() => {
+    const block = blockTypeQueries.getById(selectedBlockTypeId);
+    setSelectedBlock(block || null);
+  }, [selectedBlockTypeId]);
+
   const blockAdvice =
     drawnCard?.block_applications[
       selectedBlockTypeId as keyof typeof drawnCard.block_applications

@@ -11,10 +11,12 @@ interface BlockType {
 interface NewReadingProps {
   blockTypes: BlockType[];
   selectedBlockType: string;
+  selectedSpread: string;
   userContext: string;
   onBlockSelect: (id: string) => void;
   onUserContextChange: (context: string) => void;
   onDrawCard: () => void;
+  onSpreadSelect: (spread: string) => void;
 }
 
 const NewReading: React.FC<NewReadingProps> = ({
@@ -24,6 +26,8 @@ const NewReading: React.FC<NewReadingProps> = ({
   onBlockSelect,
   onUserContextChange,
   onDrawCard,
+  onSpreadSelect,
+  selectedSpread,
 }) => {
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
 
@@ -39,9 +43,6 @@ const NewReading: React.FC<NewReadingProps> = ({
 
       {/* Block Type Selection */}
       <div className="mb-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800">
-          What's blocking you?
-        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {blockTypes.map((blockType) => (
             <button
@@ -72,17 +73,23 @@ const NewReading: React.FC<NewReadingProps> = ({
       {/* Select Spread */}
       {selectedBlockType && (
         <div className="mb-6">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors">
+          <button
+            onClick={() => onSpreadSelect('quick-draw')}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+          >
             Quick Draw Spread
           </button>
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors">
+          <button
+            onClick={() => onSpreadSelect('full-pond')}
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+          >
             Full Pond Spread
           </button>
         </div>
       )}
 
       {/* Context Input */}
-      {selectedBlockType && (
+      {selectedSpread && (
         <div className="mb-6">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
             Tell the duck more:
@@ -98,16 +105,24 @@ const NewReading: React.FC<NewReadingProps> = ({
       )}
 
       {/* Draw Button */}
-      {selectedBlockType && userContext.trim() && (
-        <div className="text-center">
-          <button
-            onClick={onDrawCard}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
-          >
-            🎴 Draw Your Card
-          </button>
-        </div>
-      )}
+      {selectedBlockType &&
+        (selectedSpread === 'quick-draw' ||
+          (selectedSpread === 'full-pond' && userContext.trim() !== '')) && (
+          <DrawButton onDrawCard={onDrawCard} />
+        )}
+    </div>
+  );
+};
+
+const DrawButton: React.FC<{ onDrawCard: () => void }> = ({ onDrawCard }) => {
+  return (
+    <div className="text-center">
+      <button
+        onClick={onDrawCard}
+        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+      >
+        🎴 Draw Your Card
+      </button>
     </div>
   );
 };
