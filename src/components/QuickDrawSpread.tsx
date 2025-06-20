@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { blockTypeQueries } from '../db/queries';
-import type { Card, BlockType } from '../db/schema';
+import { blockTypeQueries } from '../../db/sqlite/queries';
+import type { Card, BlockType } from '../../db/sqlite/schema';
 
 interface QuickDrawSpreadProps {
   step: 'drawing' | 'revealed';

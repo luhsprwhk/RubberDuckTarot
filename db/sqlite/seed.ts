@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { db } from './connection';
-import { cards, blockTypes } from './schema';
+import { db } from './sqlite/connection';
+import { cards, blockTypes } from './sqlite/schema';
 
 interface CardData {
   id: number;

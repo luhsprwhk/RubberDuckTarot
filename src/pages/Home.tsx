@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import NewReading from '../components/NewReading';
-// import QuickDrawSpread from '../components/QuickDrawSpread'; // No longer used here
-// import FullPondSpread from '../components/FullPondSpread'; // No longer directly used here
 import { useNavigate } from 'react-router-dom'; // Import for navigation
-import { cardQueries, blockTypeQueries } from '../db/queries';
-import type { Card, BlockType } from '../db/schema';
+import { cardQueries, blockTypeQueries } from '../../db/sqlite/queries';
+import type { Card, BlockType } from '../../db/sqlite/schema';
 
 const Hero = () => {
   return (

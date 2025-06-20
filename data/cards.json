@@ -219,6 +219,452 @@
       "duck_wisdom": "You're keeping dead code in production because you're afraid to break something. That deprecated function isn't helping anyone - delete it and see what actually breaks. Spoiler: probably nothing important.",
       "reversed_meaning": "Deleting things impulsively without consideration, being afraid to let go of anything, or constantly clearing out without building anything new to replace what's gone.",
       "tags": ["cleanup", "deletion", "renewal", "legacy", "transformation"]
+    },
+    {
+      "id": 9,
+      "name": "Gift Box",
+      "emoji": "🎁",
+      "traditional_equivalent": "The Bouquet",
+      "core_meaning": "Appreciation, surprise, unexpected positive, recognition",
+      "duck_question": "What's the unexpected positive?",
+      "visual_description": "A beautifully wrapped gift box sitting on a desk, partially opened with colorful tissue paper spilling out. The ribbon is slightly undone, suggesting anticipation. There's a small gift tag attached, but you can't quite read what it says. The lighting creates a warm glow around the box, and there are hints of something valuable inside - maybe the corner of something shiny or interesting peeking through the tissue paper.",
+      "perspective_prompts": [
+        "What good thing are you dismissing because it doesn't look like what you expected?",
+        "What appreciation or recognition are you not seeing because you're focused on what's missing?",
+        "What 'consolation prize' might actually be better than what you originally wanted?",
+        "What positive outcome are you ignoring because it came wrapped in difficulty?",
+        "What gift are you refusing to accept because you think you don't deserve it?"
+      ],
+      "block_applications": {
+        "creative": "You're so focused on the creative vision you can't execute that you're missing the interesting accident happening right in front of you. Embrace the happy mistake.",
+        "decision": "Stop looking for the perfect option and start appreciating what's actually available. Sometimes the 'consolation prize' is exactly what you needed.",
+        "work": "That feedback, opportunity, or connection you're dismissing might be more valuable than you realize. Look again with fresh eyes.",
+        "life": "You're so busy chasing what you think you want that you're missing what's actually good about your current situation. Inventory your gifts.",
+        "relationship": "Someone's giving you something meaningful, but it's not packaged the way you expected. Look past the wrapping."
+      },
+      "duck_wisdom": "You're rejecting perfectly good solutions because they don't match your original spec. That 'workaround' might actually be a feature, not a bug. Sometimes the best gifts come in weird packaging.",
+      "reversed_meaning": "Expecting gifts without giving, focusing so much on the positive that you ignore real problems, or becoming addicted to surprise and novelty instead of building sustainable satisfaction.",
+      "tags": [
+        "appreciation",
+        "surprise",
+        "recognition",
+        "opportunity",
+        "gratitude"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Delete Button",
+      "emoji": "⚡",
+      "traditional_equivalent": "The Scythe",
+      "core_meaning": "Quick cuts, decisive action, immediate elimination",
+      "duck_question": "What needs immediate action?",
+      "visual_description": "A large, prominent red 'DELETE' button on a computer screen, with a cursor hovering over it. The screen shows a cluttered desktop with way too many files, folders, and applications open. Some files are clearly labeled as 'OLD_PROJECT_FINAL_FINAL_v2' and other obviously outdated items. The delete button glows slightly, almost invitingly, while the rest of the screen feels chaotic and overwhelming.",
+      "perspective_prompts": [
+        "What decision are you overthinking that just needs to be cut quickly?",
+        "What would you eliminate if you had to choose right now, no analysis?",
+        "What's taking up space that you already know doesn't serve you?",
+        "What are you keeping alive that should have been killed months ago?",
+        "What would happen if you just said 'no' immediately instead of maybe later?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to save every idea. Delete the mediocre projects cluttering your mental space and focus on the one that actually excites you.",
+        "decision": "You're paralyzed by options. Pick the obvious 'no' choices and delete them from consideration immediately.",
+        "work": "That meeting, project, or commitment you've been dreading? Just cancel it. Stop trying to optimize what should be eliminated.",
+        "life": "You're maintaining too many things out of guilt or habit. What can you just stop doing without explanation or replacement?",
+        "relationship": "Stop trying to fix what's clearly broken. Some conversations need to end, not evolve."
+      },
+      "duck_wisdom": "You're spending more time maintaining legacy code than building new features. That function hasn't been called in months - just delete it. Stop commenting out dead code and start shipping what works.",
+      "reversed_meaning": "Deleting impulsively without consideration, being afraid to cut anything, or using elimination as avoidance instead of making positive choices.",
+      "tags": [
+        "elimination",
+        "decisiveness",
+        "cutting",
+        "simplification",
+        "action"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Light Bulb",
+      "emoji": "💡",
+      "traditional_equivalent": "The Star",
+      "core_meaning": "Insight, illumination, breakthrough moments, clarity",
+      "duck_question": "What wants to be discovered?",
+      "visual_description": "A classic incandescent light bulb suspended from the ceiling, glowing warmly in an otherwise dim room. The filament is clearly visible and bright, casting interesting shadows on the walls. Around the bulb, you can see the faint outlines of previously hidden objects now becoming visible in the light - books, tools, maybe a whiteboard with half-erased equations. There's a pull chain hanging down, suggesting this illumination was recently activated.",
+      "perspective_prompts": [
+        "What solution have you been overlooking because you're searching in the wrong place?",
+        "What becomes obvious when you change your perspective slightly?",
+        "What insight are you avoiding because it would require you to change course?",
+        "What pattern would emerge if you stepped back and looked at the bigger picture?",
+        "What do you already know but haven't admitted to yourself yet?"
+      ],
+      "block_applications": {
+        "creative": "The breakthrough isn't coming from more research or inspiration - it's already in your existing knowledge, waiting to be connected differently.",
+        "decision": "You already know what you want to do. Stop gathering information and start trusting your instinct about what feels right.",
+        "work": "The solution to your problem already exists in your company, team, or network. You just haven't asked the right person yet.",
+        "life": "You're making this more complicated than it needs to be. What's the obvious answer you're intellectualizing away?",
+        "relationship": "The truth about the situation is already clear to you. Stop waiting for more evidence and act on what you know."
+      },
+      "duck_wisdom": "You're debugging like the answer is hidden in some obscure documentation when it's probably in the error message you haven't actually read yet. The insight you need is right there - you just haven't illuminated it.",
+      "reversed_meaning": "Waiting for perfect insight instead of acting on good enough understanding, over-analyzing clear signals, or seeking complexity when the simple answer is staring you in the face.",
+      "tags": [
+        "insight",
+        "clarity",
+        "breakthrough",
+        "illumination",
+        "discovery"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Streaming Service",
+      "emoji": "📺",
+      "traditional_equivalent": "The Child",
+      "core_meaning": "New beginnings, curiosity, fresh perspective, playfulness",
+      "duck_question": "What would you try if it didn't have to be perfect?",
+      "visual_description": "A smart TV showing a streaming service home screen with endless rows of content - new releases, recommended for you, trending now. The remote sits on a coffee table nearby, and you can see multiple viewing profiles listed: 'Kids,' 'Guest,' 'Movie Night.' There's that overwhelming feeling of infinite choice but also infinite possibility. A 'Continue Watching' section shows several half-finished series.",
+      "perspective_prompts": [
+        "What would you experiment with if there was no commitment required?",
+        "What beginner's mind approach could you take to this old problem?",
+        "What would you try if you knew you could quit anytime without judgment?",
+        "What playful approach are you dismissing because it doesn't seem serious enough?",
+        "What would a complete outsider suggest you try first?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to create your masterpiece and just make something fun. Treat your next project like a Netflix pilot - low stakes, high experimentation.",
+        "decision": "You're treating this like a marriage when it's actually just a free trial. Pick something and see if you like it for a week.",
+        "work": "Approach your career problem like browsing genres. What would you try if you could easily switch back to your current situation?",
+        "life": "You're taking yourself too seriously. What would be fun to try, even if it doesn't fit your current identity?",
+        "relationship": "Stop planning the perfect conversation and just start with casual curiosity. See what develops naturally."
+      },
+      "duck_wisdom": "You're architecting for production scale when you should be prototyping. Build the minimum viable feature, ship it, see if anyone actually uses it. You can always refactor later.",
+      "reversed_meaning": "Endlessly browsing options without committing to anything, treating everything like entertainment instead of taking necessary action, or avoiding depth by constantly switching to something new.",
+      "tags": [
+        "experimentation",
+        "playfulness",
+        "beginner",
+        "curiosity",
+        "flexibility"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Password Manager",
+      "emoji": "🔒",
+      "traditional_equivalent": "The Key",
+      "core_meaning": "Access, security, unlocking potential, authentication",
+      "duck_question": "What needs the right credentials?",
+      "visual_description": "A password manager app interface showing a vault of saved logins, with some accounts marked as 'strong password' and others flagged with warning icons for 'weak' or 'reused' passwords. There's a prominent 'Generate Strong Password' button and several locked entries that require master password authentication. A two-factor authentication notification waits in the background.",
+      "perspective_prompts": [
+        "What door could you open if you just asked for the right access?",
+        "What are you locked out of because you're using old credentials?",
+        "What permission do you already have but haven't activated yet?",
+        "What security are you sacrificing for convenience that's actually costing you?",
+        "What would unlock if you just proved you belong there?"
+      ],
+      "block_applications": {
+        "creative": "You have access to tools, people, or resources you're not using. Stop trying to break down doors when you already have keys.",
+        "decision": "The information you need to decide is behind an access wall. Who can give you the login credentials you need?",
+        "work": "You're trying to solve problems with insufficient permissions. What access do you need to request to actually fix this?",
+        "life": "You're locked out of opportunities because you're using outdated versions of yourself. Time to update your credentials.",
+        "relationship": "You're trying to access someone's trust or openness without the right authentication. What credentials do you need to build first?"
+      },
+      "duck_wisdom": "You're getting permission denied errors because you're running with user privileges when you need admin access. Stop brute-forcing the solution and get the proper credentials.",
+      "reversed_meaning": "Hoarding access without using it, being so security-focused that you lock yourself out of opportunities, or trying to bypass proper authentication instead of building legitimate credentials.",
+      "tags": [
+        "access",
+        "permission",
+        "credentials",
+        "security",
+        "authentication"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Food Delivery",
+      "emoji": "🍕",
+      "traditional_equivalent": "The Fish",
+      "core_meaning": "Sustenance, immediate needs, nourishment, practical solutions",
+      "duck_question": "What do you actually need right now?",
+      "visual_description": "A food delivery app on a phone screen showing 'Order Again' favorites, estimated delivery times, and that familiar decision paralysis between cuisines. There's a shopping cart with items but also a prominent 'Your usual order' suggestion. Outside the window, you can glimpse a delivery driver on a bike checking their GPS. The phone battery shows 23% - enough for now, but cutting it close.",
+      "perspective_prompts": [
+        "What basic need are you ignoring while chasing complex solutions?",
+        "What simple fix would actually solve 80% of your problem right now?",
+        "What are you overcomplicating when you just need the basics covered?",
+        "What immediate relief are you avoiding because it doesn't feel sophisticated enough?",
+        "What would handle your actual needs instead of your imagined ideal scenario?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to design the perfect creative process and just feed your creativity with whatever gets you started. Order the creative equivalent of pizza.",
+        "decision": "You're starving while reading restaurant reviews. Pick something good enough now and optimize your system later.",
+        "work": "You're building elaborate solutions when you just need to solve the immediate problem. What's the work equivalent of ordering your usual?",
+        "life": "You're so focused on the perfect lifestyle that you're not taking care of basic needs. What does your life actually require right now?",
+        "relationship": "Stop planning the perfect interaction and just give the relationship what it needs to function today."
+      },
+      "duck_wisdom": "You're trying to optimize your entire tech stack when the server is literally out of memory. Fix the immediate resource problem first, then worry about architecture.",
+      "reversed_meaning": "Always choosing convenience over quality, never building sustainable systems because you're stuck in immediate-gratification mode, or using 'basic needs' as an excuse to avoid growth.",
+      "tags": ["basics", "immediate", "sustenance", "practical", "simple"]
+    },
+    {
+      "id": 15,
+      "name": "Smart Watch",
+      "emoji": "⏰",
+      "traditional_equivalent": "The Ring",
+      "core_meaning": "Cycles, commitment, ongoing measurement, incremental progress",
+      "duck_question": "What needs consistent tracking?",
+      "visual_description": "A smartwatch face showing multiple tracking rings - activity, exercise, standing hours - with some rings nearly complete and others barely started. Notifications are piling up: calendar reminders, fitness goals, message alerts. The watch band shows slight wear from daily use, and there's a sense of both helpful monitoring and slight overwhelm from constant data.",
+      "perspective_prompts": [
+        "What progress are you making that you're not measuring or celebrating?",
+        "What cycle are you breaking by not paying attention to the pattern?",
+        "What small, consistent action would compound into major results?",
+        "What feedback loop are you missing that could optimize your process?",
+        "What commitment needs better tracking instead of hoping for motivation?"
+      ],
+      "block_applications": {
+        "creative": "You're waiting for inspiration instead of tracking creative habits. Start measuring creative consistency, not just creative quality.",
+        "decision": "You're making decisions in isolation instead of tracking decision patterns. What data about your choices would help you choose better?",
+        "work": "You're not tracking the right metrics. What leading indicators would help you see problems before they become crises?",
+        "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
+        "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
+      },
+      "duck_wisdom": "You're deploying code changes without monitoring. Set up proper logging and metrics so you can see what's actually working. You can't optimize what you don't measure.",
+      "reversed_meaning": "Becoming obsessed with metrics instead of actual progress, tracking everything but acting on nothing, or using measurement as procrastination instead of motivation.",
+      "tags": ["tracking", "measurement", "consistency", "progress", "habits"]
+    },
+    {
+      "id": 28,
+      "name": "Package Delivery",
+      "emoji": "📦",
+      "traditional_equivalent": "The Stork",
+      "core_meaning": "Completion, fulfillment, bringing ideas into reality",
+      "duck_question": "What's ready to ship?",
+      "visual_description": "A package sitting on a doorstep with a delivery confirmation notification on a phone screen. The package is professionally wrapped with shipping labels, tracking codes, and 'FRAGILE' stickers. There's a doorbell camera showing the delivery moment, and the delivery truck is visible pulling away in the background. The package looks substantial - something that took effort to create and send.",
+      "perspective_prompts": [
+        "What have you been perfecting that's actually ready to deliver?",
+        "What needs to go from internal development to external shipping?",
+        "Who's waiting for something you've been holding onto?",
+        "What would you ship if you stopped worrying about it being perfect?",
+        "What delivery are you avoiding because you're afraid of the reaction?"
+      ],
+      "block_applications": {
+        "creative": "Stop iterating and start shipping. What creative work is 80% done and ready for the world to see?",
+        "decision": "You've gathered enough information. What decision is ready to be delivered and communicated?",
+        "work": "You're hoarding completed work instead of delivering value. What's ready to ship to users, clients, or stakeholders?",
+        "life": "You're planning changes instead of implementing them. What life improvement is ready for delivery?",
+        "relationship": "You've been preparing what to say for too long. What conversation or gesture is ready to be delivered?"
+      },
+      "duck_wisdom": "You're gold-plating features instead of shipping the MVP. Users can't benefit from code that never leaves staging. Ship what works, iterate based on feedback.",
+      "reversed_meaning": "Shipping prematurely without proper preparation, being addicted to the delivery moment instead of building sustainable products, or avoiding responsibility for what you've shipped.",
+      "tags": ["completion", "shipping", "delivery", "fulfillment", "execution"]
+    },
+    {
+      "id": 29,
+      "name": "Target Practice",
+      "emoji": "🎯",
+      "traditional_equivalent": "The Cross",
+      "core_meaning": "Precision, focus, practice, deliberate aim",
+      "duck_question": "What deserves your best shot?",
+      "visual_description": "A dartboard on a wall with several darts clustered around the bullseye, some hitting the target, others scattered in the outer rings. There's a scoreboard nearby tracking progress over multiple rounds. The lighting is focused on the target, with chalk marks on the floor indicating the proper throwing distance. A few darts lie on a nearby table, ready for the next round.",
+      "perspective_prompts": [
+        "What target are you missing because you're not aiming deliberately?",
+        "What deserves your focused attention instead of scattered effort?",
+        "Where would precision matter more than volume?",
+        "What would you hit consistently if you practiced the fundamentals?",
+        "What's the real bullseye you're avoiding by aiming at easier targets?"
+      ],
+      "block_applications": {
+        "creative": "You're spraying creative energy everywhere. What specific creative target deserves focused practice and refinement?",
+        "decision": "You're aiming at too many options. What's the one decision that would hit the center of what you actually want?",
+        "work": "You're busy but not effective. What single work target would create the most impact with precise effort?",
+        "life": "You're trying to improve everything at once. What one life area deserves your most focused attention right now?",
+        "relationship": "You're addressing surface issues. What's the real target conversation you need to aim for?"
+      },
+      "duck_wisdom": "You're trying to optimize every function when you should profile first and fix the bottleneck. Find the critical path, aim precisely, measure your hits.",
+      "reversed_meaning": "Becoming so focused on precision that you never take the shot, aiming at targets that don't matter, or practicing forever without applying skills to real situations.",
+      "tags": ["precision", "focus", "targeting", "practice", "aim"]
+    },
+    {
+      "id": 30,
+      "name": "Fitness Tracker",
+      "emoji": "🏃‍♂️",
+      "traditional_equivalent": "The Dog",
+      "core_meaning": "Loyalty, routine, health habits, faithful progress",
+      "duck_question": "What habit needs your daily commitment?",
+      "visual_description": "A fitness tracker on someone's wrist showing daily stats - steps taken, heart rate zones, sleep quality from last night. The display shows you're 847 steps away from your daily goal, with a gentle buzz reminder. There are achievement badges visible: '7-day streak,' 'Personal best,' and a weekly challenge progress bar at 73%. The band shows wear marks from consistent use, and there's a charging cable nearby.",
+      "perspective_prompts": [
+        "What daily practice would compound into major life changes if you stuck with it?",
+        "What are you tracking obsessively while ignoring the metric that actually matters?",
+        "What small, consistent action are you avoiding because it seems too simple?",
+        "What habit died because you missed a few days and gave up entirely?",
+        "What would change if you committed to something for 30 days without questioning it?"
+      ],
+      "block_applications": {
+        "creative": "You're waiting for inspiration instead of tracking creative habits. Start measuring creative consistency, not just creative quality.",
+        "decision": "You're making decisions in isolation instead of tracking decision patterns. What data about your choices would help you choose better?",
+        "work": "You're not tracking the right metrics. What leading indicators would help you see problems before they become crises?",
+        "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
+        "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
+      },
+      "duck_wisdom": "You're trying to ship features without continuous integration. Set up daily builds - small, consistent commits beat heroic coding marathons every time.",
+      "reversed_meaning": "Becoming obsessed with streaks instead of actual progress, tracking vanity metrics that don't drive results, or abandoning good habits because of perfectionist all-or-nothing thinking.",
+      "tags": ["habits", "consistency", "tracking", "routine", "progress"]
+    },
+    {
+      "id": 31,
+      "name": "Clipboard Manager",
+      "emoji": "📋",
+      "traditional_equivalent": "The Whip",
+      "core_meaning": "Control, efficiency, repeated patterns, workflow optimization",
+      "duck_question": "What keeps getting copied and pasted?",
+      "visual_description": "A clipboard manager app showing a history of copied items - code snippets, email signatures, frequently used responses, and random text fragments. Some items are pinned as favorites, others have timestamps showing they were copied weeks ago but never used. There's a search bar to find specific clips, and keyboard shortcuts are visible. The current clipboard shows 'Thanks for following up on this...'",
+      "perspective_prompts": [
+        "What solution do you keep recreating instead of systematizing once?",
+        "What pattern keeps repeating that you should automate or template?",
+        "What are you manually doing that could be copied from a previous success?",
+        "What response or approach worked once and could work again?",
+        "What are you starting from scratch when you could build on existing work?"
+      ],
+      "block_applications": {
+        "creative": "You're reinventing creative wheels. What successful creative process could you template and reuse?",
+        "decision": "You're making the same type of decision over and over. What decision template could you copy from past successes?",
+        "work": "You're recreating solutions you've already built. What work patterns deserve to be systematized and reused?",
+        "life": "You're solving the same life problems repeatedly. What life solution template could you copy and paste?",
+        "relationship": "You're having the same conversations without learning. What communication pattern worked before and could be reused?"
+      },
+      "duck_wisdom": "You're writing the same functions over and over instead of building a utility library. DRY principle applies to life too - Don't Repeat Yourself.",
+      "reversed_meaning": "Copy-pasting solutions without understanding them, becoming too rigid with templates that don't fit new situations, or hoarding patterns without ever applying them.",
+      "tags": ["patterns", "efficiency", "templates", "automation", "reuse"]
+    },
+    {
+      "id": 32,
+      "name": "Color Picker",
+      "emoji": "🎨",
+      "traditional_equivalent": "The Bear",
+      "core_meaning": "Instinct, natural ability, choosing the right tone",
+      "duck_question": "What's the right tone for this situation?",
+      "visual_description": "A digital color picker interface showing a gradient wheel with a cursor hovering over different hues. The current selection shows RGB values, hex codes, and color harmony suggestions. There's a palette history showing recently used colors, and some saved color schemes labeled 'Brand Colors,' 'Calm Palette,' 'High Energy.' A dropper tool is active, ready to sample colors from anywhere on screen.",
+      "perspective_prompts": [
+        "What tone are you using that's completely wrong for the situation?",
+        "What would change if you adjusted the emotional temperature slightly?",
+        "Are you using your natural colors or trying to be someone else's palette?",
+        "What subtle shift in approach would create better harmony?",
+        "What's your authentic tone when you stop trying to match others?"
+      ],
+      "block_applications": {
+        "creative": "You're forcing the wrong creative tone. What natural creative voice are you suppressing to fit expectations?",
+        "decision": "You're approaching decisions with the wrong emotional tone. What decision-making style feels most natural to you?",
+        "work": "Your professional tone doesn't match the situation. Are you being too formal, too casual, too aggressive, or too passive?",
+        "life": "You're living in someone else's color palette. What authentic lifestyle tone would energize you?",
+        "relationship": "The conversational tone is off. What communication style would create better harmony between you?"
+      },
+      "duck_wisdom": "You're using dark mode syntax highlighting for a light mode problem. Match your approach to the context - some bugs need gentle debugging, others need aggressive refactoring.",
+      "reversed_meaning": "Constantly changing tone to please others, being tone-deaf to situational needs, or overthinking tone instead of focusing on substance.",
+      "tags": ["tone", "style", "authenticity", "harmony", "adjustment"]
+    },
+    {
+      "id": 33,
+      "name": "Scale",
+      "emoji": "⚖️",
+      "traditional_equivalent": "The Birds",
+      "core_meaning": "Balance, measurement, trade-offs, fair exchange",
+      "duck_question": "What needs to be weighed honestly?",
+      "visual_description": "A digital scale interface showing two sides with different weights - on one side, immediate gratification items, on the other, long-term benefits. The scale is slightly tilted, indicating imbalance. There's a 'tare' button to reset to zero, and measurement units can be switched between different metrics. A 'calibrate' option blinks, suggesting the scale might need adjustment for accurate readings.",
+      "perspective_prompts": [
+        "What trade-off are you avoiding because you want everything without cost?",
+        "What are you weighing that actually can't be compared directly?",
+        "What's heavier than it appears, and what's lighter than you think?",
+        "What would tip the scales if you added the hidden costs?",
+        "What balance point would you accept if you stopped trying to optimize everything?"
+      ],
+      "block_applications": {
+        "creative": "You're trying to have perfect quality, speed, and low effort simultaneously. What creative trade-off are you refusing to make?",
+        "decision": "You're comparing apples to oranges instead of weighing what actually matters. What's the real trade-off you need to evaluate?",
+        "work": "You're pursuing work that's good, fast, and cheap when you can only pick two. What professional balance point makes sense?",
+        "life": "You're trying to optimize every life area simultaneously. What life balance would you accept to stop the constant juggling?",
+        "relationship": "You're demanding perfect balance instead of fair exchange. What relationship trade-offs are actually reasonable?"
+      },
+      "duck_wisdom": "You're trying to optimize for performance, readability, and maintainability when you need to pick your priority. Every architectural decision has trade-offs - choose consciously.",
+      "reversed_meaning": "Obsessing over perfect balance instead of making decisions, refusing to acknowledge trade-offs exist, or constantly rebalancing instead of committing to a chosen equilibrium.",
+      "tags": ["balance", "trade-offs", "measurement", "priorities", "exchange"]
+    },
+    {
+      "id": 34,
+      "name": "Spam Filter",
+      "emoji": "🚫",
+      "traditional_equivalent": "The Path",
+      "core_meaning": "Filtering, boundaries, signal vs noise, protection",
+      "duck_question": "What's getting through that shouldn't?",
+      "visual_description": "An email spam filter interface showing blocked messages in quarantine - obvious scams, promotional emails, and borderline cases awaiting review. The filter shows 47 blocked messages today, with options to whitelist, blacklist, or review. There's a slider for filter sensitivity and recent activity showing what got caught versus what slipped through. A notification shows one important email was incorrectly filtered.",
+      "perspective_prompts": [
+        "What noise are you letting through that's drowning out important signals?",
+        "What boundaries do you need to set to protect your mental inbox?",
+        "What obvious 'spam' are you still entertaining because it feels rude to block?",
+        "What legitimate opportunities are you filtering out with overly strict criteria?",
+        "What would get through if you calibrated your filters more precisely?"
+      ],
+      "block_applications": {
+        "creative": "You're letting too much creative noise through. What influences, opinions, or distractions need to be filtered so you can hear your own voice?",
+        "decision": "You're processing too many irrelevant inputs. What decision criteria could automatically filter out the noise?",
+        "work": "Your attention is getting spammed by non-essential requests. What professional boundaries would protect your focus?",
+        "life": "You're saying yes to too much life spam. What activities, commitments, or people need to be filtered out?",
+        "relationship": "Drama and negativity keep getting through. What communication boundaries would filter healthier interactions?"
+      },
+      "duck_wisdom": "You're processing every input like it's legitimate when most of it is just noise. Set up better filters - not every notification deserves your attention.",
+      "reversed_meaning": "Over-filtering and missing important signals, being too rigid with boundaries, or spending more time managing filters than doing actual work.",
+      "tags": ["filtering", "boundaries", "protection", "focus", "signal"]
+    },
+    {
+      "id": 35,
+      "name": "Auto-Update",
+      "emoji": "🔄",
+      "traditional_equivalent": "The Sun",
+      "core_meaning": "Growth, renewal, automatic improvement, evolution",
+      "duck_question": "What's ready for an upgrade?",
+      "visual_description": "A software update notification showing 'Update Available - Version 2.3.1' with improvement notes: bug fixes, performance enhancements, new features. There's an option to 'Install Now' or 'Remind Me Later.' The current version shows as 1.8.2 - clearly outdated. A progress bar waits at 0%, and there's a note about backing up data before proceeding. The changelog shows months of accumulated improvements.",
+      "perspective_prompts": [
+        "What version of yourself are you running that's clearly outdated?",
+        "What automatic improvements are available that you keep postponing?",
+        "What would break if you upgraded, and is that actually worth staying stuck?",
+        "What new features could you access if you weren't afraid of change?",
+        "What bugs in your current system would be fixed with a simple update?"
+      ],
+      "block_applications": {
+        "creative": "Your creative tools, skills, or approach are running on outdated versions. What creative upgrade would unlock new possibilities?",
+        "decision": "Your decision-making framework needs updating. What new criteria or methods would improve your choices?",
+        "work": "Your professional skills, network, or methods are behind current versions. What career upgrade is overdue?",
+        "life": "You're running life patterns that served you years ago but need updating. What lifestyle upgrade would optimize your current reality?",
+        "relationship": "Your communication style or relationship patterns need updating. What relational upgrade would improve connection?"
+      },
+      "duck_wisdom": "You're running legacy code with known vulnerabilities instead of upgrading to the stable release. The new version has patches for problems you've been manually working around.",
+      "reversed_meaning": "Constantly updating without stability, being addicted to new versions instead of mastering current tools, or upgrading for novelty rather than actual improvement.",
+      "tags": ["upgrade", "improvement", "evolution", "renewal", "optimization"]
+    },
+    {
+      "id": 36,
+      "name": "Rubber Duck",
+      "emoji": "🦆",
+      "traditional_equivalent": "The World",
+      "core_meaning": "Completion, wisdom, debugging mastery, full circle",
+      "duck_question": "What do you already know?",
+      "visual_description": "A classic yellow rubber duck sitting on a desk next to a computer, wearing a tiny wizard hat. The duck has seen some use - slightly faded, with a small crack in the rubber, but still floating proudly. Around it are the tools of debugging: a notebook with half-finished diagrams, coffee rings on the desk, and a monitor displaying clean, working code. The duck seems to be smiling knowingly, as if it's heard this problem before.",
+      "perspective_prompts": [
+        "What solution are you overlooking that you've actually used before?",
+        "What do you know deep down that you're afraid to trust?",
+        "What would you tell a friend who came to you with this exact problem?",
+        "What obvious answer are you making complicated because it seems too simple?",
+        "What wisdom do you already possess but aren't applying to yourself?"
+      ],
+      "block_applications": {
+        "creative": "You already know what makes your best work happen. Stop searching for new methods and trust your proven creative process.",
+        "decision": "You've made harder decisions than this before. What worked then? Your instincts are probably better than you think.",
+        "work": "You have more professional wisdom than you're using. What career advice would you give someone else in your position?",
+        "life": "You know what makes you happy, healthy, and fulfilled. Stop complicating it and do those things.",
+        "relationship": "You know what good relationships require. Stop overthinking and apply what you already understand about connection."
+      },
+      "duck_wisdom": "Sometimes the best debugging tool is just explaining the problem out loud. You usually figure it out halfway through describing it. That's not magic - that's just thinking clearly.",
+      "reversed_meaning": "Overthinking instead of trusting proven knowledge, seeking external validation for what you already know, or making simple things complex to avoid taking action.",
+      "tags": ["wisdom", "completion", "trust", "clarity", "mastery"]
     }
   ],
   "block_types": [
