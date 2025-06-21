@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { supabase } from './supabase';
+import { supabase } from './supabase-node';
 
 interface CardData {
   id: number;
@@ -32,16 +32,23 @@ interface BlockTypeData {
 
 interface JsonData {
   cards: CardData[];
-  block_types: BlockTypeData[];
 }
 
 async function seedSupabase() {
   try {
     console.log('🌱 Starting Supabase database seeding...');
 
-    // Read the existing JSON data
-    const jsonPath = resolve('../data/cards.json');
-    const jsonData = JSON.parse(readFileSync(jsonPath, 'utf8')) as JsonData;
+    // Read cards data
+    const cardsJsonPath = resolve('./data/cards.json');
+    const cardsData = JSON.parse(
+      readFileSync(cardsJsonPath, 'utf8')
+    ) as JsonData;
+
+    // Read block types data
+    const blockTypesJsonPath = resolve('./data/block_types.json');
+    const blockTypesData = JSON.parse(
+      readFileSync(blockTypesJsonPath, 'utf8')
+    ) as BlockTypeData[];
 
     // Clear existing data
     console.log('🧹 Clearing existing data...');
@@ -52,23 +59,23 @@ async function seedSupabase() {
     console.log('📦 Inserting block types...');
     const { error: blockTypesError } = await supabase
       .from('block_types')
-      .insert(jsonData.block_types);
+      .insert(blockTypesData);
 
     if (blockTypesError) {
       throw blockTypesError;
     }
-    console.log(`✅ Inserted ${jsonData.block_types.length} block types`);
+    console.log(`✅ Inserted ${blockTypesData.length} block types`);
 
     // Insert cards
     console.log('🎴 Inserting cards...');
     const { error: cardsError } = await supabase
       .from('cards')
-      .insert(jsonData.cards);
+      .insert(cardsData.cards);
 
     if (cardsError) {
       throw cardsError;
     }
-    console.log(`✅ Inserted ${jsonData.cards.length} cards`);
+    console.log(`✅ Inserted ${cardsData.cards.length} cards`);
 
     console.log('🎉 Supabase database seeding completed successfully!');
   } catch (error) {

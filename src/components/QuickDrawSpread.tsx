@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { blockTypeQueries } from '../../db/sqlite/queries';
-import type { Card, BlockType } from '../../db/sqlite/schema';
+import { getDb } from '@/lib/database-provider';
+import type { Card, BlockType } from '@/src/shared/interfaces';
 
 interface QuickDrawSpreadProps {
   step: 'drawing' | 'revealed';
@@ -18,8 +18,12 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
   const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
 
   useEffect(() => {
-    const block = blockTypeQueries.getById(selectedBlockTypeId);
-    setSelectedBlock(block || null);
+    const fetchBlock = async () => {
+      const db = await getDb();
+      const block = await db.getBlockTypeById(selectedBlockTypeId);
+      setSelectedBlock(block);
+    };
+    fetchBlock();
   }, [selectedBlockTypeId]);
 
   const blockAdvice =

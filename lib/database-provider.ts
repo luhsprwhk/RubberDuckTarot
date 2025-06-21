@@ -1,22 +1,34 @@
-import { SQLiteAdapter } from './sqlite/sqlite-adapter';
-import { SupabaseAdapter } from './supabase/supabase-adapter';
 import type { DatabaseAdapter, DatabaseType } from './database-adapter';
 
 class DatabaseProvider {
   private adapter: DatabaseAdapter | null = null;
 
-  getAdapter(): DatabaseAdapter {
+  async getAdapter(): Promise<DatabaseAdapter> {
     if (!this.adapter) {
       const dbType = (import.meta.env.VITE_DATABASE_TYPE ||
         'sqlite') as DatabaseType;
 
       switch (dbType) {
-        case 'supabase':
+        case 'supabase': {
+          const { SupabaseAdapter } = await import(
+            './supabase/supabase-adapter'
+          );
           this.adapter = new SupabaseAdapter();
           break;
+        }
         case 'sqlite':
         default:
-          this.adapter = new SQLiteAdapter();
+          if (typeof window === 'undefined') {
+            // Only load SQLite on server-side
+            {
+              const { SQLiteAdapter } = await import('./sqlite/sqlite-adapter');
+              this.adapter = new SQLiteAdapter();
+            }
+          } else {
+            throw new Error(
+              'SQLite is not supported in browser environment. Use Supabase instead.'
+            );
+          }
           break;
       }
     }
@@ -30,4 +42,6 @@ class DatabaseProvider {
 }
 
 export const databaseProvider = new DatabaseProvider();
-export const db = databaseProvider.getAdapter();
+
+// Create async wrapper for database access
+export const getDb = () => databaseProvider.getAdapter();

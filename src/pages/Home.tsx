@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import NewReading from '../components/NewReading';
 import { useNavigate } from 'react-router-dom'; // Import for navigation
-import { cardQueries, blockTypeQueries } from '../../db/sqlite/queries';
-import type { Card, BlockType } from '../../db/sqlite/schema';
+import { getDb } from '@/lib/database-provider';
+import type { Card, BlockType } from '@/src/shared/interfaces';
 
 const Hero = () => {
   return (
@@ -31,24 +31,31 @@ export default function Home() {
 
   useEffect(() => {
     // Load block types from database
-    const loadedBlockTypes = blockTypeQueries.getAll();
-    setBlockTypes(loadedBlockTypes);
+    const loadBlockTypes = async () => {
+      const db = await getDb();
+      const loadedBlockTypes = await db.getAllBlockTypes();
+      setBlockTypes(loadedBlockTypes);
+    };
+    loadBlockTypes();
   }, []);
 
   const handleBlockSelection = (blockId: string) => {
     setSelectedBlockType(blockId);
   };
 
-  const handleDrawCard = () => {
+  const handleDrawCard = async () => {
     if (!selectedBlockType || !selectedSpread) return;
 
     setStep('drawing');
 
-    setTimeout(() => {
+    setTimeout(async () => {
+      const db = await getDb();
       const cardsToDraw: Card[] = [];
 
       if (selectedSpread === 'quick-draw') {
-        const randomCard = cardQueries.getRandomCard();
+        const allCards = await db.getAllCards();
+        const randomCard =
+          allCards[Math.floor(Math.random() * allCards.length)];
         cardsToDraw.push(randomCard);
         // Navigate to Reading page with data
         navigate('/reading', {
@@ -61,7 +68,13 @@ export default function Home() {
         setStep('setup'); // Reset step after navigating
       } else if (selectedSpread === 'full-pond') {
         // Draw 3 cards. For simplicity, allowing duplicates.
-        const randomCards = cardQueries.getRandomCards(3);
+        const allCards = await db.getAllCards();
+        const randomCards = [];
+        for (let i = 0; i < 3; i++) {
+          randomCards.push(
+            allCards[Math.floor(Math.random() * allCards.length)]
+          );
+        }
         cardsToDraw.push(...randomCards);
         // Navigate to Reading page with data
         navigate('/reading', {

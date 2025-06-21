@@ -666,37 +666,5 @@
       "reversed_meaning": "Overthinking instead of trusting proven knowledge, seeking external validation for what you already know, or making simple things complex to avoid taking action.",
       "tags": ["wisdom", "completion", "trust", "clarity", "mastery"]
     }
-  ],
-  "block_types": [
-    {
-      "id": "creative",
-      "name": "Creative Block",
-      "description": "Stuck on a project? Let's break it open.",
-      "emoji": "🎨"
-    },
-    {
-      "id": "decision",
-      "name": "Decision Block",
-      "description": "Can't choose? Let's find a fresh angle.",
-      "emoji": "🤔"
-    },
-    {
-      "id": "work",
-      "name": "Work Block",
-      "description": "Career crossroads? Duck debugging activated.",
-      "emoji": "💼"
-    },
-    {
-      "id": "life",
-      "name": "Life Block",
-      "description": "Feeling stuck in routine? Time to shake things up.",
-      "emoji": "🔄"
-    },
-    {
-      "id": "relationship",
-      "name": "Relationship Block",
-      "description": "Communication stuck? Duck's got perspective.",
-      "emoji": "💬"
-    }
   ]
 }
