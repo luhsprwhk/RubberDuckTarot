@@ -15,7 +15,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "db:seed": "tsx src/db/seed.ts",
-    "supabase:seed": "tsx lib/supabase/supabase-seed.ts"
+    "supabase:seed": "tsx lib/supabase/supabase-seed.ts",
+    "supabase": "supabase"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [

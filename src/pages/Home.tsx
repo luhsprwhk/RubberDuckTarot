@@ -1,26 +1,14 @@
 import { useState, useEffect } from 'react';
+import useAuth from '../hooks/useAuth';
 import NewReading from '../components/NewReading';
 import { useNavigate } from 'react-router-dom'; // Import for navigation
 import { getDb } from '@/lib/database-provider';
 import type { Card, BlockType } from '@/src/shared/interfaces';
-
-const Hero = () => {
-  return (
-    <>
-      <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">
-        Rubber Duck Tarot
-      </h1>
-      <p className="text-center text-gray-600 mb-8 max-w-2xl mx-auto">
-        Welcome to Rubber Duck Tarot - where debugging meets divination. Draw
-        cards to gain insights for your coding journey.
-      </p>
-    </>
-  );
-};
+import Landing from '../components/Landing';
 
 export default function Home() {
-  const isUserLoggedIn = true;
-
+  const { user } = useAuth();
+  const isUserLoggedIn = !!user;
   const [step, setStep] = useState<'setup' | 'drawing'>('setup'); // Simplified steps
   const navigate = useNavigate(); // Hook for navigation
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
@@ -99,7 +87,7 @@ export default function Home() {
 
   const renderContent = () => {
     if (!isUserLoggedIn) {
-      return <Hero />;
+      return <Landing />;
     }
 
     if (step === 'setup') {

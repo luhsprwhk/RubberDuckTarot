@@ -1,5 +1,13 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, Zap, Brain, Target, Users, Bird } from 'lucide-react';
+import useAuth from '../hooks/useAuth';
+
+import {
+  saveUserProfile,
+  getUserProfile,
+  type UserProfile as DbUserProfile,
+} from '../lib/userPreferences';
+import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {
   name: string;
@@ -16,7 +24,10 @@ interface UserProfile {
 }
 
 const OnBoarding = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({
     name: '',
     age: '',
@@ -34,6 +45,35 @@ const OnBoarding = () => {
   const [robMessage, setRobMessage] = useState(
     "Welcome to Rob's Otherworldly Debugging Services. I'm a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
   );
+
+  // Load existing profile if user is logged in
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user) {
+        try {
+          const existingProfile = await getUserProfile(user.id);
+          if (existingProfile) {
+            setProfile({
+              name: existingProfile.name,
+              age: existingProfile.age,
+              birthday: existingProfile.birthday,
+              birthPlace: existingProfile.birth_place,
+              profession: existingProfile.profession,
+              debuggingMode: existingProfile.debugging_mode,
+              blockPattern: existingProfile.block_pattern,
+              superpower: existingProfile.superpower,
+              kryptonite: existingProfile.kryptonite,
+              luckyNumber: existingProfile.lucky_number,
+              spiritAnimal: existingProfile.spirit_animal,
+            });
+          }
+        } catch (error) {
+          console.error('Failed to load profile:', error);
+        }
+      }
+    };
+    loadProfile();
+  }, [user]);
 
   const professions = [
     'Developer/Engineer',
@@ -78,6 +118,40 @@ const OnBoarding = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
       setRobMessage(steps[currentStep + 1].robMessage);
+    }
+  };
+
+  const handleCompleteOnboarding = async () => {
+    if (!user) {
+      alert('Please sign in to save your preferences');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const dbProfile: Omit<DbUserProfile, 'id' | 'created_at' | 'updated_at'> =
+        {
+          user_id: user.id,
+          name: profile.name,
+          age: profile.age,
+          birthday: profile.birthday,
+          birth_place: profile.birthPlace,
+          profession: profile.profession,
+          debugging_mode: profile.debuggingMode,
+          block_pattern: profile.blockPattern,
+          superpower: profile.superpower,
+          kryptonite: profile.kryptonite,
+          lucky_number: profile.luckyNumber,
+          spirit_animal: profile.spiritAnimal,
+        };
+
+      await saveUserProfile(dbProfile);
+      navigate('/reading');
+    } catch (error) {
+      console.error('Failed to save profile:', error);
+      alert('Failed to save your preferences. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -336,10 +410,11 @@ const OnBoarding = () => {
             </div>
           </div>
           <button
-            onClick={() => console.log('Start first consultation', profile)}
-            className="bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-700 transition-colors"
+            onClick={handleCompleteOnboarding}
+            disabled={loading}
+            className="bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            START FIRST CONSULTATION
+            {loading ? 'SAVING...' : 'START FIRST CONSULTATION'}
           </button>
         </div>
       ),
