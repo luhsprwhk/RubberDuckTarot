@@ -2,6 +2,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Reading from './pages/Reading';
+import OnBoarding from './pages/OnBoarding';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/reading" element={<Reading />} />
+          <Route path="/onboarding" element={<OnBoarding />} />
         </Routes>
       </main>
     </div>
