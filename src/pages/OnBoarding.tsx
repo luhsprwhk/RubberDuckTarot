@@ -216,6 +216,7 @@ const OnBoarding = () => {
                 <PlacesAutocomplete
                   initialValue={profile.birthPlace}
                   onPlaceSelect={(place) => {
+                    console.log(place);
                     if (place.formatted_address) {
                       updateProfile('birthPlace', place.formatted_address);
                     }
