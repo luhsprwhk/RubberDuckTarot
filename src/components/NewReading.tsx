@@ -105,11 +105,9 @@ const NewReading: React.FC<NewReadingProps> = ({
       )}
 
       {/* Draw Button */}
-      {selectedBlockType &&
-        (selectedSpread === 'quick-draw' ||
-          (selectedSpread === 'full-pond' && userContext.trim() !== '')) && (
-          <DrawButton onDrawCard={onDrawCard} />
-        )}
+      {selectedBlockType && userContext.trim() !== '' && (
+        <DrawButton onDrawCard={onDrawCard} />
+      )}
     </div>
   );
 };
