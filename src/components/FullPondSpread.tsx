@@ -1,17 +1,54 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { getDb } from '@/lib/database-provider';
 import type { Card } from '../shared/interfaces';
+import type { UserProfile } from '../shared/userPreferences';
 
 interface FullPondSpreadProps {
-  drawnCards: Card[];
   onReset: () => void;
   selectedBlockTypeId: string;
+  userContext: string;
+  userProfile: UserProfile | null;
 }
 
 const FullPondSpread: React.FC<FullPondSpreadProps> = ({
-  drawnCards,
   onReset,
   selectedBlockTypeId,
 }) => {
+  const [step, setStep] = useState<'drawing' | 'revealed'>('drawing');
+  const [drawnCards, setDrawnCards] = useState<Card[]>([]);
+
+  useEffect(() => {
+    const drawCards = async () => {
+      const db = await getDb();
+      const allCards = await db.getAllCards();
+
+      // Simulate drawing time
+      setTimeout(() => {
+        const cards: Card[] = [];
+        for (let i = 0; i < 3; i++) {
+          cards.push(allCards[Math.floor(Math.random() * allCards.length)]);
+        }
+        setDrawnCards(cards);
+        setStep('revealed');
+      }, 1000);
+    };
+
+    drawCards();
+  }, [selectedBlockTypeId]);
+
+  if (step === 'drawing') {
+    return (
+      <div className="max-w-2xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4 animate-bounce">🦆</div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Rob is shuffling the deck...
+          </h2>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="p-6 bg-white shadow-lg rounded-lg max-w-4xl mx-auto my-8">
       <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">

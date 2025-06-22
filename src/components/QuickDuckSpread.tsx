@@ -8,8 +8,6 @@ import type { Card, BlockType } from '@/src/shared/interfaces';
 import type { UserProfile } from '@/src/shared/userPreferences';
 
 interface QuickDrawSpreadProps {
-  step: 'drawing' | 'revealed';
-  drawnCard: Card | null;
   selectedBlockTypeId: string;
   userContext: string;
   userProfile: UserProfile | null;
@@ -17,25 +15,36 @@ interface QuickDrawSpreadProps {
 }
 
 const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
-  step,
-  drawnCard,
   selectedBlockTypeId,
   userContext,
   userProfile,
   onReset,
 }) => {
+  const [step, setStep] = useState<'drawing' | 'revealed'>('drawing');
+  const [drawnCard, setDrawnCard] = useState<Card | null>(null);
   const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
   const [personalizedReading, setPersonalizedReading] =
     useState<PersonalizedReading | null>(null);
   const [loadingReading, setLoadingReading] = useState(false);
 
   useEffect(() => {
-    const fetchBlock = async () => {
+    const drawCard = async () => {
       const db = await getDb();
-      const block = await db.getBlockTypeById(selectedBlockTypeId);
-      setSelectedBlock(block);
+      const [allCards, block] = await Promise.all([
+        db.getAllCards(),
+        db.getBlockTypeById(selectedBlockTypeId),
+      ]);
+
+      // Simulate drawing time
+      setTimeout(() => {
+        const card = allCards[Math.floor(Math.random() * allCards.length)];
+        setDrawnCard(card);
+        setSelectedBlock(block);
+        setStep('revealed');
+      }, 1000);
     };
-    fetchBlock();
+
+    drawCard();
   }, [selectedBlockTypeId]);
 
   // Generate personalized reading when card is revealed

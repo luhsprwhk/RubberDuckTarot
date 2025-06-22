@@ -10,7 +10,7 @@ import {
   isProfileComplete,
   type UserProfile,
 } from '../shared/userPreferences';
-import type { Card, BlockType } from '@/src/shared/interfaces';
+import type { BlockType } from '@/src/shared/interfaces';
 
 export default function Home() {
   const { user } = useAuth();
@@ -58,32 +58,18 @@ export default function Home() {
   }, [user, isUserLoggedIn]);
 
   // Handlers
-  const handleNewReading = async () => {
+  const handleNewReading = () => {
     if (!selectedBlockType || !selectedSpread) return;
 
-    const db = await getDb();
-    const allCards = await db.getAllCards();
+    navigate('/reading', {
+      state: {
+        selectedBlockTypeId: selectedBlockType,
+        spreadType: selectedSpread,
+        userContext: userContext,
+      },
+    });
 
-    // Simulate drawing time
-    setTimeout(() => {
-      const numCardsToDraw = selectedSpread === 'quick-draw' ? 1 : 3;
-      const drawnCards: Card[] = [];
-
-      for (let i = 0; i < numCardsToDraw; i++) {
-        drawnCards.push(allCards[Math.floor(Math.random() * allCards.length)]);
-      }
-
-      navigate('/reading', {
-        state: {
-          drawnCards,
-          selectedBlockTypeId: selectedBlockType,
-          spreadType: selectedSpread,
-          userContext: userContext,
-        },
-      });
-
-      handleReset(); // Reset state after navigating
-    }, 1000);
+    handleReset(); // Reset state after navigating
   };
 
   const handleReset = () => {
