@@ -73,3 +73,25 @@ export const updateUserProfile = async (
 
   return data;
 };
+
+export const isProfileComplete = (profile: UserProfile | null): boolean => {
+  if (!profile) return false;
+
+  const requiredFields: (keyof UserProfile)[] = [
+    'name',
+    'birthday',
+    'birth_place',
+    'profession',
+    'debugging_mode',
+    'block_pattern',
+    'superpower',
+    'kryptonite',
+    'lucky_number',
+    'spirit_animal',
+  ];
+
+  return requiredFields.every((field) => {
+    const value = profile[field];
+    return value !== null && value !== undefined && value !== '';
+  });
+};

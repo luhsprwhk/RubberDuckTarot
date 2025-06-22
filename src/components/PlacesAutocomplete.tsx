@@ -25,7 +25,6 @@ type PlacePrediction = {
 
 // Add the custom element to JSX
 
- 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
@@ -56,8 +55,6 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
     }
 
     const handlePlaceSelect = async (event: Event) => {
-      console.log('Place select event fired', event);
-
       try {
         // Access the event properties
         // The event structure might be different than expected
@@ -66,50 +63,24 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
           detail?: { placePrediction?: PlacePrediction };
         };
 
-        // Log the event structure to help debug
-        console.log('Event structure:', Object.keys(customEvent));
-
-        // Check all possible locations for placePrediction
         let placePrediction;
         if (customEvent.placePrediction) {
           placePrediction = customEvent.placePrediction;
-          console.log('Found placePrediction directly on event');
         } else if (customEvent.detail && customEvent.detail.placePrediction) {
           placePrediction = customEvent.detail.placePrediction;
-          console.log('Found placePrediction in event.detail');
         } else {
           console.warn('Could not find placePrediction in event');
           console.log('Full event:', customEvent);
           return;
         }
 
-        console.log('Place prediction found:', placePrediction);
-
         // Convert the prediction to a place
         const place = await placePrediction.toPlace();
-        console.log('Place object:', place);
 
         // Fetch additional fields for the place
         await place.fetchFields({
           fields: ['displayName', 'formattedAddress', 'location', 'types'],
         });
-
-        // Get the place types to verify it's a city
-        const placeTypes = place.types || [];
-        console.log('Place types:', placeTypes);
-
-        // Check if the place is a city (locality) or administrative area
-        const isCityOrRegion =
-          place.types &&
-          (place.types.includes('locality') ||
-            place.types.includes('administrative_area_level_1') ||
-            place.types.includes('administrative_area_level_2'));
-
-        if (!isCityOrRegion) {
-          console.warn('Selected place is not a city:', place.displayName);
-          // Optionally, show an error message to the user
-          return;
-        }
 
         // Convert the place to a format compatible with our existing code
         const placeResult = {
@@ -121,7 +92,6 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
           types: place.types,
         } as google.maps.places.PlaceResult;
 
-        console.log('Converted place result:', placeResult);
         onPlaceSelect(placeResult);
       } catch (error) {
         console.error('Error handling place selection:', error);

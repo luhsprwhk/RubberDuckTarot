@@ -24,6 +24,28 @@ interface UserProfile {
   spiritAnimal: string;
 }
 
+const superpowers = [
+  'Breaking complex problems into simple steps',
+  'Seeing patterns others miss',
+  'Finding creative workarounds',
+  'Research and gathering information',
+  'Getting people to open up and share',
+  'Staying calm under pressure',
+  'Learning new things quickly',
+  'Other (specify below)',
+];
+
+const kryptonites = [
+  'Overthinking simple decisions',
+  'Getting distracted by new ideas',
+  'Avoiding difficult conversations',
+  'Perfectionism and never finishing',
+  'Taking on too much at once',
+  'Procrastinating on boring tasks',
+  'Comparing myself to others',
+  'Other (specify below)',
+];
+
 const OnBoarding = () => {
   const [isGoogleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
@@ -97,13 +119,12 @@ const OnBoarding = () => {
   }, [user]);
 
   const professions = [
-    'Developer/Engineer',
-    'Designer/Creative',
-    'Product Manager',
-    'Marketing/Sales',
-    'Founder/Entrepreneur',
-    'Consultant',
-    'Student',
+    'Tech (Dev/Design/PM)',
+    'Creative (Artist/Writer/Creator)',
+    'Healthcare/Education',
+    'Business/Sales/Finance',
+    'Trades/Service Work',
+    'Student/Career Starter',
     'Other',
   ];
 
@@ -174,6 +195,22 @@ const OnBoarding = () => {
       setLoading(false);
     }
   };
+
+  const isCustomSuperpower =
+    profile.superpower && !superpowers.includes(profile.superpower);
+  const superpowerSelection = isCustomSuperpower
+    ? 'Other (specify below)'
+    : profile.superpower;
+  const showOtherSuperpower = superpowerSelection === 'Other (specify below)';
+  const otherSuperpowerValue = isCustomSuperpower ? profile.superpower : '';
+
+  const isCustomKryptonite =
+    profile.kryptonite && !kryptonites.includes(profile.kryptonite);
+  const kryptoniteSelection = isCustomKryptonite
+    ? 'Other (specify below)'
+    : profile.kryptonite;
+  const showOtherKryptonite = kryptoniteSelection === 'Other (specify below)';
+  const otherKryptoniteValue = isCustomKryptonite ? profile.kryptonite : '';
 
   const steps = [
     {
@@ -279,7 +316,7 @@ const OnBoarding = () => {
     {
       title: 'Primary Block Pattern',
       robMessage:
-        'What type of blocks do you hit most often? This helps me tune my card selection algorithm.',
+        'What type of blocks do you hit most often? This helps me tune my divination algorithm.',
       content: (
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-3">
@@ -311,26 +348,80 @@ const OnBoarding = () => {
               <Zap className="inline w-4 h-4 mr-1" />
               What's one thing you're actually good at figuring out?
             </label>
-            <textarea
-              value={profile.superpower}
-              onChange={(e) => updateProfile('superpower', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              rows={3}
-              placeholder="Your debugging superpower..."
-            />
+            <div className="relative">
+              <select
+                value={superpowerSelection || ''}
+                onChange={(e) => updateProfile('superpower', e.target.value)}
+                className="w-full p-4 border rounded-lg appearance-none bg-white border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-500"
+              >
+                <option value="" disabled>
+                  Select a superpower
+                </option>
+                {superpowers.map((superpower) => (
+                  <option key={superpower} value={superpower}>
+                    {superpower}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+            {showOtherSuperpower && (
+              <textarea
+                value={otherSuperpowerValue}
+                onChange={(e) => updateProfile('superpower', e.target.value)}
+                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                rows={3}
+                placeholder="Your debugging superpower..."
+              />
+            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               <Target className="inline w-4 h-4 mr-1" />
               What consistently trips you up?
             </label>
-            <textarea
-              value={profile.kryptonite}
-              onChange={(e) => updateProfile('kryptonite', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              rows={3}
-              placeholder="Your consistent kryptonite..."
-            />
+            <div className="relative">
+              <select
+                value={kryptoniteSelection || ''}
+                onChange={(e) => updateProfile('kryptonite', e.target.value)}
+                className="w-full p-4 border rounded-lg appearance-none bg-white border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-500"
+              >
+                <option value="" disabled>
+                  Select a kryptonite
+                </option>
+                {kryptonites.map((kryptonite) => (
+                  <option key={kryptonite} value={kryptonite}>
+                    {kryptonite}
+                  </option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+            {showOtherKryptonite && (
+              <textarea
+                value={otherKryptoniteValue}
+                onChange={(e) => updateProfile('kryptonite', e.target.value)}
+                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                rows={3}
+                placeholder="Your consistent kryptonite..."
+              />
+            )}
           </div>
         </div>
       ),

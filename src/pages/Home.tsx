@@ -6,19 +6,12 @@ import FullPondSpread from '../components/FullPondSpread';
 import Landing from '../components/Landing';
 import OnBoarding from './OnBoarding';
 import { getDb } from '@/lib/database-provider';
-import { getUserReadings } from '@/lib/supabase/supabase-queries';
+import {
+  getUserProfile,
+  isProfileComplete,
+  type UserProfile,
+} from '../lib/userPreferences';
 import type { Card, BlockType } from '@/src/shared/interfaces';
-
-// Define the type for a reading based on the database schema
-interface Reading {
-  id: number;
-  user_id: string | null;
-  spread_type: string;
-  block_type_id: string;
-  user_context: string | null;
-  cards_drawn: number[];
-  created_at: Date;
-}
 
 export default function Home() {
   const { user } = useAuth();
@@ -30,27 +23,27 @@ export default function Home() {
     'setup'
   );
   const [loading, setLoading] = useState(true);
-  const [readings, setReadings] = useState<Reading[]>([]);
   const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);
   const [drawnCards, setDrawnCards] = useState<Card[]>([]);
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-  // Fetch user readings and block types
+  // Fetch user readings, block types, and profile
   useEffect(() => {
     let isMounted = true;
     const fetchData = async () => {
       if (user) {
         try {
-          const [userReadings, db] = await Promise.all([
-            getUserReadings(),
+          const [db, profile] = await Promise.all([
             getDb(),
+            getUserProfile(user.id),
           ]);
           const loadedBlockTypes = await db.getAllBlockTypes();
           if (isMounted) {
-            setReadings(userReadings || []);
             setBlockTypes(loadedBlockTypes);
+            setUserProfile(profile);
             setLoading(false);
           }
         } catch (error) {
@@ -124,7 +117,7 @@ export default function Home() {
     return <Landing />;
   }
 
-  if (readings.length === 0 && step === 'setup') {
+  if (!isProfileComplete(userProfile)) {
     return <OnBoarding />;
   }
 
