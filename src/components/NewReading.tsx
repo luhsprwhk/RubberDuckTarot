@@ -11,7 +11,7 @@ interface BlockType {
 interface NewReadingProps {
   blockTypes: BlockType[];
   selectedBlockType: string;
-  selectedSpread: string;
+  selectedSpread: string | null;
   userContext: string;
   onBlockSelect: (id: string) => void;
   onUserContextChange: (context: string) => void;
