@@ -25,6 +25,7 @@
     ]
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.54.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@supabase/supabase-js": "^2.50.0",
     "@types/better-sqlite3": "^7.6.13",

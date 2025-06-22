@@ -8,7 +8,7 @@ import {
   saveUserProfile,
   getUserProfile,
   type UserProfile as DbUserProfile,
-} from '../lib/userPreferences';
+} from '../shared/userPreferences';
 import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {

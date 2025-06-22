@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import QuickDrawSpread from '../components/QuickDrawSpread';
 import FullPondSpread from '../components/FullPondSpread';
+import { getUserProfile, type UserProfile } from '../shared/userPreferences';
+import useAuth from '../hooks/useAuth';
 import type { Card } from '../shared/interfaces';
 
 interface ReadingState {
   drawnCards: Card[];
   selectedBlockTypeId: string;
   spreadType: 'quick-draw' | 'full-pond';
+  userContext?: string;
 }
 
 const Reading: React.FC = () => {
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as ReadingState | null;
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        try {
+          const profile = await getUserProfile(user.id);
+          setUserProfile(profile);
+        } catch (error) {
+          console.error('Failed to fetch user profile:', error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
 
   const handleReset = () => {
     navigate('/'); // Navigate back to Home to start a new reading
@@ -46,7 +66,12 @@ const Reading: React.FC = () => {
     );
   }
 
-  const { drawnCards, selectedBlockTypeId, spreadType } = state;
+  const {
+    drawnCards,
+    selectedBlockTypeId,
+    spreadType,
+    userContext = '',
+  } = state;
 
   if (spreadType === 'quick-draw') {
     if (!drawnCards || drawnCards.length === 0) {
@@ -66,9 +91,11 @@ const Reading: React.FC = () => {
     }
     return (
       <QuickDrawSpread
-        step="revealed" // Assuming QuickDrawSpread handles its own reveal or displays immediately
+        step="revealed"
         drawnCard={drawnCards[0]}
         selectedBlockTypeId={selectedBlockTypeId}
+        userContext={userContext}
+        userProfile={userProfile}
         onReset={handleReset}
       />
     );

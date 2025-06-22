@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import NewReading from '../components/NewReading';
-import FullPondSpread from '../components/FullPondSpread';
 import Landing from '../components/Landing';
 import OnBoarding from './OnBoarding';
 import { getDb } from '@/lib/database-provider';
@@ -10,7 +9,7 @@ import {
   getUserProfile,
   isProfileComplete,
   type UserProfile,
-} from '../lib/userPreferences';
+} from '../shared/userPreferences';
 import type { Card, BlockType } from '@/src/shared/interfaces';
 
 export default function Home() {
@@ -19,12 +18,8 @@ export default function Home() {
   const navigate = useNavigate();
 
   // State management
-  const [step, setStep] = useState<'setup' | 'drawing' | 'full-pond-display'>(
-    'setup'
-  );
   const [loading, setLoading] = useState(true);
   const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);
-  const [drawnCards, setDrawnCards] = useState<Card[]>([]);
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
@@ -63,42 +58,35 @@ export default function Home() {
   }, [user, isUserLoggedIn]);
 
   // Handlers
-  const handleDrawCard = async () => {
+  const handleNewReading = async () => {
     if (!selectedBlockType || !selectedSpread) return;
 
-    setStep('drawing');
     const db = await getDb();
     const allCards = await db.getAllCards();
 
     // Simulate drawing time
     setTimeout(() => {
-      if (selectedSpread === 'quick-draw') {
-        const randomCard =
-          allCards[Math.floor(Math.random() * allCards.length)];
-        navigate('/reading', {
-          state: {
-            drawnCards: [randomCard],
-            selectedBlockTypeId: selectedBlockType,
-            spreadType: 'quick-draw',
-          },
-        });
-        handleReset(); // Reset state after navigating
-      } else if (selectedSpread === 'full-pond') {
-        const randomCards: Card[] = [];
-        for (let i = 0; i < 3; i++) {
-          randomCards.push(
-            allCards[Math.floor(Math.random() * allCards.length)]
-          );
-        }
-        setDrawnCards(randomCards);
-        setStep('full-pond-display');
+      const numCardsToDraw = selectedSpread === 'quick-draw' ? 1 : 3;
+      const drawnCards: Card[] = [];
+
+      for (let i = 0; i < numCardsToDraw; i++) {
+        drawnCards.push(allCards[Math.floor(Math.random() * allCards.length)]);
       }
+
+      navigate('/reading', {
+        state: {
+          drawnCards,
+          selectedBlockTypeId: selectedBlockType,
+          spreadType: selectedSpread,
+          userContext: userContext,
+        },
+      });
+
+      handleReset(); // Reset state after navigating
     }, 1000);
   };
 
   const handleReset = () => {
-    setStep('setup');
-    setDrawnCards([]);
     setSelectedSpread(null);
     setSelectedBlockType('');
     setUserContext('');
@@ -122,39 +110,18 @@ export default function Home() {
   }
 
   const renderContent = () => {
-    switch (step) {
-      case 'setup':
-        return (
-          <NewReading
-            blockTypes={blockTypes}
-            selectedBlockType={selectedBlockType}
-            userContext={userContext}
-            onBlockSelect={setSelectedBlockType}
-            onUserContextChange={setUserContext}
-            onSpreadSelect={setSelectedSpread}
-            onDrawCard={handleDrawCard}
-            selectedSpread={selectedSpread}
-          />
-        );
-      case 'drawing':
-        return (
-          <div className="text-center py-10">
-            <p className="text-2xl text-gray-700 animate-pulse">
-              Shuffling the deck and drawing your cards...
-            </p>
-          </div>
-        );
-      case 'full-pond-display':
-        return (
-          <FullPondSpread
-            drawnCards={drawnCards}
-            selectedBlockTypeId={selectedBlockType}
-            onReset={handleReset}
-          />
-        );
-      default:
-        return <div>An unexpected error occurred.</div>;
-    }
+    return (
+      <NewReading
+        blockTypes={blockTypes}
+        selectedBlockType={selectedBlockType}
+        userContext={userContext}
+        onBlockSelect={setSelectedBlockType}
+        onUserContextChange={setUserContext}
+        onSpreadSelect={setSelectedSpread}
+        onNewReading={handleNewReading}
+        selectedSpread={selectedSpread}
+      />
+    );
   };
 
   return <div className="container mx-auto p-4">{renderContent()}</div>;

@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { getDb } from '@/lib/database-provider';
+import {
+  generatePersonalizedReading,
+  type PersonalizedReading,
+} from '@/src/shared/claude-ai';
 import type { Card, BlockType } from '@/src/shared/interfaces';
+import type { UserProfile } from '@/src/shared/userPreferences';
 
 interface QuickDrawSpreadProps {
   step: 'drawing' | 'revealed';
   drawnCard: Card | null;
   selectedBlockTypeId: string;
+  userContext: string;
+  userProfile: UserProfile | null;
   onReset: () => void;
 }
 
@@ -13,9 +20,14 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
   step,
   drawnCard,
   selectedBlockTypeId,
+  userContext,
+  userProfile,
   onReset,
 }) => {
   const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
+  const [personalizedReading, setPersonalizedReading] =
+    useState<PersonalizedReading | null>(null);
+  const [loadingReading, setLoadingReading] = useState(false);
 
   useEffect(() => {
     const fetchBlock = async () => {
@@ -25,6 +37,44 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
     };
     fetchBlock();
   }, [selectedBlockTypeId]);
+
+  // Generate personalized reading when card is revealed
+  useEffect(() => {
+    const generateReading = async () => {
+      if (
+        step === 'revealed' &&
+        drawnCard &&
+        selectedBlock &&
+        userProfile &&
+        !personalizedReading
+      ) {
+        setLoadingReading(true);
+        try {
+          const reading = await generatePersonalizedReading({
+            cards: [drawnCard],
+            blockType: selectedBlock,
+            userContext,
+            userProfile,
+            spreadType: 'quick-draw',
+          });
+          setPersonalizedReading(reading);
+        } catch (error) {
+          console.error('Failed to generate personalized reading:', error);
+        } finally {
+          setLoadingReading(false);
+        }
+      }
+    };
+
+    generateReading();
+  }, [
+    step,
+    drawnCard,
+    selectedBlock,
+    userProfile,
+    userContext,
+    personalizedReading,
+  ]);
 
   const blockAdvice =
     drawnCard?.block_applications[
@@ -68,43 +118,114 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
             </p>
           </div>
 
-          {/* Block-Specific Advice */}
-          <div className="bg-blue-50 rounded-lg p-4 mb-6">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-xl">{selectedBlock?.emoji}</span>
-              <h3 className="text-lg font-semibold text-gray-800">
-                {selectedBlock?.name} Insight
-              </h3>
+          {/* Personalized Reading or Loading */}
+          {loadingReading ? (
+            <div className="bg-blue-50 rounded-lg p-6 mb-6 text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-700">
+                Rob is analyzing your situation...
+              </p>
             </div>
-            <p className="text-gray-700 leading-relaxed">{blockAdvice}</p>
-          </div>
+          ) : personalizedReading ? (
+            <>
+              {/* AI-Generated Interpretation */}
+              <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">{selectedBlock?.emoji}</span>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    Rob's Personalized Analysis
+                  </h3>
+                </div>
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {personalizedReading.interpretation}
+                </p>
+              </div>
 
-          {/* Rob's Wisdom */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              🦆 Rob's Debugging Wisdom
-            </h3>
-            <p className="text-gray-700 italic leading-relaxed">
-              "{drawnCard.duck_wisdom}"
-            </p>
-          </div>
+              {/* Key Insights */}
+              {personalizedReading.keyInsights.length > 0 && (
+                <div className="bg-green-50 rounded-lg p-4 mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                    🔍 Key Insights
+                  </h3>
+                  <ul className="space-y-2">
+                    {personalizedReading.keyInsights.map((insight, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-green-500 mt-1">•</span>
+                        <span className="text-gray-700">{insight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-          {/* Perspective Prompts */}
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
-              Reflection Questions:
-            </h3>
-            <ul className="space-y-2">
-              {drawnCard.perspective_prompts
-                .slice(0, 3)
-                .map((prompt, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="text-blue-500 mt-1">•</span>
-                    <span className="text-gray-700">{prompt}</span>
-                  </li>
-                ))}
-            </ul>
-          </div>
+              {/* Action Steps */}
+              {personalizedReading.actionSteps.length > 0 && (
+                <div className="bg-purple-50 rounded-lg p-4 mb-6">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                    🎯 Action Steps
+                  </h3>
+                  <ol className="space-y-2">
+                    {personalizedReading.actionSteps.map((step, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-purple-500 font-semibold">
+                          {index + 1}.
+                        </span>
+                        <span className="text-gray-700">{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+              {/* Rob's Quip */}
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  🦆 Rob's Final Word
+                </h3>
+                <p className="text-gray-700 italic leading-relaxed">
+                  "{personalizedReading.robQuip}"
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Fallback to Static Content */}
+              <div className="bg-blue-50 rounded-lg p-4 mb-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xl">{selectedBlock?.emoji}</span>
+                  <h3 className="text-lg font-semibold text-gray-800">
+                    {selectedBlock?.name} Insight
+                  </h3>
+                </div>
+                <p className="text-gray-700 leading-relaxed">{blockAdvice}</p>
+              </div>
+
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  🦆 Rob's Debugging Wisdom
+                </h3>
+                <p className="text-gray-700 italic leading-relaxed">
+                  "{drawnCard.duck_wisdom}"
+                </p>
+              </div>
+
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-3">
+                  Reflection Questions:
+                </h3>
+                <ul className="space-y-2">
+                  {drawnCard.perspective_prompts
+                    .slice(0, 3)
+                    .map((prompt, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-blue-500 mt-1">•</span>
+                        <span className="text-gray-700">{prompt}</span>
+                      </li>
+                    ))}
+                </ul>
+              </div>
+            </>
+          )}
         </div>
       )}
 

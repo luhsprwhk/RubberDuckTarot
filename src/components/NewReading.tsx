@@ -15,7 +15,7 @@ interface NewReadingProps {
   userContext: string;
   onBlockSelect: (id: string) => void;
   onUserContextChange: (context: string) => void;
-  onDrawCard: () => void;
+  onNewReading: () => void;
   onSpreadSelect: (spread: string) => void;
 }
 
@@ -25,7 +25,7 @@ const NewReading: React.FC<NewReadingProps> = ({
   userContext,
   onBlockSelect,
   onUserContextChange,
-  onDrawCard,
+  onNewReading,
   onSpreadSelect,
   selectedSpread,
 }) => {
@@ -106,20 +106,22 @@ const NewReading: React.FC<NewReadingProps> = ({
 
       {/* Draw Button */}
       {selectedBlockType && userContext.trim() !== '' && (
-        <DrawButton onDrawCard={onDrawCard} />
+        <DrawButton onNewReading={onNewReading} />
       )}
     </div>
   );
 };
 
-const DrawButton: React.FC<{ onDrawCard: () => void }> = ({ onDrawCard }) => {
+const DrawButton: React.FC<{ onNewReading: () => void }> = ({
+  onNewReading,
+}) => {
   return (
     <div className="text-center">
       <button
-        onClick={onDrawCard}
+        onClick={onNewReading}
         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
       >
-        🎴 Draw Your Card
+        🎴 New Reading
       </button>
     </div>
   );
