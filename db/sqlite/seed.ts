@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { db } from './sqlite/connection';
-import { cards, blockTypes } from './sqlite/schema';
+import { db } from './connection';
+import { cards, blockTypes } from './schema';
 
 interface CardData {
   id: number;
@@ -36,7 +36,7 @@ interface JsonData {
   block_types: BlockTypeData[];
 }
 
-async function seed() {
+export async function seed() {
   try {
     console.log('🌱 Starting database seeding...');
 
@@ -65,5 +65,3 @@ async function seed() {
     process.exit(1);
   }
 }
-
-seed();

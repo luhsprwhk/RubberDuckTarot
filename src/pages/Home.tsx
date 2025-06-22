@@ -10,7 +10,7 @@ import {
   isProfileComplete,
   type UserProfile,
 } from '../shared/userPreferences';
-import type { BlockType } from '@/src/shared/interfaces';
+import type { BlockType } from '../shared/interfaces';
 
 export default function Home() {
   const { user } = useAuth();
@@ -25,11 +25,12 @@ export default function Home() {
   const [userContext, setUserContext] = useState<string>('');
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-  // Fetch user readings, block types, and profile
+  // Fetch block types and user profile
   useEffect(() => {
     let isMounted = true;
-    const fetchData = async () => {
+    const fetchUserData = async () => {
       if (user) {
+        setLoading(true);
         try {
           const [db, profile] = await Promise.all([
             getDb(),
@@ -39,23 +40,23 @@ export default function Home() {
           if (isMounted) {
             setBlockTypes(loadedBlockTypes);
             setUserProfile(profile);
-            setLoading(false);
           }
         } catch (error) {
-          console.error('Error fetching data:', error);
-          if (isMounted) setLoading(false);
+          console.error('Error fetching user data:', error);
+        } finally {
+          if (isMounted) {
+            setLoading(false);
+          }
         }
-      } else if (!isUserLoggedIn) {
-        setLoading(false);
       }
     };
 
-    fetchData();
+    fetchUserData();
 
     return () => {
       isMounted = false;
     };
-  }, [user, isUserLoggedIn]);
+  }, [user]);
 
   // Handlers
   const handleNewReading = () => {
