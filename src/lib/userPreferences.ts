@@ -4,7 +4,6 @@ export interface UserProfile {
   id?: string;
   user_id: string;
   name: string;
-  age: string;
   birthday: string;
   birth_place: string;
   profession: string;

@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { Loader } from '@googlemaps/js-api-loader';
+import PlacesAutocomplete from '../components/PlacesAutocomplete';
 import { ChevronRight, Zap, Brain, Target, Users, Bird } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 
@@ -11,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 
 interface UserProfile {
   name: string;
-  age: string;
   birthday: string;
   birthPlace: string;
   profession: string;
@@ -24,13 +25,34 @@ interface UserProfile {
 }
 
 const OnBoarding = () => {
+  const [isGoogleMapsLoaded, setGoogleMapsLoaded] = useState(false);
+
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || '',
+      version: 'weekly',
+      libraries: ['places'],
+    });
+
+    loader
+      .load()
+      .then(() => {
+        setGoogleMapsLoaded(true);
+      })
+      .catch((e) => {
+        console.error(
+          'Failed to load Google Maps script. Please check your API key and network connection.',
+          e
+        );
+      });
+  }, []);
+
   const { user } = useAuth();
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<UserProfile>({
     name: '',
-    age: '',
     birthday: '',
     birthPlace: '',
     profession: '',
@@ -55,7 +77,6 @@ const OnBoarding = () => {
           if (existingProfile) {
             setProfile({
               name: existingProfile.name,
-              age: existingProfile.age,
               birthday: existingProfile.birthday,
               birthPlace: existingProfile.birth_place,
               profession: existingProfile.profession,
@@ -133,7 +154,6 @@ const OnBoarding = () => {
         {
           user_id: user.id,
           name: profile.name,
-          age: profile.age,
           birthday: profile.birthday,
           birth_place: profile.birthPlace,
           profession: profile.profession,
@@ -175,18 +195,6 @@ const OnBoarding = () => {
                 placeholder="What should I call you?"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Age
-              </label>
-              <input
-                type="number"
-                value={profile.age}
-                onChange={(e) => updateProfile('age', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                placeholder="How many years debugging life?"
-              />
-            </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -204,13 +212,16 @@ const OnBoarding = () => {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Place of Birth
               </label>
-              <input
-                type="text"
-                value={profile.birthPlace}
-                onChange={(e) => updateProfile('birthPlace', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                placeholder="Where did your debugging journey begin?"
-              />
+              {isGoogleMapsLoaded && (
+                <PlacesAutocomplete
+                  initialValue={profile.birthPlace}
+                  onPlaceSelect={(place) => {
+                    if (place.formatted_address) {
+                      updateProfile('birthPlace', place.formatted_address);
+                    }
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -424,9 +435,7 @@ const OnBoarding = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 0:
-        return (
-          profile.name && profile.age && profile.birthday && profile.birthPlace
-        );
+        return profile.name && profile.birthday && profile.birthPlace;
       case 1:
         return profile.profession;
       case 2:
