@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getDb } from '@/lib/database-provider';
 import CardsContext from './CardsContext';
+import { cardCache } from './cardCache';
 import type { Card } from '../interfaces';
 
 interface CardsProviderProps {
@@ -12,13 +13,27 @@ const CardsProvider = ({ children }: CardsProviderProps) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchCards = async () => {
+  const fetchCards = async (forceRefresh = false) => {
     try {
       setLoading(true);
       setError(null);
 
+      // Check cache first unless forcing refresh
+      if (!forceRefresh) {
+        const cached = cardCache.get();
+        if (cached) {
+          setCards(cached.cards);
+          setLoading(false);
+          return;
+        }
+      }
+
       const db = await getDb();
       const allCards = await db.getAllCards();
+
+      // Cache the cards with a simple version based on count and timestamp
+      const version = `${allCards.length}-${Date.now()}`;
+      cardCache.set(allCards, version);
 
       setCards(allCards);
     } catch (err) {
@@ -34,7 +49,7 @@ const CardsProvider = ({ children }: CardsProviderProps) => {
   }, []);
 
   const refreshCards = async () => {
-    await fetchCards();
+    await fetchCards(true);
   };
 
   const value = {
