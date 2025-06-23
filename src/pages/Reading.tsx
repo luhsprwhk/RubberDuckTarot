@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { BlockType, Card } from '../interfaces';
 import { getDb } from '@/lib/database-provider';
-import { createInsight } from '@/lib/supabase/supabase-queries';
+import { createInsight } from '@/src/modules/insights/insight-queries';
 import {
   generatePersonalizedReading,
   type PersonalizedReading,
