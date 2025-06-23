@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getInsightById } from '@/lib/supabase/supabase-queries';
-import { getCardById, getBlockTypeById } from '@/lib/supabase/supabase-queries';
-import type { Insight, Card, BlockType } from '@/lib/supabase/supabase-schema';
+import { getInsightById } from '@/src/modules/insights/insight-queries';
+import { getCardById } from '@/src/modules/cards/card-queries';
+import { getBlockTypeById } from '@/src/modules/blocktypes/blocktype-queries';
+import type { Insight, Card, BlockType } from '@/src/interfaces';
 import QuickDuckSpread from '../components/QuickDuckSpread';
 import FullPondSpread from '../components/FullPondSpread';
 
