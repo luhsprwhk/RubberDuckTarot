@@ -433,6 +433,348 @@
       "tags": ["tracking", "measurement", "consistency", "progress", "habits"]
     },
     {
+      "id": 16,
+      "name": "Noise-Canceling Headphones",
+      "emoji": "🎧",
+      "traditional_equivalent": "The Tower",
+      "core_meaning": "Isolation, focus, boundaries, filtering distractions",
+      "duck_question": "What noise needs to be blocked out?",
+      "visual_description": "A pair of premium noise-canceling headphones sitting on a cluttered desk, with the active noise cancellation indicator glowing softly. Around them, you can see the chaos they're meant to block out - open Slack notifications, email alerts, a ringing phone, and people talking in the background through glass office walls. The headphones look like a sanctuary of focus in a world of interruption.",
+      "perspective_prompts": [
+        "What signal are you trying to hear that's being drowned out by noise?",
+        "What boundaries do you need to create to protect your mental bandwidth?",
+        "What 'urgent' interruptions are actually just other people's poor planning?",
+        "What would you accomplish if you could filter out the opinions that don't matter?",
+        "What environment do you need to create to do your best work?"
+      ],
+      "block_applications": {
+        "creative": "You're trying to create in a noisy environment. What distractions need to be eliminated before you can hear your own creative voice?",
+        "decision": "Too many voices are influencing your choice. Who actually gets a vote in this decision, and who's just background noise?",
+        "work": "You're reactive instead of proactive because you can't filter incoming requests. What noise can you cancel to focus on what matters?",
+        "life": "You're living according to other people's expectations instead of your own values. Time to tune out the external static.",
+        "relationship": "Drama and old conflicts are drowning out real communication. What background noise needs to be eliminated?"
+      },
+      "duck_wisdom": "You're trying to debug with a thousand console.log statements running. Mute the irrelevant output and focus on the error that actually matters. Not every notification deserves your immediate attention.",
+      "reversed_meaning": "Isolating so much that you miss important feedback, using focus as an excuse to avoid necessary collaboration, or becoming addicted to perfect conditions instead of learning to work anywhere.",
+      "tags": ["focus", "boundaries", "filtering", "isolation", "distraction"]
+    },
+    {
+      "id": 17,
+      "name": "Portable Charger",
+      "emoji": "🔋",
+      "traditional_equivalent": "The Anchor",
+      "core_meaning": "Backup power, preparation, reliability, emergency resources",
+      "duck_question": "What's your backup plan?",
+      "visual_description": "A sleek portable battery pack connected to a smartphone with a charging cable. The power bank shows 78% capacity on its LED display, and there are multiple USB ports ready for other devices. It sits in a laptop bag next to other travel essentials - cables, adapters, earbuds. There's a sense of preparedness and the comfort that comes from knowing you won't be caught powerless.",
+      "perspective_prompts": [
+        "What would you attempt if you knew you had a reliable fallback option?",
+        "What's your plan when your primary strategy runs out of juice?",
+        "What emergency resource are you not building because you're hoping you won't need it?",
+        "What would give you the confidence to take bigger risks?",
+        "What are you avoiding because you're afraid of being left stranded?"
+      ],
+      "block_applications": {
+        "creative": "You're not taking creative risks because you're afraid of 'wasting' time. What backup project could you work on if the main one fails?",
+        "decision": "You're paralyzed by the fear of making the wrong choice. What's your plan B if option A doesn't work out?",
+        "work": "You're stuck in a job because you haven't built career backup options. What safety net do you need to take professional risks?",
+        "life": "You're not pursuing what you want because you're afraid of failure. What foundation would let you experiment freely?",
+        "relationship": "You're staying in something unsatisfying because you're afraid of being alone. What independence do you need to build first?"
+      },
+      "duck_wisdom": "You're afraid to refactor because you don't have proper version control. Set up your rollback plan first, then you can experiment without fear of breaking everything.",
+      "reversed_meaning": "Over-preparing to avoid taking action, becoming addicted to safety nets instead of building confidence, or hoarding resources you never actually use.",
+      "tags": ["backup", "preparation", "safety", "reliability", "confidence"]
+    },
+    {
+      "id": 18,
+      "name": "Camera Roll",
+      "emoji": "📸",
+      "traditional_equivalent": "The Book",
+      "core_meaning": "Memory, documentation, perspective, evidence",
+      "duck_question": "What story does the evidence tell?",
+      "visual_description": "A smartphone camera roll showing a grid of recent photos - screenshots of ideas, pictures of whiteboards from meetings, random moments captured throughout the week. Some photos are blurry, others perfectly composed. There's a mix of work stuff, personal moments, and things that seemed important at the time. The storage bar at the bottom shows it's almost full.",
+      "perspective_prompts": [
+        "What patterns emerge when you look at your actual behavior instead of your intentions?",
+        "What evidence are you ignoring because it doesn't match the story you want to tell?",
+        "What would an outside observer conclude about your priorities from your actions?",
+        "What moments are you not documenting because you think they don't matter?",
+        "What would you see differently if you reviewed the last month like a photo album?"
+      ],
+      "block_applications": {
+        "creative": "Look back at your recent creative attempts. What patterns show what actually works versus what you think should work?",
+        "decision": "Review your past decisions - what does your track record tell you about your judgment? Trust the data, not the anxiety.",
+        "work": "What does your calendar/email/Slack history reveal about where your time actually goes versus where you think it goes?",
+        "life": "If someone looked at your photos from the last month, what would they conclude about what makes you happy?",
+        "relationship": "What does your communication history actually show about the relationship dynamic, stripped of emotion and assumptions?"
+      },
+      "duck_wisdom": "Stop guessing what's wrong and look at the actual logs. Your git history, your metrics, your user behavior - the data tells the real story, not your assumptions about what should be happening.",
+      "reversed_meaning": "Living in the past instead of the present, being paralyzed by over-documentation, or refusing to look at evidence that contradicts your preferred narrative.",
+      "tags": [
+        "evidence",
+        "patterns",
+        "documentation",
+        "reality",
+        "perspective"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Shopping Cart",
+      "emoji": "🛒",
+      "traditional_equivalent": "The Garden",
+      "core_meaning": "Accumulation, intention vs. action, resource gathering",
+      "duck_question": "What are you collecting instead of using?",
+      "visual_description": "An online shopping cart interface showing 47 items added over several weeks - books you meant to read, courses you planned to take, tools you thought you needed. The total keeps climbing, but nothing's been purchased. There's a 'Save for Later' section that's even fuller, and several 'Items in your cart are going fast!' notifications. The checkout button sits there, waiting.",
+      "perspective_prompts": [
+        "What are you gathering that you never actually use or implement?",
+        "What resources do you already have that could solve your current problem?",
+        "What are you buying/collecting to avoid actually doing the work?",
+        "What would happen if you used what you have instead of acquiring more?",
+        "What are you preparing for that you could just start now with existing tools?"
+      ],
+      "block_applications": {
+        "creative": "Stop buying new creative tools and use what you already have. That expensive software won't make you more creative than starting with basics.",
+        "decision": "You're researching options instead of testing them. Pick from what you already know works and stop shopping for perfect solutions.",
+        "work": "You're collecting skills, credentials, and tools instead of shipping work. Use your existing toolkit to solve real problems.",
+        "life": "You're buying the lifestyle instead of living it. What experiences are you postponing while you acquire the 'right' equipment?",
+        "relationship": "You're collecting relationship advice instead of having actual conversations. Act on what you already know."
+      },
+      "duck_wisdom": "You have 73 npm packages in your devDependencies but you're only using 12. Stop installing new libraries and learn to use the ones you already have. Ship with what works.",
+      "reversed_meaning": "Never committing to purchases or decisions, hoarding resources without purpose, or using minimalism as an excuse to avoid investing in necessary tools.",
+      "tags": [
+        "accumulation",
+        "resources",
+        "preparation",
+        "action",
+        "commitment"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Game Controller",
+      "emoji": "🎮",
+      "traditional_equivalent": "The Mice",
+      "core_meaning": "Play, experimentation, safe failure, skill building",
+      "duck_question": "How can you make this more like a game?",
+      "visual_description": "A gaming controller on a coffee table, slightly worn from use, with a game paused on the TV screen showing a character at a checkpoint. The controller's analog sticks show slight wear patterns, and there are energy drink cans and snack wrappers nearby - evidence of long gaming sessions. The screen shows a respawn timer counting down, suggesting multiple attempts at the same challenge.",
+      "perspective_prompts": [
+        "What would you attempt if failure was just hitting restart instead of actual consequences?",
+        "How could you break this big challenge into smaller levels or achievements?",
+        "What would make this tedious task actually engaging or competitive?",
+        "What skills are you building through play that apply to serious work?",
+        "How could you lower the stakes while keeping the learning high?"
+      ],
+      "block_applications": {
+        "creative": "Treat your next project like a game level - set small objectives, celebrate wins, and don't worry about perfect scores on the first playthrough.",
+        "decision": "Game out different scenarios. What's the worst that happens if you 'die' in this choice? Usually you just respawn and try again.",
+        "work": "Turn your boring tasks into a points system or competition. What would make this work actually fun to optimize?",
+        "life": "You're treating life like a test instead of a sandbox game. Where can you experiment without permanent consequences?",
+        "relationship": "Stop trying to win conversations and start playing cooperatively. How can you both level up together?"
+      },
+      "duck_wisdom": "You're coding like every bug will brick the system. Set up a proper dev environment where you can break things safely and iterate quickly. Fail fast, learn faster.",
+      "reversed_meaning": "Using games to avoid real challenges, treating serious situations too casually, or never progressing beyond comfortable difficulty levels.",
+      "tags": ["play", "experimentation", "learning", "iteration", "practice"]
+    },
+    {
+      "id": 21,
+      "name": "Ride Share",
+      "emoji": "🚗",
+      "traditional_equivalent": "The Crossroads",
+      "core_meaning": "Direction, temporary guidance, shared journey, navigation",
+      "duck_question": "Who's driving this decision?",
+      "visual_description": "A smartphone showing a ride-share app with multiple route options to the same destination - some faster but more expensive, others longer but cheaper. The driver's ETA keeps updating, and you can see their car icon moving through traffic on the map. There's a 'Share Ride' option available, and the passenger rating system shows 4.8 stars. The pickup location pin is slightly off from where you're actually standing.",
+      "perspective_prompts": [
+        "Are you trying to control the route when you should just pick the destination?",
+        "What journey would be easier if you shared it with someone else?",
+        "Who's actually steering this situation, and are you okay with that?",
+        "What would happen if you let someone else navigate for a while?",
+        "Are you waiting for the perfect route when any movement would help?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to map the entire creative journey. Pick a destination and let the process navigate the route.",
+        "decision": "You're overthinking the path when you just need to choose where you want to end up. Let circumstances handle the details.",
+        "work": "You're trying to solo something that would be easier with a collaborator. Who could share this professional ride?",
+        "life": "You're paralyzed by trying to plan every step. Pick a direction and trust that course corrections happen naturally.",
+        "relationship": "Someone else might need to drive this conversation. Stop backseat driving and see where they take it."
+      },
+      "duck_wisdom": "You're trying to micromanage every function call when you just need to define the API contract. Set the destination, trust the framework to route efficiently.",
+      "reversed_meaning": "Never taking the wheel when leadership is needed, constantly changing destinations mid-journey, or refusing to share control even when you're lost.",
+      "tags": [
+        "navigation",
+        "collaboration",
+        "control",
+        "direction",
+        "guidance"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Video Call",
+      "emoji": "💻",
+      "traditional_equivalent": "The Letter",
+      "core_meaning": "Communication, connection across distance, presence, clarity",
+      "duck_question": "What needs to be said face-to-face?",
+      "visual_description": "A laptop screen showing a video call interface with multiple participants - some with cameras on, others just showing initials or profile pics. There's background blur active, a mute button prominently displayed, and chat messages piling up on the side. Connection bars show varying signal strength. One person appears to be talking but the 'You're muted' notification is visible.",
+      "perspective_prompts": [
+        "What message are you sending through text that needs your actual voice?",
+        "Who haven't you seen face-to-face (virtually or otherwise) in too long?",
+        "What conversation keeps getting delayed that needs to happen now?",
+        "Are you hiding behind async communication to avoid real interaction?",
+        "What would change if you could see each other's reactions in real time?"
+      ],
+      "block_applications": {
+        "creative": "Stop trying to explain your creative vision through messages. Show people what you mean, don't just describe it.",
+        "decision": "You're making assumptions about what others think. Get on a call and actually ask them directly.",
+        "work": "That email chain has gone on too long. Schedule 15 minutes and resolve it with actual conversation.",
+        "life": "You're managing relationships through status updates instead of real connection. Time for actual face time.",
+        "relationship": "Stop texting about the issue. Have the conversation where you can hear tone and see expressions."
+      },
+      "duck_wisdom": "You're debugging through comments in pull requests when you need to screen share and walk through the code together. Some problems require bandwidth that text can't provide.",
+      "reversed_meaning": "Over-relying on meetings when async communication would work better, avoiding difficult conversations by demanding they happen 'in person,' or using video calls to avoid taking action.",
+      "tags": [
+        "communication",
+        "presence",
+        "clarity",
+        "connection",
+        "directness"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Search Bar",
+      "emoji": "🔍",
+      "traditional_equivalent": "The Man",
+      "core_meaning": "Seeking, inquiry, investigation, finding what's hidden",
+      "duck_question": "What are you really looking for?",
+      "visual_description": "A browser search bar with a blinking cursor, showing recent search history - a mix of work-related queries, random questions, and half-remembered song lyrics. The autocomplete dropdown suggests similar searches from others. There are multiple tabs open in the background, suggesting deep research or distracted browsing. The search suggestions get more specific as you type, narrowing from millions of results to something more targeted.",
+      "perspective_prompts": [
+        "Are you searching for answers or searching to avoid making decisions?",
+        "What question behind the question are you actually trying to solve?",
+        "What would you find if you searched your own behavior instead of external solutions?",
+        "Are you looking in the right place, or just where the searching is comfortable?",
+        "What answer are you hoping NOT to find?"
+      ],
+      "block_applications": {
+        "creative": "You're researching inspiration instead of creating. Stop searching for the perfect reference and start making something.",
+        "decision": "You're googling pros and cons instead of testing options. The answer isn't in search results - it's in trying.",
+        "work": "You're looking for external solutions when the answer is probably in your existing knowledge or team.",
+        "life": "You're searching for life hacks instead of examining what's actually not working. Look inward first.",
+        "relationship": "You're researching relationship advice instead of having the actual conversation with your person."
+      },
+      "duck_wisdom": "You're Stack Overflow diving when you should be reading your own error logs first. The answer is usually in your existing codebase, not in some random forum post.",
+      "reversed_meaning": "Never searching when research would help, accepting the first result without verification, or becoming addicted to information gathering instead of problem solving.",
+      "tags": ["seeking", "research", "investigation", "inquiry", "discovery"]
+    },
+    {
+      "id": 24,
+      "name": "Thermostat",
+      "emoji": "🌡️",
+      "traditional_equivalent": "The Heart",
+      "core_meaning": "Environment control, comfort zones, automatic adjustment, sensitivity",
+      "duck_question": "What temperature needs adjusting?",
+      "visual_description": "A smart thermostat display showing current temperature (72°F) and target temperature (70°F), with a slight difference creating ongoing adjustment. The display shows it's in 'auto' mode, switching between heating and cooling as needed. There's a schedule visible with different settings for different times of day. Energy usage graphs show efficiency patterns, and there's a 'learning' indicator suggesting the system is adapting to behavior patterns.",
+      "perspective_prompts": [
+        "What environment are you trying to control that keeps fighting back?",
+        "What comfort zone needs a deliberate temperature change?",
+        "Are you manually adjusting when you could set up automatic systems?",
+        "What's the real target you're trying to reach versus where you keep settling?",
+        "What small environmental change would make everything else easier?"
+      ],
+      "block_applications": {
+        "creative": "Your creative environment is wrong - too hot, too cold, too comfortable, or too stressful. What needs calibration?",
+        "decision": "You're trying to make decisions in the wrong emotional temperature. Cool down the pressure or heat up the urgency.",
+        "work": "Your work environment isn't supporting peak performance. What small adjustment would optimize your daily output?",
+        "life": "You're stuck in a comfort zone that's actually uncomfortable. What lifestyle temperature change would energize you?",
+        "relationship": "The emotional climate is off. Is it too hot (conflict) or too cold (distance)? Adjust accordingly."
+      },
+      "duck_wisdom": "You're manually scaling your infrastructure when you should set up auto-scaling rules. Define your target performance metrics and let the system adjust automatically.",
+      "reversed_meaning": "Constantly fiddling with settings instead of letting systems stabilize, being too sensitive to minor environmental changes, or refusing to adapt when conditions clearly need adjustment.",
+      "tags": [
+        "environment",
+        "adjustment",
+        "comfort",
+        "automation",
+        "calibration"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Monitor Setup",
+      "emoji": "🖥️",
+      "traditional_equivalent": "The Window",
+      "core_meaning": "Perspective, multiple viewpoints, expanded vision, clarity",
+      "duck_question": "What angle are you missing?",
+      "visual_description": "A dual monitor setup on a desk - one screen showing code, the other displaying documentation. The monitors are at slightly different angles, creating a panoramic workspace. One screen has dark mode enabled while the other is in light mode. There are multiple windows open across both displays, with some applications spanning both screens. Cable management is visible but organized, suggesting this is a deliberate, optimized setup.",
+      "perspective_prompts": [
+        "What view would open up if you could see the problem from multiple angles simultaneously?",
+        "What context are you missing because you're only looking at one screen at a time?",
+        "What would become obvious if you could compare two versions side by side?",
+        "Are you switching between perspectives when you should be seeing them together?",
+        "What bigger picture emerges when you expand your field of view?"
+      ],
+      "block_applications": {
+        "creative": "You're tunnel-visioned on one approach. What if you worked on two different versions of the same project simultaneously?",
+        "decision": "Stop switching between options - lay them out side by side and compare directly. What do you see when they're both visible?",
+        "work": "You're context-switching too much. What if you could see the problem and the solution space at the same time?",
+        "life": "You're looking at life one aspect at a time. What patterns emerge when you view work, relationships, and health together?",
+        "relationship": "You're seeing their perspective OR yours, not both. What changes when you hold both viewpoints simultaneously?"
+      },
+      "duck_wisdom": "You're alt-tabbing between the bug and the fix when you need split-screen debugging. See the problem and solution space together - the connection becomes obvious.",
+      "reversed_meaning": "Information overload from too many simultaneous views, using multiple perspectives to avoid making decisions, or being unable to focus on any single viewpoint effectively.",
+      "tags": ["perspective", "viewpoint", "comparison", "clarity", "overview"]
+    },
+    {
+      "id": 26,
+      "name": "Cloud Storage",
+      "emoji": "☁️",
+      "traditional_equivalent": "The Mountain",
+      "core_meaning": "Permanence, accessibility, backup, elevated perspective",
+      "duck_question": "What needs to be preserved and accessible?",
+      "visual_description": "A cloud storage interface showing files syncing across devices - laptop, phone, tablet icons with green checkmarks indicating successful sync. The storage meter shows 67% full with options to upgrade. There's a 'Recently Deleted' folder and a 'Shared with Me' section. Some files show version history with timestamps, and there's a notification about offline access being enabled for important documents.",
+      "perspective_prompts": [
+        "What knowledge or experience are you not preserving that could help you later?",
+        "What needs to be accessible from anywhere, not just where you are now?",
+        "What are you keeping locally that should be shared with others?",
+        "What backup plan do you need for your most important work/relationships/ideas?",
+        "What would you want to recover if everything local got wiped out?"
+      ],
+      "block_applications": {
+        "creative": "Your best ideas are scattered across notebooks, phones, and random files. What creative work needs proper backup and organization?",
+        "decision": "You're making decisions with incomplete information because your past lessons aren't accessible. What decision-making wisdom needs to be archived?",
+        "work": "Your valuable work knowledge is trapped on your local machine. What expertise should be preserved and shareable?",
+        "life": "You keep relearning the same life lessons. What personal insights need better documentation and backup?",
+        "relationship": "Important conversations and agreements get lost. What relationship knowledge needs to be preserved and accessible?"
+      },
+      "duck_wisdom": "You're storing critical business logic only in your head. Document it, version it, make it accessible to the whole team. Knowledge that can't be shared or recovered is technical debt.",
+      "reversed_meaning": "Hoarding information in the cloud without ever accessing it, over-relying on external storage instead of developing internal knowledge, or sharing everything without proper access controls.",
+      "tags": ["storage", "backup", "accessibility", "preservation", "sharing"]
+    },
+    {
+      "id": 27,
+      "name": "Playlist",
+      "emoji": "🎵",
+      "traditional_equivalent": "The Flowers",
+      "core_meaning": "Curation, mood management, rhythm, intentional flow",
+      "duck_question": "What's the right soundtrack for this?",
+      "visual_description": "A music streaming app showing a custom playlist titled 'Deep Work Flow' with 47 songs, 3 hours runtime. The current track is playing with a subtle equalizer animation. There are multiple playlists visible: 'Morning Energy,' 'Debugging Vibes,' 'Weekend Reset.' The shuffle button is off, suggesting intentional sequencing. Recently played shows a mix of genres, and there's a 'Made for You' recommendation waiting.",
+      "perspective_prompts": [
+        "What rhythm or energy would support what you're trying to accomplish?",
+        "Are you operating to the wrong soundtrack for the situation?",
+        "What sequence of actions would create better flow than random attempts?",
+        "What mood are you trying to create, and what supports that atmosphere?",
+        "What would you skip or repeat if you could curate this experience?"
+      ],
+      "block_applications": {
+        "creative": "You're working in the wrong energy. What creative soundtrack would shift your mood from stuck to flowing?",
+        "decision": "You're making decisions in chaos mode. What mental playlist would help you think more clearly?",
+        "work": "Your work rhythm is off. What sequence of tasks would create momentum instead of friction?",
+        "life": "You're living to the wrong soundtrack. What daily rhythm would energize instead of drain you?",
+        "relationship": "You're both operating to different emotional music. What shared rhythm could you create together?"
+      },
+      "duck_wisdom": "You're trying to code dubstep to classical music. Match your tools and environment to the task rhythm. Some bugs need lo-fi hip-hop, others need silence.",
+      "reversed_meaning": "Using music to avoid dealing with problems, being unable to work without perfect conditions, or letting mood management become more important than actual progress.",
+      "tags": ["rhythm", "mood", "flow", "curation", "atmosphere"]
+    },
+    {
       "id": 28,
       "name": "Package Delivery",
       "emoji": "📦",
