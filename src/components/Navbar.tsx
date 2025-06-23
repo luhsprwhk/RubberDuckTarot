@@ -32,12 +32,22 @@ const Navbar = () => {
               >
                 Home
               </Link>
-              <Link
-                to="/about"
-                className="text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                About
-              </Link>
+              {!user && (
+                <Link
+                  to="/about"
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  About
+                </Link>
+              )}
+              {user && (
+                <Link
+                  to="/readings"
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  Readings
+                </Link>
+              )}
 
               {!loading && (
                 <>

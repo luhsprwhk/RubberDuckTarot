@@ -75,13 +75,13 @@ const NewReading: React.FC<NewReadingProps> = ({
         <div className="mb-6">
           <button
             onClick={() => onSpreadSelect('quick-draw')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+            className={`${selectedSpread === 'quick-draw' ? 'bg-green-700' : 'bg-blue-600 hover:bg-green-700'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
           >
             Quick Duck Spread
           </button>
           <button
             onClick={() => onSpreadSelect('full-pond')}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+            className={`${selectedSpread === 'full-pond' ? 'bg-green-700' : 'bg-blue-600 hover:bg-green-700'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
           >
             Full Pond Spread
           </button>
