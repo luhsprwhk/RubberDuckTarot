@@ -2,11 +2,13 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Reading from './pages/Reading';
-import Insights from './pages/Insights';
 import OnBoarding from './pages/OnBoarding';
 import AuthProvider from './shared/auth/AuthProvider';
 import CardsProvider from './shared/cards/CardsProvider';
 import Navbar from './components/Navbar';
+import Upgrade from './pages/Upgrade';
+import Insights from './pages/Insights';
+import Preferences from './pages/Preferences';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <Route path="/reading" element={<Reading />} />
               <Route path="/insights" element={<Insights />} />
               <Route path="/onboarding" element={<OnBoarding />} />
+              <Route path="/upgrade" element={<Upgrade />} />
+              <Route path="/preferences" element={<Preferences />} />
             </Routes>
           </main>
         </div>

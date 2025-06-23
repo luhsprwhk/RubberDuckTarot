@@ -10,13 +10,10 @@ import {
   type UserProfile,
 } from '../shared/userPreferences';
 import type { BlockType } from '../shared/interfaces';
-import useCards from '../hooks/useCards';
 
 export default function Lobby() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { cards } = useCards();
-  console.log({ cards });
   // State management
   const [loading, setLoading] = useState(true);
   const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);

@@ -4,6 +4,7 @@ import { getDb } from '../../lib/database-provider';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { Reading, Card, BlockType } from '../shared/interfaces';
+import { MessageCircle, Brain } from 'lucide-react';
 
 const Insights: React.FC = () => {
   const { user } = useAuth();
@@ -67,7 +68,7 @@ const Insights: React.FC = () => {
         <div className="text-center">
           <div className="text-6xl mb-4 animate-bounce">🦆</div>
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Loading your readings...
+            Loading your insights...
           </h2>
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
         </div>
@@ -96,31 +97,7 @@ const Insights: React.FC = () => {
   }
 
   if (readings.length === 0) {
-    return (
-      <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
-        <div className="text-center">
-          {/* <div className="text-6xl mb-4">🦆</div> */}
-
-          {/* Premium Upsell Box */}
-          <div className="bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-lg p-6 mb-8 max-w-md mx-auto">
-            <div className="text-3xl mb-2">👑</div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Save Your Duck Insights
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Upgrade to Premium Duck to keep a full archive of all your
-              insights and track your unblocking journey over time.
-            </p>
-            <Link
-              to="/premium"
-              className="inline-block px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors"
-            >
-              Learn More
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
+    return <EmptyInsightsState />;
   }
 
   return (
@@ -128,10 +105,10 @@ const Insights: React.FC = () => {
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">🦆</div>
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
-          Your Reading History
+          Your Insight History
         </h1>
         <p className="text-gray-600">
-          {readings.length} reading{readings.length !== 1 ? 's' : ''} with Rob
+          {readings.length} insight{readings.length !== 1 ? 's' : ''} with Rob
           the Duck
         </p>
       </div>
@@ -196,6 +173,88 @@ const Insights: React.FC = () => {
         >
           Get Another Reading
         </Link>
+      </div>
+    </div>
+  );
+};
+
+const EmptyInsightsState = () => {
+  return (
+    <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+        {/* Rob's Empty State */}
+        <div className="mb-8">
+          <div className="text-8xl mb-4 animate-bounce">🦆</div>
+          <div className="text-2xl mb-2">👻</div>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-blue-500">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Your Insight Archive is Empty
+          </h2>
+
+          <div className="bg-gray-50 rounded-lg p-6 mb-6 border-l-4 border-yellow-400">
+            <div className="flex items-start space-x-3">
+              <div className="text-2xl">🦆🎩</div>
+              <div className="text-left">
+                <p className="text-gray-700 mb-3">
+                  <strong>Rob here.</strong> I'm floating around in the ethereal
+                  realm with zero debugging sessions logged. That's either
+                  impressive life management or serious avoidance behavior.
+                </p>
+
+                <p className="text-gray-700 font-medium">
+                  Let's fix that. What's blocking you right now?
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Action Cards */}
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <MessageCircle className="w-6 h-6 text-blue-600 mb-2" />
+              <h4 className="font-semibold text-blue-800 mb-1">Quick Duck</h4>
+              <p className="text-sm text-blue-600">
+                Single card for immediate perspective shifts
+              </p>
+            </div>
+
+            <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+              <Brain className="w-6 h-6 text-purple-600 mb-2" />
+              <h4 className="font-semibold text-purple-800 mb-1">Full Pond</h4>
+              <p className="text-sm text-purple-600">
+                3-card spread for deeper analysis of your block
+              </p>
+            </div>
+          </div>
+
+          <a
+            href="/"
+            className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+          >
+            <MessageCircle className="w-5 h-5 mr-2" />
+            Start Your First Consultation
+          </a>
+        </div>
+
+        {/* Testimonial Teaser */}
+        <div className="mt-8 bg-gray-800 text-white rounded-lg p-6 max-w-xl">
+          <div className="flex items-center mb-3">
+            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-sm font-bold mr-3">
+              D
+            </div>
+            <div>
+              <p className="font-medium">Dana, Backend Engineer</p>
+              <p className="text-gray-400 text-sm">Seattle, WA</p>
+            </div>
+          </div>
+          <p className="text-gray-300 italic">
+            "I was stuck in architecture analysis paralysis for weeks. One Quick
+            Duck session and I realized I was optimizing the wrong thing.
+            Shipped the feature the next day."
+          </p>
+        </div>
       </div>
     </div>
   );
