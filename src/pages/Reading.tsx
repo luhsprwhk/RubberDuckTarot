@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import QuickDuckSpread from '../components/QuickDuckSpread';
-import FullPondSpread from '../components/FullPondSpread';
-import { getUserProfile, type UserProfile } from '../shared/userPreferences';
+import { getUserProfile, type UserProfile } from '../modules/userPreferences';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
-import type { Card } from '../shared/interfaces';
+import type { BlockType, Card } from '../interfaces';
+import { getDb } from '@/lib/database-provider';
+import { createInsight } from '@/lib/supabase/supabase-queries';
+import {
+  generatePersonalizedReading,
+  type PersonalizedReading,
+} from '../modules/claude-ai';
 
 interface ReadingState {
   selectedBlockTypeId: string;
@@ -24,6 +28,11 @@ const Reading: React.FC = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [drawnCards, setDrawnCards] = useState<Card[]>([]);
   const [isDrawing, setIsDrawing] = useState(true);
+  const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
+  const [personalizedReading, setPersonalizedReading] =
+    useState<PersonalizedReading | null>(null);
+  const [loadingReading, setLoadingReading] = useState(false);
+  const [readingError, setReadingError] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -33,7 +42,6 @@ const Reading: React.FC = () => {
         return;
       }
 
-      // Wait for cards to be loaded from context
       if (cards.length === 0) {
         if (!cardsLoading && !cardsError) {
           console.error('No cards available');
@@ -45,19 +53,18 @@ const Reading: React.FC = () => {
       setDrawnCards([]);
 
       try {
-        // Only need to fetch user profile now
         const profile = await getUserProfile(user.id);
-
         if (!isMounted) return;
-
         setUserProfile(profile);
 
-        // Draw cards from context
-        const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
-        const drawnCardsList: Card[] = [];
+        const db = await getDb();
+        const block = await db.getBlockTypeById(selectedBlockTypeId);
+        if (!isMounted) return;
+        setSelectedBlock(block);
 
-        // Ensure no duplicate cards in the same reading
+        const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
+        const drawnCardsList: Card[] = [];
         for (let i = 0; i < numCardsToDraw; i++) {
           if (availableCards.length === 0) break;
           const randomIndex = Math.floor(Math.random() * availableCards.length);
@@ -83,9 +90,94 @@ const Reading: React.FC = () => {
     };
   }, [user, spreadType, selectedBlockTypeId, cards, cardsLoading, cardsError]);
 
+  useEffect(() => {
+    const generateReading = async () => {
+      if (
+        !isDrawing &&
+        drawnCards.length > 0 &&
+        selectedBlock &&
+        userProfile &&
+        !personalizedReading &&
+        (spreadType === 'quick-draw' || spreadType === 'full-pond')
+      ) {
+        setLoadingReading(true);
+        setReadingError(false);
+        try {
+          const reading = await generatePersonalizedReading({
+            cards: drawnCards,
+            blockType: selectedBlock,
+            userContext: userContext || '',
+            userProfile,
+            spreadType,
+          });
+          setPersonalizedReading(reading);
+
+          const insight = await createInsight({
+            user_id: user?.id ?? null,
+            spread_type: spreadType,
+            block_type_id: selectedBlock.id,
+            user_context: userContext ?? null,
+            cards_drawn: drawnCards.map((c) => c.id),
+            reading,
+          });
+
+          navigate(`/insights/${insight.id}`, {
+            state: {
+              spreadType,
+            },
+          });
+        } catch (error) {
+          console.error('Failed to generate personalized reading:', error);
+          setReadingError(true);
+        } finally {
+          setLoadingReading(false);
+        }
+      }
+    };
+
+    generateReading();
+  }, [
+    isDrawing,
+    drawnCards,
+    selectedBlock,
+    userProfile,
+    userContext,
+    personalizedReading,
+    spreadType,
+    user?.id,
+    navigate,
+  ]);
+
   const handleReset = () => {
-    navigate('/'); // Navigate back to Home to start a new reading
+    navigate('/');
   };
+
+  if (loadingReading) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <p className="text-lg text-gray-700">Generating your insight...</p>
+      </div>
+    );
+  }
+
+  if (readingError) {
+    return (
+      <div className="container mx-auto px-4 py-8 text-center">
+        <h2 className="text-2xl font-semibold text-red-600 mb-4">
+          Error Generating Reading
+        </h2>
+        <p className="text-gray-700 mb-6">
+          We couldn't generate your reading. Please try again.
+        </p>
+        <button
+          onClick={handleReset}
+          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   if (!state) {
     return (
@@ -98,7 +190,7 @@ const Reading: React.FC = () => {
           the home page.
         </p>
         <button
-          onClick={handleReset} // Navigate to home
+          onClick={handleReset}
           className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
         >
           Go to Home Page
@@ -140,7 +232,6 @@ const Reading: React.FC = () => {
     );
   }
 
-  // After loading, check if cards were actually drawn
   if (drawnCards.length === 0 && !isDrawing) {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
@@ -161,32 +252,6 @@ const Reading: React.FC = () => {
     );
   }
 
-  if (spreadType === 'quick-draw' && drawnCards.length === 1) {
-    return (
-      <QuickDuckSpread
-        step="revealed"
-        drawnCard={drawnCards[0]}
-        selectedBlockTypeId={selectedBlockTypeId!}
-        userContext={userContext}
-        userProfile={userProfile}
-        onReset={handleReset}
-      />
-    );
-  }
-
-  if (spreadType === 'full-pond' && drawnCards.length === 3) {
-    return (
-      <FullPondSpread
-        drawnCards={drawnCards}
-        selectedBlockTypeId={selectedBlockTypeId!}
-        onReset={handleReset}
-        userContext={userContext}
-        userProfile={userProfile}
-      />
-    );
-  }
-
-  // Fallback for unknown spreadType
   return (
     <div className="container mx-auto px-4 py-8 text-center">
       <p className="text-red-500 mb-4">Invalid spread type specified.</p>

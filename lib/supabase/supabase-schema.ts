@@ -1,3 +1,4 @@
+import type { PersonalizedReading } from '../../src/modules/claude-ai';
 import {
   pgTable,
   serial,
@@ -45,6 +46,7 @@ export const insights = pgTable('insights', {
   block_type_id: text('block_type_id').notNull(),
   user_context: text('user_context'),
   cards_drawn: jsonb('cards_drawn').$type<number[]>().notNull(),
+  reading: jsonb('reading').$type<PersonalizedReading>().notNull(),
   created_at: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

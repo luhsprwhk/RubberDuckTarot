@@ -1,6 +1,6 @@
 import { supabase } from './supabase';
 import type { DatabaseAdapter } from '../database-adapter';
-import type { Card, BlockType, Reading } from '../../src/shared/interfaces';
+import type { Card, BlockType, Reading } from '../../src/modules/interfaces';
 
 export class SupabaseAdapter implements DatabaseAdapter {
   async getAllCards(): Promise<Card[]> {

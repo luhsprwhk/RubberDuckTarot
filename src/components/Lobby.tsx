@@ -8,8 +8,8 @@ import {
   getUserProfile,
   isProfileComplete,
   type UserProfile,
-} from '../shared/userPreferences';
-import type { BlockType } from '../shared/interfaces';
+} from '../modules/userPreferences';
+import type { BlockType } from '@/src/interfaces';
 
 export default function Lobby() {
   const { user } = useAuth();

@@ -1,101 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { getDb } from '@/lib/database-provider';
-import {
-  generatePersonalizedReading,
-  type PersonalizedReading,
-} from '@/src/shared/claude-ai';
-import type { Card, BlockType } from '@/src/shared/interfaces';
-import type { UserProfile } from '@/src/shared/userPreferences';
+import React from 'react';
+import type { PersonalizedReading } from '@/src/modules/claude-ai';
+import type { Card, BlockType } from '@/src/interfaces';
 
 interface QuickDrawSpreadProps {
-  step: 'drawing' | 'revealed';
   drawnCard: Card;
-  selectedBlockTypeId: string;
-  userContext: string;
-  userProfile: UserProfile | null;
+  selectedBlock: BlockType | null;
   onReset: () => void;
+  personalizedReading: PersonalizedReading | null;
+  loadingReading: boolean;
 }
 
 const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
-  step,
   drawnCard,
-  selectedBlockTypeId,
-  userContext,
-  userProfile,
+  selectedBlock,
   onReset,
+  personalizedReading,
+  loadingReading,
 }) => {
-  const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
-  const [personalizedReading, setPersonalizedReading] =
-    useState<PersonalizedReading | null>(null);
-  const [loadingReading, setLoadingReading] = useState(false);
-
-  useEffect(() => {
-    const fetchBlock = async () => {
-      const db = await getDb();
-      const block = await db.getBlockTypeById(selectedBlockTypeId);
-      setSelectedBlock(block);
-    };
-    fetchBlock();
-  }, [selectedBlockTypeId]);
-
-  // Generate personalized reading when card is revealed
-  useEffect(() => {
-    const generateReading = async () => {
-      if (
-        step === 'revealed' &&
-        drawnCard &&
-        selectedBlock &&
-        userProfile &&
-        !personalizedReading
-      ) {
-        setLoadingReading(true);
-        try {
-          const reading = await generatePersonalizedReading({
-            cards: [drawnCard],
-            blockType: selectedBlock,
-            userContext,
-            userProfile,
-            spreadType: 'quick-draw',
-          });
-          setPersonalizedReading(reading);
-        } catch (error) {
-          console.error('Failed to generate personalized reading:', error);
-        } finally {
-          setLoadingReading(false);
-        }
-      }
-    };
-
-    generateReading();
-  }, [
-    step,
-    drawnCard,
-    selectedBlock,
-    userProfile,
-    userContext,
-    personalizedReading,
-  ]);
-
   const blockAdvice =
     drawnCard?.block_applications[
-      selectedBlockTypeId as keyof typeof drawnCard.block_applications
+      selectedBlock?.id as keyof typeof drawnCard.block_applications
     ];
 
-  if (step === 'drawing') {
-    return (
-      <div className="max-w-2xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce">🦆</div>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Rob is shuffling the deck...
-          </h2>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        </div>
-      </div>
-    );
-  }
-
-  // This is the 'revealed' step
   return (
     <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
       <div className="text-center mb-8">

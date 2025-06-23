@@ -4,7 +4,7 @@ import {
   readingQueries,
 } from '../../db/sqlite/queries';
 import type { DatabaseAdapter } from '../database-adapter';
-import type { Card, BlockType, Reading } from '../../src/shared/interfaces';
+import type { Card, BlockType, Reading } from '../../src/modules/interfaces';
 
 export class SQLiteAdapter implements DatabaseAdapter {
   async getAllCards(): Promise<Card[]> {

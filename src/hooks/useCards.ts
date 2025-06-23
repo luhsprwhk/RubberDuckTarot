@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import CardsContext from '../shared/cards/CardsContext';
+import CardsContext from '../modules/cards/CardsContext';
 
 const useCards = () => {
   const context = useContext(CardsContext);

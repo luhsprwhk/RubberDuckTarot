@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { getDb } from '../../lib/database-provider';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
-import type { Reading, Card, BlockType } from '../shared/interfaces';
+import type { Reading, Card, BlockType } from '../interfaces';
 import { MessageCircle, Brain } from 'lucide-react';
 
 const Insights: React.FC = () => {

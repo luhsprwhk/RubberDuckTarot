@@ -3,12 +3,13 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Reading from './pages/Reading';
 import OnBoarding from './pages/OnBoarding';
-import AuthProvider from './shared/auth/AuthProvider';
-import CardsProvider from './shared/cards/CardsProvider';
+import AuthProvider from './modules/auth/AuthProvider';
+import CardsProvider from './modules/cards/CardsProvider';
 import Navbar from './components/Navbar';
 import Upgrade from './pages/Upgrade';
 import Insights from './pages/Insights';
 import Preferences from './pages/Preferences';
+import Insight from './pages/Insight';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/onboarding" element={<OnBoarding />} />
               <Route path="/upgrade" element={<Upgrade />} />
               <Route path="/preferences" element={<Preferences />} />
+              <Route path="/insight/:id" element={<Insight />} />
             </Routes>
           </main>
         </div>

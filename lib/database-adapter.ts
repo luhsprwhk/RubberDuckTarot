@@ -1,4 +1,4 @@
-import type { Card, BlockType, Reading } from '../src/shared/interfaces';
+import type { Card, BlockType, Reading } from '../src/modules/interfaces';
 
 export interface DatabaseAdapter {
   // Cards

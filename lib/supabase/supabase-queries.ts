@@ -1,9 +1,6 @@
 import { supabase } from './supabase';
 import type { Card, BlockType, Insight } from './supabase-schema';
 
-// Legacy alias for backward compatibility
-type Reading = Insight;
-
 // Cards
 export const getAllCards = async (): Promise<Card[]> => {
   const { data, error } = await supabase.from('cards').select('*').order('id');
@@ -47,13 +44,13 @@ export const getBlockTypeById = async (
   return data;
 };
 
-// Readings
-export const createReading = async (
-  reading: Omit<Reading, 'id' | 'created_at'>
-): Promise<Reading> => {
+// Insights
+export const createInsight = async (
+  insight: Omit<Insight, 'id' | 'created_at'>
+): Promise<Insight> => {
   const { data, error } = await supabase
     .from('insights')
-    .insert(reading)
+    .insert(insight)
     .select()
     .single();
 
@@ -61,7 +58,7 @@ export const createReading = async (
   return data;
 };
 
-export const getUserReadings = async (userId?: string): Promise<Reading[]> => {
+export const getUserInsights = async (userId?: string): Promise<Insight[]> => {
   let query = supabase
     .from('insights')
     .select('*')
@@ -79,7 +76,7 @@ export const getUserReadings = async (userId?: string): Promise<Reading[]> => {
   return data;
 };
 
-export const getReadingById = async (id: number): Promise<Reading | null> => {
+export const getInsightById = async (id: number): Promise<Insight | null> => {
   const { data, error } = await supabase
     .from('insights')
     .select('*')

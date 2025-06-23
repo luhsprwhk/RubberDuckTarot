@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react';
 import { Save, User, Settings, Bell, Eye, Palette } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 import { useUserProfile } from '../hooks/useUserProfile';
-import { updateUserProfile, type UserProfile } from '../shared/userPreferences';
+import {
+  updateUserProfile,
+  type UserProfile,
+} from '../modules/userPreferences';
 
 const superpowers = [
   'Breaking complex problems into simple steps',

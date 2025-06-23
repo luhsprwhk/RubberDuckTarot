@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getDb } from '@/lib/database-provider';
 import CardsContext from './CardsContext';
 import { cardCache } from './cardCache';
-import type { Card } from '../interfaces';
+import type { Card } from '@/src/interfaces';
 
 interface CardsProviderProps {
   children: React.ReactNode;
