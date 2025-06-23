@@ -14,6 +14,7 @@ const CardsProvider = ({ children }: CardsProviderProps) => {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCards = async (forceRefresh = false) => {
+    console.log('Fetching cards...');
     try {
       setLoading(true);
       setError(null);
@@ -29,6 +30,7 @@ const CardsProvider = ({ children }: CardsProviderProps) => {
       }
 
       const db = await getDb();
+      console.log('xxx');
       const allCards = await db.getAllCards();
 
       // Cache the cards with a simple version based on count and timestamp

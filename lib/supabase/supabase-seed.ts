@@ -1,37 +1,10 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { supabase } from './supabase-node';
-
-interface CardData {
-  id: number;
-  name: string;
-  emoji: string;
-  traditional_equivalent: string;
-  core_meaning: string;
-  duck_question: string;
-  visual_description: string;
-  perspective_prompts: string[];
-  block_applications: {
-    creative: string;
-    decision: string;
-    work: string;
-    life: string;
-    relationship: string;
-  };
-  duck_wisdom: string;
-  reversed_meaning: string;
-  tags: string[];
-}
-
-interface BlockTypeData {
-  id: string;
-  name: string;
-  description: string;
-  emoji: string;
-}
+import type { Card, BlockType } from './supabase-schema';
 
 interface JsonData {
-  cards: CardData[];
+  cards: Card[];
 }
 
 async function seedSupabase() {
@@ -48,7 +21,7 @@ async function seedSupabase() {
     const blockTypesJsonPath = resolve('./data/block_types.json');
     const blockTypesData = JSON.parse(
       readFileSync(blockTypesJsonPath, 'utf8')
-    ) as BlockTypeData[];
+    ) as BlockType[];
 
     // Clear existing data
     console.log('🧹 Clearing existing data...');
