@@ -5,6 +5,7 @@ import {
   integer,
   jsonb,
   timestamp,
+  boolean,
 } from 'drizzle-orm/pg-core';
 
 export const cards = pgTable('cards', {
@@ -58,6 +59,7 @@ export const users = pgTable('users', {
     favorite_block_types?: string[];
     reading_history_enabled?: boolean;
   }>(),
+  premium: boolean('premium').notNull().default(false),
 });
 
 export type Card = typeof cards.$inferSelect;

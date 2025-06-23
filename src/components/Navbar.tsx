@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import { AuthModal } from './AuthModal';
 import { Link } from 'react-router-dom';
-import { User, Settings, LogOut } from 'lucide-react';
+import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
 
 const Navbar = () => {
   const { user, signOut, loading } = useAuth();
@@ -42,10 +42,10 @@ const Navbar = () => {
               )}
               {user && (
                 <Link
-                  to="/readings"
+                  to="/insights"
                   className="text-gray-600 hover:text-gray-800 transition-colors"
                 >
-                  Readings
+                  Insights
                 </Link>
               )}
 
@@ -70,6 +70,14 @@ const Navbar = () => {
                           >
                             <Settings className="w-4 h-4 mr-2" />
                             Preferences
+                          </Link>
+                          <Link
+                            to="/upgrade"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => setShowUserMenu(false)}
+                          >
+                            <CircleFadingArrowUpIcon className="w-4 h-4 mr-2" />
+                            Upgrade
                           </Link>
                           <button
                             onClick={handleSignOut}

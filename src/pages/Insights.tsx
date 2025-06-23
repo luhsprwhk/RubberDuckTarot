@@ -5,7 +5,7 @@ import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { Reading, Card, BlockType } from '../shared/interfaces';
 
-const Readings: React.FC = () => {
+const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
   const [readings, setReadings] = useState<Reading[]>([]);
@@ -99,20 +99,25 @@ const Readings: React.FC = () => {
     return (
       <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
         <div className="text-center">
-          <div className="text-6xl mb-4">🦆</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">
-            No Readings Yet
-          </h1>
-          <p className="text-gray-600 mb-8">
-            You haven't done any tarot readings yet. Start your first reading to
-            get insights from the duck!
-          </p>
-          <Link
-            to="/"
-            className="px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Start Your First Reading
-          </Link>
+          {/* <div className="text-6xl mb-4">🦆</div> */}
+
+          {/* Premium Upsell Box */}
+          <div className="bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-lg p-6 mb-8 max-w-md mx-auto">
+            <div className="text-3xl mb-2">👑</div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-2">
+              Save Your Duck History
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Upgrade to Premium Duck to keep a full archive of all your
+              readings and track your unblocking journey over time.
+            </p>
+            <Link
+              to="/premium"
+              className="inline-block px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition-colors"
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -196,4 +201,4 @@ const Readings: React.FC = () => {
   );
 };
 
-export default Readings;
+export default Insights;
