@@ -55,7 +55,7 @@ export class SupabaseAdapter implements DatabaseAdapter {
     reading: Omit<Reading, 'id' | 'created_at'>
   ): Promise<Reading> {
     const { data, error } = await supabase
-      .from('readings')
+      .from('insights')
       .insert(reading)
       .select()
       .single();
@@ -66,7 +66,7 @@ export class SupabaseAdapter implements DatabaseAdapter {
 
   async getUserReadings(userId?: string): Promise<Reading[]> {
     let query = supabase
-      .from('readings')
+      .from('insights')
       .select('*')
       .order('created_at', { ascending: false });
 
@@ -84,7 +84,7 @@ export class SupabaseAdapter implements DatabaseAdapter {
 
   async getReadingById(id: number): Promise<Reading | null> {
     const { data, error } = await supabase
-      .from('readings')
+      .from('insights')
       .select('*')
       .eq('id', id)
       .single();

@@ -38,7 +38,7 @@ export const blockTypes = pgTable('block_types', {
   emoji: text('emoji').notNull(),
 });
 
-export const readings = pgTable('readings', {
+export const insights = pgTable('insights', {
   id: serial('id').primaryKey(),
   user_id: text('user_id'),
   spread_type: text('spread_type').notNull(), // 'quick-draw' | 'full-pond'
@@ -64,5 +64,5 @@ export const users = pgTable('users', {
 
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
-export type Reading = typeof readings.$inferSelect;
+export type Insight = typeof insights.$inferSelect;
 export type User = typeof users.$inferSelect;

@@ -1,5 +1,8 @@
 import { supabase } from './supabase';
-import type { Card, BlockType, Reading } from './supabase-schema';
+import type { Card, BlockType, Insight } from './supabase-schema';
+
+// Legacy alias for backward compatibility
+type Reading = Insight;
 
 // Cards
 export const getAllCards = async (): Promise<Card[]> => {
@@ -49,7 +52,7 @@ export const createReading = async (
   reading: Omit<Reading, 'id' | 'created_at'>
 ): Promise<Reading> => {
   const { data, error } = await supabase
-    .from('readings')
+    .from('insights')
     .insert(reading)
     .select()
     .single();
@@ -60,7 +63,7 @@ export const createReading = async (
 
 export const getUserReadings = async (userId?: string): Promise<Reading[]> => {
   let query = supabase
-    .from('readings')
+    .from('insights')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -78,7 +81,7 @@ export const getUserReadings = async (userId?: string): Promise<Reading[]> => {
 
 export const getReadingById = async (id: number): Promise<Reading | null> => {
   const { data, error } = await supabase
-    .from('readings')
+    .from('insights')
     .select('*')
     .eq('id', id)
     .single();

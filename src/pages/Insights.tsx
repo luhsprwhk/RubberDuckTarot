@@ -105,11 +105,11 @@ const Insights: React.FC = () => {
           <div className="bg-gradient-to-r from-purple-100 to-blue-100 border border-purple-200 rounded-lg p-6 mb-8 max-w-md mx-auto">
             <div className="text-3xl mb-2">👑</div>
             <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Save Your Duck History
+              Save Your Duck Insights
             </h3>
             <p className="text-sm text-gray-600 mb-4">
               Upgrade to Premium Duck to keep a full archive of all your
-              readings and track your unblocking journey over time.
+              insights and track your unblocking journey over time.
             </p>
             <Link
               to="/premium"
