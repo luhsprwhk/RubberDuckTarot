@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { AuthModal } from './AuthModal';
 import { Link } from 'react-router-dom';
@@ -11,6 +11,26 @@ const Navbar = () => {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { profile } = useUserProfile();
+  const userMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        userMenuRef.current &&
+        !userMenuRef.current.contains(event.target as Node)
+      ) {
+        setShowUserMenu(false);
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showUserMenu]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -55,7 +75,7 @@ const Navbar = () => {
               {!loading && (
                 <>
                   {user ? (
-                    <div className="relative">
+                    <div className="relative" ref={userMenuRef}>
                       <button
                         onClick={() => setShowUserMenu(!showUserMenu)}
                         className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
