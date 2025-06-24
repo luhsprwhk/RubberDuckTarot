@@ -8,7 +8,7 @@ import {
   getUserProfile,
   isProfileComplete,
   type UserProfile,
-} from '../modules/userPreferences';
+} from '../lib/userPreferences';
 import type { BlockType } from '@/src/interfaces';
 
 export default function Lobby() {

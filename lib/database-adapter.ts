@@ -1,4 +1,4 @@
-import type { Card, BlockType, Reading } from '../src/modules/interfaces';
+import type { Card, BlockType, Reading } from '../src/interfaces';
 
 export interface DatabaseAdapter {
   // Cards
@@ -14,5 +14,3 @@ export interface DatabaseAdapter {
   getUserReadings(userId?: string): Promise<Reading[]>;
   getReadingById(id: number): Promise<Reading | null>;
 }
-
-export type DatabaseType = 'sqlite' | 'supabase';

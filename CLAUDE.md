@@ -20,17 +20,16 @@ npm run format:check
 npm run db:generate    # Generate database migrations
 npm run db:migrate     # Run migrations
 npm run db:studio      # Open Drizzle Studio
-npm run db:seed        # Seed SQLite database
-npm run supabase:seed  # Seed Supabase database
+npm run supabase:seed  # Seed database
 ```
 
 ## Architecture Overview
 
-This is a React + TypeScript + Vite application for a tarot card reading service called "Rubber Duck Tarot". The application uses a dual-database approach supporting both SQLite (development) and Supabase (production).
+This is a React + TypeScript + Vite application for a tarot card reading service called "Rubber Duck Tarot". The application uses Supabase as its database backend.
 
 ### Key Architecture Patterns
 
-**Database Abstraction Layer**: The app uses a database adapter pattern (`lib/database-adapter.ts`) that allows switching between SQLite and Supabase backends via `VITE_DATABASE_TYPE` environment variable. All database operations go through this unified interface.
+**Database Abstraction Layer**: The app uses a database adapter pattern (`lib/database-adapter.ts`) that provides a unified interface for all database operations using Supabase.
 
 **Module Organization**: Code is organized into feature modules under `src/modules/`:
 
@@ -48,10 +47,7 @@ This is a React + TypeScript + Vite application for a tarot card reading service
 
 ### Database Schema
 
-The app uses Drizzle ORM with schemas defined in:
-
-- `lib/supabase/supabase-schema.ts` (PostgreSQL/Supabase)
-- `db/sqlite/schema.ts` (SQLite)
+The app uses Drizzle ORM with schemas defined in `supabase/schema.ts` (PostgreSQL/Supabase).
 
 Core entities:
 
@@ -76,6 +72,5 @@ Core entities:
 ## Important Notes
 
 - The terminology changed from "readings" to "insights" - use "insights" for new code
-- Database seeding differs between SQLite (`npm run db:seed`) and Supabase (`npm run supabase:seed`)
-- SQLite is only supported server-side; browser environment requires Supabase
+- Database seeding is done with `npm run supabase:seed`
 - Claude API key must be set in `VITE_ANTHROPIC_API_KEY` environment variable
