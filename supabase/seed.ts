@@ -1,7 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { supabase } from './supabase-node';
-import type { Card, BlockType } from './supabase-schema';
+import { supabase } from '../lib/supabase/supabase-node';
+import type { Card, BlockType } from './schema';
 
 interface JsonData {
   cards: Card[];

@@ -24,21 +24,23 @@ create table public.block_types (
   emoji text not null
 );
 
--- Create users table
+-- Create users table with premium flag
 create table public.users (
   id text primary key,
   created_at timestamp with time zone not null default now(),
-  preferences jsonb
+  preferences jsonb,
+  premium boolean not null default false
 );
 
--- Create readings table
-create table public.readings (
+-- Create insights table (renamed from readings, with reading column)
+create table public.insights (
   id serial primary key,
-  user_id text references public.users(id),
+  user_id text references public.users(id) on delete set null,
   spread_type text not null check (spread_type in ('quick-draw', 'full-pond')),
   block_type_id text not null references public.block_types(id),
   user_context text,
   cards_drawn jsonb not null,
+  reading jsonb not null,
   created_at timestamp with time zone not null default now()
 );
 
@@ -46,7 +48,7 @@ create table public.readings (
 alter table public.cards enable row level security;
 alter table public.block_types enable row level security;
 alter table public.users enable row level security;
-alter table public.readings enable row level security;
+alter table public.insights enable row level security;
 
 -- Create policies for cards and block_types (public read access)
 create policy "Allow public read access on cards" on public.cards
@@ -65,16 +67,16 @@ create policy "Users can update their own profile" on public.users
 create policy "Users can insert their own profile" on public.users
   for insert with check (auth.uid()::text = id);
 
--- Create policies for readings (users can only access their own readings)
-create policy "Users can view their own readings" on public.readings
+-- Create policies for insights (users can only access their own insights)
+create policy "Users can view their own insights" on public.insights
   for select using (auth.uid()::text = user_id);
 
-create policy "Users can insert their own readings" on public.readings
+create policy "Users can insert their own insights" on public.insights
   for insert with check (auth.uid()::text = user_id);
 
-create policy "Users can update their own readings" on public.readings
+create policy "Users can update their own insights" on public.insights
   for update using (auth.uid()::text = user_id);
 
--- Allow anonymous readings (where user_id is null)
-create policy "Allow anonymous readings" on public.readings
+-- Allow anonymous insights (where user_id is null)
+create policy "Allow anonymous insights" on public.insights
   for all using (user_id is null);
