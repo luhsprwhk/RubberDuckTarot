@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getUserProfile, type UserProfile } from '../modules/userPreferences';
+import { getUserProfile, type UserProfile } from '../lib/userPreferences';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { BlockType, Card } from '../interfaces';
 import { getDb } from '@/lib/database-provider';
-import { createInsight } from '@/src/modules/insights/insight-queries';
+import { createInsight } from '../lib/insights/insight-queries';
 import {
   generatePersonalizedReading,
   type PersonalizedReading,
-} from '../modules/claude-ai';
+} from '../lib/claude-ai';
 
 interface ReadingState {
   selectedBlockTypeId: string;

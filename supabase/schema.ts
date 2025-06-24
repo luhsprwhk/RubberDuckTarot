@@ -1,4 +1,4 @@
-import type { PersonalizedReading } from '../src/modules/claude-ai';
+import type { PersonalizedReading } from '../src/lib/claude-ai';
 import {
   pgTable,
   serial,

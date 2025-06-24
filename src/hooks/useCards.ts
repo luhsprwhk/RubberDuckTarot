@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import CardsContext from '../modules/cards/CardsContext';
+import CardsContext from '../lib/cards/CardsContext';
 
 const useCards = () => {
   const context = useContext(CardsContext);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getInsightById } from '@/src/modules/insights/insight-queries';
-import { getCardById } from '@/src/modules/cards/card-queries';
-import { getBlockTypeById } from '@/src/modules/blocktypes/blocktype-queries';
+import { getInsightById } from '@/src/lib/insights/insight-queries';
+import { getCardById } from '@/src/lib/cards/card-queries';
+import { getBlockTypeById } from '@/src/lib/blocktypes/blocktype-queries';
 import type { Insight, Card, BlockType } from '@/src/interfaces';
 import QuickDuckSpread from '../components/QuickDuckSpread';
 import FullPondSpread from '../components/FullPondSpread';
@@ -32,12 +32,12 @@ const InsightPage: React.FC = () => {
         }
         setInsight(insightData);
 
-        const cardPromises = insightData.cards_drawn.map((cardId) =>
+        const cardPromises = insightData.cards_drawn.map((cardId: number) =>
           getCardById(cardId)
         );
         const fetchedCards = (await Promise.all(cardPromises)).filter(
-          (c) => c !== null
-        ) as Card[];
+          (c: Card | null): c is Card => c !== null
+        );
         setCards(fetchedCards);
 
         const fetchedBlockType = await getBlockTypeById(
