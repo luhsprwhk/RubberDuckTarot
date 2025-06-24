@@ -61,10 +61,33 @@ export const users = pgTable('users', {
     favorite_block_types?: string[];
     reading_history_enabled?: boolean;
   }>(),
+  email: text('email').notNull().unique(),
   premium: boolean('premium').notNull().default(false),
+  auth_uid: text('auth_uid').notNull().unique(),
+});
+
+export const user_profiles = pgTable('user_profiles', {
+  id: serial('id').primaryKey(),
+  user_id: text('user_id').notNull().unique(),
+  name: text('name').notNull(),
+  birthday: text('birthday').notNull(),
+  birth_place: text('birth_place').notNull(),
+  profession: text('profession').notNull(),
+  debugging_mode: text('debugging_mode').notNull(),
+  block_pattern: text('block_pattern').notNull(),
+  superpower: text('superpower').notNull(),
+  kryptonite: text('kryptonite').notNull(),
+  spirit_animal: text('spirit_animal').notNull(),
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });
 
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
 export type Insight = typeof insights.$inferSelect;
 export type User = typeof users.$inferSelect;
+export type UserProfile = typeof user_profiles.$inferSelect;

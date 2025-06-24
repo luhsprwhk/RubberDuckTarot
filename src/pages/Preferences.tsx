@@ -249,22 +249,6 @@ const Preferences = () => {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Lucky Number (1-36)
-                </label>
-                <input
-                  type="number"
-                  min="1"
-                  max="36"
-                  value={formData.lucky_number || ''}
-                  onChange={(e) =>
-                    handleInputChange('lucky_number', parseInt(e.target.value))
-                  }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Spirit Animal
                 </label>
                 <select

@@ -1,4 +1,4 @@
-import type { Insight } from '@/lib/supabase/supabase-schema';
+import type { Insight } from '@/supabase/schema';
 
 // Re-export database types for backward compatibility
 export type {
@@ -6,7 +6,8 @@ export type {
   BlockType,
   Insight,
   User,
-} from '@/lib/supabase/supabase-schema';
+  UserProfile,
+} from '@/supabase/schema';
 
 // Legacy alias for backward compatibility
 export type Reading = Insight;

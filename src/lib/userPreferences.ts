@@ -11,7 +11,7 @@ export interface UserProfile {
   block_pattern: string;
   superpower: string;
   kryptonite: string;
-  lucky_number: number;
+
   spirit_animal: string;
   created_at?: string;
   updated_at?: string;
@@ -86,7 +86,7 @@ export const isProfileComplete = (profile: UserProfile | null): boolean => {
     'block_pattern',
     'superpower',
     'kryptonite',
-    'lucky_number',
+
     'spirit_animal',
   ];
 

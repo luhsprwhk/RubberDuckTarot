@@ -20,7 +20,7 @@ interface UserProfile {
   blockPattern: string;
   superpower: string;
   kryptonite: string;
-  luckyNumber: number;
+
   spiritAnimal: string;
 }
 
@@ -82,12 +82,12 @@ const OnBoarding = () => {
     blockPattern: '',
     superpower: '',
     kryptonite: '',
-    luckyNumber: 1,
+
     spiritAnimal: '',
   });
 
   const [robMessage, setRobMessage] = useState(
-    "Welcome to Rob's Otherworldly Debugging Services. I'm a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
+    "Welcome to the Rubber Duck Tarot. I'm Rob, a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
   );
 
   // Load existing profile if user is logged in
@@ -106,7 +106,7 @@ const OnBoarding = () => {
               blockPattern: existingProfile.block_pattern,
               superpower: existingProfile.superpower,
               kryptonite: existingProfile.kryptonite,
-              luckyNumber: existingProfile.lucky_number,
+
               spiritAnimal: existingProfile.spirit_animal,
             });
           }
@@ -182,7 +182,7 @@ const OnBoarding = () => {
           block_pattern: profile.blockPattern,
           superpower: profile.superpower,
           kryptonite: profile.kryptonite,
-          lucky_number: profile.luckyNumber,
+
           spirit_animal: profile.spiritAnimal,
         };
 
@@ -426,38 +426,7 @@ const OnBoarding = () => {
         </div>
       ),
     },
-    {
-      title: 'Randomness Calibration',
-      robMessage:
-        'Pick a number 1-36. This is your lucky number. This helps me calibrate my otherworldly randomness generator.',
-      content: (
-        <div className="space-y-4">
-          <div className="flex justify-center">
-            <input
-              type="range"
-              min="1"
-              max="36"
-              value={profile.luckyNumber}
-              onChange={(e) => {
-                const value = e.target.value;
-                // Allow empty input, otherwise parse to int
-                const numericValue = value === '' ? 0 : parseInt(value, 10);
-                if (!isNaN(numericValue)) {
-                  updateProfile('luckyNumber', numericValue);
-                }
-              }}
-              className="w-full max-w-md"
-            />
-          </div>
-          <div className="text-center">
-            <span className="text-6xl font-bold text-yellow-600">
-              {profile.luckyNumber}
-            </span>
-            <p className="text-gray-600 mt-2">Your lucky number</p>
-          </div>
-        </div>
-      ),
-    },
+
     {
       title: 'Problem-Solving Spirit Animal',
       robMessage:
@@ -507,9 +476,6 @@ const OnBoarding = () => {
                 <strong>Spirit Animal:</strong>{' '}
                 {spiritAnimals.find((a) => a.id === profile.spiritAnimal)?.name}
               </p>
-              <p>
-                <strong>Lucky Number:</strong> {profile.luckyNumber}
-              </p>
             </div>
           </div>
           <button
@@ -537,8 +503,6 @@ const OnBoarding = () => {
       case 4:
         return profile.superpower && profile.kryptonite;
       case 5:
-        return true; // Lucky number always has a value
-      case 6:
         return profile.spiritAnimal;
       default:
         return true;
@@ -552,7 +516,7 @@ const OnBoarding = () => {
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🦆🧙‍♂️</div>
           <h1 className="text-3xl font-bold text-gray-800 mb-2">
-            Rob's Otherworldly Debugging
+            Rubber Duck Tarot
           </h1>
           <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
             <div
@@ -572,7 +536,7 @@ const OnBoarding = () => {
             <div className="flex-1">
               <div className="bg-gray-100 rounded-lg p-4 relative">
                 <div className="absolute -left-2 top-4 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-gray-100"></div>
-                <p className="text-gray-800 italic">"{robMessage}"</p>
+                <p className="text-gray-800 italic">{robMessage}</p>
               </div>
             </div>
           </div>
