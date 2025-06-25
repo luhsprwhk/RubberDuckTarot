@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { Save, User, Settings, Bell, Eye, Palette } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 import { useUserProfile } from '../hooks/useUserProfile';
-import { updateUserProfile, type UserProfile } from '../lib/userPreferences';
+import { updateUserProfile } from '../lib/userPreferences';
+import { type UserProfile } from '../interfaces';
 
 const superpowers = [
   'Breaking complex problems into simple steps',
@@ -200,7 +201,7 @@ const Preferences = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.profession || ''}
+                  value={formData.profession || profile.profession.name}
                   onChange={(e) =>
                     handleInputChange('profession', e.target.value)
                   }

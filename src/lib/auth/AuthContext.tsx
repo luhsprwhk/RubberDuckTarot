@@ -14,6 +14,11 @@ interface AuthContextType {
     password: string
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
+  isAuthModalOpen: boolean;
+  authModalMode: 'signIn' | 'signUp';
+  showAuthModal: (mode: 'signIn' | 'signUp') => void;
+  hideAuthModal: () => void;
+  setAuthModalMode: (mode: 'signIn' | 'signUp') => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

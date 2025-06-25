@@ -1,26 +1,42 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 import useAlert from '../hooks/useAlert';
 
-interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSuccess?: () => void;
-}
+export const AuthModal = () => {
+  const {
+    isAuthModalOpen,
+    hideAuthModal,
+    authModalMode,
+    setAuthModalMode,
+    signIn,
+    signUp,
+  } = useAuth();
 
-export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
-  const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const { signIn, signUp } = useAuth();
   const { showSuccess, showInfo } = useAlert();
 
-  if (!isOpen) return null;
+  const isSignUp = authModalMode === 'signUp';
+
+  const resetForm = () => {
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+    setError('');
+  };
+
+  useEffect(() => {
+    if (isAuthModalOpen) {
+      resetForm();
+    }
+  }, [isAuthModalOpen]);
+
+  if (!isAuthModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,12 +50,12 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
     }
 
     try {
-      const { error } = isSignUp
+      const { error: authError } = isSignUp
         ? await signUp(email, password)
         : await signIn(email, password);
 
-      if (error) {
-        setError(error.message);
+      if (authError) {
+        setError(authError.message);
       } else {
         if (isSignUp) {
           showInfo(
@@ -49,25 +65,17 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
         } else {
           showSuccess('Successfully signed in!');
         }
-        onSuccess?.();
-        onClose();
+        hideAuthModal();
       }
     } catch {
-      setError('An unexpected error occurred');
+      setError('An unexpected error occurred.');
     } finally {
       setLoading(false);
     }
   };
 
-  const resetForm = () => {
-    setEmail('');
-    setPassword('');
-    setConfirmPassword('');
-    setError('');
-  };
-
   const toggleMode = () => {
-    setIsSignUp(!isSignUp);
+    setAuthModalMode(isSignUp ? 'signIn' : 'signUp');
     resetForm();
   };
 
@@ -79,7 +87,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
             {isSignUp ? 'Create Account' : 'Sign In'}
           </h2>
           <button
-            onClick={onClose}
+            onClick={hideAuthModal}
             className="text-gray-500 hover:text-gray-700"
           >
             <X className="w-6 h-6" />

@@ -1,21 +1,5 @@
 import { supabase } from '../../lib/supabase/supabase';
-
-export interface UserProfile {
-  id?: string;
-  user_id: string;
-  name: string;
-  birthday: string;
-  birth_place: string;
-  profession: string;
-  debugging_mode: string;
-  block_pattern: string;
-  superpower: string;
-  kryptonite: string;
-
-  spirit_animal: string;
-  created_at?: string;
-  updated_at?: string;
-}
+import type { UserProfile } from '../interfaces';
 
 export const saveUserProfile = async (
   profile: Omit<UserProfile, 'id' | 'created_at' | 'updated_at'>

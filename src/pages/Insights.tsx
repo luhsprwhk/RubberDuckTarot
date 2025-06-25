@@ -1,58 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getDb } from '../../lib/database-provider';
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
-import type { Reading, Card, BlockType } from '../interfaces';
+import type { Insight, BlockType } from '../interfaces';
 import { MessageCircle, Brain } from 'lucide-react';
+import { getUserInsights } from '../lib/insights/insight-queries';
+import { getAllBlockTypes } from '../lib/blocktypes/blocktype-queries';
 
 const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
-  const [readings, setReadings] = useState<Reading[]>([]);
+  const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchReadings = async () => {
+    const fetchInsights = async () => {
       try {
         setLoading(true);
-        const db = await getDb();
 
         // Fetch readings and block types in parallel
-        const [userReadings, allBlockTypes] = await Promise.all([
-          db.getUserReadings(user?.id),
-          db.getAllBlockTypes(),
+        const [insights, blockTypes] = await Promise.all([
+          getUserInsights(user?.id),
+          getAllBlockTypes(),
         ]);
 
-        setReadings(userReadings);
-        setBlockTypes(allBlockTypes);
+        setInsights(insights);
+        setBlockTypes(blockTypes);
       } catch (err) {
-        console.error('Failed to fetch readings:', err);
-        setError('Failed to load your readings');
+        console.error('Failed to fetch insights:', err);
+        setError('Failed to load your insights');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchReadings();
+    fetchInsights();
   }, [user?.id]);
-
-  const getCardsByIds = (cardIds: number[]): Card[] => {
-    return cardIds
-      .map((id) => cards.find((card) => card.id === id))
-      .filter(Boolean) as Card[];
-  };
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt) => bt.id === blockTypeId);
     return blockType ? `${blockType.emoji} ${blockType.name}` : blockTypeId;
   };
 
-  const formatDate = (timestamp: Date | number): string => {
-    const date =
-      typeof timestamp === 'number' ? new Date(timestamp) : timestamp;
+  const formatDate = (timestamp: Date | number | string): string => {
+    const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -96,7 +90,7 @@ const Insights: React.FC = () => {
     );
   }
 
-  if (readings.length === 0) {
+  if (insights.length === 0 && !loading && !error) {
     return <EmptyInsightsState />;
   }
 
@@ -108,58 +102,58 @@ const Insights: React.FC = () => {
           Your Insight History
         </h1>
         <p className="text-gray-600">
-          {readings.length} insight{readings.length !== 1 ? 's' : ''} with Rob
+          {insights.length} insight{insights.length !== 1 ? 's' : ''} with Rob
           the Duck
         </p>
       </div>
 
       <div className="space-y-6">
-        {readings.map((reading) => {
-          const readingCards = getCardsByIds(reading.cards_drawn);
-
+        {insights.map((insight) => {
           return (
             <div
-              key={reading.id}
+              key={insight.id}
               className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">
-                      {reading.spread_type === 'quick-draw'
+                      {insight.spread_type === 'quick-draw'
                         ? 'Quick Draw'
                         : 'Full Pond'}
                     </span>
                     <span className="text-sm text-gray-500">
-                      {formatDate(reading.created_at)}
+                      {formatDate(insight.created_at)}
                     </span>
                   </div>
                   <h3 className="text-lg font-semibold text-gray-800 mb-1">
-                    {getBlockTypeName(reading.block_type_id)}
+                    {getBlockTypeName(insight.block_type_id)}
                   </h3>
-                  {reading.user_context && (
+                  {insight.user_context && (
                     <p className="text-gray-600 text-sm">
-                      "{reading.user_context}"
+                      "{insight.user_context}"
                     </p>
                   )}
                 </div>
               </div>
 
               <div className="flex gap-3 mt-4">
-                {readingCards.map((card, index) => (
-                  <div
-                    key={`${reading.id}-${card.id}-${index}`}
-                    className="flex-1 bg-gray-50 rounded-lg p-3 text-center"
-                  >
-                    <div className="text-2xl mb-1">{card.emoji}</div>
-                    <div className="text-sm font-medium text-gray-800">
-                      {card.name}
+                {insight.cards_drawn.map((cardId, index) => {
+                  const card = cards.find((c) => c.id === cardId);
+                  if (!card) return null;
+                  return (
+                    <div
+                      key={`${insight.id}-${card.id}-${index}`}
+                      className="flex-1 bg-gray-50 rounded-lg p-3 text-center"
+                      onClick={() => navigate(`/insight/${insight.id}`)}
+                    >
+                      <div className="text-2xl mb-1">{card.emoji}</div>
+                      <div className="text-sm font-medium text-gray-800">
+                        {card.name}
+                      </div>
                     </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                      {card.traditional_equivalent}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           );

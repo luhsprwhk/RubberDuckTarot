@@ -4,25 +4,9 @@ import PlacesAutocomplete from '../components/PlacesAutocomplete';
 import { ChevronRight, Zap, Brain, Target, Users, Bird } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
 
-import {
-  saveUserProfile,
-  getUserProfile,
-  type UserProfile as DbUserProfile,
-} from '../lib/userPreferences';
+import { saveUserProfile, getUserProfile } from '../lib/userPreferences';
+import { type UserProfile } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
-
-interface UserProfile {
-  name: string;
-  birthday: string;
-  birthPlace: string;
-  profession: string;
-  debuggingMode: string;
-  blockPattern: string;
-  superpower: string;
-  kryptonite: string;
-
-  spiritAnimal: string;
-}
 
 const superpowers = [
   'Breaking complex problems into simple steps',
@@ -44,6 +28,99 @@ const kryptonites = [
   'Procrastinating on boring tasks',
   'Comparing myself to others',
   'Other (specify below)',
+];
+
+const techProfessions = [
+  'Dev',
+  'Designer',
+  'PM',
+  'Marketing',
+  'Manager',
+  'Sales',
+  'Executive',
+  'Founder',
+  'Intern',
+  'Other',
+];
+
+const creativeProfessions = [
+  'Artist',
+  'Writer',
+  'Musician',
+  'Filmmaker',
+  'Dancer',
+  'Actor',
+  'Other',
+];
+const healthcareProfessions = [
+  'Doctor',
+  'Nurse',
+  'Therapist',
+  'Researcher',
+  'Administrator',
+  'Educator',
+  'Other',
+];
+const businessProfessions = [
+  'Analyst',
+  'Consultant',
+  'Accountant',
+  'HR',
+  'Operations',
+  'Sales',
+  'Marketing',
+  'Other',
+];
+const studentProfessions = [
+  'High School',
+  'Undergraduate',
+  'Graduate',
+  'PhD Candidate',
+  'Bootcamp',
+  'Other',
+];
+
+const professionsByCategory: { [key: string]: string[] } = {
+  'Tech (Dev/Design/PM)': techProfessions,
+  'Creative (Artist/Writer/Creator)': creativeProfessions,
+  'Healthcare/Education': healthcareProfessions,
+  'Business/Finance': businessProfessions,
+  Student: studentProfessions,
+  Other: [],
+};
+
+const professionCategories = [
+  'Tech (Dev/Design/PM)',
+  'Creative (Artist/Writer/Creator)',
+  'Healthcare/Education',
+  'Business/Sales/Finance',
+  'Trades/Service Work',
+  'Student/Career Starter',
+  'Other',
+];
+
+const debuggingModes = [
+  'Panic and Google everything',
+  'Overthink until paralyzed',
+  'Ask everyone for advice',
+  'Ignore it and hope it fixes itself',
+  'Break it down step by step',
+];
+
+const blockPatterns = [
+  'Creative (stuck on projects)',
+  'Decision (analysis paralysis)',
+  'Work (career confusion)',
+  'Life (routine ruts)',
+  'Relationship (communication failures)',
+];
+
+const spiritAnimals = [
+  { id: 'eagle', name: '🦅 Eagle (big picture)', icon: Bird },
+  { id: 'ant', name: '🐜 Ant (detail-oriented)', icon: Brain },
+  { id: 'fox', name: '🦊 Fox (creative solutions)', icon: Zap },
+  { id: 'turtle', name: '🐢 Turtle (methodical)', icon: Target },
+  { id: 'wolf', name: '🐺 Wolf (collaborative)', icon: Users },
 ];
 
 const OnBoarding = () => {
@@ -73,18 +150,22 @@ const OnBoarding = () => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState<UserProfile>({
+  const [profile, setProfile] = useState({
     name: '',
     birthday: '',
-    birthPlace: '',
-    profession: '',
-    debuggingMode: '',
-    blockPattern: '',
+    birth_place: '',
+    profession: {
+      category: '',
+      name: '',
+    },
+    debugging_mode: '',
+    block_pattern: '',
     superpower: '',
     kryptonite: '',
-
-    spiritAnimal: '',
+    spirit_animal: '',
   });
+
+  const [isOtherProfession, setIsOtherProfession] = useState(false);
 
   const [robMessage, setRobMessage] = useState(
     "Welcome to the Rubber Duck Tarot. I'm Rob, a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
@@ -97,18 +178,32 @@ const OnBoarding = () => {
         try {
           const existingProfile = await getUserProfile(user.id);
           if (existingProfile) {
-            setProfile({
+            const loadedProfile = {
               name: existingProfile.name,
               birthday: existingProfile.birthday,
-              birthPlace: existingProfile.birth_place,
+              birth_place: existingProfile.birth_place,
               profession: existingProfile.profession,
-              debuggingMode: existingProfile.debugging_mode,
-              blockPattern: existingProfile.block_pattern,
+              debugging_mode: existingProfile.debugging_mode,
+              block_pattern: existingProfile.block_pattern,
               superpower: existingProfile.superpower,
               kryptonite: existingProfile.kryptonite,
+              spirit_animal: existingProfile.spirit_animal,
+            };
+            setProfile(loadedProfile);
 
-              spiritAnimal: existingProfile.spirit_animal,
-            });
+            if (loadedProfile.profession && loadedProfile.profession.category) {
+              const { category, name } = loadedProfile.profession;
+              const categoryProfessions = professionsByCategory[category];
+              if (
+                !categoryProfessions ||
+                categoryProfessions.length === 0 ||
+                !categoryProfessions.includes(name)
+              ) {
+                setIsOtherProfession(true);
+              } else {
+                setIsOtherProfession(false);
+              }
+            }
           }
         } catch (error) {
           console.error('Failed to load profile:', error);
@@ -118,41 +213,10 @@ const OnBoarding = () => {
     loadProfile();
   }, [user]);
 
-  const professions = [
-    'Tech (Dev/Design/PM)',
-    'Creative (Artist/Writer/Creator)',
-    'Healthcare/Education',
-    'Business/Sales/Finance',
-    'Trades/Service Work',
-    'Student/Career Starter',
-    'Other',
-  ];
-
-  const debuggingModes = [
-    'Panic and Google everything',
-    'Overthink until paralyzed',
-    'Ask everyone for advice',
-    'Ignore it and hope it fixes itself',
-    'Break it down step by step',
-  ];
-
-  const blockPatterns = [
-    'Creative (stuck on projects)',
-    'Decision (analysis paralysis)',
-    'Work (career confusion)',
-    'Life (routine ruts)',
-    'Relationship (communication failures)',
-  ];
-
-  const spiritAnimals = [
-    { id: 'eagle', name: '🦅 Eagle (big picture)', icon: Bird },
-    { id: 'ant', name: '🐜 Ant (detail-oriented)', icon: Brain },
-    { id: 'fox', name: '🦊 Fox (creative solutions)', icon: Zap },
-    { id: 'turtle', name: '🐢 Turtle (methodical)', icon: Target },
-    { id: 'wolf', name: '🐺 Wolf (collaborative)', icon: Users },
-  ];
-
-  const updateProfile = (field: keyof UserProfile, value: string | number) => {
+  const updateProfile = <K extends keyof UserProfile>(
+    field: K,
+    value: UserProfile[K]
+  ) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -171,23 +235,21 @@ const OnBoarding = () => {
 
     setLoading(true);
     try {
-      const dbProfile: Omit<DbUserProfile, 'id' | 'created_at' | 'updated_at'> =
-        {
-          user_id: user.id,
-          name: profile.name,
-          birthday: profile.birthday,
-          birth_place: profile.birthPlace,
-          profession: profile.profession,
-          debugging_mode: profile.debuggingMode,
-          block_pattern: profile.blockPattern,
-          superpower: profile.superpower,
-          kryptonite: profile.kryptonite,
-
-          spirit_animal: profile.spiritAnimal,
-        };
+      const dbProfile: Omit<UserProfile, 'id' | 'created_at' | 'updated_at'> = {
+        user_id: user.id,
+        name: profile.name,
+        birthday: profile.birthday,
+        birth_place: profile.birth_place,
+        profession: profile.profession,
+        debugging_mode: profile.debugging_mode,
+        block_pattern: profile.block_pattern,
+        superpower: profile.superpower,
+        kryptonite: profile.kryptonite,
+        spirit_animal: profile.spirit_animal,
+      };
 
       await saveUserProfile(dbProfile);
-      navigate('/reading');
+      navigate('/');
     } catch (error) {
       console.error('Failed to save profile:', error);
       alert('Failed to save your preferences. Please try again.');
@@ -211,6 +273,16 @@ const OnBoarding = () => {
     : profile.kryptonite;
   const showOtherKryptonite = kryptoniteSelection === 'Other (specify below)';
   const otherKryptoniteValue = isCustomKryptonite ? profile.kryptonite : '';
+
+  const professionNameSelection =
+    isOtherProfession ||
+    (profile.profession.category &&
+      profile.profession.name &&
+      !professionsByCategory[profile.profession.category]?.includes(
+        profile.profession.name
+      ))
+      ? 'Other'
+      : profile.profession.name;
 
   const steps = [
     {
@@ -251,11 +323,11 @@ const OnBoarding = () => {
               </label>
               {isGoogleMapsLoaded && (
                 <PlacesAutocomplete
-                  initialValue={profile.birthPlace}
+                  initialValue={profile.birth_place}
                   onPlaceSelect={(place) => {
                     console.log(place);
                     if (place.formatted_address) {
-                      updateProfile('birthPlace', place.formatted_address);
+                      updateProfile('birth_place', place.formatted_address);
                     }
                   }}
                 />
@@ -268,24 +340,91 @@ const OnBoarding = () => {
     {
       title: 'Profession Assessment',
       robMessage:
-        "What's your day job? This helps me calibrate my metaphor game - I can dial up the coding references for developers or tone them down for normal humans.",
+        "What's your day job? This helps me calibrate my metaphor game.",
       content: (
         <div className="space-y-4">
           <div className="grid grid-cols-1 gap-3">
-            {professions.map((prof) => (
-              <button
-                key={prof}
-                onClick={() => updateProfile('profession', prof)}
-                className={`p-4 text-left border rounded-lg transition-all ${
-                  profile.profession === prof
-                    ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
-              >
-                {prof}
-              </button>
-            ))}
+            {professionCategories
+              .filter(
+                (category) =>
+                  !profile.profession.category ||
+                  category === profile.profession.category
+              )
+              .map((category) => (
+                <button
+                  key={category}
+                  onClick={() => {
+                    updateProfile('profession', {
+                      category: category,
+                      name: '',
+                    });
+                    setIsOtherProfession(
+                      professionsByCategory[category]?.length === 0
+                    );
+                  }}
+                  className={`p-4 text-left border rounded-lg transition-all ${
+                    profile.profession.category === category
+                      ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
+                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
           </div>
+          {profile.profession.category && (
+            <div className="grid grid-cols-1 gap-3">
+              {!isOtherProfession &&
+                professionsByCategory[profile.profession.category]?.length >
+                  0 && (
+                  <select
+                    value={professionNameSelection}
+                    onChange={(e) => {
+                      if (e.target.value === 'Other') {
+                        setIsOtherProfession(true);
+                        updateProfile('profession', {
+                          ...profile.profession,
+                          name: '',
+                        });
+                      } else {
+                        updateProfile('profession', {
+                          ...profile.profession,
+                          name: e.target.value,
+                        });
+                      }
+                    }}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  >
+                    <option value="" disabled>
+                      Select your profession
+                    </option>
+                    {professionsByCategory[profile.profession.category].map(
+                      (p) => (
+                        <option key={p} value={p}>
+                          {p}
+                        </option>
+                      )
+                    )}
+                  </select>
+                )}
+
+              {isOtherProfession && (
+                <input
+                  type="text"
+                  value={profile.profession.name}
+                  onChange={(e) =>
+                    updateProfile('profession', {
+                      ...profile.profession,
+                      name: e.target.value,
+                    })
+                  }
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  placeholder="What's your profession?"
+                  autoFocus
+                />
+              )}
+            </div>
+          )}
         </div>
       ),
     },
@@ -299,9 +438,9 @@ const OnBoarding = () => {
             {debuggingModes.map((mode) => (
               <button
                 key={mode}
-                onClick={() => updateProfile('debuggingMode', mode)}
+                onClick={() => updateProfile('debugging_mode', mode)}
                 className={`p-4 text-left border rounded-lg transition-all ${
-                  profile.debuggingMode === mode
+                  profile.debugging_mode === mode
                     ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
@@ -323,9 +462,9 @@ const OnBoarding = () => {
             {blockPatterns.map((pattern) => (
               <button
                 key={pattern}
-                onClick={() => updateProfile('blockPattern', pattern)}
+                onClick={() => updateProfile('block_pattern', pattern)}
                 className={`p-4 text-left border rounded-lg transition-all ${
-                  profile.blockPattern === pattern
+                  profile.block_pattern === pattern
                     ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
@@ -439,9 +578,9 @@ const OnBoarding = () => {
               return (
                 <button
                   key={animal.id}
-                  onClick={() => updateProfile('spiritAnimal', animal.id)}
+                  onClick={() => updateProfile('spirit_animal', animal.id)}
                   className={`p-4 text-left border rounded-lg transition-all flex items-center ${
-                    profile.spiritAnimal === animal.id
+                    profile.spirit_animal === animal.id
                       ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
                       : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                   }`}
@@ -467,14 +606,17 @@ const OnBoarding = () => {
             </h3>
             <div className="text-left space-y-2 text-sm text-gray-700">
               <p>
-                <strong>Debugging Style:</strong> {profile.debuggingMode}
+                <strong>Debugging Style:</strong> {profile.debugging_mode}
               </p>
               <p>
-                <strong>Primary Block:</strong> {profile.blockPattern}
+                <strong>Primary Block:</strong> {profile.block_pattern}
               </p>
               <p>
                 <strong>Spirit Animal:</strong>{' '}
-                {spiritAnimals.find((a) => a.id === profile.spiritAnimal)?.name}
+                {
+                  spiritAnimals.find((a) => a.id === profile.spirit_animal)
+                    ?.name
+                }
               </p>
             </div>
           </div>
@@ -493,17 +635,17 @@ const OnBoarding = () => {
   const canProceed = () => {
     switch (currentStep) {
       case 0:
-        return profile.name && profile.birthday && profile.birthPlace;
+        return profile.name && profile.birthday && profile.birth_place;
       case 1:
         return profile.profession;
       case 2:
-        return profile.debuggingMode;
+        return profile.debugging_mode;
       case 3:
-        return profile.blockPattern;
+        return profile.block_pattern;
       case 4:
         return profile.superpower && profile.kryptonite;
       case 5:
-        return profile.spiritAnimal;
+        return profile.spirit_animal;
       default:
         return true;
     }

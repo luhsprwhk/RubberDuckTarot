@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getUserProfile, type UserProfile } from '../lib/userPreferences';
+import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { BlockType, Card } from '../interfaces';
@@ -10,6 +10,7 @@ import {
   generatePersonalizedReading,
   type PersonalizedReading,
 } from '../lib/claude-ai';
+import { type UserProfile } from '../interfaces';
 
 interface ReadingState {
   selectedBlockTypeId: string;

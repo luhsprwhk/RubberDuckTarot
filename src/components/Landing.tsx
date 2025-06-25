@@ -1,6 +1,9 @@
 import { Star, ArrowRight, User, Zap, Target, Shield } from 'lucide-react';
+import useAuth from '@/src/hooks/useAuth';
 
 const Landing = () => {
+  const { showAuthModal } = useAuth();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       {/* Hero Section */}
@@ -32,7 +35,10 @@ const Landing = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2">
+            <button
+              onClick={() => showAuthModal('signUp')}
+              className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            >
               Start Free Consultation
               <ArrowRight className="w-5 h-5" />
             </button>
@@ -132,7 +138,7 @@ const Landing = () => {
                   bonded to a rubber duck wearing a wizard hat.
                 </p>
                 <p className="text-gray-600 mb-6">
-                  Now operating from beyond the veil, Rob offers debugging
+                  Now operating from beyond the grave, Rob offers debugging
                   services with the unique perspective that only death can
                   provide. His ethereal consultancy focuses on practical
                   problem-solving without the limitations of physical form or
@@ -157,7 +163,7 @@ const Landing = () => {
               <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-xl">
                 <div className="text-center">
                   <div className="w-32 h-32 mx-auto bg-yellow-400 rounded-full flex items-center justify-center mb-4 shadow-lg">
-                    <span className="text-6xl">\U0001f986</span>
+                    <span className="text-6xl">🦆</span>
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     Rob Chen
@@ -166,9 +172,9 @@ const Landing = () => {
                     Otherworldly Senior Consultant
                   </p>
                   <div className="text-sm text-gray-600">
-                    <div>\U0001f4e7 rob@ethereal-debugging.com</div>
-                    <div>\U0001f4f1 Available via s�ance</div>
-                    <div>\U0001f30d Operating from the beyond</div>
+                    <div>📧 rob@rubberducktarot.com</div>
+                    <div>📱 Available via digital seance</div>
+                    <div>👻 Operating from beyond the grave</div>
                   </div>
                 </div>
               </div>
@@ -185,7 +191,7 @@ const Landing = () => {
               Client Testimonials
             </h2>
             <p className="text-gray-600">
-              What the living are saying about our otherworldly services
+              What the living are saying about my otherworldly services
             </p>
           </div>
 
@@ -261,15 +267,14 @@ const Landing = () => {
               Ready to Debug Your Blocks?
             </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Start your free consultation with Rob's Otherworldly Debugging
-              Consultancy. No mystical nonsense, just practical problem-solving
-              from beyond the grave.
+              Start your free consultation with Rubber Duck Tarot. No mystical
+              nonsense, just practical problem-solving from beyond the grave.
             </p>
             <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors text-lg">
               Begin Free Consultation
             </button>
             <p className="text-sm text-gray-500 mt-4">
-              * No s�ance required. Standard debugging rates apply.
+              * No seance required. Standard spiritual rates apply.
             </p>
           </div>
         </div>
@@ -279,17 +284,15 @@ const Landing = () => {
       <div className="bg-gray-900 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="text-2xl">\U0001f986</span>
-            <span className="font-semibold">
-              Rob's Otherworldly Debugging Consultancy
-            </span>
+            <span className="text-2xl">🦆</span>
+            <span className="font-semibold">Rubber Duck Tarot</span>
           </div>
           <p className="text-gray-400 text-sm">
-            Professional debugging services from beyond the veil since 2023
+            Professional debugging services from beyond the grave since 2023
           </p>
           <p className="text-gray-500 text-xs mt-2">
-            Rob Chen (1977-2023) \u2022 Licensed Ethereal Consultant \u2022 No
-            returns policy (obviously)
+            Rob Chen (1977-2023) • Licensed Ethereal Consultant • No returns
+            policy (obviously)
           </p>
         </div>
       </div>

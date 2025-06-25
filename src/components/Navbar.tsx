@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
-import { AuthModal } from './AuthModal';
+
 import { Link } from 'react-router-dom';
 import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
 import clsx from 'clsx';
 
 import { useUserProfile } from '../hooks/useUserProfile';
 const Navbar = () => {
-  const { user, signOut, loading } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { user, signOut, loading, showAuthModal } = useAuth();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { profile } = useUserProfile();
   const userMenuRef = useRef<HTMLDivElement>(null);
@@ -119,7 +118,7 @@ const Navbar = () => {
                     </div>
                   ) : (
                     <button
-                      onClick={() => setShowAuthModal(true)}
+                      onClick={() => showAuthModal('signIn')}
                       className="bg-yellow-600 text-white px-4 py-2 rounded-md hover:bg-yellow-700 transition-colors"
                     >
                       Sign In
@@ -131,11 +130,6 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-
-      <AuthModal
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-      />
     </>
   );
 };

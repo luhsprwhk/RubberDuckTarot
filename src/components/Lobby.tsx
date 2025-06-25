@@ -2,14 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import NewReading from './NewReading';
-import OnBoarding from '../pages/OnBoarding';
 import { getDb } from '@/lib/database-provider';
-import {
-  getUserProfile,
-  isProfileComplete,
-  type UserProfile,
-} from '../lib/userPreferences';
-import type { BlockType } from '@/src/interfaces';
+import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
+import type { BlockType, UserProfile } from '@/src/interfaces';
 
 export default function Lobby() {
   const { user } = useAuth();
@@ -87,7 +82,7 @@ export default function Lobby() {
   }
 
   if (!isProfileComplete(userProfile)) {
-    return <OnBoarding />;
+    navigate('/onboarding');
   }
 
   return (

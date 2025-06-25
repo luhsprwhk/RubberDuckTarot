@@ -72,7 +72,9 @@ export const user_profiles = pgTable('user_profiles', {
   name: text('name').notNull(),
   birthday: text('birthday').notNull(),
   birth_place: text('birth_place').notNull(),
-  profession: text('profession').notNull(),
+  profession: jsonb('profession')
+    .$type<{ category: string; name: string }>()
+    .notNull(),
   debugging_mode: text('debugging_mode').notNull(),
   block_pattern: text('block_pattern').notNull(),
   superpower: text('superpower').notNull(),
