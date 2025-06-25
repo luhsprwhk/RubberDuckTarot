@@ -1,6 +1,7 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { UserProfile } from './userPreferences';
+import type { UserProfile } from '../interfaces';
 import type { Card, BlockType } from '../interfaces';
+import { getProfessionMetaphors } from './ai/profession-metaphors';
 
 const anthropic = new Anthropic({
   apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
@@ -31,7 +32,7 @@ export const generatePersonalizedReading = async (
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: request.spreadType === 'quick-draw' ? 400 : 1200,
+      max_tokens: request.spreadType === 'quick-draw' ? 250 : 800,
       temperature: 0.7, // Slight randomness for personality
       messages: [
         {
@@ -55,6 +56,7 @@ export const generatePersonalizedReading = async (
 
 const buildReadingPrompt = (request: ReadingRequest): string => {
   const { cards, blockType, userContext, userProfile, spreadType } = request;
+  console.log(userProfile);
 
   // Get profession-specific metaphor style
   const metaphorStyle = getProfessionMetaphors(userProfile.profession);
@@ -107,7 +109,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
 
 CLIENT PROFILE:
 Name: ${userProfile.name}
-Profession: ${userProfile.profession} ${metaphorStyle.note}
+Profession: ${userProfile.profession.name} ${metaphorStyle.note}
 Debugging Style: ${userProfile.debugging_mode}
 Primary Block Pattern: ${userProfile.block_pattern}
 Superpower: "${userProfile.superpower}"
@@ -135,52 +137,6 @@ Respond in valid JSON format:
 }`;
 
   return basePrompt;
-};
-
-const getProfessionMetaphors = (profession: string) => {
-  const lower = profession.toLowerCase();
-
-  if (
-    lower.includes('develop') ||
-    lower.includes('engineer') ||
-    lower.includes('program')
-  ) {
-    return {
-      style:
-        'Heavy coding metaphors: debugging, refactoring, technical debt, CI/CD, etc.',
-      note: '(fellow developer - use full technical language)',
-    };
-  }
-
-  if (
-    lower.includes('design') ||
-    lower.includes('creative') ||
-    lower.includes('artist')
-  ) {
-    return {
-      style:
-        'Design/creative process metaphors: iterations, wireframes, color theory, composition.',
-      note: '(creative professional - use design language)',
-    };
-  }
-
-  if (
-    lower.includes('manager') ||
-    lower.includes('business') ||
-    lower.includes('marketing')
-  ) {
-    return {
-      style:
-        'Business/strategy metaphors: KPIs, roadmaps, stakeholders, user stories.',
-      note: '(business role - use strategic frameworks)',
-    };
-  }
-
-  return {
-    style:
-      'Universal problem-solving metaphors: systems, processes, optimization, with minimal jargon.',
-    note: '(general audience - keep tech references light)',
-  };
 };
 
 const getSpreadSpecificInstructions = (spreadType: string): string => {

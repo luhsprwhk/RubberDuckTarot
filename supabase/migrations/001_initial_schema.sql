@@ -40,7 +40,7 @@ create table public.user_profiles (
   name text not null,
   birthday text not null,
   birth_place text not null,
-  profession text not null,
+  profession jsonb not null,
   debugging_mode text not null,
   block_pattern text not null,
   superpower text not null,
