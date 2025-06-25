@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
 import useAuth from '../hooks/useAuth';
+import useAlert from '../hooks/useAlert';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
   const [error, setError] = useState('');
 
   const { signIn, signUp } = useAuth();
+  const { showSuccess, showInfo } = useAlert();
 
   if (!isOpen) return null;
 
@@ -39,6 +41,14 @@ export const AuthModal = ({ isOpen, onClose, onSuccess }: AuthModalProps) => {
       if (error) {
         setError(error.message);
       } else {
+        if (isSignUp) {
+          showInfo(
+            'Please check your email and click the confirmation link to complete your registration.',
+            'Check Your Email'
+          );
+        } else {
+          showSuccess('Successfully signed in!');
+        }
         onSuccess?.();
         onClose();
       }
