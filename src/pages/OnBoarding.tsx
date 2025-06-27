@@ -291,34 +291,34 @@ const OnBoarding = () => {
         "Before we start breaking your mental loops, I need some intel. This isn't mystical nonsense - it's just good consulting practice. Even in the afterlife, I believe in proper client onboarding.",
       content: (
         <div className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Name
               </label>
               <input
                 type="text"
                 value={profile.name}
                 onChange={(e) => updateProfile('name', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
                 placeholder="What should I call you?"
               />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Birthday
               </label>
               <input
                 type="date"
                 value={profile.birthday}
                 onChange={(e) => updateProfile('birthday', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-primary mb-2">
                 Place of Birth
               </label>
               {isGoogleMapsLoaded && (
@@ -362,10 +362,10 @@ const OnBoarding = () => {
                       professionsByCategory[category]?.length === 0
                     );
                   }}
-                  className={`p-4 text-left border rounded-lg transition-all ${
+                  className={`p-4 text-left border text-primary border-liminal-border rounded-lg transition-all ${
                     profile.profession.category === category
-                      ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
+                      : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
                   }`}
                 >
                   {category}
@@ -393,7 +393,7 @@ const OnBoarding = () => {
                         });
                       }
                     }}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-3 py-2 bg-void-800 text-primary border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
                   >
                     <option value="" disabled>
                       Select your profession
@@ -418,7 +418,7 @@ const OnBoarding = () => {
                       name: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   placeholder="What's your profession?"
                   autoFocus
                 />
@@ -442,7 +442,7 @@ const OnBoarding = () => {
                 className={`p-4 text-left border rounded-lg transition-all ${
                   profile.debugging_mode === mode
                     ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
                 {mode}
@@ -466,7 +466,7 @@ const OnBoarding = () => {
                 className={`p-4 text-left border rounded-lg transition-all ${
                   profile.block_pattern === pattern
                     ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
                 }`}
               >
                 {pattern}
@@ -516,7 +516,7 @@ const OnBoarding = () => {
               <textarea
                 value={otherSuperpowerValue}
                 onChange={(e) => updateProfile('superpower', e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full mt-2 px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 rows={3}
                 placeholder="Your debugging superpower..."
               />
@@ -556,7 +556,7 @@ const OnBoarding = () => {
               <textarea
                 value={otherKryptoniteValue}
                 onChange={(e) => updateProfile('kryptonite', e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                className="w-full mt-2 px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 rows={3}
                 placeholder="Your consistent kryptonite..."
               />
@@ -582,7 +582,7 @@ const OnBoarding = () => {
                   className={`p-4 text-left border rounded-lg transition-all flex items-center ${
                     profile.spirit_animal === animal.id
                       ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                      : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                      : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
                   }`}
                 >
                   <IconComponent className="w-6 h-6 mr-3 text-gray-600" />
@@ -652,41 +652,41 @@ const OnBoarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-yellow-50 p-4">
+    <div className="min-h-screen bg-void-gradient p-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🦆🧙‍♂️</div>
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl font-bold text-primary mb-2">
             Rubber Duck Tarot
           </h1>
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+          <div className="w-full bg-void-gradient rounded-full h-2 mb-4">
             <div
-              className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
+              className="bg-terminal-pulse h-2 rounded-full transition-all duration-300"
               style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
             />
           </div>
-          <p className="text-gray-600">
+          <p className="text-accent">
             Step {currentStep + 1} of {steps.length}
           </p>
         </div>
 
         {/* Rob's Message */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
+        <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
           <div className="flex items-start">
             <div className="text-4xl mr-4">🦆</div>
             <div className="flex-1">
-              <div className="bg-gray-100 rounded-lg p-4 relative">
+              <div className="bg-void-700 rounded-lg p-4 relative">
                 <div className="absolute -left-2 top-4 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-gray-100"></div>
-                <p className="text-gray-800 italic">{robMessage}</p>
+                <p className="text-primary italic">{robMessage}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Current Step Content */}
-        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 mb-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-6">
+        <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
+          <h2 className="text-xl font-semibold text-primary mb-6">
             {steps[currentStep].title}
           </h2>
           {steps[currentStep].content}
@@ -700,8 +700,8 @@ const OnBoarding = () => {
               disabled={!canProceed()}
               className={`flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${
                 canProceed()
-                  ? 'bg-yellow-600 text-white hover:bg-yellow-700'
-                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  ? 'bg-breakthrough-400 text-primary hover:bg-breakthrough-500'
+                  : 'bg-void-700 text-primary cursor-not-allowed'
               }`}
             >
               Continue

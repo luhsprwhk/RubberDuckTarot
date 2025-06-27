@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import About from './pages/About';
 import Reading from './pages/Reading';
 import OnBoarding from './pages/OnBoarding';
 import AuthProvider from './lib/auth/AuthProvider';
@@ -10,6 +9,7 @@ import Navbar from './components/Navbar';
 import { AlertContainer } from './components/AlertContainer';
 import Upgrade from './pages/Upgrade';
 import Insights from './pages/Insights';
+import Pricing from './pages/Pricing';
 import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 
@@ -23,11 +23,11 @@ function App() {
             <main>
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
                 <Route path="/reading" element={<Reading />} />
                 <Route path="/insights" element={<Insights />} />
                 <Route path="/onboarding" element={<OnBoarding />} />
                 <Route path="/upgrade" element={<Upgrade />} />
+                <Route path="/pricing" element={<Pricing />} />
                 <Route path="/preferences" element={<Preferences />} />
                 <Route path="/insight/:id" element={<Insight />} />
               </Routes>

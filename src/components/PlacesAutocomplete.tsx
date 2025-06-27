@@ -111,13 +111,30 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
     };
   }, [onPlaceSelect]);
 
+  useEffect(() => {
+    if (autocompleteRef.current) {
+      const shadowRoot = autocompleteRef.current.shadowRoot;
+      if (shadowRoot) {
+        const style = document.createElement('style');
+        style.textContent = `
+          #input-container .focus-ring {
+            border: none !important;
+            opacity: 0 !important;
+          }
+        `;
+        shadowRoot.appendChild(style);
+      }
+    }
+  }, []);
+
   return (
     <gmp-place-autocomplete
+      id="places-autocomplete-widget"
       ref={autocompleteRef}
       placeholder="Enter a city"
       value={initialValue}
       fields="name,formatted_address,types"
-      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+      className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md "
       place-types="locality"
       included-primary-types={['locality']}
     />
