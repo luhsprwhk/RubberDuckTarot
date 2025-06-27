@@ -16,7 +16,6 @@ const superpowers = [
   'Getting people to open up and share',
   'Staying calm under pressure',
   'Learning new things quickly',
-  'Other (specify below)',
 ];
 
 const kryptonites = [
@@ -27,7 +26,6 @@ const kryptonites = [
   'Taking on too much at once',
   'Procrastinating on boring tasks',
   'Comparing myself to others',
-  'Other (specify below)',
 ];
 
 const techProfessions = [
@@ -382,7 +380,8 @@ const OnBoarding = () => {
                       name: e.target.value,
                     })
                   }
-                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  onBlur={() => setIsOtherProfession(false)}
+                  className="w-full px-3 py-2 border border-liminal-border bg-void-800 text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   placeholder="What's your profession?"
                   autoFocus
                 />
