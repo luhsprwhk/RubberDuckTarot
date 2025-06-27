@@ -1,5 +1,5 @@
 import type { BlockType } from '@/src/interfaces';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '../supabase/supabase';
 
 // Block Types
 export const getAllBlockTypes = async (): Promise<BlockType[]> => {

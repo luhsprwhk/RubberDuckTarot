@@ -201,16 +201,16 @@ const Preferences = () => {
                 </label>
                 <input
                   type="text"
-                  value={formData.profession || profile.profession.name}
+                  value={formData.profession?.name || profile.profession.name}
                   onChange={(e) =>
                     handleInputChange('profession', e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary mb-2">
                   Debugging Mode
                 </label>
                 <select
@@ -218,7 +218,7 @@ const Preferences = () => {
                   onChange={(e) =>
                     handleInputChange('debugging_mode', e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   {debuggingModes.map((mode) => (
                     <option key={mode} value={mode}>
@@ -230,7 +230,7 @@ const Preferences = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-primary mb-2">
                   Block Pattern
                 </label>
                 <select
@@ -238,7 +238,7 @@ const Preferences = () => {
                   onChange={(e) =>
                     handleInputChange('block_pattern', e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   {blockPatterns.map((pattern) => (
                     <option key={pattern} value={pattern}>
@@ -257,7 +257,7 @@ const Preferences = () => {
                   onChange={(e) =>
                     handleInputChange('spirit_animal', e.target.value)
                   }
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   {spiritAnimals.map((animal) => (
                     <option key={animal} value={animal}>

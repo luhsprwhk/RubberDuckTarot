@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '../supabase/supabase';
 import AuthContext from '@/src/lib/auth/AuthContext';
 import { AuthModal } from '@/src/components/AuthModal';
 import { getUserFromAuth } from '../user/user-queries';
@@ -23,14 +23,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
-      if (session?.user) {
-        const user = await getUserFromAuth(session.user.id);
-        setUser(user ?? null);
-      } else {
-        setUser(null);
+      try {
+        setSession(session);
+        if (session?.user) {
+          const user = await getUserFromAuth(session.user.id);
+          setUser(user ?? null);
+        } else {
+          setUser(null);
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => {

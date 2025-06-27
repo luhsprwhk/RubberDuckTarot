@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import NewReading from './NewReading';
-import { getDb } from '@/lib/database-provider';
+import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
-import type { BlockType, UserProfile } from '@/src/interfaces';
+import type { BlockType } from '@/src/interfaces';
 
 export default function Lobby() {
   const { user } = useAuth();
@@ -15,7 +15,6 @@ export default function Lobby() {
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -30,7 +29,11 @@ export default function Lobby() {
           const loadedBlockTypes = await db.getAllBlockTypes();
           if (isMounted) {
             setBlockTypes(loadedBlockTypes);
-            setUserProfile(profile);
+
+            // Navigate to onboarding if profile is incomplete
+            if (!isProfileComplete(profile)) {
+              navigate('/onboarding');
+            }
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -49,7 +52,7 @@ export default function Lobby() {
     return () => {
       isMounted = false;
     };
-  }, [user]);
+  }, [user, navigate]);
 
   // Handlers
   const handleNewReading = () => {
@@ -79,10 +82,6 @@ export default function Lobby() {
         <div>Loading...</div>
       </div>
     );
-  }
-
-  if (!isProfileComplete(userProfile)) {
-    navigate('/onboarding');
   }
 
   return (

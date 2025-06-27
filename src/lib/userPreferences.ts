@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase/supabase';
+import { supabase } from './supabase/supabase';
 import type { UserProfile } from '../interfaces';
 
 export const saveUserProfile = async (

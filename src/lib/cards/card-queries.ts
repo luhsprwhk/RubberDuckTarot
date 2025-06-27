@@ -1,5 +1,5 @@
 import type { Card } from '@/src/interfaces';
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '../supabase/supabase';
 
 // Cards
 export const getAllCards = async (): Promise<Card[]> => {

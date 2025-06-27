@@ -146,11 +146,13 @@ const OnBoarding = () => {
       });
   }, []);
 
-  const { user } = useAuth();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [profile, setProfile] = useState({
+  const [profile, setProfile] = useState<
+    Omit<UserProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>
+  >({
     name: '',
     birthday: '',
     birth_place: '',
@@ -178,17 +180,7 @@ const OnBoarding = () => {
         try {
           const existingProfile = await getUserProfile(user.id);
           if (existingProfile) {
-            const loadedProfile = {
-              name: existingProfile.name,
-              birthday: existingProfile.birthday,
-              birth_place: existingProfile.birth_place,
-              profession: existingProfile.profession,
-              debugging_mode: existingProfile.debugging_mode,
-              block_pattern: existingProfile.block_pattern,
-              superpower: existingProfile.superpower,
-              kryptonite: existingProfile.kryptonite,
-              spirit_animal: existingProfile.spirit_animal,
-            };
+            const { ...loadedProfile } = existingProfile;
             setProfile(loadedProfile);
 
             if (loadedProfile.profession && loadedProfile.profession.category) {
@@ -213,49 +205,25 @@ const OnBoarding = () => {
     loadProfile();
   }, [user]);
 
-  const updateProfile = <K extends keyof UserProfile>(
+  // Check if user is authenticated after all hooks
+  if (authLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div>Loading...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    navigate('/login');
+    return null;
+  }
+
+  const updateProfile = <K extends keyof typeof profile>(
     field: K,
-    value: UserProfile[K]
+    value: (typeof profile)[K]
   ) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-      setRobMessage(steps[currentStep + 1].robMessage);
-    }
-  };
-
-  const handleCompleteOnboarding = async () => {
-    if (!user) {
-      alert('Please sign in to save your preferences');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const dbProfile: Omit<UserProfile, 'id' | 'created_at' | 'updated_at'> = {
-        user_id: user.id,
-        name: profile.name,
-        birthday: profile.birthday,
-        birth_place: profile.birth_place,
-        profession: profile.profession,
-        debugging_mode: profile.debugging_mode,
-        block_pattern: profile.block_pattern,
-        superpower: profile.superpower,
-        kryptonite: profile.kryptonite,
-        spirit_animal: profile.spirit_animal,
-      };
-
-      await saveUserProfile(dbProfile);
-      navigate('/');
-    } catch (error) {
-      console.error('Failed to save profile:', error);
-      alert('Failed to save your preferences. Please try again.');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const isCustomSuperpower =
@@ -263,16 +231,12 @@ const OnBoarding = () => {
   const superpowerSelection = isCustomSuperpower
     ? 'Other (specify below)'
     : profile.superpower;
-  const showOtherSuperpower = superpowerSelection === 'Other (specify below)';
-  const otherSuperpowerValue = isCustomSuperpower ? profile.superpower : '';
 
   const isCustomKryptonite =
     profile.kryptonite && !kryptonites.includes(profile.kryptonite);
   const kryptoniteSelection = isCustomKryptonite
     ? 'Other (specify below)'
     : profile.kryptonite;
-  const showOtherKryptonite = kryptoniteSelection === 'Other (specify below)';
-  const otherKryptoniteValue = isCustomKryptonite ? profile.kryptonite : '';
 
   const professionNameSelection =
     isOtherProfession ||
@@ -325,7 +289,6 @@ const OnBoarding = () => {
                 <PlacesAutocomplete
                   initialValue={profile.birth_place}
                   onPlaceSelect={(place) => {
-                    console.log(place);
                     if (place.formatted_address) {
                       updateProfile('birth_place', place.formatted_address);
                     }
@@ -387,6 +350,7 @@ const OnBoarding = () => {
                           name: '',
                         });
                       } else {
+                        setIsOtherProfession(false);
                         updateProfile('profession', {
                           ...profile.profession,
                           name: e.target.value,
@@ -439,10 +403,10 @@ const OnBoarding = () => {
               <button
                 key={mode}
                 onClick={() => updateProfile('debugging_mode', mode)}
-                className={`p-4 text-left border rounded-lg transition-all ${
+                className={`p-4 text-left text-primary border rounded-lg transition-all ${
                   profile.debugging_mode === mode
-                    ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                    : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
+                    : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
                 }`}
               >
                 {mode}
@@ -463,10 +427,10 @@ const OnBoarding = () => {
               <button
                 key={pattern}
                 onClick={() => updateProfile('block_pattern', pattern)}
-                className={`p-4 text-left border rounded-lg transition-all ${
+                className={`p-4 text-left text-primary border rounded-lg transition-all ${
                   profile.block_pattern === pattern
-                    ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                    : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
+                    ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
+                    : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
                 }`}
               >
                 {pattern}
@@ -483,7 +447,7 @@ const OnBoarding = () => {
       content: (
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary mb-2">
               <Zap className="inline w-4 h-4 mr-1" />
               What's one thing you're actually good at figuring out?
             </label>
@@ -491,18 +455,22 @@ const OnBoarding = () => {
               <select
                 value={superpowerSelection || ''}
                 onChange={(e) => updateProfile('superpower', e.target.value)}
-                className="w-full p-4 border rounded-lg appearance-none bg-white border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-500"
+                className="w-full p-4 border rounded-lg text-primary appearance-none bg-void-800 border-liminal-border hover:border-terminal-pulse focus:outline-none focus:ring-2 focus:ring-terminal-pulse focus:border-terminal-pulse"
               >
                 <option value="" disabled>
                   Select a superpower
                 </option>
                 {superpowers.map((superpower) => (
-                  <option key={superpower} value={superpower}>
+                  <option
+                    key={superpower}
+                    value={superpower}
+                    className="text-primary bg-void-800"
+                  >
                     {superpower}
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
                 <svg
                   className="fill-current h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"
@@ -512,18 +480,9 @@ const OnBoarding = () => {
                 </svg>
               </div>
             </div>
-            {showOtherSuperpower && (
-              <textarea
-                value={otherSuperpowerValue}
-                onChange={(e) => updateProfile('superpower', e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                rows={3}
-                placeholder="Your debugging superpower..."
-              />
-            )}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-primary mb-2">
               <Target className="inline w-4 h-4 mr-1" />
               What consistently trips you up?
             </label>
@@ -531,20 +490,24 @@ const OnBoarding = () => {
               <select
                 value={kryptoniteSelection || ''}
                 onChange={(e) => updateProfile('kryptonite', e.target.value)}
-                className="w-full p-4 border rounded-lg appearance-none bg-white border-gray-200 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-200 focus:border-yellow-500"
+                className="w-full p-4 border bg-void-800 rounded-lg text-primary appearance-none border-liminal-border hover:border-terminal-pulse focus:outline-none focus:ring-2 focus:ring-terminal-pulse focus:border-terminal-pulse"
               >
-                <option value="" disabled>
+                <option value="" disabled className="text-primary bg-void-800">
                   Select a kryptonite
                 </option>
                 {kryptonites.map((kryptonite) => (
-                  <option key={kryptonite} value={kryptonite}>
+                  <option
+                    key={kryptonite}
+                    value={kryptonite}
+                    className="text-primary bg-void-800"
+                  >
                     {kryptonite}
                   </option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-primary">
                 <svg
-                  className="fill-current h-4 w-4"
+                  className="fill-current h-4 w-4 text-primary bg-void-800"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
                 >
@@ -552,20 +515,10 @@ const OnBoarding = () => {
                 </svg>
               </div>
             </div>
-            {showOtherKryptonite && (
-              <textarea
-                value={otherKryptoniteValue}
-                onChange={(e) => updateProfile('kryptonite', e.target.value)}
-                className="w-full mt-2 px-3 py-2 border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                rows={3}
-                placeholder="Your consistent kryptonite..."
-              />
-            )}
           </div>
         </div>
       ),
     },
-
     {
       title: 'Problem-Solving Spirit Animal',
       robMessage:
@@ -579,13 +532,13 @@ const OnBoarding = () => {
                 <button
                   key={animal.id}
                   onClick={() => updateProfile('spirit_animal', animal.id)}
-                  className={`p-4 text-left border rounded-lg transition-all flex items-center ${
+                  className={`p-4 text-left border rounded-lg transition-all flex items-center text-primary ${
                     profile.spirit_animal === animal.id
-                      ? 'border-yellow-500 bg-yellow-50 ring-2 ring-yellow-200'
-                      : 'border-liminal-border hover:border-gray-300 hover:bg-gray-50'
+                      ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
+                      : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
                   }`}
                 >
-                  <IconComponent className="w-6 h-6 mr-3 text-gray-600" />
+                  <IconComponent className="w-6 h-6 mr-3" />
                   {animal.name}
                 </button>
               );
@@ -594,67 +547,71 @@ const OnBoarding = () => {
         </div>
       ),
     },
-    {
-      title: 'Profile Complete',
-      robMessage:
-        "Perfect. I've got your debugging profile logged in my ethereal database. Now I can give you properly calibrated perspective shifts instead of generic fortune cookie wisdom. One last thing - I died avoiding bad business advice, so I promise to keep this practical. No cosmic energy nonsense, just good old-fashioned problem decomposition from beyond the grave.",
-      content: (
-        <div className="text-center space-y-6">
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">
-              Rob's Assessment
-            </h3>
-            <div className="text-left space-y-2 text-sm text-gray-700">
-              <p>
-                <strong>Debugging Style:</strong> {profile.debugging_mode}
-              </p>
-              <p>
-                <strong>Primary Block:</strong> {profile.block_pattern}
-              </p>
-              <p>
-                <strong>Spirit Animal:</strong>{' '}
-                {
-                  spiritAnimals.find((a) => a.id === profile.spirit_animal)
-                    ?.name
-                }
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={handleCompleteOnboarding}
-            disabled={loading}
-            className="bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-yellow-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'SAVING...' : 'START FIRST CONSULTATION'}
-          </button>
-        </div>
-      ),
-    },
   ];
 
-  const canProceed = () => {
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+      setRobMessage(
+        steps[currentStep + 1]?.robMessage || "Let's wrap this up."
+      );
+    }
+  };
+
+  const handleCompleteOnboarding = async () => {
+    if (!user) {
+      alert('Please sign in to save your preferences');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const dbProfile: Omit<UserProfile, 'id' | 'created_at' | 'updated_at'> = {
+        user_id: user.id,
+        ...profile,
+      };
+
+      await saveUserProfile(dbProfile);
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to save profile:', error);
+      alert('Failed to save your preferences. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isStepComplete = () => {
     switch (currentStep) {
       case 0:
-        return profile.name && profile.birthday && profile.birth_place;
+        return (
+          profile.name.trim() !== '' &&
+          profile.birthday !== '' &&
+          profile.birth_place.trim() !== ''
+        );
       case 1:
-        return profile.profession;
+        return (
+          profile.profession.category.trim() !== '' &&
+          profile.profession.name.trim() !== ''
+        );
       case 2:
-        return profile.debugging_mode;
+        return profile.debugging_mode.trim() !== '';
       case 3:
-        return profile.block_pattern;
+        return profile.block_pattern.trim() !== '';
       case 4:
-        return profile.superpower && profile.kryptonite;
+        return (
+          profile.superpower.trim() !== '' && profile.kryptonite.trim() !== ''
+        );
       case 5:
-        return profile.spirit_animal;
+        return profile.spirit_animal.trim() !== '';
       default:
-        return true;
+        return false;
     }
   };
 
   return (
     <div className="min-h-screen bg-void-gradient p-4">
       <div className="max-w-2xl mx-auto">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="text-6xl mb-4">🦆🧙‍♂️</div>
           <h1 className="text-3xl font-bold text-primary mb-2">
@@ -663,28 +620,27 @@ const OnBoarding = () => {
           <div className="w-full bg-void-gradient rounded-full h-2 mb-4">
             <div
               className="bg-terminal-pulse h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+              style={{
+                width: `${((currentStep + 1) / (steps.length + 1)) * 100}%`,
+              }}
             />
           </div>
           <p className="text-accent">
-            Step {currentStep + 1} of {steps.length}
+            Step {currentStep + 1} of {steps.length + 1}
           </p>
         </div>
 
-        {/* Rob's Message */}
         <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
           <div className="flex items-start">
             <div className="text-4xl mr-4">🦆</div>
             <div className="flex-1">
               <div className="bg-void-700 rounded-lg p-4 relative">
-                <div className="absolute -left-2 top-4 w-0 h-0 border-t-8 border-b-8 border-r-8 border-transparent border-r-gray-100"></div>
                 <p className="text-primary italic">{robMessage}</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Current Step Content */}
         <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
           <h2 className="text-xl font-semibold text-primary mb-6">
             {steps[currentStep].title}
@@ -692,23 +648,26 @@ const OnBoarding = () => {
           {steps[currentStep].content}
         </div>
 
-        {/* Navigation */}
-        {currentStep < steps.length - 1 && (
-          <div className="flex justify-end">
+        <div className="mt-8 flex justify-end">
+          {currentStep < steps.length - 1 ? (
             <button
               onClick={nextStep}
-              disabled={!canProceed()}
-              className={`flex items-center px-6 py-3 rounded-lg font-semibold transition-colors ${
-                canProceed()
-                  ? 'bg-breakthrough-400 text-primary hover:bg-breakthrough-500'
-                  : 'bg-void-700 text-primary cursor-not-allowed'
-              }`}
+              disabled={!isStepComplete()}
+              className="flex items-center justify-center px-6 py-3 bg-terminal-pulse text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
             >
-              Continue
-              <ChevronRight className="w-4 h-4 ml-2" />
+              <span>Continue</span>
+              <ChevronRight className="ml-2 h-5 w-5" />
             </button>
-          </div>
-        )}
+          ) : (
+            <button
+              onClick={handleCompleteOnboarding}
+              disabled={!isStepComplete() || loading}
+              className="flex items-center justify-center px-6 py-3 bg-terminal-pulse text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
+            >
+              {loading ? 'Saving...' : 'Complete & See Your Profile'}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

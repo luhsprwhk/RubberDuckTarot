@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getDb } from '@/lib/database-provider';
+import { getDb } from '@/src/lib/database-provider';
 import CardsContext from './CardsContext';
 import { cardCache } from './cardCache';
 import type { Card } from '@/src/interfaces';

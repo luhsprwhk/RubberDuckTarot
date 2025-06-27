@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase/supabase';
+import { supabase } from '../supabase/supabase';
 import type { Insight } from '@/src/interfaces';
 
 // Insights

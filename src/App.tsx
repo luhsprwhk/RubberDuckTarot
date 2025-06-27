@@ -12,6 +12,7 @@ import Insights from './pages/Insights';
 import Pricing from './pages/Pricing';
 import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
+import Login from './pages/Login';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/pricing" element={<Pricing />} />
                 <Route path="/preferences" element={<Preferences />} />
                 <Route path="/insight/:id" element={<Insight />} />
+                <Route path="/login" element={<Login />} />
               </Routes>
             </main>
             <AlertContainer />

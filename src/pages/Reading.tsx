@@ -4,7 +4,7 @@ import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
 import type { BlockType, Card } from '../interfaces';
-import { getDb } from '@/lib/database-provider';
+import { getDb } from '@/src/lib/database-provider';
 import { createInsight } from '../lib/insights/insight-queries';
 import {
   generatePersonalizedReading,
