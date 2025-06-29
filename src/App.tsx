@@ -19,7 +19,7 @@ function App() {
     <AlertProvider>
       <AuthProvider>
         <CardsProvider>
-          <div className="min-h-screen bg-gray-100">
+          <div className="min-h-screen bg-void-gradient">
             <Navbar />
             <main>
               <Routes>

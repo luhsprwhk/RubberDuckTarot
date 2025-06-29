@@ -32,13 +32,15 @@ const NewReading: React.FC<NewReadingProps> = ({
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div className="max-w-2xl mx-auto p-6 bg-void-800 min-h-screen">
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">🦆</div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl font-bold text-primary mb-2">
           What's blocking you?
         </h1>
-        <p className="text-gray-600">When you're stuck, consult the duck</p>
+        <p className="text-accent text-sm">
+          When you're stuck, consult the duck
+        </p>
       </div>
 
       {/* Block Type Selection */}
@@ -50,17 +52,17 @@ const NewReading: React.FC<NewReadingProps> = ({
               onClick={() => onBlockSelect(blockType.id)}
               className={`p-4 rounded-lg border-2 text-left transition-all hover:shadow-md ${
                 selectedBlockType === blockType.id
-                  ? 'border-blue-500 bg-blue-50 shadow-md'
-                  : 'border-gray-200 bg-white hover:border-gray-300'
+                  ? 'border-primary bg-primary shadow-md'
+                  : 'border-liminal-border hover:border-liminal-border'
               }`}
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{blockType.emoji}</span>
                 <div>
-                  <div className="font-medium text-gray-800">
+                  <div className="font-medium text-primary">
                     {blockType.name}
                   </div>
-                  <div className="text-sm text-gray-600">
+                  <div className="text-sm text-accent">
                     {blockType.description}
                   </div>
                 </div>
@@ -75,13 +77,13 @@ const NewReading: React.FC<NewReadingProps> = ({
         <div className="mb-6">
           <button
             onClick={() => onSpreadSelect('quick-draw')}
-            className={`${selectedSpread === 'quick-draw' ? 'bg-green-700' : 'bg-blue-600 hover:bg-green-700'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
+            className={`${selectedSpread === 'quick-draw' ? 'bg-green-700' : 'bg-liminal-border hover:bg-liminal-border'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
           >
             Quick Duck Spread
           </button>
           <button
             onClick={() => onSpreadSelect('full-pond')}
-            className={`${selectedSpread === 'full-pond' ? 'bg-green-700' : 'bg-blue-600 hover:bg-green-700'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
+            className={`${selectedSpread === 'full-pond' ? 'bg-green-700' : 'bg-liminal-border hover:bg-liminal-border'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
           >
             Full Pond Spread
           </button>
@@ -91,7 +93,7 @@ const NewReading: React.FC<NewReadingProps> = ({
       {/* Context Input */}
       {selectedSpread && (
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-4 text-gray-800">
+          <h2 className="text-xl font-semibold mb-4 text-primary">
             Tell the duck more:
           </h2>
           <textarea
@@ -119,7 +121,7 @@ const DrawButton: React.FC<{ onNewReading: () => void }> = ({
     <div className="text-center">
       <button
         onClick={onNewReading}
-        className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+        className="bg-primary hover:bg-primary text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
       >
         🎴 New Reading
       </button>

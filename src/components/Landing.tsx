@@ -1,36 +1,38 @@
 import { Star, ArrowRight, User, Zap, Target, Shield } from 'lucide-react';
 import useAuth from '@/src/hooks/useAuth';
+import DuckHero from '@/src/assets/landing-hero.png';
+import DuckLinkedin from '@/src/assets/rob-linkedin.png';
 
 const Landing = () => {
   const { showAuthModal } = useAuth();
   return (
     <div className="min-h-screen bg-void-gradient">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-16">
+      <div className="container mx-auto px-4 py-8">
         <div className="text-center max-w-4xl mx-auto">
           {/* Logo/Mascot Area */}
           <div className="mb-8">
-            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 animate-pulse-glow shadow-glow">
-              <span className="text-3xl filter drop-shadow-lg"> 🦆</span>
-            </div>
-            <div className="text-xs text-accent font-medium tracking-wider">
-              EST. 2023 * BEYOND THE GRAVE
-            </div>
+            <img
+              src={DuckHero}
+              alt="Rubber Duck"
+              className="w-96 h-96 mx-auto"
+            />
           </div>
 
           <div className="mb-8">
-            <h1 className="text-5xl font-bold text-primary mb-6 leading-tight">
+            <h1 className="text-5xl font-bold text-primary mb-4 leading-tight">
               Rubber Duck Tarot
             </h1>
             <h2 className="text-accent text-2xl font-semibold">
-              Ethereal Debugging Services
+              Perspective Debugging for Creatives
             </h2>
           </div>
 
           <p className="text-xl text-secondary mb-8 max-w-3xl mx-auto leading-relaxed">
-            Professional problem-solving services from a deceased full-stack
-            developer. Now offering perspective debugging from beyond the veil
-            with 25+ years of experience in breaking things and fixing them.
+            When you're stuck, consult the duck. Rob's a dead developer who
+            spent 25 years coding other people's dreams while his indie game
+            prototypes collected dust. Now he helps creative people debug their
+            blocks from beyond the grave
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -115,11 +117,13 @@ const Landing = () => {
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
               <Shield className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Life Debugging
+                Risk Calibration
               </h3>
               <p className="text-secondary text-sm">
-                General problem-solving for the complexities of existence.
-                Afterlife perspective included at no extra charge.
+                Learn to take smart creative and career risks instead of playing
+                it safe until you die of boredom. Rob helps you distinguish
+                between reckless gambling and calculated bets that could change
+                your life.
               </p>
             </div>
           </div>
@@ -168,13 +172,17 @@ const Landing = () => {
               <div className="bg-overlay p-8 rounded-xl border border-liminal-border backdrop-blur-liminal">
                 <div className="text-center">
                   <div className="w-32 h-32 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 shadow-glow animate-flicker">
-                    <span className="text-6xl filter drop-shadow-lg">🦆</span>
+                    <img
+                      src={DuckLinkedin}
+                      alt="Rubber Duck"
+                      className="w-64 h-36"
+                    />
                   </div>
                   <h3 className="text-xl font-semibold text-primary mb-2">
                     Rob Chen
                   </h3>
                   <p className="text-accent font-medium mb-4">
-                    Otherworldly Senior Consultant
+                    Senior Ethereal Consultant
                   </p>
                   <div className="text-sm text-secondary space-y-1">
                     <div>📧 rob@rubberducktarot.com</div>
@@ -211,14 +219,20 @@ const Landing = () => {
                 ))}
               </div>
               <p className="text-secondary mb-4">
-                "Rob helped me debug my career in 15 minutes. The perspective
-                from someone who's literally beyond caring about office politics
-                was exactly what I needed."
+                "I've been stuck between my fintech job and game dev dreams for
+                years. Rob's perspective cut through all my analysis paralysis -
+                stopped researching 'market viability' and just started
+                prototyping.
+                <br /> <br />
+                Shipped my first game demo last month!"
+                <br />
+                <br />
+                <span className="font-medium text-primary">Dana K.</span>
+                <br />
+                <span className="text-muted">
+                  Senior Backend Engineer, Fintech
+                </span>
               </p>
-              <div className="text-sm">
-                <div className="font-medium text-primary">Sarah K.</div>
-                <div className="text-muted">Senior Engineer, FinTech</div>
-              </div>
             </div>
 
             <div className="bg-surface p-6 rounded-lg border border-liminal-border backdrop-blur-liminal">
@@ -231,14 +245,18 @@ const Landing = () => {
                 ))}
               </div>
               <p className="text-secondary mb-4">
-                "Finally, a consultant who doesn't try to sell me anything
-                because he's literally dead. The advice was brutally honest and
-                incredibly helpful."
+                "Rob helped me stop treating my real estate career and music
+                like they're at war with each other. Turns out my people skills
+                from selling houses actually make my songwriting more authentic.
+                Finally making progress on both fronts."
+                <br />
+                <br />
+                <span className="font-medium text-primary">Melody R.</span>
+                <br />
+                <span className="text-muted">
+                  Real Estate Agent & Singer-Songwriter
+                </span>
               </p>
-              <div className="text-sm">
-                <div className="font-medium text-primary">Mike T.</div>
-                <div className="text-muted">Product Manager, SaaS</div>
-              </div>
             </div>
 
             <div className="bg-surface p-6 rounded-lg border border-liminal-border backdrop-blur-liminal">
@@ -252,13 +270,18 @@ const Landing = () => {
               </div>
               <p className="text-secondary mb-4">
                 "Rob's debugging methodology works for more than just code.
-                Helped me fix my entire life stack. 10/10 would consult the
-                otherworld again."
+                Helped me realize I was optimizing the wrong variables in my
+                startup.
+                <br /> <br />
+                We pivoted, found product-market fit, and closed our Series A.
+                Death gives excellent business perspective."
+                <br />
+                <br />
+                <span className="font-medium text-primary">Alex R.</span>
+                <br />
+                <span className="text-muted">Founder, DevTools Startup</span>
+                <br />
               </p>
-              <div className="text-sm">
-                <div className="font-medium text-primary">Alex R.</div>
-                <div className="text-muted">UX Designer, Startup</div>
-              </div>
             </div>
           </div>
         </div>
@@ -305,6 +328,20 @@ const Landing = () => {
             policy (obviously)
           </p>
         </div>
+      </div>
+      <div className="flex text-center items-center justify-center gap-2 mt-4 p-4 bg-black text-muted ">
+        <span className="text-sm">
+          An app by
+          <a
+            href="https://luhsprwhk.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:underline ml-1 mr-1"
+          >
+            @luhsprwhk
+          </a>
+          &copy; {new Date().getFullYear()}
+        </span>
       </div>
     </div>
   );
