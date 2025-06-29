@@ -6,5 +6,5 @@ export default function Home() {
   const { user } = useAuth();
   const isUserLoggedIn = !!user;
 
-  return !isUserLoggedIn ? <Landing /> : <Lobby />;
+  return isUserLoggedIn ? <Lobby /> : <Landing />;
 }

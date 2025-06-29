@@ -1,12 +1,7 @@
 import React from 'react';
-
-// This interface can be moved to a shared types file later
-interface BlockType {
-  id: string;
-  name: string;
-  description: string;
-  emoji: string;
-}
+import { cn } from '@/src/lib/utils';
+import { type BlockType } from '@/src/interfaces';
+import robDivinationPic from '@/src/assets/rob-divination-pic.png';
 
 interface NewReadingProps {
   blockTypes: BlockType[];
@@ -29,13 +24,26 @@ const NewReading: React.FC<NewReadingProps> = ({
   onSpreadSelect,
   selectedSpread,
 }) => {
+  const [blockTypeLocked, setBlockTypeLocked] = React.useState(false);
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
+
+  const handleBlockSelect = (id: string) => {
+    onBlockSelect(id);
+    setBlockTypeLocked(true);
+  };
+
+  const handleUnlockBlockType = () => {
+    onBlockSelect('');
+    setBlockTypeLocked(false);
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-void-800 min-h-screen">
-      <div className="text-center mb-8">
-        <div className="text-6xl mb-4">🦆</div>
-        <h1 className="text-3xl font-bold text-primary mb-2">
+      <div className="text-center mb-4">
+        <div id="rob-divination-pic" className="mb-12 w-24 h-24 mx-auto">
+          <img src={robDivinationPic} alt="Rob Divination" />
+        </div>
+        <h1 className="text-3xl font-bold text-primary mb-2 pt-4">
           What's blocking you?
         </h1>
         <p className="text-accent text-sm">
@@ -45,49 +53,87 @@ const NewReading: React.FC<NewReadingProps> = ({
 
       {/* Block Type Selection */}
       <div className="mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {blockTypes.map((blockType) => (
-            <button
-              key={blockType.id}
-              onClick={() => onBlockSelect(blockType.id)}
-              className={`p-4 rounded-lg border-2 text-left transition-all hover:shadow-md ${
-                selectedBlockType === blockType.id
-                  ? 'border-primary bg-primary shadow-md'
-                  : 'border-liminal-border hover:border-liminal-border'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">{blockType.emoji}</span>
-                <div>
-                  <div className="font-medium text-primary">
-                    {blockType.name}
-                  </div>
-                  <div className="text-sm text-accent">
-                    {blockType.description}
+        {blockTypeLocked && selectedBlock ? (
+          <>
+            <div className="grid grid-cols-1 mb-4">
+              <button
+                key={selectedBlock.id}
+                className={cn(
+                  'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-breakthrough-400'
+                )}
+                disabled
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{selectedBlock.emoji}</span>
+                  <div>
+                    <div className="font-medium text-void-800">
+                      {selectedBlock.name}
+                    </div>
+                    <div className="text-sm text-void-800">
+                      {selectedBlock.description}
+                    </div>
                   </div>
                 </div>
-              </div>
+              </button>
+            </div>
+            <button
+              type="button"
+              className="mt-2 px-4 py-2 rounded border border-liminal-border text-sm text-secondary hover:bg-liminal-border transition-colors"
+              onClick={handleUnlockBlockType}
+            >
+              Pick a different block type
             </button>
-          ))}
-        </div>
+          </>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {blockTypes.map((blockType) => (
+              <button
+                key={blockType.id}
+                onClick={() => handleBlockSelect(blockType.id)}
+                className={cn(
+                  'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md',
+                  selectedBlockType === blockType.id
+                    ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
+                    : 'border-liminal-border hover:border-liminal-border'
+                )}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{blockType.emoji}</span>
+                  <div>
+                    <div
+                      className={cn(
+                        'font-medium',
+                        selectedBlockType === blockType.id
+                          ? 'text-void-800'
+                          : 'text-secondary'
+                      )}
+                    >
+                      {blockType.name}
+                    </div>
+                    <div
+                      className={cn(
+                        'text-sm',
+                        selectedBlockType === blockType.id
+                          ? 'text-void-800'
+                          : 'text-secondary'
+                      )}
+                    >
+                      {blockType.description}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Select Spread */}
       {selectedBlockType && (
-        <div className="mb-6">
-          <button
-            onClick={() => onSpreadSelect('quick-draw')}
-            className={`${selectedSpread === 'quick-draw' ? 'bg-green-700' : 'bg-liminal-border hover:bg-liminal-border'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
-          >
-            Quick Duck Spread
-          </button>
-          <button
-            onClick={() => onSpreadSelect('full-pond')}
-            className={`${selectedSpread === 'full-pond' ? 'bg-green-700' : 'bg-liminal-border hover:bg-liminal-border'} text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors`}
-          >
-            Full Pond Spread
-          </button>
-        </div>
+        <SpreadSelector
+          selectedSpread={selectedSpread}
+          onSpreadSelect={onSpreadSelect}
+        />
       )}
 
       {/* Context Input */}
@@ -99,8 +145,8 @@ const NewReading: React.FC<NewReadingProps> = ({
           <textarea
             value={userContext}
             onChange={(e) => onUserContextChange(e.target.value)}
-            placeholder={`Describe your ${selectedBlock?.name.toLowerCase()} in a few sentences...`}
-            className="w-full p-4 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder={`Describe your ${selectedBlock?.name.toLowerCase()} or ask a question`}
+            className="w-full text-secondary p-4 border border-liminal-border rounded-lg resize-none focus:ring-2 focus:ring-breakthrough-400 focus:border-transparent"
             rows={4}
           />
         </div>
@@ -121,12 +167,44 @@ const DrawButton: React.FC<{ onNewReading: () => void }> = ({
     <div className="text-center">
       <button
         onClick={onNewReading}
-        className="bg-primary hover:bg-primary text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
+        className="bg-breakthrough-400 hover:bg-breakthrough-400 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors"
       >
-        🎴 New Reading
+        Send to Rob
       </button>
     </div>
   );
 };
 
 export default NewReading;
+
+const SpreadSelector: React.FC<{
+  selectedSpread: string | null;
+  onSpreadSelect: (spread: string) => void;
+}> = ({ selectedSpread, onSpreadSelect }) => (
+  <div className="mb-6">
+    <div className="grid grid-cols-2 gap-x-4">
+      <button
+        onClick={() => onSpreadSelect('quick-draw')}
+        className={cn(
+          selectedSpread === 'quick-draw'
+            ? 'bg-breakthrough-400 text-void-800'
+            : 'bg-liminal-border hover:bg-liminal-border text-primary',
+          'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
+        )}
+      >
+        Quick Duck Spread
+      </button>
+      <button
+        onClick={() => onSpreadSelect('full-pond')}
+        className={cn(
+          selectedSpread === 'full-pond'
+            ? 'bg-breakthrough-400 text-void-800'
+            : 'bg-liminal-border hover:bg-liminal-border text-primary',
+          'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
+        )}
+      >
+        Full Pond Spread
+      </button>
+    </div>
+  </div>
+);
