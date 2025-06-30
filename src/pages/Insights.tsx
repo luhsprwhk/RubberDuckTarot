@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
-import useCards from '../lib/hooks/useCards';
+import useCards from '../lib/cards/useCards';
 import type { Insight, BlockType } from '../interfaces';
 import { MessageCircle } from 'lucide-react';
 import { getUserInsights } from '../lib/insights/insight-queries';

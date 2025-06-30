@@ -4,7 +4,7 @@ type FlatDrawnCard = import('../interfaces').Card & { reversed: boolean };
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../lib/hooks/useAuth';
-import useCards from '../lib/hooks/useCards';
+import useCards from '../lib/cards/useCards';
 import type { BlockType } from '../interfaces';
 import { createInsight } from '../lib/insights/insight-queries';
 import {
