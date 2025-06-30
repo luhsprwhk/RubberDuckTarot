@@ -78,7 +78,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
         `Key perspectives: ${perspectivePrompts.join(' / ')}\n` +
         `Rob's wisdom: "${card.duck_wisdom}"\n` +
         `Core meaning: ${card.core_meaning}\n` +
-        `Reversed meaning: ${card.reversed_meaning}`
+        `Reversed meaning: ${card.reversed_meaning}\n`
       );
     })
     .join('\n\n');

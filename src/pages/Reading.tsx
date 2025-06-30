@@ -6,13 +6,13 @@ import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../lib/hooks/useAuth';
 import useCards from '../lib/hooks/useCards';
 import type { BlockType } from '../interfaces';
-import { getDb } from '@/src/lib/database-provider';
 import { createInsight } from '../lib/insights/insight-queries';
 import {
   generatePersonalizedReading,
   type PersonalizedReading,
 } from '../lib/claude-ai';
 import { type UserProfile } from '../interfaces';
+import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 
 interface ReadingState {
   selectedBlockTypeId: string;
@@ -22,6 +22,7 @@ interface ReadingState {
 
 const Reading: React.FC = () => {
   const { user } = useAuth();
+  const { blockTypes } = useBlockTypes();
   const { cards, loading: cardsLoading, error: cardsError } = useCards();
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,10 +62,9 @@ const Reading: React.FC = () => {
         if (!isMounted) return;
         setUserProfile(profile);
 
-        const db = await getDb();
-        const block = await db.getBlockTypeById(selectedBlockTypeId);
+        const block = blockTypes.find((bt) => bt.id === selectedBlockTypeId);
         if (!isMounted) return;
-        setSelectedBlock(block);
+        setSelectedBlock(block ?? null);
 
         const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
@@ -92,7 +92,15 @@ const Reading: React.FC = () => {
     return () => {
       isMounted = false;
     };
-  }, [user, spreadType, selectedBlockTypeId, cards, cardsLoading, cardsError]);
+  }, [
+    user,
+    spreadType,
+    selectedBlockTypeId,
+    cards,
+    cardsLoading,
+    cardsError,
+    blockTypes,
+  ]);
 
   useEffect(() => {
     const generateReading = async () => {
@@ -122,7 +130,7 @@ const Reading: React.FC = () => {
           const insight = await createInsight({
             user_id: user?.id ?? null,
             spread_type: spreadType,
-            block_type_id: selectedBlock.id,
+            block_type_id: selectedBlock?.id ?? null,
             user_context: userContext ?? null,
             cards_drawn: drawnCards.map((dc) => dc.card.id),
             reading,

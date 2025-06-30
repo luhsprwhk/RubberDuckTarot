@@ -14,33 +14,36 @@ import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 import Login from './pages/Login';
 import NewReading from './pages/NewReading';
+import BlockTypesProvider from './lib/blocktypes/BlockTypesProvider';
 
 function App() {
   return (
-    <AlertProvider>
-      <AuthProvider>
-        <CardsProvider>
-          <div className="min-h-screen bg-void-gradient">
-            <Navbar />
-            <main>
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/reading" element={<Reading />} />
-                <Route path="/insights" element={<Insights />} />
-                <Route path="/onboarding" element={<OnBoarding />} />
-                <Route path="/upgrade" element={<Upgrade />} />
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/preferences" element={<Preferences />} />
-                <Route path="/insight/:id" element={<Insight />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/new-reading" element={<NewReading />} />
-              </Routes>
-            </main>
-            <AlertContainer />
-          </div>
-        </CardsProvider>
-      </AuthProvider>
-    </AlertProvider>
+    <BlockTypesProvider>
+      <AlertProvider>
+        <AuthProvider>
+          <CardsProvider>
+            <div className="min-h-screen bg-void-gradient">
+              <Navbar />
+              <main>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/reading" element={<Reading />} />
+                  <Route path="/insights" element={<Insights />} />
+                  <Route path="/onboarding" element={<OnBoarding />} />
+                  <Route path="/upgrade" element={<Upgrade />} />
+                  <Route path="/pricing" element={<Pricing />} />
+                  <Route path="/preferences" element={<Preferences />} />
+                  <Route path="/insight/:id" element={<Insight />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/new-reading" element={<NewReading />} />
+                </Routes>
+              </main>
+              <AlertContainer />
+            </div>
+          </CardsProvider>
+        </AuthProvider>
+      </AlertProvider>
+    </BlockTypesProvider>
   );
 }
 

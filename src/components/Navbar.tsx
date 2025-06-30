@@ -72,6 +72,14 @@ const Navbar = () => {
                   Insights
                 </Link>
               )}
+              {user && (
+                <Link
+                  to="/new-reading"
+                  className="text-secondary hover:text-accent transition-colors duration-200"
+                >
+                  New Reading
+                </Link>
+              )}
 
               {user && (
                 <div className="relative" ref={userMenuRef}>

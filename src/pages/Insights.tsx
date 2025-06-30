@@ -194,13 +194,13 @@ const EmptyInsightsState = () => {
             </div>
           </div>
 
-          <a
-            href="/"
+          <Link
+            to="/new-reading"
             className="inline-flex items-center px-8 py-3 bg-void-gradient text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
             Start Your First Consultation
-          </a>
+          </Link>
         </div>
       </div>
     </div>
