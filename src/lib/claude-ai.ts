@@ -116,13 +116,17 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       * Use ${metaphorStyle.style}—keep it practical, not mystical.
     </profile_integration>
 
+    <response_format>
     Respond in valid JSON format:
     {
       "interpretation": "Main reading combining the cards for their specific situation",
-      "keyInsights": ["Array of 3-4 key insights"],
-      "actionSteps": ["Array of 2-3 specific, actionable steps"],
+      "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 3-4 key insights"'}],
+      "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 2-3 specific, actionable steps"'}],
       "robQuip": "Rob's signature sarcastic but encouraging closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
-    }`;
+    }
+    ${spreadType === 'quick-draw' ? '\nIMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action step in the arrays.' : ''}
+    </response_format>
+  `;
 
   return basePrompt;
 };
