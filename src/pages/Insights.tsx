@@ -84,7 +84,7 @@ const Insights: React.FC = () => {
         <h1 className="text-3xl font-bold text-primary mb-2">
           Your Insight History
         </h1>
-        <p className="text-gray-600">
+        <p className="text-accent">
           {insights.length} insight{insights.length !== 1 ? 's' : ''} with Rob
           the Duck
         </p>

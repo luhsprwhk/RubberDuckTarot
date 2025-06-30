@@ -13,6 +13,12 @@ import {
 } from '../lib/claude-ai';
 import { type UserProfile } from '../interfaces';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
+import duckCodingGIF from '../assets/wiz-duck-coding.gif';
+import duckCardCatchGIF from '../assets/duck-card-catch.gif';
+import ErrorState from '../components/ErrorState';
+
+// Add more duck GIFs here if available
+const duckGifs = [duckCodingGIF, duckCardCatchGIF];
 
 interface ReadingState {
   selectedBlockTypeId: string;
@@ -167,109 +173,61 @@ const Reading: React.FC = () => {
     navigate('/');
   };
 
-  if (loadingReading) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <p className="text-lg text-gray-700">Generating your insight...</p>
-      </div>
-    );
+  // Pick a random duck GIF for the loader on mount
+  const loadingGIF = React.useMemo(() => {
+    return duckGifs[Math.floor(Math.random() * duckGifs.length)];
+  }, []);
+
+  // Always show the loading GIF at the top
+  const renderLoader = () => (
+    <div className="flex flex-col items-center mb-6">
+      {loadingGIF && (
+        <img src={loadingGIF} alt="Wizard Duck Coding" className="mb-4" />
+      )}
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-2"></div>
+    </div>
+  );
+
+  // Determine loading text
+  let loadingText = '';
+  if (cardsLoading) {
+    loadingText = 'Rob is preparing the deck...';
+  } else if (isDrawing) {
+    loadingText = 'Rob is shuffling the deck...';
+  } else if (loadingReading) {
+    loadingText = 'Generating your insight...';
   }
 
-  if (readingError) {
+  // Show loader GIF and spinner at the top for loading states
+  if (cardsLoading || isDrawing || loadingReading) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl font-semibold text-red-600 mb-4">
-          Error Generating Reading
-        </h2>
-        <p className="text-gray-700 mb-6">
-          We couldn't generate your reading. Please try again.
-        </p>
-        <button
-          onClick={handleReset}
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
-
-  if (!state) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl font-semibold text-orange-600 mb-4">
-          Oops! Reading details are missing.
-        </h2>
-        <p className="text-gray-700 mb-6">
-          To see your tarot reading, please start by setting up your question on
-          the home page.
-        </p>
-        <button
-          onClick={handleReset}
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Go to Home Page
-        </button>
-      </div>
-    );
-  }
-
-  if (cardsLoading || isDrawing) {
-    return (
-      <div className="max-w-2xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce">🦆</div>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            {cardsLoading
-              ? 'Rob is preparing the deck...'
-              : 'Rob is shuffling the deck...'}
-          </h2>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <div className="max-w-2xl mx-auto p-6 bg-void-gradient min-h-screen flex items-center justify-center">
+        <div className="text-center w-full">
+          {renderLoader()}
+          {loadingText && (
+            <p className="text-lg text-primary font-semibold">{loadingText}</p>
+          )}
         </div>
       </div>
     );
   }
 
-  if (cardsError) {
-    return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl font-semibold text-red-600 mb-4">
-          Card Loading Error
-        </h2>
-        <p className="text-gray-700 mb-6">{cardsError}</p>
-        <button
-          onClick={handleReset}
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
-    );
-  }
+  // RETURN WITHOUT LOADING FOR ALL OTHER STATES
 
-  if (drawnCards.length === 0 && !isDrawing) {
+  if (readingError) {
     return (
-      <div className="container mx-auto px-4 py-8 text-center">
-        <h2 className="text-2xl font-semibold text-red-600 mb-4">
-          Failed to Draw Cards
-        </h2>
-        <p className="text-gray-700 mb-6">
-          We couldn't draw any cards. This might be a temporary issue or the
-          deck might be empty.
-        </p>
-        <button
-          onClick={handleReset}
-          className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Try Again
-        </button>
-      </div>
+      <ErrorState
+        error="Failed to generate reading"
+        homeLinkText="Go to Home Page"
+      />
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8 text-center">
-      <p className="text-red-500 mb-4">Invalid spread type specified.</p>
+      <p className="text-red-500 mb-4">
+        Something went wrong. Please try again.
+      </p>
       <button onClick={handleReset} className="text-blue-500 hover:underline">
         Please try again
       </button>
