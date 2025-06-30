@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../lib/hooks/useAuth';
 
 import { Link } from 'react-router-dom';
 import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
 import clsx from 'clsx';
 
-import { useUserProfile } from '../hooks/useUserProfile';
+import { useUserProfile } from '../lib/hooks/useUserProfile';
 
 const Navbar = () => {
   const { user, signOut, showAuthModal } = useAuth();

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
-import useCards from '../hooks/useCards';
+import useAuth from '../lib/hooks/useAuth';
+import useCards from '../lib/hooks/useCards';
 import type { Insight, BlockType } from '../interfaces';
-import { MessageCircle, Brain } from 'lucide-react';
+import { MessageCircle } from 'lucide-react';
 import { getUserInsights } from '../lib/insights/insight-queries';
 import { getAllBlockTypes } from '../lib/blocktypes/blocktype-queries';
+import Loading from '../components/Loading';
 
 const Insights: React.FC = () => {
   const { user } = useAuth();
@@ -60,22 +61,12 @@ const Insights: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4 animate-bounce">🦆</div>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            Loading your insights...
-          </h2>
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-        </div>
-      </div>
-    );
+    return <Loading text="Loading your insights..." />;
   }
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+      <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
         <div className="text-center">
           <div className="text-6xl mb-4">🦆</div>
           <h2 className="text-2xl font-semibold text-red-600 mb-4">
@@ -180,12 +171,8 @@ const EmptyInsightsState = () => {
     <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         {/* Rob's Empty State */}
-        <div className="mb-8">
-          <div className="text-8xl mb-4 animate-bounce">🦆</div>
-          <div className="text-2xl mb-2">👻</div>
-        </div>
 
-        <div className="bg-void-800 rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-blue-500">
+        <div className="bg-void-800 rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-liminal-border">
           <h2 className="text-2xl font-bold text-primary mb-4">
             Your Insight Archive is Empty
           </h2>
@@ -207,25 +194,6 @@ const EmptyInsightsState = () => {
             </div>
           </div>
 
-          {/* Quick Action Cards */}
-          <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-liminal-overlay rounded-lg p-4 border border-void-800">
-              <MessageCircle className="w-6 h-6 text-primary mb-2" />
-              <h4 className="font-semibold text-primary mb-1">Quick Duck</h4>
-              <p className="text-sm text-primary">
-                Single card for immediate perspective shifts
-              </p>
-            </div>
-
-            <div className="bg-liminal-overlay rounded-lg p-4 border border-void-800">
-              <Brain className="w-6 h-6 text-primary mb-2" />
-              <h4 className="font-semibold text-primary mb-1">Full Pond</h4>
-              <p className="text-sm text-primary">
-                3-card spread for deeper analysis of your block
-              </p>
-            </div>
-          </div>
-
           <a
             href="/"
             className="inline-flex items-center px-8 py-3 bg-void-gradient text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
@@ -233,24 +201,6 @@ const EmptyInsightsState = () => {
             <MessageCircle className="w-5 h-5 mr-2" />
             Start Your First Consultation
           </a>
-        </div>
-
-        {/* Testimonial Teaser */}
-        <div className="mt-8 bg-void-800 text-white rounded-lg p-6 max-w-xl">
-          <div className="flex items-center mb-3">
-            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-sm font-bold mr-3">
-              D
-            </div>
-            <div>
-              <p className="font-medium">Dana, Backend Engineer</p>
-              <p className="text-gray-400 text-sm">Seattle, WA</p>
-            </div>
-          </div>
-          <p className="text-gray-300 italic">
-            "I was stuck in architecture analysis paralysis for weeks. One Quick
-            Duck session and I realized I was optimizing the wrong thing.
-            Shipped the feature the next day."
-          </p>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../lib/hooks/useAuth';
 import NewReading from './NewReading';
 import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';

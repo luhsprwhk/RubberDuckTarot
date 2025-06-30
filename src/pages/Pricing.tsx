@@ -1,5 +1,5 @@
 import { Check, X, Zap, Crown, Ghost, ArrowRight } from 'lucide-react';
-import useAuth from '@/src/hooks/useAuth';
+import useAuth from '@/src/lib/hooks/useAuth';
 import { cn } from '@/src/lib/utils';
 import PricingPic from '@/src/assets/pricing-hero.png';
 

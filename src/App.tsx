@@ -13,6 +13,7 @@ import Pricing from './pages/Pricing';
 import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 import Login from './pages/Login';
+import NewReading from './pages/NewReading';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="/preferences" element={<Preferences />} />
                 <Route path="/insight/:id" element={<Insight />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/new-reading" element={<NewReading />} />
               </Routes>
             </main>
             <AlertContainer />

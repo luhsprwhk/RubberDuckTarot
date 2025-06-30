@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import PlacesAutocomplete from '../components/PlacesAutocomplete';
 import { ChevronRight, Zap, Brain, Target, Users, Bird } from 'lucide-react';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../lib/hooks/useAuth';
 
 import { saveUserProfile, getUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';

@@ -1,4 +1,4 @@
-import type { Card } from '../interfaces';
+import type { Card } from '@/src/interfaces';
 
 interface CacheData {
   cards: Card[];

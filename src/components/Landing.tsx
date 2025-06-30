@@ -1,5 +1,5 @@
 import { Star, ArrowRight, User, Zap, Target, Shield } from 'lucide-react';
-import useAuth from '@/src/hooks/useAuth';
+import useAuth from '@/src/lib/hooks/useAuth';
 import DuckHero from '@/src/assets/landing-hero.png';
 import DuckLinkedin from '@/src/assets/rob-linkedin.png';
 

@@ -196,6 +196,10 @@ const SpreadSelector: React.FC<{
         )}
       >
         Quick Duck Spread
+        <br />
+        <small className="text-xs text-secondary">
+          Single card for immediate perspective shifts
+        </small>
       </button>
       <button
         onClick={() => onSpreadSelect('full-pond')}
@@ -207,6 +211,10 @@ const SpreadSelector: React.FC<{
         )}
       >
         Full Pond Spread
+        <br />
+        <small className="text-xs text-secondary">
+          A comprehensive look at your situation from multiple angles.
+        </small>
       </button>
     </div>
   </div>

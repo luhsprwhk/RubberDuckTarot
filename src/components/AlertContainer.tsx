@@ -1,5 +1,5 @@
 import { Alert } from './Alert';
-import useAlert from '@/src/hooks/useAlert';
+import useAlert from '@/src/lib/hooks/useAlert';
 
 export const AlertContainer = () => {
   const { alerts, removeAlert } = useAlert();

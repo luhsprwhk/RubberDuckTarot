@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import useAuth from '../hooks/useAuth';
-import { getUserProfile } from '../lib/userPreferences';
-import { type UserProfile } from '../interfaces';
+import useAuth from './useAuth';
+import { getUserProfile } from '../userPreferences';
+import { type UserProfile } from '../../interfaces';
 
 export const useUserProfile = () => {
   const { user, loading: authLoading } = useAuth();

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Card, BlockType } from '@/src/interfaces';
-import type { PersonalizedReading } from '@/src/modules/claude-ai';
+import type { PersonalizedReading } from '@/src/lib/claude-ai';
 
 interface FullPondSpreadProps {
   drawnCards: Card[];
@@ -79,12 +79,14 @@ const FullPondSpread: React.FC<FullPondSpreadProps> = ({
                 🔍 Key Insights
               </h3>
               <ul className="space-y-3">
-                {personalizedReading.keyInsights.map((insight, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-green-500 text-xl mt-1">✓</span>
-                    <span className="text-gray-700">{insight}</span>
-                  </li>
-                ))}
+                {personalizedReading.keyInsights.map(
+                  (insight: string, index: number) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="text-green-500 text-xl mt-1">✓</span>
+                      <span className="text-gray-700">{insight}</span>
+                    </li>
+                  )
+                )}
               </ul>
             </div>
           )}
@@ -95,14 +97,16 @@ const FullPondSpread: React.FC<FullPondSpreadProps> = ({
                 🎯 Action Steps
               </h3>
               <ol className="space-y-3">
-                {personalizedReading.actionSteps.map((step, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <span className="text-purple-500 font-bold">
-                      {index + 1}.
-                    </span>
-                    <span className="text-gray-700">{step}</span>
-                  </li>
-                ))}
+                {personalizedReading.actionSteps.map(
+                  (step: string, index: number) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <span className="text-purple-500 font-bold">
+                        {index + 1}.
+                      </span>
+                      <span className="text-gray-700">{step}</span>
+                    </li>
+                  )
+                )}
               </ol>
             </div>
           )}
@@ -128,12 +132,6 @@ const FullPondSpread: React.FC<FullPondSpreadProps> = ({
           className="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg shadow-lg transition-all duration-300"
         >
           🔄 Start a New Reading 🔄 New Consultation
-        </button>
-        <button
-          onClick={() => alert('Saved to Duck History! (Premium feature)')}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
-        >
-          💾 Save to History
         </button>
       </div>
 

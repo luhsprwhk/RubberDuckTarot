@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Save, User, Settings, Bell, Eye, Palette } from 'lucide-react';
-import useAuth from '../hooks/useAuth';
-import { useUserProfile } from '../hooks/useUserProfile';
+import useAuth from '../lib/hooks/useAuth';
+import { useUserProfile } from '../lib/hooks/useUserProfile';
 import { updateUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';
 

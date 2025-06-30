@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PersonalizedReading } from '@/src/modules/claude-ai';
+import type { PersonalizedReading } from '@/src/lib/claude-ai';
 import type { Card, BlockType } from '@/src/interfaces';
 
 interface QuickDrawSpreadProps {
@@ -74,12 +74,14 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
                     🔍 Key Insights
                   </h3>
                   <ul className="space-y-2">
-                    {personalizedReading.keyInsights.map((insight, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-green-500 mt-1">•</span>
-                        <span className="text-gray-700">{insight}</span>
-                      </li>
-                    ))}
+                    {personalizedReading.keyInsights.map(
+                      (insight: string, index: number) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <span className="text-green-500 mt-1">•</span>
+                          <span className="text-gray-700">{insight}</span>
+                        </li>
+                      )
+                    )}
                   </ul>
                 </div>
               )}
@@ -91,14 +93,16 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
                     🎯 Action Steps
                   </h3>
                   <ol className="space-y-2">
-                    {personalizedReading.actionSteps.map((step, index) => (
-                      <li key={index} className="flex items-start gap-2">
-                        <span className="text-purple-500 font-semibold">
-                          {index + 1}.
-                        </span>
-                        <span className="text-gray-700">{step}</span>
-                      </li>
-                    ))}
+                    {personalizedReading.actionSteps.map(
+                      (step: string, index: number) => (
+                        <li key={index} className="flex items-start gap-2">
+                          <span className="text-purple-500 font-semibold">
+                            {index + 1}.
+                          </span>
+                          <span className="text-gray-700">{step}</span>
+                        </li>
+                      )
+                    )}
                   </ol>
                 </div>
               )}

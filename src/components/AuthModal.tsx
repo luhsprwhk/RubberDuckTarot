@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
-import useAuth from '../hooks/useAuth';
-import useAlert from '../hooks/useAlert';
+import useAuth from '../lib/hooks/useAuth';
+import useAlert from '../lib/hooks/useAlert';
 
 export const AuthModal = () => {
   const {

@@ -1,4 +1,4 @@
-import useAuth from '../hooks/useAuth';
+import useAuth from '../lib/hooks/useAuth';
 import Landing from '../components/Landing';
 import Lobby from '../components/Lobby';
 

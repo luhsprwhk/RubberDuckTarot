@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import type { Card } from '../interfaces';
+import type { Card } from '@/src/interfaces';
 
 interface CardsContextType {
   cards: Card[];
