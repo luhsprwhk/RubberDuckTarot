@@ -2,6 +2,8 @@ import React from 'react';
 import type { PersonalizedReading } from '@/src/lib/claude-ai';
 import type { Card, BlockType } from '@/src/interfaces';
 import robEmoji from '@/src/assets/rob-emoji.png';
+import AdBanner from './AdBanner';
+import { useNavigate } from 'react-router-dom';
 
 interface QuickDrawSpreadProps {
   drawnCard: Card;
@@ -14,10 +16,10 @@ interface QuickDrawSpreadProps {
 const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
   drawnCard,
   selectedBlock,
-  onReset,
   personalizedReading,
   loadingReading,
 }) => {
+  const navigate = useNavigate();
   const blockAdvice =
     drawnCard?.block_applications[
       selectedBlock?.id as keyof typeof drawnCard.block_applications
@@ -101,8 +103,11 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
                 </div>
               )}
 
+              {/* Ad Banner */}
+              <AdBanner />
+
               {/* Rob's Quip */}
-              <div className="bg-liminal-surface rounded-lg p-4 mb-6">
+              <div className="bg-liminal-surface rounded-lg p-4 mt-6 mb-6">
                 <h3 className="text-lg font-semibold text-accent mb-2">
                   <img
                     src={robEmoji}
@@ -143,7 +148,10 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
                 </p>
               </div>
 
-              <div className="mb-6">
+              {/* Ad Banner Placeholder */}
+              <AdBanner />
+
+              <div className="mb-6 mt-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">
                   Reflection Questions:
                 </h3>
@@ -164,20 +172,13 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
       )}
 
       {/* Actions */}
-      <div className="text-center space-x-4">
+      <div className="text-center space-x-4 mt-4">
         <button
-          onClick={onReset}
+          onClick={() => navigate('/new-reading')}
           className="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
         >
           🔄 New Consultation
         </button>
-      </div>
-
-      {/* Ad Banner Placeholder */}
-      <div className="mt-8 bg-gray-100 border border-gray-300 rounded-lg p-4 text-center">
-        <p className="text-gray-500 text-sm">
-          📺 Friendly Ad Space • Upgrade to Premium Duck for ad-free wisdom
-        </p>
       </div>
     </div>
   );
