@@ -44,6 +44,7 @@ const Reading: React.FC = () => {
 
     const fetchDataAndDrawCards = async () => {
       if (!user || !spreadType || !selectedBlockTypeId || cardsLoading) {
+        setIsDrawing(false);
         return;
       }
 
@@ -51,6 +52,7 @@ const Reading: React.FC = () => {
         if (!cardsLoading && !cardsError) {
           console.error('No cards available');
         }
+        setIsDrawing(false);
         return;
       }
 

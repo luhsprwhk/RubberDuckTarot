@@ -33,7 +33,7 @@ export const generatePersonalizedReading = async (
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: request.spreadType === 'quick-draw' ? 300 : 750,
+      max_tokens: request.spreadType === 'quick-draw' ? 750 : 1400,
       temperature: 0.7, // Slight randomness for personality
       system: systemPrompt,
       messages: [
@@ -171,17 +171,26 @@ const parseReadingResponse = (
 
   try {
     const parsed = JSON.parse(cleaned);
+    // Handle case where interpretation is itself a JSON string
+    const interpretation = parsed.interpretation || '';
+    const keyInsights = Array.isArray(parsed.keyInsights)
+      ? parsed.keyInsights
+      : [];
+    const actionSteps = Array.isArray(parsed.actionSteps)
+      ? parsed.actionSteps
+      : [];
+    const robQuip =
+      parsed.robQuip ||
+      "Now quit overthinking and go debug your life. I've got other ethereal consultations to handle.";
+    const reflectionPrompts =
+      spreadType !== 'quick-draw' ? parsed.reflectionPrompts || [] : undefined;
+
     return {
-      interpretation: parsed.interpretation || '',
-      keyInsights: Array.isArray(parsed.keyInsights) ? parsed.keyInsights : [],
-      actionSteps: Array.isArray(parsed.actionSteps) ? parsed.actionSteps : [],
-      robQuip:
-        parsed.robQuip ||
-        "Now quit overthinking and go debug your life. I've got other ethereal consultations to handle.",
-      reflectionPrompts:
-        spreadType !== 'quick-draw'
-          ? parsed.reflectionPrompts || []
-          : undefined,
+      interpretation,
+      keyInsights,
+      actionSteps,
+      robQuip,
+      reflectionPrompts,
     };
   } catch (parseError) {
     console.error('Failed to parse Claude response as JSON:', parseError);
