@@ -6,6 +6,8 @@ import { getBlockTypeById } from '@/src/lib/blocktypes/blocktype-queries';
 import type { Insight, Card, BlockType } from '@/src/interfaces';
 import QuickDuckSpread from '../components/QuickDuckSpread';
 import FullPondSpread from '../components/FullPondSpread';
+import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
 
 const InsightPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -60,13 +62,11 @@ const InsightPage: React.FC = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-6 text-center text-gray-400">Loading insight...</div>
-    );
+    return <Loading text="Loading insight..." />;
   }
 
   if (error) {
-    return <div className="p-6 text-center text-red-500">{error}</div>;
+    return <ErrorState error={error} />;
   }
 
   if (!insight || cards.length === 0 || !blockType) {

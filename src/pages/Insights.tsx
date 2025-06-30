@@ -1,51 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import useCards from '../lib/cards/useCards';
-import type { Insight, BlockType } from '../interfaces';
+import type { BlockType } from '../interfaces';
 import { MessageCircle } from 'lucide-react';
-import { getUserInsights } from '../lib/insights/insight-queries';
-import { getAllBlockTypes } from '../lib/blocktypes/blocktype-queries';
 import Loading from '../components/Loading';
+import ErrorState from '../components/ErrorState';
+import { useInsights } from '../lib/insights/useInsights';
+import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 
 const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
-  const [insights, setInsights] = useState<Insight[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [blockTypes, setBlockTypes] = useState<BlockType[]>([]);
+  const {
+    insights,
+    loading: insightsLoading,
+    error: insightsError,
+    fetchUserInsights,
+  } = useInsights();
+  const {
+    blockTypes,
+    loading: blockTypesLoading,
+    error: blockTypesError,
+    refreshBlockTypes,
+  } = useBlockTypes();
+  const loading = insightsLoading || blockTypesLoading;
+  const error = insightsError || blockTypesError;
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchInsights = async () => {
-      try {
-        setLoading(true);
-        if (!user?.id) {
-          setInsights([]);
-          setBlockTypes([]);
-          setLoading(false);
-          return;
-        }
-        // Fetch readings and block types in parallel
-        const [insightsRaw, blockTypesRaw] = await Promise.all([
-          getUserInsights(user.id),
-          getAllBlockTypes(),
-        ]);
-        setInsights(Array.isArray(insightsRaw) ? insightsRaw : []);
-        setBlockTypes(Array.isArray(blockTypesRaw) ? blockTypesRaw : []);
-      } catch (err) {
-        console.error('Failed to fetch insights:', err);
-        setError('Failed to load your insights');
-      } finally {
-        setLoading(false);
+    if (user?.id) {
+      if (!insights.length && !insightsLoading) {
+        fetchUserInsights(user.id);
       }
-    };
-    fetchInsights();
-  }, [user?.id]);
+      if (!blockTypes.length && !blockTypesLoading) {
+        refreshBlockTypes();
+      }
+    }
+    // Optionally, clear context if user logs out
+  }, [
+    user?.id,
+    fetchUserInsights,
+    refreshBlockTypes,
+    insights.length,
+    insightsLoading,
+    blockTypes.length,
+    blockTypesLoading,
+  ]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
-    const blockType = blockTypes.find((bt) => bt.id === blockTypeId);
+    const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
     return blockType ? `${blockType.emoji} ${blockType.name}` : blockTypeId;
   };
 
@@ -65,23 +70,7 @@ const Insights: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
-        <div className="text-center">
-          <div className="text-6xl mb-4">🦆</div>
-          <h2 className="text-2xl font-semibold text-red-600 mb-4">
-            Oops! Something went wrong
-          </h2>
-          <p className="text-gray-700 mb-6">{error}</p>
-          <Link
-            to="/"
-            className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Go to Home Page
-          </Link>
-        </div>
-      </div>
-    );
+    return <ErrorState error={error} />;
   }
 
   if (insights.length === 0 && !loading && !error) {
@@ -89,10 +78,10 @@ const Insights: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="text-center mb-8">
         <div className="text-6xl mb-4">🦆</div>
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">
+        <h1 className="text-3xl font-bold text-primary mb-2">
           Your Insight History
         </h1>
         <p className="text-gray-600">
@@ -106,25 +95,25 @@ const Insights: React.FC = () => {
           return (
             <div
               key={insight.id}
-              className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                    <span className="text-sm font-medium text-primary bg-liminal-overlay px-2 py-1 rounded">
                       {insight.spread_type === 'quick-draw'
                         ? 'Quick Draw'
                         : 'Full Pond'}
                     </span>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-secondary">
                       {formatDate(insight.created_at)}
                     </span>
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                  <h3 className="text-lg font-semibold text-secondary mb-1">
                     {getBlockTypeName(insight.block_type_id)}
                   </h3>
                   {insight.user_context && (
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-secondary text-sm">
                       "{insight.user_context}"
                     </p>
                   )}
@@ -138,11 +127,11 @@ const Insights: React.FC = () => {
                   return (
                     <div
                       key={`${insight.id}-${card.id}-${index}`}
-                      className="flex-1 bg-gray-50 rounded-lg p-3 text-center"
+                      className="flex-1 bg-void-800 rounded-lg p-3 text-center"
                       onClick={() => navigate(`/insights/${insight.id}`)}
                     >
                       <div className="text-2xl mb-1">{card.emoji}</div>
-                      <div className="text-sm font-medium text-gray-800">
+                      <div className="text-sm font-medium text-secondary">
                         {card.name}
                       </div>
                     </div>
@@ -157,7 +146,7 @@ const Insights: React.FC = () => {
       <div className="text-center mt-8">
         <Link
           to="/"
-          className="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors"
+          className="px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors"
         >
           Get Another Reading
         </Link>

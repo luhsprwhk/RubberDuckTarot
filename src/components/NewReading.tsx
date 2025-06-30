@@ -38,7 +38,7 @@ const NewReading: React.FC<NewReadingProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-void-800 min-h-screen">
+    <div className="max-w-2xl mx-auto p-6 bg-liminal-surface min-h-screen">
       <div className="text-center mb-4">
         <div id="rob-divination-pic" className="mb-12 w-24 h-24 mx-auto">
           <img src={robDivinationPic} alt="Rob Divination" />
