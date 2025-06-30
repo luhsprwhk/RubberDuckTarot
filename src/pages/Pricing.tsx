@@ -1,11 +1,20 @@
 import { Check, X, Zap, Crown, Ghost, ArrowRight } from 'lucide-react';
 import useAuth from '@/src/lib/hooks/useAuth';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
 import PricingPic from '@/src/assets/pricing-hero.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
 
 const Pricing = () => {
-  const { showAuthModal } = useAuth();
+  const { showAuthModal, user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/upgrade', { replace: true });
+    }
+  }, [user, navigate]);
 
   return (
     <div className={cn('min-h-screen bg-void-gradient')}>
