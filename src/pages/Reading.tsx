@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { drawCard } from '../lib/drawCard';
+import type { DrawnCard } from '../lib/drawCard';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../hooks/useAuth';
 import useCards from '../hooks/useCards';
-import type { BlockType, Card } from '../interfaces';
+import type { BlockType } from '../interfaces';
 import { getDb } from '@/src/lib/database-provider';
 import { createInsight } from '../lib/insights/insight-queries';
 import {
@@ -27,7 +29,8 @@ const Reading: React.FC = () => {
   const { spreadType, selectedBlockTypeId, userContext = '' } = state || {};
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [drawnCards, setDrawnCards] = useState<Card[]>([]);
+
+  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
   const [isDrawing, setIsDrawing] = useState(true);
   const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
   const [personalizedReading, setPersonalizedReading] =
@@ -65,11 +68,11 @@ const Reading: React.FC = () => {
 
         const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
-        const drawnCardsList: Card[] = [];
+        const drawnCardsList: DrawnCard[] = [];
         for (let i = 0; i < numCardsToDraw; i++) {
-          if (availableCards.length === 0) break;
-          const randomIndex = Math.floor(Math.random() * availableCards.length);
-          drawnCardsList.push(availableCards.splice(randomIndex, 1)[0]);
+          const drawn = drawCard(availableCards);
+          if (!drawn) break;
+          drawnCardsList.push(drawn);
         }
 
         if (isMounted) {
@@ -105,7 +108,10 @@ const Reading: React.FC = () => {
         setReadingError(false);
         try {
           const reading = await generatePersonalizedReading({
-            cards: drawnCards,
+            cards: drawnCards.map((dc) => ({
+              ...dc.card,
+              reversed: dc.reversed,
+            })),
             blockType: selectedBlock,
             userContext: userContext || '',
             userProfile,
@@ -118,7 +124,7 @@ const Reading: React.FC = () => {
             spread_type: spreadType,
             block_type_id: selectedBlock.id,
             user_context: userContext ?? null,
-            cards_drawn: drawnCards.map((c) => c.id),
+            cards_drawn: drawnCards.map((dc) => dc.card.id),
             reading,
           });
 

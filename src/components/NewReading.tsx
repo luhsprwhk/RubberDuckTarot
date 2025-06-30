@@ -59,17 +59,17 @@ const NewReading: React.FC<NewReadingProps> = ({
               <button
                 key={selectedBlock.id}
                 className={cn(
-                  'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-breakthrough-400'
+                  'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-liminal-overlay'
                 )}
                 disabled
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{selectedBlock.emoji}</span>
                   <div>
-                    <div className="font-medium text-void-800">
+                    <div className="font-medium text-primary">
                       {selectedBlock.name}
                     </div>
-                    <div className="text-sm text-void-800">
+                    <div className="text-sm text-secondary">
                       {selectedBlock.description}
                     </div>
                   </div>
@@ -78,7 +78,7 @@ const NewReading: React.FC<NewReadingProps> = ({
             </div>
             <button
               type="button"
-              className="mt-2 px-4 py-2 rounded border border-liminal-border text-sm text-secondary hover:bg-liminal-border transition-colors"
+              className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
               onClick={handleUnlockBlockType}
             >
               Pick a different block type
@@ -91,7 +91,7 @@ const NewReading: React.FC<NewReadingProps> = ({
                 key={blockType.id}
                 onClick={() => handleBlockSelect(blockType.id)}
                 className={cn(
-                  'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md',
+                  'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
                   selectedBlockType === blockType.id
                     ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
                     : 'border-liminal-border hover:border-liminal-border'
@@ -146,7 +146,10 @@ const NewReading: React.FC<NewReadingProps> = ({
             value={userContext}
             onChange={(e) => onUserContextChange(e.target.value)}
             placeholder={`Describe your ${selectedBlock?.name.toLowerCase()} or ask a question`}
-            className="w-full text-secondary p-4 border border-liminal-border rounded-lg resize-none focus:ring-2 focus:ring-breakthrough-400 focus:border-transparent"
+            className={cn(
+              'w-full text-secondary p-4 border border-default rounded-lg resize-none focus:ring-2 focus:ring-breakthrough-400 focus:border-transparent',
+              'bg-liminal-overlay'
+            )}
             rows={4}
           />
         </div>
@@ -187,8 +190,8 @@ const SpreadSelector: React.FC<{
         onClick={() => onSpreadSelect('quick-draw')}
         className={cn(
           selectedSpread === 'quick-draw'
-            ? 'bg-breakthrough-400 text-void-800'
-            : 'bg-liminal-border hover:bg-liminal-border text-primary',
+            ? 'bg-liminal-overlay border border-breakthrough-400 text-primary'
+            : 'bg-liminal-overlay hover:border-breakthrough-400 text-primary',
           'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
         )}
       >
@@ -198,8 +201,8 @@ const SpreadSelector: React.FC<{
         onClick={() => onSpreadSelect('full-pond')}
         className={cn(
           selectedSpread === 'full-pond'
-            ? 'bg-breakthrough-400 text-void-800'
-            : 'bg-liminal-border hover:bg-liminal-border text-primary',
+            ? 'bg-liminal-overlay border border-breakthrough-400 text-primary'
+            : 'bg-liminal-overlay hover:border-breakthrough-400 text-primary',
           'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
         )}
       >

@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import type { UserProfile } from '../interfaces';
 import type { Card, BlockType } from '../interfaces';
 import { getProfessionMetaphors } from './ai/profession-metaphors';
+import systemPrompt from './ai/system-prompt.md?raw';
 
 const anthropic = new Anthropic({
   apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
@@ -32,8 +33,9 @@ export const generatePersonalizedReading = async (
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: request.spreadType === 'quick-draw' ? 250 : 800,
+      max_tokens: request.spreadType === 'quick-draw' ? 300 : 750,
       temperature: 0.7, // Slight randomness for personality
+      system: systemPrompt,
       messages: [
         {
           role: 'user',
@@ -56,7 +58,6 @@ export const generatePersonalizedReading = async (
 
 const buildReadingPrompt = (request: ReadingRequest): string => {
   const { cards, blockType, userContext, userProfile, spreadType } = request;
-  console.log(userProfile);
 
   // Get profession-specific metaphor style
   const metaphorStyle = getProfessionMetaphors(userProfile.profession);
@@ -75,66 +76,45 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
         `Duck's Question: "${card.duck_question}"\n` +
         `For ${blockType.name} blocks: ${blockApplication}\n` +
         `Key perspectives: ${perspectivePrompts.join(' / ')}\n` +
-        `Rob's wisdom: "${card.duck_wisdom}"`
+        `Rob's wisdom: "${card.duck_wisdom}"\n` +
+        `Core meaning: ${card.core_meaning}\n` +
+        `Reversed meaning: ${card.reversed_meaning}`
       );
     })
     .join('\n\n');
 
-  const overview = `
-  OVERVIEW: You are Rob Chen, a dead full-stack developer (1999-2023) now stuck in a rubber duck after drowning while avoiding a startup pitch. You run "Rubber Duck Tarot" - practical life advice through the lens of a modernized version of the Lenormand tarot, agile software development, and rubber duck methodology.
-  `;
-
-  const backstory = `
-  BACKSTORY: You survived Y2K, dot-com crash, 2008 recession, countless framework wars, and finally died avoiding a pitch for "AI-powered pet nutrition." Now you help the living debug their problems using your decades of technical experience and the perspective that comes from literally seeing it all.
-  `;
-
-  const personality = `
-  YOUR PERSONALITY:
-  - Brutally honest but genuinely helpful
-  - Uses coding/tech metaphors (calibrated to user's profession)
-  - Sarcastic about startup culture and bad decisions
-  - Takes your ghostly consulting business seriously
-  - Anti-mystical: "This isn't fortune telling, it's debugging methodology"
-  - Slight impatience with overthinking: "Stop gold-plating, ship the MVP"
-  - Self-deprecating jokes about his current state in the afterlife
+  const clientProfile = `
+    Name: ${userProfile.name}
+    Profession: ${userProfile.profession.name} - ${metaphorStyle.note}
+    Debugging Style: ${userProfile.debugging_mode}
+    Primary Block Pattern: ${userProfile.block_pattern}
+    Superpower: "${userProfile.superpower}"
+    Kryptonite: "${userProfile.kryptonite}"
+    Problem-solving Spirit: ${userProfile.spirit_animal}
   `;
 
   const basePrompt = `
-  ${overview}
+    <client_profile>${clientProfile}</client_profile>
 
-  ${backstory}
+    <consultation_details>
+      Type: ${spreadType.replace('-', ' ')} consultation
+      Block Category: ${blockType.name}
+      Client's Situation: "${userContext}"
+    </consultation_details>
 
-  ${personality}
+    <cards_drawn>${cardDetails}</cards_drawn>
 
+    <spread_instructions>${getSpreadSpecificInstructions(spreadType)}</spread_instructions>
 
-CLIENT PROFILE:
-Name: ${userProfile.name}
-Profession: ${userProfile.profession.name} ${metaphorStyle.note}
-Debugging Style: ${userProfile.debugging_mode}
-Primary Block Pattern: ${userProfile.block_pattern}
-Superpower: "${userProfile.superpower}"
-Kryptonite: "${userProfile.kryptonite}"
-Problem-solving Spirit: ${userProfile.spirit_animal}
+    Use ${metaphorStyle.style} Keep it practical, not mystical. Reference their profile naturally - their debugging style, superpower/kryptonite, profession, and spirit animal. Make it feel like Rob knows them.
 
-CONSULTATION DETAILS:
-Type: ${spreadType.replace('-', ' ')} consultation
-Block Category: ${blockType.name}
-Client's Situation: "${userContext}"
-
-CARDS DRAWN:
-${cardDetails}
-
-${getSpreadSpecificInstructions(spreadType)}
-
-Use ${metaphorStyle.style} Keep it practical, not mystical. Reference their profile naturally - their debugging style, superpower/kryptonite, profession. Make it feel like Rob knows them.
-
-Respond in valid JSON format:
-{
-  "interpretation": "Main reading combining the cards for their specific situation",
-  "keyInsights": ["Array of 3-4 key insights"],
-  "actionSteps": ["Array of 2-3 specific, actionable steps"],
-  "robQuip": "Rob's signature sarcastic but encouraging closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
-}`;
+    Respond in valid JSON format:
+    {
+      "interpretation": "Main reading combining the cards for their specific situation",
+      "keyInsights": ["Array of 3-4 key insights"],
+      "actionSteps": ["Array of 2-3 specific, actionable steps"],
+      "robQuip": "Rob's signature sarcastic but encouraging closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
+    }`;
 
   return basePrompt;
 };
@@ -155,7 +135,7 @@ const getSpreadSpecificInstructions = (spreadType: string): string => {
         - More depth than Quick Draw but still practical
         - Connect the cards meaningfully to their situation
         - Balance insight with actionable guidance
-        - Include reflection prompts to deepen understandin
+        - Include reflection prompts to deepen understanding
         - Comprehensive 3-card analysis: context/blocks/resources/action/outcome
         - Deep integration of their profile with card meanings
         - Multiple layers of insight and practical steps
@@ -170,8 +150,17 @@ const parseReadingResponse = (
   response: string,
   spreadType: string
 ): PersonalizedReading => {
+  // Remove code block markers if present
+  let cleaned = response.trim();
+  // Remove leading/trailing ```json or ``` if present
+  cleaned = cleaned
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '');
+  cleaned = cleaned.trim();
+
   try {
-    const parsed = JSON.parse(response);
+    const parsed = JSON.parse(cleaned);
     return {
       interpretation: parsed.interpretation || '',
       keyInsights: Array.isArray(parsed.keyInsights) ? parsed.keyInsights : [],
@@ -188,12 +177,12 @@ const parseReadingResponse = (
     console.error('Failed to parse Claude response as JSON:', parseError);
 
     // Fallback: extract what we can from plain text
-    const interpretation = response.includes('{')
-      ? response.substring(0, response.indexOf('{'))
-      : response;
+    const interpretation = cleaned.includes('{')
+      ? cleaned.substring(0, cleaned.indexOf('{'))
+      : cleaned;
 
     return {
-      interpretation: interpretation.trim() || response,
+      interpretation: interpretation.trim() || cleaned,
       keyInsights: ['The cards suggest looking at this from a different angle'],
       actionSteps: ['Take one small step forward today'],
       robQuip:

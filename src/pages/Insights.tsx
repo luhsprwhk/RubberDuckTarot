@@ -20,15 +20,19 @@ const Insights: React.FC = () => {
     const fetchInsights = async () => {
       try {
         setLoading(true);
-
+        if (!user?.id) {
+          setInsights([]);
+          setBlockTypes([]);
+          setLoading(false);
+          return;
+        }
         // Fetch readings and block types in parallel
-        const [insights, blockTypes] = await Promise.all([
-          getUserInsights(user?.id),
+        const [insightsRaw, blockTypesRaw] = await Promise.all([
+          getUserInsights(user.id),
           getAllBlockTypes(),
         ]);
-
-        setInsights(insights);
-        setBlockTypes(blockTypes);
+        setInsights(Array.isArray(insightsRaw) ? insightsRaw : []);
+        setBlockTypes(Array.isArray(blockTypesRaw) ? blockTypesRaw : []);
       } catch (err) {
         console.error('Failed to fetch insights:', err);
         setError('Failed to load your insights');
@@ -36,7 +40,6 @@ const Insights: React.FC = () => {
         setLoading(false);
       }
     };
-
     fetchInsights();
   }, [user?.id]);
 
@@ -174,7 +177,7 @@ const Insights: React.FC = () => {
 
 const EmptyInsightsState = () => {
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gradient-to-br from-blue-50 to-purple-50 min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         {/* Rob's Empty State */}
         <div className="mb-8">
@@ -182,22 +185,22 @@ const EmptyInsightsState = () => {
           <div className="text-2xl mb-2">👻</div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-blue-500">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        <div className="bg-void-800 rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-blue-500">
+          <h2 className="text-2xl font-bold text-primary mb-4">
             Your Insight Archive is Empty
           </h2>
 
-          <div className="bg-gray-50 rounded-lg p-6 mb-6 border-l-4 border-yellow-400">
+          <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-yellow-400">
             <div className="flex items-start space-x-3">
               <div className="text-2xl">🦆🎩</div>
               <div className="text-left">
-                <p className="text-gray-700 mb-3">
+                <p className="text-primary mb-3">
                   <strong>Rob here.</strong> I'm floating around in the ethereal
                   realm with zero debugging sessions logged. That's either
                   impressive life management or serious avoidance behavior.
                 </p>
 
-                <p className="text-gray-700 font-medium">
+                <p className="text-primary font-medium">
                   Let's fix that. What's blocking you right now?
                 </p>
               </div>
@@ -206,18 +209,18 @@ const EmptyInsightsState = () => {
 
           {/* Quick Action Cards */}
           <div className="grid md:grid-cols-2 gap-4 mb-6">
-            <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-              <MessageCircle className="w-6 h-6 text-blue-600 mb-2" />
-              <h4 className="font-semibold text-blue-800 mb-1">Quick Duck</h4>
-              <p className="text-sm text-blue-600">
+            <div className="bg-liminal-overlay rounded-lg p-4 border border-void-800">
+              <MessageCircle className="w-6 h-6 text-primary mb-2" />
+              <h4 className="font-semibold text-primary mb-1">Quick Duck</h4>
+              <p className="text-sm text-primary">
                 Single card for immediate perspective shifts
               </p>
             </div>
 
-            <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
-              <Brain className="w-6 h-6 text-purple-600 mb-2" />
-              <h4 className="font-semibold text-purple-800 mb-1">Full Pond</h4>
-              <p className="text-sm text-purple-600">
+            <div className="bg-liminal-overlay rounded-lg p-4 border border-void-800">
+              <Brain className="w-6 h-6 text-primary mb-2" />
+              <h4 className="font-semibold text-primary mb-1">Full Pond</h4>
+              <p className="text-sm text-primary">
                 3-card spread for deeper analysis of your block
               </p>
             </div>
@@ -225,7 +228,7 @@ const EmptyInsightsState = () => {
 
           <a
             href="/"
-            className="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+            className="inline-flex items-center px-8 py-3 bg-void-gradient text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
           >
             <MessageCircle className="w-5 h-5 mr-2" />
             Start Your First Consultation
@@ -233,7 +236,7 @@ const EmptyInsightsState = () => {
         </div>
 
         {/* Testimonial Teaser */}
-        <div className="mt-8 bg-gray-800 text-white rounded-lg p-6 max-w-xl">
+        <div className="mt-8 bg-void-800 text-white rounded-lg p-6 max-w-xl">
           <div className="flex items-center mb-3">
             <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center text-sm font-bold mr-3">
               D
