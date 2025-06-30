@@ -107,7 +107,14 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
 
     <spread_instructions>${getSpreadSpecificInstructions(spreadType)}</spread_instructions>
 
-    Use ${metaphorStyle.style} Keep it practical, not mystical. Reference their profile naturally - their debugging style, superpower/kryptonite, profession, and spirit animal. Make it feel like Rob knows them.
+    <profile_integration>
+      * Integrate the client's profile (profession, debugging style, superpower, kryptonite, spirit animal)
+      directly into your interpretation of each card. Let these traits influence how you explain the card
+      meanings and advice, tailoring insights and action steps to their unique strengths,
+      challenges, and mindset.
+      
+      * Use ${metaphorStyle.style}—keep it practical, not mystical.
+    </profile_integration>
 
     Respond in valid JSON format:
     {
@@ -125,7 +132,8 @@ const getSpreadSpecificInstructions = (spreadType: string): string => {
     case 'quick-draw':
       return `QUICK DRAW RULES:
         - Follow Oblique Strategies approach: sharp, surgical insight
-        - Rob is slightly impatient: "Stop overthinking, start doing"
+        - For the drawn card, use its core meaning (or reversed meaning if reversed) as the main lens for interpreting the user's situation or blocker.
+        - Directly connect the card's meaning to the user's question or blocker, in a practical, literal way.
         - Focus on ONE reframe question + ONE action
         - Keep interpretation to 2-3 sentences max
         - No reflection prompts needed - they should figure it out themselves`;
@@ -133,11 +141,12 @@ const getSpreadSpecificInstructions = (spreadType: string): string => {
     case 'duck-insight':
       return `DUCK INSIGHT RULES:
         - 3-card reading: situation/challenge/action approach
-        - More depth than Quick Draw but still practical
-        - Connect the cards meaningfully to their situation
+        - For each card, use its core meaning (or reversed meaning if reversed) as the main lens for interpreting the user's situation, challenge, or action.
+        - Directly relate each card's meaning to the user's question or blocker, in a practical, literal way (Lenormand style).
+        - Synthesize the cards in sequence: context → challenge → advice.
+        - Combine card meanings for a nuanced, actionable answer.
         - Balance insight with actionable guidance
         - Include reflection prompts to deepen understanding
-        - Comprehensive 3-card analysis: context/blocks/resources/action/outcome
         - Deep integration of their profile with card meanings
         - Multiple layers of insight and practical steps
         - Strong reflection prompts for continued self-discovery`;
