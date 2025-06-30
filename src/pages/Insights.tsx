@@ -139,7 +139,7 @@ const Insights: React.FC = () => {
                     <div
                       key={`${insight.id}-${card.id}-${index}`}
                       className="flex-1 bg-gray-50 rounded-lg p-3 text-center"
-                      onClick={() => navigate(`/insight/${insight.id}`)}
+                      onClick={() => navigate(`/insights/${insight.id}`)}
                     >
                       <div className="text-2xl mb-1">{card.emoji}</div>
                       <div className="text-sm font-medium text-gray-800">

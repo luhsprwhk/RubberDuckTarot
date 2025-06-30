@@ -39,7 +39,7 @@ function App() {
             <Route path="/upgrade" element={<Upgrade />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/preferences" element={<Preferences />} />
-            <Route path="/insight/:id" element={<Insight />} />
+            <Route path="/insights/:id" element={<Insight />} />
             <Route path="/login" element={<Login />} />
             <Route path="/new-reading" element={<NewReading />} />
           </Routes>
