@@ -1,6 +1,7 @@
 import React from 'react';
 import type { PersonalizedReading } from '@/src/lib/claude-ai';
 import type { Card, BlockType } from '@/src/interfaces';
+import robEmoji from '@/src/assets/rob-emoji.png';
 
 interface QuickDrawSpreadProps {
   drawnCard: Card;
@@ -103,7 +104,12 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
               {/* Rob's Quip */}
               <div className="bg-liminal-surface rounded-lg p-4 mb-6">
                 <h3 className="text-lg font-semibold text-accent mb-2">
-                  🦆 Rob's Final Word
+                  <img
+                    src={robEmoji}
+                    alt="Rob"
+                    className="w-6 h-6 inline-block"
+                  />{' '}
+                  Rob's Final Word
                 </h3>
                 <p className="text-primary italic leading-relaxed">
                   "{personalizedReading.robQuip}"
@@ -125,7 +131,12 @@ const QuickDuckSpread: React.FC<QuickDrawSpreadProps> = ({
 
               <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-2">
-                  🦆 Rob's Debugging Wisdom
+                  <img
+                    src={robEmoji}
+                    alt="Rob"
+                    className="w-6 h-6 inline-block"
+                  />{' '}
+                  Rob's Debugging Wisdom
                 </h3>
                 <p className="text-gray-700 italic leading-relaxed">
                   "{drawnCard.duck_wisdom}"

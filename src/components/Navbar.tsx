@@ -6,6 +6,7 @@ import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
 import clsx from 'clsx';
 
 import { useUserProfile } from '../lib/hooks/useUserProfile';
+import robEmoji from '../assets/rob-emoji.png';
 
 const Navbar = () => {
   const { user, signOut, showAuthModal } = useAuth();
@@ -46,7 +47,11 @@ const Navbar = () => {
               to="/"
               className="text-xl font-bold text-primary hover:text-accent transition-colors duration-200 flex items-center gap-2"
             >
-              <span className="text-breakthrough-400 animate-flicker">🦆</span>
+              <img
+                src={robEmoji}
+                alt="Rob"
+                className="w-6 h-6 text-breakthrough-400 animate-flicker"
+              />
               Rubber Duck Tarot
             </Link>
             <div className="flex items-center space-x-6">

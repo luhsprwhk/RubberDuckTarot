@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Card, BlockType } from '@/src/interfaces';
 import type { PersonalizedReading } from '@/src/lib/claude-ai';
+import robEmoji from '@/src/assets/rob-emoji.png';
 
 interface FullPondSpreadProps {
   drawnCards: Card[];
@@ -45,7 +46,11 @@ const FullPondSpread: React.FC<FullPondSpreadProps> = ({
   return (
     <div className="max-w-5xl mx-auto p-6 bg-gradient-to-b from-blue-100 to-purple-100 min-h-screen">
       <div className="text-center mb-8">
-        <div className="text-5xl mb-2">🌊🦆🌊</div>
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <span className="text-4xl">🌊</span>
+          <img src={robEmoji} alt="Rob" className="w-12 h-12" />
+          <span className="text-4xl">🌊</span>
+        </div>
         <h1 className="text-3xl font-bold text-gray-800">Full Pond Spread</h1>
         <p className="text-lg text-gray-600">
           A comprehensive look at your situation from multiple angles.
@@ -113,7 +118,8 @@ const FullPondSpread: React.FC<FullPondSpreadProps> = ({
 
           <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6">
             <h3 className="text-xl font-semibold text-gray-800 mb-2">
-              🦆 Rob's Final Word
+              <img src={robEmoji} alt="Rob" className="w-6 h-6 inline-block" />{' '}
+              Rob's Final Word
             </h3>
             <p className="text-gray-700 italic leading-relaxed">
               "{personalizedReading.robQuip}"

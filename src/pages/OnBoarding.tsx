@@ -7,6 +7,7 @@ import useAuth from '../lib/hooks/useAuth';
 import { saveUserProfile, getUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
+import robEmoji from '../assets/rob-emoji.png';
 
 const superpowers = [
   'Breaking complex problems into simple steps',
@@ -612,7 +613,10 @@ const OnBoarding = () => {
     <div className="min-h-screen bg-void-gradient p-4">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <div className="text-6xl mb-4">🦆🧙‍♂️</div>
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <img src={robEmoji} alt="Rob" className="w-16 h-16" />
+            <span className="text-6xl">🧙‍♂️</span>
+          </div>
           <h1 className="text-3xl font-bold text-primary mb-2">
             Rubber Duck Tarot
           </h1>
@@ -631,7 +635,9 @@ const OnBoarding = () => {
 
         <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
           <div className="flex items-start">
-            <div className="text-4xl mr-4">🦆</div>
+            <div className="mr-4">
+              <img src={robEmoji} alt="Rob" className="w-10 h-10" />
+            </div>
             <div className="flex-1">
               <div className="bg-void-700 rounded-lg p-4 relative">
                 <p className="text-primary italic">{robMessage}</p>

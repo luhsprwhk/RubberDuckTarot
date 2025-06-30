@@ -2,6 +2,7 @@ import { Check, X, Zap, Crown, Ghost, ArrowRight } from 'lucide-react';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { cn } from '@/src/lib/utils';
 import PricingPic from '@/src/assets/pricing-hero.png';
+import robEmoji from '@/src/assets/rob-emoji.png';
 
 const Pricing = () => {
   const { showAuthModal } = useAuth();
@@ -61,7 +62,7 @@ const Pricing = () => {
                   'flex items-center justify-center flex-shrink-0 animate-pulse-glow'
                 )}
               >
-                <span className={cn('text-xl')}>🦆</span>
+                <img src={robEmoji} alt="Rob" className="w-6 h-6" />
               </div>
               <div>
                 <h3 className={cn('text-lg font-semibold text-primary mb-2')}>
@@ -366,7 +367,7 @@ const Pricing = () => {
                       'w-24 h-24 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 animate-flicker shadow-glow'
                     )}
                   >
-                    <span className={cn('text-4xl')}>🦆</span>
+                    <img src={robEmoji} alt="Rob" className="w-10 h-10" />
                   </div>
                   <div className={cn('text-accent text-sm font-medium mb-2')}>
                     ETHEREAL GUARANTEE

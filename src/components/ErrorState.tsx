@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import robEmoji from '@/src/assets/rob-emoji.png';
 
 interface ErrorStateProps {
   error: string;
@@ -12,7 +13,9 @@ const ErrorState: React.FC<ErrorStateProps> = ({
 }) => (
   <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
     <div className="text-center">
-      <div className="text-6xl mb-4">🦆</div>
+      <div className="mb-4">
+        <img src={robEmoji} alt="Rob" className="w-16 h-16 mx-auto" />
+      </div>
       <h2 className="text-2xl font-semibold text-red-600 mb-4">
         Oops! Something went wrong
       </h2>

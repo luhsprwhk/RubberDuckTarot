@@ -7,6 +7,7 @@ import {
   Sparkles,
   Check,
 } from 'lucide-react';
+import robEmoji from '../assets/rob-emoji.png';
 
 const Upgrade = () => {
   return (
@@ -17,7 +18,7 @@ const Upgrade = () => {
           <div className="flex justify-center mb-6">
             <div className="relative">
               <div className="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center text-4xl animate-bounce">
-                🦆
+                <img src={robEmoji} alt="Rob" className="w-10 h-10" />
               </div>
               <div className="absolute -top-2 -right-2 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
                 <Crown className="w-4 h-4 text-yellow-400" />
@@ -39,7 +40,9 @@ const Upgrade = () => {
           {/* Free Duck */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
             <div className="text-center mb-6">
-              <div className="text-4xl mb-4">🦆</div>
+              <div className="mb-4">
+                <img src={robEmoji} alt="Rob" className="w-10 h-10 mx-auto" />
+              </div>
               <h3 className="text-2xl font-bold mb-2">Free Duck</h3>
               <div className="text-3xl font-bold text-gray-300">
                 $0<span className="text-lg">/month</span>
@@ -73,7 +76,10 @@ const Upgrade = () => {
               </span>
             </div>
             <div className="text-center mb-6">
-              <div className="text-4xl mb-4">👑🦆</div>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <span className="text-4xl">👑</span>
+                <img src={robEmoji} alt="Rob" className="w-10 h-10" />
+              </div>
               <h3 className="text-2xl font-bold mb-2">Premium Duck</h3>
               <div className="text-3xl font-bold text-yellow-400">
                 $2.99<span className="text-lg">/month</span>
@@ -104,7 +110,10 @@ const Upgrade = () => {
         {/* Rob's Sales Pitch */}
         <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700 max-w-4xl mx-auto mb-16">
           <div className="flex items-start space-x-4">
-            <div className="text-4xl">🦆🎩</div>
+            <div className="flex items-center gap-2">
+              <img src={robEmoji} alt="Rob" className="w-10 h-10" />
+              <span className="text-4xl">🎩</span>
+            </div>
             <div>
               <h3 className="text-xl font-bold mb-4 text-yellow-400">
                 Rob's Honest Sales Pitch

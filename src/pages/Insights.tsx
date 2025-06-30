@@ -8,6 +8,7 @@ import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { useInsights } from '../lib/insights/useInsights';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
+import robEmoji from '../assets/rob-emoji.png';
 
 const Insights: React.FC = () => {
   const { user } = useAuth();
@@ -80,7 +81,9 @@ const Insights: React.FC = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="text-center mb-8">
-        <div className="text-6xl mb-4">🦆</div>
+        <div className="mb-4">
+          <img src={robEmoji} alt="Rob" className="w-16 h-16 mx-auto" />
+        </div>
         <h1 className="text-3xl font-bold text-primary mb-2">
           Your Insight History
         </h1>
@@ -168,7 +171,10 @@ const EmptyInsightsState = () => {
 
           <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-yellow-400">
             <div className="flex items-start space-x-3">
-              <div className="text-2xl">🦆🎩</div>
+              <div className="flex items-center gap-1">
+                <img src={robEmoji} alt="Rob" className="w-8 h-8" />
+                <span className="text-2xl">🎩</span>
+              </div>
               <div className="text-left">
                 <p className="text-primary mb-3">
                   <strong>Rob here.</strong> I'm floating around in the ethereal

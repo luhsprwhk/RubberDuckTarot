@@ -2,6 +2,7 @@ import { Star, ArrowRight, User, Zap, Target, Shield } from 'lucide-react';
 import useAuth from '@/src/lib/hooks/useAuth';
 import DuckHero from '@/src/assets/landing-hero.png';
 import DuckLinkedin from '@/src/assets/rob-linkedin.png';
+import robEmoji from '@/src/assets/rob-emoji.png';
 
 const Landing = () => {
   const { showAuthModal } = useAuth();
@@ -315,7 +316,7 @@ const Landing = () => {
       <div className="bg-void-950 border-t border-liminal-border py-8">
         <div className="container mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <span className="text-2xl">🦆 </span>
+            <img src={robEmoji} alt="Rob" className="w-8 h-8" />
             <span className="font-semibold text-primary">
               Rubber Duck Tarot
             </span>
