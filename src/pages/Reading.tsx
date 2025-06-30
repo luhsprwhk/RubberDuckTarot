@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { drawCard } from '../lib/drawCard';
-import type { DrawnCard } from '../lib/drawCard';
+type FlatDrawnCard = import('../interfaces').Card & { reversed: boolean };
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../lib/hooks/useAuth';
@@ -31,7 +31,7 @@ const Reading: React.FC = () => {
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-  const [drawnCards, setDrawnCards] = useState<DrawnCard[]>([]);
+  const [drawnCards, setDrawnCards] = useState<FlatDrawnCard[]>([]);
   const [isDrawing, setIsDrawing] = useState(true);
   const [selectedBlock, setSelectedBlock] = useState<BlockType | null>(null);
   const [personalizedReading, setPersonalizedReading] =
@@ -68,11 +68,12 @@ const Reading: React.FC = () => {
 
         const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
-        const drawnCardsList: DrawnCard[] = [];
+        const drawnCardsList = [];
         for (let i = 0; i < numCardsToDraw; i++) {
           const drawn = drawCard(availableCards);
           if (!drawn) break;
-          drawnCardsList.push(drawn);
+          // Flatten the drawn card: merge all card properties + reversed
+          drawnCardsList.push({ ...drawn.card, reversed: drawn.reversed });
         }
 
         if (isMounted) {
@@ -116,10 +117,7 @@ const Reading: React.FC = () => {
         setReadingError(false);
         try {
           const reading = await generatePersonalizedReading({
-            cards: drawnCards.map((dc) => ({
-              ...dc.card,
-              reversed: dc.reversed,
-            })),
+            cards: drawnCards,
             blockType: selectedBlock,
             userContext: userContext || '',
             userProfile,
@@ -132,7 +130,7 @@ const Reading: React.FC = () => {
             spread_type: spreadType,
             block_type_id: selectedBlock?.id ?? null,
             user_context: userContext ?? null,
-            cards_drawn: drawnCards.map((dc) => dc.card.id),
+            cards_drawn: drawnCards.map((dc) => dc.id),
             reading,
           });
 

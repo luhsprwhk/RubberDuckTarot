@@ -10,7 +10,7 @@ const anthropic = new Anthropic({
 });
 
 export interface ReadingRequest {
-  cards: Card[];
+  cards: (Card & { reversed: boolean })[];
   blockType: BlockType;
   userContext: string;
   userProfile: UserProfile;
@@ -78,7 +78,8 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
         `Key perspectives: ${perspectivePrompts.join(' / ')}\n` +
         `Rob's wisdom: "${card.duck_wisdom}"\n` +
         `Core meaning: ${card.core_meaning}\n` +
-        `Reversed meaning: ${card.reversed_meaning}\n`
+        `Reversed meaning: ${card.reversed_meaning}\n` +
+        `Reversed: ${card.reversed}`
       );
     })
     .join('\n\n');
