@@ -77,45 +77,13 @@ const CardDetail = () => {
           <div className="text-8xl mb-4">{card.emoji}</div>
           <h1 className="text-4xl font-bold text-primary mb-2">{card.name}</h1>
           <p className="text-accent text-lg">
-            Traditional: {card.traditional_equivalent}
+            {card.duck_question && `"${card.duck_question}"`}
           </p>
         </div>
       </div>
 
-      {/* Core Meaning */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-4">
-          Core Meaning
-        </h2>
-        <p className="text-secondary leading-relaxed text-lg">
-          {card.core_meaning}
-        </p>
-      </div>
-
-      {/* Rob's Question */}
-      <div className="bg-liminal-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <img src={robEmoji} alt="Rob" className="w-8 h-8" />
-          <h2 className="text-2xl font-semibold text-accent">Rob's Question</h2>
-        </div>
-        <p className="text-primary italic text-lg">"{card.duck_question}"</p>
-      </div>
-
-      {/* Visual Description */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-4">
-          Visual Description
-        </h2>
-        <p className="text-secondary leading-relaxed">
-          {card.visual_description}
-        </p>
-      </div>
-
       {/* Block Applications */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-6">
-          Block Applications
-        </h2>
         <div className="grid md:grid-cols-2 gap-4">
           {Object.entries(card.block_applications).map(([blockId, advice]) => (
             <div
@@ -153,7 +121,7 @@ const CardDetail = () => {
           Reflection Questions
         </h2>
         <div className="space-y-3">
-          {card.perspective_prompts.map((prompt, index) => (
+          {card.perspective_prompts.slice(0, 3).map((prompt, index) => (
             <div key={index} className="flex items-start gap-3">
               <span className="text-accent font-semibold mt-1">
                 {index + 1}.
@@ -162,16 +130,6 @@ const CardDetail = () => {
             </div>
           ))}
         </div>
-      </div>
-
-      {/* Reversed Meaning */}
-      <div className="bg-void-800 rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-4">
-          When Blocked (Reversed)
-        </h2>
-        <p className="text-secondary leading-relaxed">
-          {card.reversed_meaning}
-        </p>
       </div>
 
       {/* Tags */}

@@ -16,7 +16,6 @@ export const cards = pgTable('cards', {
   traditional_equivalent: text('traditional_equivalent').notNull(),
   core_meaning: text('core_meaning').notNull(),
   duck_question: text('duck_question').notNull(),
-  visual_description: text('visual_description').notNull(),
   perspective_prompts: jsonb('perspective_prompts').$type<string[]>().notNull(),
   block_applications: jsonb('block_applications')
     .$type<{

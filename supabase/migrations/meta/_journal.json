@@ -8,6 +8,13 @@
       "when": 1751331880984,
       "tag": "0000_powerful_sphinx",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751334432877,
+      "tag": "0001_third_maximus",
+      "breakpoints": true
     }
   ]
 }

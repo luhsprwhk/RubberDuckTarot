@@ -7,7 +7,6 @@
       "traditional_equivalent": "The Rider",
       "core_meaning": "News, incoming changes, arrivals, messages",
       "duck_question": "What's heading your way?",
-      "visual_description": "A delivery driver in a recognizable uniform (think Amazon, UPS vibes) holding a package, with a delivery truck in the background. The package has a question mark on it, and there's a subtle sense of motion - maybe some dust clouds or speed lines. The driver has a friendly but hurried expression, checking their phone/scanner.",
       "perspective_prompts": [
         "What information are you avoiding that's trying to reach you?",
         "What change is already in motion that you haven't acknowledged?",
@@ -21,7 +20,7 @@
         "life": "Someone's reaching out or something's changing in your environment. Pay attention to what's actually arriving instead of what you think should arrive.",
         "relationship": "Communication is coming - but are you ready to receive it? Clear the channel and listen for what's really being said."
       },
-      "duck_wisdom": "Just like that package you've been tracking obsessively, sometimes the solution is already on its way. Stop refreshing the status page and prepare to receive what's coming. And hey - maybe check your spam folder while you're at it.",
+      "duck_wisdom": "Just like that package you've been tracking obsessively, sometimes the solution is already on its way. Stop refreshing the status and prepare to receive what's coming. And hey - maybe check your missed calls while you're at it.",
       "reversed_meaning": "Delayed information, missed messages, refusing to acknowledge incoming changes, or being so focused on what you expect that you miss what's actually arriving.",
       "tags": ["communication", "change", "information", "arrival", "news"]
     },
@@ -32,7 +31,6 @@
       "traditional_equivalent": "The Clover",
       "core_meaning": "Chance, opportunity, calculated risks, luck",
       "duck_question": "What risk might pay off?",
-      "visual_description": "A scratch-off lottery ticket in the process of being scratched, with a coin beside it. Some numbers are revealed, others still hidden under the silver coating. There's a subtle glow or shimmer around the unscratched areas, suggesting potential. The ticket sits on a desk next to a coffee cup and keyboard, making it feel like an everyday decision moment.",
       "perspective_prompts": [
         "What small bet could you make that has asymmetric upside?",
         "What opportunity are you dismissing because the odds seem low?",
@@ -46,7 +44,7 @@
         "life": "You're stuck in the safe zone. What's one low-risk experiment that could open unexpected doors?",
         "relationship": "Someone or something unexpected might be worth a chance. Stop calculating and start connecting."
       },
-      "duck_wisdom": "You're coding like every function needs 100% test coverage. Sometimes you need to deploy the feature and see if users actually want it. Make small bets, fail fast, iterate. That weird idea you dismissed? Maybe scratch that ticket first.",
+      "duck_wisdom": "You're trying to guarantee outcomes when you should be making smart bets. Sometimes you need to scratch the ticket and see what happens. Make small bets, fail fast, iterate. That weird idea you dismissed? Maybe scratch that one first.",
       "reversed_meaning": "Gambling away certainty for false hope, taking reckless risks without strategy, or being so focused on the big win that you miss the small opportunities already in front of you.",
       "tags": ["risk", "opportunity", "chance", "experiment", "potential"]
     },
@@ -57,7 +55,6 @@
       "traditional_equivalent": "The Ship",
       "core_meaning": "Movement, escape, journey, departure",
       "duck_question": "What needs to change location?",
-      "visual_description": "A commercial airplane mid-takeoff, angled upward against a sky with scattered clouds. The plane is modern and sleek, with subtle motion blur on the wings. Below, you can see a small airport terminal and runway getting smaller. There's a sense of momentum and leaving something behind, with the horizon suggesting new destinations ahead.",
       "perspective_prompts": [
         "What are you trying to fix that would be better off relocated entirely?",
         "What environment is holding you back that you could simply leave?",
@@ -71,7 +68,7 @@
         "life": "You're optimizing a life situation that fundamentally doesn't work. What would moving (literally or metaphorically) solve that no amount of local fixes can?",
         "relationship": "Stop trying to have the same conversation in the same setting. Change the venue, medium, or timing entirely."
       },
-      "duck_wisdom": "You're spending way too much time trying to optimize a system that's fundamentally broken. Sometimes the best refactor is a complete rewrite in a new environment. Stop trying to patch legacy code and start fresh somewhere else.",
+      "duck_wisdom": "You're trying to fix something in the wrong environment entirely. Sometimes the best solution isn't improving where you are - it's going somewhere else that actually works. Stop trying to polish broken systems and start fresh somewhere better.",
       "reversed_meaning": "Running away from problems that would follow you anywhere, avoiding commitment to see things through, or being so focused on escape that you miss local solutions.",
       "tags": ["movement", "change", "environment", "migration", "escape"]
     },
@@ -82,7 +79,6 @@
       "traditional_equivalent": "The House",
       "core_meaning": "Foundation, security, base operations, stability",
       "duck_question": "What's your safe base?",
-      "visual_description": "A modern smart home with subtle tech indicators - doorbell camera, solar panels, smart windows with a soft glow. The house looks secure and well-maintained, surrounded by a neat yard. There's a sense of both traditional stability and modern efficiency. The front door is slightly open, suggesting welcome but also control over who enters.",
       "perspective_prompts": [
         "What foundation do you keep taking for granted until it breaks?",
         "What 'home base' do you need to establish before taking bigger risks?",
@@ -96,7 +92,7 @@
         "life": "You're trying to build excitement on an unstable foundation. What core life infrastructure needs your attention first?",
         "relationship": "The relationship lacks a solid foundation of trust, communication, or shared values. Address the basics before tackling the complex stuff."
       },
-      "duck_wisdom": "You're trying to deploy to production with a broken CI/CD pipeline. Fix your infrastructure first - reliable backup systems, clear documentation, and solid foundations. Once your base is stable, everything else gets easier.",
+      "duck_wisdom": "You're trying to build ambitious projects on shaky foundations. Fix your infrastructure first - reliable backup systems, clear processes, and solid basics. Once your base is stable, everything else gets easier.",
       "reversed_meaning": "Over-focusing on security and stability to the point of stagnation, using 'foundation building' as an excuse to avoid taking action, or clinging to outdated infrastructure.",
       "tags": ["foundation", "security", "stability", "infrastructure", "base"]
     },
@@ -107,7 +103,6 @@
       "traditional_equivalent": "The Tree",
       "core_meaning": "Growth, sustainability, long-term energy, patience",
       "duck_question": "What energizes you long-term?",
-      "visual_description": "A sleek solar panel installation on a rooftop, gleaming in bright sunlight. The panels are angled optimally, with subtle electrical connections visible. In the background, you can see a power meter running backward, and there's a sense of clean, efficient energy conversion. The sun is prominent but not overwhelming, suggesting consistent, reliable power generation.",
       "perspective_prompts": [
         "What investment of time now would pay energy dividends for years?",
         "What are you burning out on that could be made sustainable instead?",
@@ -121,7 +116,7 @@
         "life": "You're running on willpower instead of building sustainable systems. What lifestyle change would give you more energy rather than requiring it?",
         "relationship": "You're putting in constant effort to maintain something. What foundation could you build to make the relationship naturally energizing instead of exhausting?"
       },
-      "duck_wisdom": "You're writing the same bug fix over and over instead of refactoring the root cause. Think infrastructure, not patches. What system could you build once that solves this class of problems forever? Stop being a human cron job.",
+      "duck_wisdom": "You're manually fixing the same problem every week instead of building a system that prevents it. Stop being your own maintenance crew - invest the time once to save yourself months of repeated headaches.",
       "reversed_meaning": "Waiting for perfect conditions before starting, over-investing in systems that never pay off, or being so focused on future sustainability that you ignore immediate energy needs.",
       "tags": ["sustainability", "energy", "automation", "long-term", "systems"]
     },
@@ -132,7 +127,6 @@
       "traditional_equivalent": "The Clouds",
       "core_meaning": "Uncertainty, mood, atmospheric conditions, forecasting",
       "duck_question": "What's unclear right now?",
-      "visual_description": "A smartphone displaying a weather app with conflicting forecasts - multiple weather services showing different predictions for the same day. The screen shows partly cloudy with a chance of rain, but there's disagreement in the details. Behind the phone, you can see an actual window with ambiguous weather - could be clearing up or getting worse.",
       "perspective_prompts": [
         "What are you trying to predict that you should just prepare for instead?",
         "What uncertainty are you treating like a problem to solve rather than a condition to navigate?",
@@ -146,7 +140,7 @@
         "life": "You're waiting for life circumstances to become clear before making moves. Start navigating the ambiguity instead of waiting it out.",
         "relationship": "You're trying to read unclear signals instead of creating clear communication. Stop forecasting their mood and start stating your needs."
       },
-      "duck_wisdom": "You're trying to write perfect code for requirements that keep changing. Build flexible systems that can handle multiple scenarios instead of waiting for the product manager to make up their mind.",
+      "duck_wisdom": "You're trying to plan for perfect conditions that don't exist. Build flexible approaches that work in multiple scenarios instead of waiting for certainty that never comes.",
       "reversed_meaning": "Avoiding necessary uncertainty, over-relying on predictions that can't be made, or creating false clarity to avoid dealing with real ambiguity.",
       "tags": [
         "uncertainty",
@@ -163,7 +157,6 @@
       "traditional_equivalent": "The Snake",
       "core_meaning": "Connection, complexity, entanglement, energy transfer",
       "duck_question": "What's tangled up?",
-      "visual_description": "A charging cable that's impossibly knotted and twisted, lying on a desk next to a laptop with a low battery warning. Despite the mess, you can see both ends - the power source and the device that needs charging. There's a sense that untangling it would solve the immediate problem, but it looks like it would take forever.",
       "perspective_prompts": [
         "What complex situation could be solved by finding the right connection point?",
         "What are you overcomplicating that has a simple linking solution?",
@@ -177,7 +170,7 @@
         "life": "You're dealing with interconnected problems that feel impossible to separate. Pick one thread and follow it.",
         "relationship": "Communication is tangled up in old issues and misunderstandings. Find the direct connection point and start there."
       },
-      "duck_wisdom": "You've got spaghetti code when you need a clean function. Stop trying to debug the whole mess at once - trace one connection from input to output and refactor from there.",
+      "duck_wisdom": "You've got a mess when you need a clean connection. Stop trying to untangle the whole thing at once - trace one path from start to finish and simplify from there.",
       "reversed_meaning": "Creating unnecessary complexity to avoid simple solutions, getting lost in details instead of following the main connection, or avoiding untangling because the mess feels manageable.",
       "tags": [
         "complexity",
@@ -194,7 +187,6 @@
       "traditional_equivalent": "The Coffin",
       "core_meaning": "Endings, renewal, clearing out, transformation",
       "duck_question": "What needs to be cleared out?",
-      "visual_description": "A desktop recycle bin icon that's full and needs to be emptied, sitting on a computer screen. Around it, you can see file icons and folders - some clearly outdated (old project names, deprecated formats). The recycle bin has that 'full' appearance with papers slightly spilling out the top. There's a cursor hovering over 'Empty Recycle Bin' but not quite clicking.",
       "perspective_prompts": [
         "What are you keeping around that's taking up mental space for no reason?",
         "What ended that you're still treating like it's active?",
@@ -208,7 +200,7 @@
         "life": "You're carrying around old identities, habits, or commitments that don't fit your current life. Time for a major cleanup.",
         "relationship": "Old conflicts, grudges, or patterns are cluttering up the present relationship. Clear the cache and start fresh."
       },
-      "duck_wisdom": "You're keeping dead code in production because you're afraid to break something. That deprecated function isn't helping anyone - delete it and see what actually breaks. Spoiler: probably nothing important.",
+      "duck_wisdom": "You're keeping broken systems running because you're afraid of what might break. That thing that stopped working months ago isn't helping anyone - cut it loose and see what actually falls apart. Spoiler: probably nothing you'll miss.",
       "reversed_meaning": "Deleting things impulsively without consideration, being afraid to let go of anything, or constantly clearing out without building anything new to replace what's gone.",
       "tags": ["cleanup", "deletion", "renewal", "legacy", "transformation"]
     },
@@ -219,7 +211,6 @@
       "traditional_equivalent": "The Bouquet",
       "core_meaning": "Appreciation, surprise, unexpected positive, recognition",
       "duck_question": "What's the unexpected positive?",
-      "visual_description": "A beautifully wrapped gift box sitting on a desk, partially opened with colorful tissue paper spilling out. The ribbon is slightly undone, suggesting anticipation. There's a small gift tag attached, but you can't quite read what it says. The lighting creates a warm glow around the box, and there are hints of something valuable inside - maybe the corner of something shiny or interesting peeking through the tissue paper.",
       "perspective_prompts": [
         "What good thing are you dismissing because it doesn't look like what you expected?",
         "What appreciation or recognition are you not seeing because you're focused on what's missing?",
@@ -233,7 +224,7 @@
         "life": "You're so busy chasing what you think you want that you're missing what's actually good about your current situation. Inventory your gifts.",
         "relationship": "Someone's giving you something meaningful, but it's not packaged the way you expected. Look past the wrapping."
       },
-      "duck_wisdom": "You're rejecting perfectly good solutions because they don't match your original spec. That 'workaround' might actually be a feature, not a bug. Sometimes the best gifts come in weird packaging.",
+      "duck_wisdom": "You're rejecting perfectly good solutions because they don't match your original expectations. That 'workaround' might actually be better than your first plan. Sometimes the best gifts come in weird packaging.",
       "reversed_meaning": "Expecting gifts without giving, focusing so much on the positive that you ignore real problems, or becoming addicted to surprise and novelty instead of building sustainable satisfaction.",
       "tags": [
         "appreciation",
@@ -250,7 +241,6 @@
       "traditional_equivalent": "The Scythe",
       "core_meaning": "Quick cuts, decisive action, immediate elimination",
       "duck_question": "What needs immediate action?",
-      "visual_description": "A large, prominent red 'DELETE' button on a computer screen, with a cursor hovering over it. The screen shows a cluttered desktop with way too many files, folders, and applications open. Some files are clearly labeled as 'OLD_PROJECT_FINAL_FINAL_v2' and other obviously outdated items. The delete button glows slightly, almost invitingly, while the rest of the screen feels chaotic and overwhelming.",
       "perspective_prompts": [
         "What decision are you overthinking that just needs to be cut quickly?",
         "What would you eliminate if you had to choose right now, no analysis?",
@@ -264,7 +254,7 @@
         "life": "You're maintaining too many things out of guilt or habit. What can you just stop doing without explanation or replacement?",
         "relationship": "Stop trying to fix what's clearly broken. Some conversations need to end, not evolve."
       },
-      "duck_wisdom": "You're spending more time maintaining legacy code than building new features. That function hasn't been called in months - just delete it. Stop commenting out dead code and start shipping what works.",
+      "duck_wisdom": "You're spending more time maintaining dead weight than building new momentum. That thing hasn't been useful in months - just delete it. Stop trying to fix what should be eliminated.",
       "reversed_meaning": "Deleting impulsively without consideration, being afraid to cut anything, or using elimination as avoidance instead of making positive choices.",
       "tags": [
         "elimination",
@@ -281,7 +271,6 @@
       "traditional_equivalent": "The Star",
       "core_meaning": "Insight, illumination, breakthrough moments, clarity",
       "duck_question": "What wants to be discovered?",
-      "visual_description": "A classic incandescent light bulb suspended from the ceiling, glowing warmly in an otherwise dim room. The filament is clearly visible and bright, casting interesting shadows on the walls. Around the bulb, you can see the faint outlines of previously hidden objects now becoming visible in the light - books, tools, maybe a whiteboard with half-erased equations. There's a pull chain hanging down, suggesting this illumination was recently activated.",
       "perspective_prompts": [
         "What solution have you been overlooking because you're searching in the wrong place?",
         "What becomes obvious when you change your perspective slightly?",
@@ -295,7 +284,7 @@
         "life": "You're making this more complicated than it needs to be. What's the obvious answer you're intellectualizing away?",
         "relationship": "The truth about the situation is already clear to you. Stop waiting for more evidence and act on what you know."
       },
-      "duck_wisdom": "You're debugging like the answer is hidden in some obscure documentation when it's probably in the error message you haven't actually read yet. The insight you need is right there - you just haven't illuminated it.",
+      "duck_wisdom": "You're searching everywhere except where the answer actually is. The insight you need is right there - you just haven't looked at what's already in front of you.",
       "reversed_meaning": "Waiting for perfect insight instead of acting on good enough understanding, over-analyzing clear signals, or seeking complexity when the simple answer is staring you in the face.",
       "tags": [
         "insight",
@@ -312,7 +301,6 @@
       "traditional_equivalent": "The Child",
       "core_meaning": "New beginnings, curiosity, fresh perspective, playfulness",
       "duck_question": "What would you try if it didn't have to be perfect?",
-      "visual_description": "A smart TV showing a streaming service home screen with endless rows of content - new releases, recommended for you, trending now. The remote sits on a coffee table nearby, and you can see multiple viewing profiles listed: 'Kids,' 'Guest,' 'Movie Night.' There's that overwhelming feeling of infinite choice but also infinite possibility. A 'Continue Watching' section shows several half-finished series.",
       "perspective_prompts": [
         "What would you experiment with if there was no commitment required?",
         "What beginner's mind approach could you take to this old problem?",
@@ -326,7 +314,7 @@
         "life": "You're taking yourself too seriously. What would be fun to try, even if it doesn't fit your current identity?",
         "relationship": "Stop planning the perfect conversation and just start with casual curiosity. See what develops naturally."
       },
-      "duck_wisdom": "You're architecting for production scale when you should be prototyping. Build the minimum viable feature, ship it, see if anyone actually uses it. You can always refactor later.",
+      "duck_wisdom": "You're planning for perfection when you should be trying prototypes. Build the minimum version, test it, see if anyone actually wants it. You can always improve later.",
       "reversed_meaning": "Endlessly browsing options without committing to anything, treating everything like entertainment instead of taking necessary action, or avoiding depth by constantly switching to something new.",
       "tags": [
         "experimentation",
@@ -343,7 +331,6 @@
       "traditional_equivalent": "The Key",
       "core_meaning": "Access, security, unlocking potential, authentication",
       "duck_question": "What needs the right credentials?",
-      "visual_description": "A password manager app interface showing a vault of saved logins, with some accounts marked as 'strong password' and others flagged with warning icons for 'weak' or 'reused' passwords. There's a prominent 'Generate Strong Password' button and several locked entries that require master password authentication. A two-factor authentication notification waits in the background.",
       "perspective_prompts": [
         "What door could you open if you just asked for the right access?",
         "What are you locked out of because you're using old credentials?",
@@ -357,7 +344,7 @@
         "life": "You're locked out of opportunities because you're using outdated versions of yourself. Time to update your credentials.",
         "relationship": "You're trying to access someone's trust or openness without the right authentication. What credentials do you need to build first?"
       },
-      "duck_wisdom": "You're getting permission denied errors because you're running with user privileges when you need admin access. Stop brute-forcing the solution and get the proper credentials.",
+      "duck_wisdom": "You're getting blocked because you're using the wrong access level. Stop trying to force your way in and get the proper credentials first.",
       "reversed_meaning": "Hoarding access without using it, being so security-focused that you lock yourself out of opportunities, or trying to bypass proper authentication instead of building legitimate credentials.",
       "tags": [
         "access",
@@ -374,7 +361,6 @@
       "traditional_equivalent": "The Fish",
       "core_meaning": "Sustenance, immediate needs, nourishment, practical solutions",
       "duck_question": "What do you actually need right now?",
-      "visual_description": "A food delivery app on a phone screen showing 'Order Again' favorites, estimated delivery times, and that familiar decision paralysis between cuisines. There's a shopping cart with items but also a prominent 'Your usual order' suggestion. Outside the window, you can glimpse a delivery driver on a bike checking their GPS. The phone battery shows 23% - enough for now, but cutting it close.",
       "perspective_prompts": [
         "What basic need are you ignoring while chasing complex solutions?",
         "What simple fix would actually solve 80% of your problem right now?",
@@ -388,7 +374,7 @@
         "life": "You're so focused on the perfect lifestyle that you're not taking care of basic needs. What does your life actually require right now?",
         "relationship": "Stop planning the perfect interaction and just give the relationship what it needs to function today."
       },
-      "duck_wisdom": "You're trying to optimize your entire tech stack when the server is literally out of memory. Fix the immediate resource problem first, then worry about architecture.",
+      "duck_wisdom": "You're trying to optimize your entire system when you just need to fix the immediate resource problem. Handle your actual needs first, then worry about perfect solutions.",
       "reversed_meaning": "Always choosing convenience over quality, never building sustainable systems because you're stuck in immediate-gratification mode, or using 'basic needs' as an excuse to avoid growth.",
       "tags": ["basics", "immediate", "sustenance", "practical", "simple"]
     },
@@ -399,7 +385,6 @@
       "traditional_equivalent": "The Ring",
       "core_meaning": "Cycles, commitment, ongoing measurement, incremental progress",
       "duck_question": "What needs consistent tracking?",
-      "visual_description": "A smartwatch face showing multiple tracking rings - activity, exercise, standing hours - with some rings nearly complete and others barely started. Notifications are piling up: calendar reminders, fitness goals, message alerts. The watch band shows slight wear from daily use, and there's a sense of both helpful monitoring and slight overwhelm from constant data.",
       "perspective_prompts": [
         "What progress are you making that you're not measuring or celebrating?",
         "What cycle are you breaking by not paying attention to the pattern?",
@@ -413,7 +398,7 @@
         "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
         "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
       },
-      "duck_wisdom": "You're deploying code changes without monitoring. Set up proper logging and metrics so you can see what's actually working. You can't optimize what you don't measure.",
+      "duck_wisdom": "You're making changes without monitoring results. Set up proper tracking so you can see what's actually working. You can't optimize what you don't measure.",
       "reversed_meaning": "Becoming obsessed with metrics instead of actual progress, tracking everything but acting on nothing, or using measurement as procrastination instead of motivation.",
       "tags": ["tracking", "measurement", "consistency", "progress", "habits"]
     },
@@ -424,7 +409,6 @@
       "traditional_equivalent": "The Tower",
       "core_meaning": "Isolation, focus, boundaries, filtering distractions",
       "duck_question": "What noise needs to be blocked out?",
-      "visual_description": "A pair of premium noise-canceling headphones sitting on a cluttered desk, with the active noise cancellation indicator glowing softly. Around them, you can see the chaos they're meant to block out - open Slack notifications, email alerts, a ringing phone, and people talking in the background through glass office walls. The headphones look like a sanctuary of focus in a world of interruption.",
       "perspective_prompts": [
         "What signal are you trying to hear that's being drowned out by noise?",
         "What boundaries do you need to create to protect your mental bandwidth?",
@@ -438,7 +422,7 @@
         "life": "You're living according to other people's expectations instead of your own values. Time to tune out the external static.",
         "relationship": "Drama and old conflicts are drowning out real communication. What background noise needs to be eliminated?"
       },
-      "duck_wisdom": "You're trying to debug with a thousand console.log statements running. Mute the irrelevant output and focus on the error that actually matters. Not every notification deserves your immediate attention.",
+      "duck_wisdom": "You're trying to focus while everything is screaming for attention. Filter out the irrelevant noise and focus on the signal that actually matters. Not every interruption deserves your immediate response.",
       "reversed_meaning": "Isolating so much that you miss important feedback, using focus as an excuse to avoid necessary collaboration, or becoming addicted to perfect conditions instead of learning to work anywhere.",
       "tags": ["focus", "boundaries", "filtering", "isolation", "distraction"]
     },
@@ -449,7 +433,6 @@
       "traditional_equivalent": "The Anchor",
       "core_meaning": "Backup power, preparation, reliability, emergency resources",
       "duck_question": "What's your backup plan?",
-      "visual_description": "A sleek portable battery pack connected to a smartphone with a charging cable. The power bank shows 78% capacity on its LED display, and there are multiple USB ports ready for other devices. It sits in a laptop bag next to other travel essentials - cables, adapters, earbuds. There's a sense of preparedness and the comfort that comes from knowing you won't be caught powerless.",
       "perspective_prompts": [
         "What would you attempt if you knew you had a reliable fallback option?",
         "What's your plan when your primary strategy runs out of juice?",
@@ -463,7 +446,7 @@
         "life": "You're not pursuing what you want because you're afraid of failure. What foundation would let you experiment freely?",
         "relationship": "You're staying in something unsatisfying because you're afraid of being alone. What independence do you need to build first?"
       },
-      "duck_wisdom": "You're afraid to refactor because you don't have proper version control. Set up your rollback plan first, then you can experiment without fear of breaking everything.",
+      "duck_wisdom": "You're afraid to take risks because you don't have a safety net. Set up your backup plan first, then you can experiment without fear of losing everything.",
       "reversed_meaning": "Over-preparing to avoid taking action, becoming addicted to safety nets instead of building confidence, or hoarding resources you never actually use.",
       "tags": ["backup", "preparation", "safety", "reliability", "confidence"]
     },
@@ -474,7 +457,6 @@
       "traditional_equivalent": "The Book",
       "core_meaning": "Memory, documentation, perspective, evidence",
       "duck_question": "What story does the evidence tell?",
-      "visual_description": "A smartphone camera roll showing a grid of recent photos - screenshots of ideas, pictures of whiteboards from meetings, random moments captured throughout the week. Some photos are blurry, others perfectly composed. There's a mix of work stuff, personal moments, and things that seemed important at the time. The storage bar at the bottom shows it's almost full.",
       "perspective_prompts": [
         "What patterns emerge when you look at your actual behavior instead of your intentions?",
         "What evidence are you ignoring because it doesn't match the story you want to tell?",
@@ -488,7 +470,7 @@
         "life": "If someone looked at your photos from the last month, what would they conclude about what makes you happy?",
         "relationship": "What does your communication history actually show about the relationship dynamic, stripped of emotion and assumptions?"
       },
-      "duck_wisdom": "Stop guessing what's wrong and look at the actual logs. Your git history, your metrics, your user behavior - the data tells the real story, not your assumptions about what should be happening.",
+      "duck_wisdom": "Stop guessing what's wrong and look at the actual evidence. Your actions, your results, your patterns - the data tells the real story, not your assumptions about what should be happening.",
       "reversed_meaning": "Living in the past instead of the present, being paralyzed by over-documentation, or refusing to look at evidence that contradicts your preferred narrative.",
       "tags": [
         "evidence",
@@ -505,7 +487,6 @@
       "traditional_equivalent": "The Garden",
       "core_meaning": "Accumulation, intention vs. action, resource gathering",
       "duck_question": "What are you collecting instead of using?",
-      "visual_description": "An online shopping cart interface showing 47 items added over several weeks - books you meant to read, courses you planned to take, tools you thought you needed. The total keeps climbing, but nothing's been purchased. There's a 'Save for Later' section that's even fuller, and several 'Items in your cart are going fast!' notifications. The checkout button sits there, waiting.",
       "perspective_prompts": [
         "What are you gathering that you never actually use or implement?",
         "What resources do you already have that could solve your current problem?",
@@ -519,7 +500,7 @@
         "life": "You're buying the lifestyle instead of living it. What experiences are you postponing while you acquire the 'right' equipment?",
         "relationship": "You're collecting relationship advice instead of having actual conversations. Act on what you already know."
       },
-      "duck_wisdom": "You have 73 npm packages in your devDependencies but you're only using 12. Stop installing new libraries and learn to use the ones you already have. Ship with what works.",
+      "duck_wisdom": "You're hoarding resources you never use while complaining you don't have what you need. Stop collecting and start using what you already have. Most problems can be solved with existing tools.",
       "reversed_meaning": "Never committing to purchases or decisions, hoarding resources without purpose, or using minimalism as an excuse to avoid investing in necessary tools.",
       "tags": [
         "accumulation",
@@ -536,7 +517,6 @@
       "traditional_equivalent": "The Mice",
       "core_meaning": "Play, experimentation, safe failure, skill building",
       "duck_question": "How can you make this more like a game?",
-      "visual_description": "A gaming controller on a coffee table, slightly worn from use, with a game paused on the TV screen showing a character at a checkpoint. The controller's analog sticks show slight wear patterns, and there are energy drink cans and snack wrappers nearby - evidence of long gaming sessions. The screen shows a respawn timer counting down, suggesting multiple attempts at the same challenge.",
       "perspective_prompts": [
         "What would you attempt if failure was just hitting restart instead of actual consequences?",
         "How could you break this big challenge into smaller levels or achievements?",
@@ -550,7 +530,7 @@
         "life": "You're treating life like a test instead of a sandbox game. Where can you experiment without permanent consequences?",
         "relationship": "Stop trying to win conversations and start playing cooperatively. How can you both level up together?"
       },
-      "duck_wisdom": "You're coding like every bug will brick the system. Set up a proper dev environment where you can break things safely and iterate quickly. Fail fast, learn faster.",
+      "duck_wisdom": "You're treating everything like a final exam when it should be practice mode. Set up safe spaces where you can experiment, fail, and try again without permanent consequences.",
       "reversed_meaning": "Using games to avoid real challenges, treating serious situations too casually, or never progressing beyond comfortable difficulty levels.",
       "tags": ["play", "experimentation", "learning", "iteration", "practice"]
     },
@@ -561,7 +541,6 @@
       "traditional_equivalent": "The Crossroads",
       "core_meaning": "Direction, temporary guidance, shared journey, navigation",
       "duck_question": "Who's driving this decision?",
-      "visual_description": "A smartphone showing a ride-share app with multiple route options to the same destination - some faster but more expensive, others longer but cheaper. The driver's ETA keeps updating, and you can see their car icon moving through traffic on the map. There's a 'Share Ride' option available, and the passenger rating system shows 4.8 stars. The pickup location pin is slightly off from where you're actually standing.",
       "perspective_prompts": [
         "Are you trying to control the route when you should just pick the destination?",
         "What journey would be easier if you shared it with someone else?",
@@ -575,7 +554,7 @@
         "life": "You're paralyzed by trying to plan every step. Pick a direction and trust that course corrections happen naturally.",
         "relationship": "Someone else might need to drive this conversation. Stop backseat driving and see where they take it."
       },
-      "duck_wisdom": "You're trying to micromanage every function call when you just need to define the API contract. Set the destination, trust the framework to route efficiently.",
+      "duck_wisdom": "You're trying to control every detail when you just need to pick the destination. Let others handle the navigation sometimes - not everything needs your direct management.",
       "reversed_meaning": "Never taking the wheel when leadership is needed, constantly changing destinations mid-journey, or refusing to share control even when you're lost.",
       "tags": [
         "navigation",
@@ -592,7 +571,6 @@
       "traditional_equivalent": "The Letter",
       "core_meaning": "Communication, connection across distance, presence, clarity",
       "duck_question": "What needs to be said face-to-face?",
-      "visual_description": "A laptop screen showing a video call interface with multiple participants - some with cameras on, others just showing initials or profile pics. There's background blur active, a mute button prominently displayed, and chat messages piling up on the side. Connection bars show varying signal strength. One person appears to be talking but the 'You're muted' notification is visible.",
       "perspective_prompts": [
         "What message are you sending through text that needs your actual voice?",
         "Who haven't you seen face-to-face (virtually or otherwise) in too long?",
@@ -606,7 +584,7 @@
         "life": "You're managing relationships through status updates instead of real connection. Time for actual face time.",
         "relationship": "Stop texting about the issue. Have the conversation where you can hear tone and see expressions."
       },
-      "duck_wisdom": "You're debugging through comments in pull requests when you need to screen share and walk through the code together. Some problems require bandwidth that text can't provide.",
+      "duck_wisdom": "You're trying to solve complex problems through vague messages when you need actual conversation. Some issues require real-time communication, not endless text chains.",
       "reversed_meaning": "Over-relying on meetings when async communication would work better, avoiding difficult conversations by demanding they happen 'in person,' or using video calls to avoid taking action.",
       "tags": [
         "communication",
@@ -623,7 +601,6 @@
       "traditional_equivalent": "The Man",
       "core_meaning": "Seeking, inquiry, investigation, finding what's hidden",
       "duck_question": "What are you really looking for?",
-      "visual_description": "A browser search bar with a blinking cursor, showing recent search history - a mix of work-related queries, random questions, and half-remembered song lyrics. The autocomplete dropdown suggests similar searches from others. There are multiple tabs open in the background, suggesting deep research or distracted browsing. The search suggestions get more specific as you type, narrowing from millions of results to something more targeted.",
       "perspective_prompts": [
         "Are you searching for answers or searching to avoid making decisions?",
         "What question behind the question are you actually trying to solve?",
@@ -637,7 +614,7 @@
         "life": "You're searching for life hacks instead of examining what's actually not working. Look inward first.",
         "relationship": "You're researching relationship advice instead of having the actual conversation with your person."
       },
-      "duck_wisdom": "You're Stack Overflow diving when you should be reading your own error logs first. The answer is usually in your existing codebase, not in some random forum post.",
+      "duck_wisdom": "You're looking for external answers when you should be examining your own patterns first. The solution is usually in your existing experience, not in some random advice forum.",
       "reversed_meaning": "Never searching when research would help, accepting the first result without verification, or becoming addicted to information gathering instead of problem solving.",
       "tags": ["seeking", "research", "investigation", "inquiry", "discovery"]
     },
@@ -648,7 +625,6 @@
       "traditional_equivalent": "The Heart",
       "core_meaning": "Environment control, comfort zones, automatic adjustment, sensitivity",
       "duck_question": "What temperature needs adjusting?",
-      "visual_description": "A smart thermostat display showing current temperature (72°F) and target temperature (70°F), with a slight difference creating ongoing adjustment. The display shows it's in 'auto' mode, switching between heating and cooling as needed. There's a schedule visible with different settings for different times of day. Energy usage graphs show efficiency patterns, and there's a 'learning' indicator suggesting the system is adapting to behavior patterns.",
       "perspective_prompts": [
         "What environment are you trying to control that keeps fighting back?",
         "What comfort zone needs a deliberate temperature change?",
@@ -662,7 +638,7 @@
         "life": "You're stuck in a comfort zone that's actually uncomfortable. What lifestyle temperature change would energize you?",
         "relationship": "The emotional climate is off. Is it too hot (conflict) or too cold (distance)? Adjust accordingly."
       },
-      "duck_wisdom": "You're manually scaling your infrastructure when you should set up auto-scaling rules. Define your target performance metrics and let the system adjust automatically.",
+      "duck_wisdom": "You're manually adjusting everything when you should set up systems that adapt automatically. Define your targets and let the environment self-regulate.",
       "reversed_meaning": "Constantly fiddling with settings instead of letting systems stabilize, being too sensitive to minor environmental changes, or refusing to adapt when conditions clearly need adjustment.",
       "tags": [
         "environment",
@@ -679,7 +655,6 @@
       "traditional_equivalent": "The Window",
       "core_meaning": "Perspective, multiple viewpoints, expanded vision, clarity",
       "duck_question": "What angle are you missing?",
-      "visual_description": "A dual monitor setup on a desk - one screen showing code, the other displaying documentation. The monitors are at slightly different angles, creating a panoramic workspace. One screen has dark mode enabled while the other is in light mode. There are multiple windows open across both displays, with some applications spanning both screens. Cable management is visible but organized, suggesting this is a deliberate, optimized setup.",
       "perspective_prompts": [
         "What view would open up if you could see the problem from multiple angles simultaneously?",
         "What context are you missing because you're only looking at one screen at a time?",
@@ -693,7 +668,7 @@
         "life": "You're looking at life one aspect at a time. What patterns emerge when you view work, relationships, and health together?",
         "relationship": "You're seeing their perspective OR yours, not both. What changes when you hold both viewpoints simultaneously?"
       },
-      "duck_wisdom": "You're alt-tabbing between the bug and the fix when you need split-screen debugging. See the problem and solution space together - the connection becomes obvious.",
+      "duck_wisdom": "You're switching between perspectives when you need to see the whole picture at once. Stop context-switching and find a way to view everything simultaneously.",
       "reversed_meaning": "Information overload from too many simultaneous views, using multiple perspectives to avoid making decisions, or being unable to focus on any single viewpoint effectively.",
       "tags": ["perspective", "viewpoint", "comparison", "clarity", "overview"]
     },
@@ -704,7 +679,6 @@
       "traditional_equivalent": "The Mountain",
       "core_meaning": "Permanence, accessibility, backup, elevated perspective",
       "duck_question": "What needs to be preserved and accessible?",
-      "visual_description": "A cloud storage interface showing files syncing across devices - laptop, phone, tablet icons with green checkmarks indicating successful sync. The storage meter shows 67% full with options to upgrade. There's a 'Recently Deleted' folder and a 'Shared with Me' section. Some files show version history with timestamps, and there's a notification about offline access being enabled for important documents.",
       "perspective_prompts": [
         "What knowledge or experience are you not preserving that could help you later?",
         "What needs to be accessible from anywhere, not just where you are now?",
@@ -718,7 +692,7 @@
         "life": "You keep relearning the same life lessons. What personal insights need better documentation and backup?",
         "relationship": "Important conversations and agreements get lost. What relationship knowledge needs to be preserved and accessible?"
       },
-      "duck_wisdom": "You're storing critical business logic only in your head. Document it, version it, make it accessible to the whole team. Knowledge that can't be shared or recovered is technical debt.",
+      "duck_wisdom": "You're keeping critical knowledge trapped in your head when it should be accessible to everyone who needs it. Document it, share it, back it up - knowledge that can't be recovered is wasted effort.",
       "reversed_meaning": "Hoarding information in the cloud without ever accessing it, over-relying on external storage instead of developing internal knowledge, or sharing everything without proper access controls.",
       "tags": ["storage", "backup", "accessibility", "preservation", "sharing"]
     },
@@ -729,7 +703,6 @@
       "traditional_equivalent": "The Flowers",
       "core_meaning": "Curation, mood management, rhythm, intentional flow",
       "duck_question": "What's the right soundtrack for this?",
-      "visual_description": "A music streaming app showing a custom playlist titled 'Deep Work Flow' with 47 songs, 3 hours runtime. The current track is playing with a subtle equalizer animation. There are multiple playlists visible: 'Morning Energy,' 'Debugging Vibes,' 'Weekend Reset.' The shuffle button is off, suggesting intentional sequencing. Recently played shows a mix of genres, and there's a 'Made for You' recommendation waiting.",
       "perspective_prompts": [
         "What rhythm or energy would support what you're trying to accomplish?",
         "Are you operating to the wrong soundtrack for the situation?",
@@ -743,7 +716,7 @@
         "life": "You're living to the wrong soundtrack. What daily rhythm would energize instead of drain you?",
         "relationship": "You're both operating to different emotional music. What shared rhythm could you create together?"
       },
-      "duck_wisdom": "You're trying to code dubstep to classical music. Match your tools and environment to the task rhythm. Some bugs need lo-fi hip-hop, others need silence.",
+      "duck_wisdom": "You're working to the wrong rhythm for the task at hand. Match your environment and energy to what you're actually trying to accomplish.",
       "reversed_meaning": "Using music to avoid dealing with problems, being unable to work without perfect conditions, or letting mood management become more important than actual progress.",
       "tags": ["rhythm", "mood", "flow", "curation", "atmosphere"]
     },
@@ -754,7 +727,6 @@
       "traditional_equivalent": "The Stork",
       "core_meaning": "Completion, fulfillment, bringing ideas into reality",
       "duck_question": "What's ready to ship?",
-      "visual_description": "A package sitting on a doorstep with a delivery confirmation notification on a phone screen. The package is professionally wrapped with shipping labels, tracking codes, and 'FRAGILE' stickers. There's a doorbell camera showing the delivery moment, and the delivery truck is visible pulling away in the background. The package looks substantial - something that took effort to create and send.",
       "perspective_prompts": [
         "What have you been perfecting that's actually ready to deliver?",
         "What needs to go from internal development to external shipping?",
@@ -768,7 +740,7 @@
         "life": "You're planning changes instead of implementing them. What life improvement is ready for delivery?",
         "relationship": "You've been preparing what to say for too long. What conversation or gesture is ready to be delivered?"
       },
-      "duck_wisdom": "You're gold-plating features instead of shipping the MVP. Users can't benefit from code that never leaves staging. Ship what works, iterate based on feedback.",
+      "duck_wisdom": "You're perfecting things that are already good enough to ship. Stop gold-plating and start delivering - users can't benefit from work that never leaves your desk.",
       "reversed_meaning": "Shipping prematurely without proper preparation, being addicted to the delivery moment instead of building sustainable products, or avoiding responsibility for what you've shipped.",
       "tags": ["completion", "shipping", "delivery", "fulfillment", "execution"]
     },
@@ -779,7 +751,6 @@
       "traditional_equivalent": "The Cross",
       "core_meaning": "Precision, focus, practice, deliberate aim",
       "duck_question": "What deserves your best shot?",
-      "visual_description": "A dartboard on a wall with several darts clustered around the bullseye, some hitting the target, others scattered in the outer rings. There's a scoreboard nearby tracking progress over multiple rounds. The lighting is focused on the target, with chalk marks on the floor indicating the proper throwing distance. A few darts lie on a nearby table, ready for the next round.",
       "perspective_prompts": [
         "What target are you missing because you're not aiming deliberately?",
         "What deserves your focused attention instead of scattered effort?",
@@ -793,7 +764,7 @@
         "life": "You're trying to improve everything at once. What one life area deserves your most focused attention right now?",
         "relationship": "You're addressing surface issues. What's the real target conversation you need to aim for?"
       },
-      "duck_wisdom": "You're trying to optimize every function when you should profile first and fix the bottleneck. Find the critical path, aim precisely, measure your hits.",
+      "duck_wisdom": "You're spraying effort everywhere when you should aim precisely at what matters most. Find the critical target and focus your energy there.",
       "reversed_meaning": "Becoming so focused on precision that you never take the shot, aiming at targets that don't matter, or practicing forever without applying skills to real situations.",
       "tags": ["precision", "focus", "targeting", "practice", "aim"]
     },
@@ -804,7 +775,6 @@
       "traditional_equivalent": "The Dog",
       "core_meaning": "Loyalty, routine, health habits, faithful progress",
       "duck_question": "What habit needs your daily commitment?",
-      "visual_description": "A fitness tracker on someone's wrist showing daily stats - steps taken, heart rate zones, sleep quality from last night. The display shows you're 847 steps away from your daily goal, with a gentle buzz reminder. There are achievement badges visible: '7-day streak,' 'Personal best,' and a weekly challenge progress bar at 73%. The band shows wear marks from consistent use, and there's a charging cable nearby.",
       "perspective_prompts": [
         "What daily practice would compound into major life changes if you stuck with it?",
         "What are you tracking obsessively while ignoring the metric that actually matters?",
@@ -818,7 +788,7 @@
         "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
         "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
       },
-      "duck_wisdom": "You're trying to ship features without continuous integration. Set up daily builds - small, consistent commits beat heroic coding marathons every time.",
+      "duck_wisdom": "You're hoping for change instead of building systems that create change. Set up daily practices that compound - small consistent actions beat heroic one-time efforts.",
       "reversed_meaning": "Becoming obsessed with streaks instead of actual progress, tracking vanity metrics that don't drive results, or abandoning good habits because of perfectionist all-or-nothing thinking.",
       "tags": ["habits", "consistency", "tracking", "routine", "progress"]
     },
@@ -829,7 +799,6 @@
       "traditional_equivalent": "The Whip",
       "core_meaning": "Control, efficiency, repeated patterns, workflow optimization",
       "duck_question": "What keeps getting copied and pasted?",
-      "visual_description": "A clipboard manager app showing a history of copied items - code snippets, email signatures, frequently used responses, and random text fragments. Some items are pinned as favorites, others have timestamps showing they were copied weeks ago but never used. There's a search bar to find specific clips, and keyboard shortcuts are visible. The current clipboard shows 'Thanks for following up on this...'",
       "perspective_prompts": [
         "What solution do you keep recreating instead of systematizing once?",
         "What pattern keeps repeating that you should automate or template?",
@@ -843,7 +812,7 @@
         "life": "You're solving the same life problems repeatedly. What life solution template could you copy and paste?",
         "relationship": "You're having the same conversations without learning. What communication pattern worked before and could be reused?"
       },
-      "duck_wisdom": "You're writing the same functions over and over instead of building a utility library. DRY principle applies to life too - Don't Repeat Yourself.",
+      "duck_wisdom": "You're recreating solutions you've already built instead of systematizing what works. Build templates, save patterns, stop solving the same problem twice.",
       "reversed_meaning": "Copy-pasting solutions without understanding them, becoming too rigid with templates that don't fit new situations, or hoarding patterns without ever applying them.",
       "tags": ["patterns", "efficiency", "templates", "automation", "reuse"]
     },
@@ -854,7 +823,6 @@
       "traditional_equivalent": "The Bear",
       "core_meaning": "Instinct, natural ability, choosing the right tone",
       "duck_question": "What's the right tone for this situation?",
-      "visual_description": "A digital color picker interface showing a gradient wheel with a cursor hovering over different hues. The current selection shows RGB values, hex codes, and color harmony suggestions. There's a palette history showing recently used colors, and some saved color schemes labeled 'Brand Colors,' 'Calm Palette,' 'High Energy.' A dropper tool is active, ready to sample colors from anywhere on screen.",
       "perspective_prompts": [
         "What tone are you using that's completely wrong for the situation?",
         "What would change if you adjusted the emotional temperature slightly?",
@@ -868,7 +836,7 @@
         "life": "You're living in someone else's color palette. What authentic lifestyle tone would energize you?",
         "relationship": "The conversational tone is off. What communication style would create better harmony between you?"
       },
-      "duck_wisdom": "You're using dark mode syntax highlighting for a light mode problem. Match your approach to the context - some bugs need gentle debugging, others need aggressive refactoring.",
+      "duck_wisdom": "You're using the wrong tone for the situation at hand. Adjust your approach to match the context - some problems need gentle touches, others need bold moves.",
       "reversed_meaning": "Constantly changing tone to please others, being tone-deaf to situational needs, or overthinking tone instead of focusing on substance.",
       "tags": ["tone", "style", "authenticity", "harmony", "adjustment"]
     },
@@ -879,7 +847,6 @@
       "traditional_equivalent": "The Birds",
       "core_meaning": "Balance, measurement, trade-offs, fair exchange",
       "duck_question": "What needs to be weighed honestly?",
-      "visual_description": "A digital scale interface showing two sides with different weights - on one side, immediate gratification items, on the other, long-term benefits. The scale is slightly tilted, indicating imbalance. There's a 'tare' button to reset to zero, and measurement units can be switched between different metrics. A 'calibrate' option blinks, suggesting the scale might need adjustment for accurate readings.",
       "perspective_prompts": [
         "What trade-off are you avoiding because you want everything without cost?",
         "What are you weighing that actually can't be compared directly?",
@@ -893,7 +860,7 @@
         "life": "You're trying to optimize every life area simultaneously. What life balance would you accept to stop the constant juggling?",
         "relationship": "You're demanding perfect balance instead of fair exchange. What relationship trade-offs are actually reasonable?"
       },
-      "duck_wisdom": "You're trying to optimize for performance, readability, and maintainability when you need to pick your priority. Every architectural decision has trade-offs - choose consciously.",
+      "duck_wisdom": "You're trying to optimize everything when you need to pick your priorities. Every choice has trade-offs - acknowledge them and choose consciously rather than pretending you can have it all.",
       "reversed_meaning": "Obsessing over perfect balance instead of making decisions, refusing to acknowledge trade-offs exist, or constantly rebalancing instead of committing to a chosen equilibrium.",
       "tags": ["balance", "trade-offs", "measurement", "priorities", "exchange"]
     },
@@ -904,7 +871,6 @@
       "traditional_equivalent": "The Path",
       "core_meaning": "Filtering, boundaries, signal vs noise, protection",
       "duck_question": "What's getting through that shouldn't?",
-      "visual_description": "An email spam filter interface showing blocked messages in quarantine - obvious scams, promotional emails, and borderline cases awaiting review. The filter shows 47 blocked messages today, with options to whitelist, blacklist, or review. There's a slider for filter sensitivity and recent activity showing what got caught versus what slipped through. A notification shows one important email was incorrectly filtered.",
       "perspective_prompts": [
         "What noise are you letting through that's drowning out important signals?",
         "What boundaries do you need to set to protect your mental inbox?",
@@ -918,7 +884,7 @@
         "life": "You're saying yes to too much life spam. What activities, commitments, or people need to be filtered out?",
         "relationship": "Drama and negativity keep getting through. What communication boundaries would filter healthier interactions?"
       },
-      "duck_wisdom": "You're processing every input like it's legitimate when most of it is just noise. Set up better filters - not every notification deserves your attention.",
+      "duck_wisdom": "You're letting too much noise through when you should be protecting your mental bandwidth. Set better boundaries - not every input deserves your attention.",
       "reversed_meaning": "Over-filtering and missing important signals, being too rigid with boundaries, or spending more time managing filters than doing actual work.",
       "tags": ["filtering", "boundaries", "protection", "focus", "signal"]
     },
@@ -929,7 +895,6 @@
       "traditional_equivalent": "The Sun",
       "core_meaning": "Growth, renewal, automatic improvement, evolution",
       "duck_question": "What's ready for an upgrade?",
-      "visual_description": "A software update notification showing 'Update Available - Version 2.3.1' with improvement notes: bug fixes, performance enhancements, new features. There's an option to 'Install Now' or 'Remind Me Later.' The current version shows as 1.8.2 - clearly outdated. A progress bar waits at 0%, and there's a note about backing up data before proceeding. The changelog shows months of accumulated improvements.",
       "perspective_prompts": [
         "What version of yourself are you running that's clearly outdated?",
         "What automatic improvements are available that you keep postponing?",
@@ -943,7 +908,7 @@
         "life": "You're running life patterns that served you years ago but need updating. What lifestyle upgrade would optimize your current reality?",
         "relationship": "Your communication style or relationship patterns need updating. What relational upgrade would improve connection?"
       },
-      "duck_wisdom": "You're running legacy code with known vulnerabilities instead of upgrading to the stable release. The new version has patches for problems you've been manually working around.",
+      "duck_wisdom": "You're running outdated systems when better versions are available. Stop manually working around problems that have already been solved - upgrade to what actually works.",
       "reversed_meaning": "Constantly updating without stability, being addicted to new versions instead of mastering current tools, or upgrading for novelty rather than actual improvement.",
       "tags": ["upgrade", "improvement", "evolution", "renewal", "optimization"]
     },
@@ -954,7 +919,6 @@
       "traditional_equivalent": "The World",
       "core_meaning": "Completion, wisdom, debugging mastery, full circle",
       "duck_question": "What do you already know?",
-      "visual_description": "A classic yellow rubber duck sitting on a desk next to a computer, wearing a tiny wizard hat. The duck has seen some use - slightly faded, with a small crack in the rubber, but still floating proudly. Around it are the tools of debugging: a notebook with half-finished diagrams, coffee rings on the desk, and a monitor displaying clean, working code. The duck seems to be smiling knowingly, as if it's heard this problem before.",
       "perspective_prompts": [
         "What solution are you overlooking that you've actually used before?",
         "What do you know deep down that you're afraid to trust?",
@@ -968,7 +932,7 @@
         "life": "You know what makes you happy, healthy, and fulfilled. Stop complicating it and do those things.",
         "relationship": "You know what good relationships require. Stop overthinking and apply what you already understand about connection."
       },
-      "duck_wisdom": "Sometimes the best debugging tool is just explaining the problem out loud. You usually figure it out halfway through describing it. That's not magic - that's just thinking clearly.",
+      "duck_wisdom": "You already know what you need to do - you just haven't trusted yourself enough to act on it. Stop seeking external validation for internal wisdom you already possess.",
       "reversed_meaning": "Overthinking instead of trusting proven knowledge, seeking external validation for what you already know, or making simple things complex to avoid taking action.",
       "tags": ["wisdom", "completion", "trust", "clarity", "mastery"]
     }

@@ -10,8 +10,17 @@ const CACHE_KEY = 'tarot_cards_cache';
 const CACHE_VERSION_KEY = 'tarot_cards_version';
 const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
+// Disable card cache in development for easier debugging
+const IS_DEV =
+  import.meta.env.MODE === 'development' ||
+  process.env.NODE_ENV === 'development';
+
 export const cardCache = {
   get: (): CacheData | null => {
+    if (IS_DEV) {
+      // No caching in dev
+      return null;
+    }
     try {
       const cached = localStorage.getItem(CACHE_KEY);
       const version = localStorage.getItem(CACHE_VERSION_KEY);
@@ -37,6 +46,10 @@ export const cardCache = {
   },
 
   set: (cards: Card[], version: string): void => {
+    if (IS_DEV) {
+      // No caching in dev
+      return;
+    }
     try {
       const data: CacheData = {
         cards,
@@ -52,6 +65,10 @@ export const cardCache = {
   },
 
   clear: (): void => {
+    if (IS_DEV) {
+      // No caching in dev
+      return;
+    }
     try {
       localStorage.removeItem(CACHE_KEY);
       localStorage.removeItem(CACHE_VERSION_KEY);
