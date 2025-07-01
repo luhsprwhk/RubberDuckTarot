@@ -52,24 +52,29 @@ const BlockDetails: React.FC = () => {
       <Link to="/blocks" className="text-breakthrough-400 hover:underline">
         &larr; Back to Blocks
       </Link>
-      <h1 className="text-2xl font-bold mt-4 mb-2 flex items-center gap-2">
+      <h1 className="text-2xl font-bold mt-4 mb-2 flex items-center gap-2 text-primary">
         {blockType
           ? `${blockType.emoji} ${blockType.name}`
           : block.block_type_id}
       </h1>
-      <div className="mb-4 text-lg font-semibold">{block.name}</div>
-      <div className="mb-2">
-        <span className="font-semibold">Status:</span> {block.status}
+      <div className="mb-4 text-lg font-semibold text-primary">
+        {block.name}
       </div>
       <div className="mb-2">
-        <span className="font-semibold">Progress:</span> {block.progress}%
+        <span className="font-semibold text-secondary">Status:</span>{' '}
+        <span className="text-primary">{block.status}</span>
+      </div>
+      <div className="mb-2">
+        <span className="font-semibold text-secondary">Progress:</span>{' '}
+        <span className="text-primary">{block.progress}%</span>
       </div>
       {block.notes && (
         <div className="mb-2">
-          <span className="font-semibold">Notes:</span> {block.notes}
+          <span className="font-semibold text-secondary">Notes:</span>{' '}
+          <span className="text-primary">{block.notes}</span>
         </div>
       )}
-      <div className="text-xs text-gray-400 mt-4">
+      <div className="text-xs text-gray-400 mt-4 text-secondary">
         Created: {new Date(block.created_at).toLocaleString()}
         <br />
         Updated: {new Date(block.updated_at).toLocaleString()}

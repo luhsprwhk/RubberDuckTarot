@@ -29,6 +29,13 @@
       "when": 1751390946313,
       "tag": "0003_fine_zombie",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1751409880913,
+      "tag": "0004_fine_roulette",
+      "breakpoints": true
     }
   ]
 }

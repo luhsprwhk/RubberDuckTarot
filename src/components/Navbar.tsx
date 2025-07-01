@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import useAuth from '../lib/hooks/useAuth';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
 import clsx from 'clsx';
 
@@ -13,6 +13,7 @@ const Navbar = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const { profile } = useUserProfile();
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -36,6 +37,7 @@ const Navbar = () => {
   const handleSignOut = async () => {
     await signOut();
     setShowUserMenu(false);
+    navigate('/');
   };
 
   return (
@@ -75,14 +77,7 @@ const Navbar = () => {
                   Pricing
                 </Link>
               )}
-              {user && (
-                <Link
-                  to="/insights"
-                  className="text-secondary hover:text-accent transition-colors duration-200"
-                >
-                  Insights
-                </Link>
-              )}
+
               {user && (
                 <Link
                   to="/blocks"
@@ -91,6 +86,15 @@ const Navbar = () => {
                   Blocks
                 </Link>
               )}
+              {user && (
+                <Link
+                  to="/insights"
+                  className="text-secondary hover:text-accent transition-colors duration-200"
+                >
+                  Insights
+                </Link>
+              )}
+
               {user && (
                 <Link
                   to="/new-reading"

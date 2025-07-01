@@ -135,17 +135,6 @@ const Reading: React.FC = () => {
           });
           setPersonalizedReading(reading);
 
-          const insight = await createInsight({
-            user_id: user?.id ?? null,
-            spread_type: spreadType,
-            block_type_id: selectedBlock?.id ?? null,
-            user_context: userContext ?? null,
-            cards_drawn: drawnCards.map((dc) => dc.id),
-            resonated: false,
-            took_action: false,
-            reading,
-          });
-
           const userBlockPayload = {
             user_id: user?.id ?? null,
             block_type_id: selectedBlock?.id ?? null,
@@ -155,9 +144,19 @@ const Reading: React.FC = () => {
             notes: null,
           };
 
-          console.log('Creating user block with:', userBlockPayload);
+          const userBlock = await createUserBlock(userBlockPayload);
 
-          await createUserBlock(userBlockPayload);
+          const insight = await createInsight({
+            user_id: user?.id ?? null,
+            spread_type: spreadType,
+            block_type_id: selectedBlock?.id ?? null,
+            user_context: userContext ?? null,
+            cards_drawn: drawnCards.map((dc) => dc.id),
+            resonated: false,
+            took_action: false,
+            reading,
+            user_block_id: userBlock.id,
+          });
 
           navigate(`/insights/${insight.id}`, {
             state: {

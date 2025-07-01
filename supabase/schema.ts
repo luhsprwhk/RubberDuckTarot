@@ -42,6 +42,7 @@ export const insights = pgTable('insights', {
   user_id: text('user_id'),
   spread_type: text('spread_type').notNull(), // 'quick-draw' | 'full-pond'
   block_type_id: text('block_type_id').notNull(),
+  user_block_id: integer('user_block_id'),
   user_context: text('user_context'),
   cards_drawn: jsonb('cards_drawn').$type<number[]>().notNull(),
   reading: jsonb('reading').$type<PersonalizedReading>().notNull(),
