@@ -153,7 +153,7 @@ const CardDetail = () => {
           to="/new-reading"
           className="block sm:inline-block bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-colors"
         >
-          Get Reading with This Card
+          Get an Insight with This Card
         </Link>
         <Link
           to="/cards"

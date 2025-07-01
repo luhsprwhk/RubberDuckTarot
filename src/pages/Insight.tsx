@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getInsightById } from '@/src/lib/insights/insight-queries';
 import { getCardById } from '@/src/lib/cards/card-queries';
 import { getBlockTypeById } from '@/src/lib/blocktypes/blocktype-queries';
-import type { Insight, Card, BlockType } from '@/src/interfaces';
-import QuickDuckSpread from '../components/QuickDuckSpread';
-import FullPondSpread from '../components/FullPondSpread';
 import Loading from '../components/Loading';
+import type { Insight, Card, BlockType } from '@/src/interfaces';
 import ErrorState from '../components/ErrorState';
+import InsightDisplay from '../components/InsightDisplay';
 
 const InsightPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const [insight, setInsight] = useState<Insight | null>(null);
   const [cards, setCards] = useState<Card[]>([]);
   const [blockType, setBlockType] = useState<BlockType | null>(null);
@@ -57,10 +55,6 @@ const InsightPage: React.FC = () => {
     fetchInsightData();
   }, [id]);
 
-  const handleReset = () => {
-    navigate('/');
-  };
-
   if (loading) {
     return <Loading text="Loading insight..." />;
   }
@@ -77,32 +71,15 @@ const InsightPage: React.FC = () => {
     );
   }
 
-  if (insight.spread_type === 'quick-draw' && cards.length === 1) {
-    return (
-      <QuickDuckSpread
-        drawnCard={cards[0]}
-        selectedBlock={blockType}
-        onReset={handleReset}
-        personalizedReading={insight.reading}
-        loadingReading={false}
-      />
-    );
-  }
-
-  if (insight.spread_type === 'full-pond' && cards.length === 3) {
-    return (
-      <FullPondSpread
-        drawnCards={cards}
-        selectedBlock={blockType}
-        onReset={handleReset}
-        personalizedReading={insight.reading}
-        loadingReading={false}
-      />
-    );
-  }
-
   return (
-    <div className="p-6 text-center text-gray-400">Invalid insight data.</div>
+    <InsightDisplay
+      selectedBlock={blockType}
+      personalizedReading={insight.reading}
+      loadingReading={false}
+      loadingMessage="Rob is analyzing your situation..."
+      drawnCards={cards}
+      spreadType={insight.spread_type}
+    />
   );
 };
 

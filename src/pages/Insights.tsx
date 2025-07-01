@@ -116,6 +116,22 @@ const Insights: React.FC = () => {
                       "{insight.user_context}"
                     </p>
                   )}
+
+                  {insight.reading.keyInsights && (
+                    <div className="mt-2">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-2xl" role="img" aria-label="key">
+                          🔑
+                        </span>
+                        <span className="text-xs text-primary uppercase tracking-wide font-bold">
+                          Key Insights
+                        </span>
+                      </div>
+                      <p className="text-secondary text-sm italic">
+                        {insight.reading.keyInsights.join(', ')}
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -147,7 +163,7 @@ const Insights: React.FC = () => {
           to="/"
           className="px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors"
         >
-          Get Another Reading
+          Get Another Insight
         </Link>
       </div>
     </div>
