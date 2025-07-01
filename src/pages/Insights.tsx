@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import useCards from '../lib/cards/useCards';
@@ -25,30 +25,26 @@ const Insights: React.FC = () => {
     error: blockTypesError,
     refreshBlockTypes,
   } = useBlockTypes();
-  const loading = insightsLoading || blockTypesLoading;
+
   const error = insightsError || blockTypesError;
+
+  const [initialLoading, setInitialLoading] = React.useState(true);
 
   const navigate = useNavigate();
 
-  useEffect(() => {
+  React.useEffect(() => {
+    if (!insightsLoading && !blockTypesLoading) {
+      setInitialLoading(false);
+    }
+  }, [insightsLoading, blockTypesLoading]);
+
+  React.useEffect(() => {
     if (user?.id) {
-      if (!insights.length && !insightsLoading) {
-        fetchUserInsights(user.id);
-      }
-      if (!blockTypes.length && !blockTypesLoading) {
-        refreshBlockTypes();
-      }
+      fetchUserInsights(user.id);
+      refreshBlockTypes();
     }
     // Optionally, clear context if user logs out
-  }, [
-    user?.id,
-    fetchUserInsights,
-    refreshBlockTypes,
-    insights.length,
-    insightsLoading,
-    blockTypes.length,
-    blockTypesLoading,
-  ]);
+  }, [user?.id, fetchUserInsights, refreshBlockTypes]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
@@ -66,7 +62,7 @@ const Insights: React.FC = () => {
     });
   };
 
-  if (loading) {
+  if (initialLoading) {
     return <Loading text="Loading your insights..." />;
   }
 
@@ -74,7 +70,7 @@ const Insights: React.FC = () => {
     return <ErrorState error={error} />;
   }
 
-  if (insights.length === 0 && !loading && !error) {
+  if (insights.length === 0) {
     return <EmptyInsightsState />;
   }
 
@@ -164,16 +160,15 @@ const EmptyInsightsState = () => {
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
         {/* Rob's Empty State */}
 
-        <div className="bg-void-800 rounded-xl shadow-lg p-8 max-w-2xl border-l-4 border-liminal-border">
+        <div className="bg-void-800 rounded-xl shadow-lg p-8 border-l-4 border-liminal-border">
           <h2 className="text-2xl font-bold text-primary mb-4">
             Your Insight Archive is Empty
           </h2>
 
-          <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-yellow-400">
+          <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-breakthrough-400">
             <div className="flex items-start space-x-3">
-              <div className="flex items-center gap-1">
-                <img src={robEmoji} alt="Rob" className="w-8 h-8" />
-                <span className="text-2xl">🎩</span>
+              <div className="flex items-center justify-center p-2 md:p-4 gap-4 min-w-[72px]">
+                <img src={robEmoji} alt="Rob" className="w-20 h-16" />
               </div>
               <div className="text-left">
                 <p className="text-primary mb-3">

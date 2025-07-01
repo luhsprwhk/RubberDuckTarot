@@ -27,7 +27,7 @@ const Pricing = () => {
               className={cn(
                 'w-96 h-96 mx-auto',
                 'bg-gradient-to-br from-breakthrough-400 to-breakthrough-500',
-                'rounded-full flex items-center justify-center mb-4 animate-flicker shadow-glow'
+                'rounded-full flex items-center justify-center mb-4 animate-flicker'
               )}
             >
               <img
@@ -36,15 +36,10 @@ const Pricing = () => {
                 className="w-full h-full"
               />
             </div>
-            <div
-              className={cn('text-xs text-accent font-medium tracking-wider')}
-            >
-              AFTERLIFE CONSULTING RATES
-            </div>
           </div>
 
           <h1
-            className={cn('text-4xl font-bold text-primary mb-4 leading-tight')}
+            className={cn('text-5xl font-bold text-primary mb-4 leading-tight')}
           >
             Choose Your Debugging Plan
           </h1>
@@ -71,7 +66,7 @@ const Pricing = () => {
                   'flex items-center justify-center flex-shrink-0 animate-pulse-glow'
                 )}
               >
-                <img src={robEmoji} alt="Rob" className="w-6 h-6" />
+                <img src={robEmoji} alt="Rob" className="w-16 h-16" />
               </div>
               <div>
                 <h3 className={cn('text-lg font-semibold text-primary mb-2')}>
@@ -344,8 +339,8 @@ const Pricing = () => {
                   Why I Actually Recommend Premium
                 </h2>
                 <p className={cn('text-secondary mb-4')}>
-                  Look, I'm dead - I don't get commission. But after debugging
-                  thousands of human problems, I've noticed something:{' '}
+                  After debugging thousands of human problems, I've noticed
+                  something:{' '}
                   <span className={cn('text-breakthrough-400')}>
                     people get stuck in the same patterns
                   </span>
@@ -376,15 +371,15 @@ const Pricing = () => {
                       'w-24 h-24 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 animate-flicker shadow-glow'
                     )}
                   >
-                    <img src={robEmoji} alt="Rob" className="w-10 h-10" />
+                    <img src={robEmoji} alt="Rob" className="w-20 h-20" />
                   </div>
                   <div className={cn('text-accent text-sm font-medium mb-2')}>
                     ETHEREAL GUARANTEE
                   </div>
                   <p className={cn('text-secondary text-sm')}>
                     If Premium doesn't help you debug faster, cancel anytime.
-                    I'm stuck in this duck until I can repay my karmic debt, so
-                    I'm motivated to actually help you.
+                    I'm stuck in this duck until I repay my karmic debt, so I'm
+                    motivated to actually help you.
                   </p>
                 </div>
               </div>

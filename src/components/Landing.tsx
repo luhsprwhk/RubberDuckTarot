@@ -11,7 +11,7 @@ const Landing = () => {
   return (
     <div className="min-h-screen bg-void-gradient">
       {/* Hero Section */}
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-16 pb-8">
         <div className="text-center max-w-4xl mx-auto">
           {/* Logo/Mascot Area */}
           <div className="mb-8">
@@ -78,7 +78,7 @@ const Landing = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-primary mb-4">
-              Debugging Services
+              WHAT'S GOT YOU STUCK?
             </h2>
             <p className="text-secondary max-w-2xl mx-auto">
               Specialized consultation for the living, drawing from hard-won
@@ -88,48 +88,49 @@ const Landing = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
-              <Target className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
+              <Zap className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Life Direction
+                Creative Block
               </h3>
               <p className="text-secondary text-sm">
-                Navigate major life transitions and find clarity in chaos. Death
-                gives excellent perspective on what actually matters.
+                Break through creative paralysis and ship projects that matter.
+                Stop researching inspiration and start making things.
               </p>
             </div>
 
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
-              <Zap className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
+              <Target className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Creative Unblocking
+                Life Stagnation
               </h3>
               <p className="text-secondary text-sm">
-                Overcome creative blocks using proven debugging methodologies.
-                Death gives excellent perspective on what actually matters.
+                Escape routine ruts and stagnant patterns. Build momentum toward
+                what actually energizes you instead of running the same life
+                loops.
               </p>
             </div>
 
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
               <User className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Career Consultation
+                Career Clarity
               </h3>
               <p className="text-secondary text-sm">
-                Navigate professional challenges with insights from someone
-                who's seen every tech trend die (and then died himself).
+                Navigate workplace confusion with strategic moves. Transform
+                professional drift into intentional progress toward work that
+                matters.
               </p>
             </div>
 
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
               <Shield className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Risk Calibration
+                Communication Breakdowns
               </h3>
               <p className="text-secondary text-sm">
-                Learn to take smart creative and career risks instead of playing
-                it safe until you die of boredom. Rob helps you distinguish
-                between reckless gambling and calculated bets that could change
-                your life.
+                Resolve recurring conflicts and improve difficult conversations.
+                Turn communication barriers into genuine connections that
+                actually work.
               </p>
             </div>
           </div>

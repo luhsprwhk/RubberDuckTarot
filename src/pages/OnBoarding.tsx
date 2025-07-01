@@ -80,19 +80,19 @@ const studentProfessions = [
 ];
 
 const professionsByCategory: { [key: string]: string[] } = {
-  'Tech (Dev/Design/PM)': techProfessions,
-  'Creative (Artist/Writer/Creator)': creativeProfessions,
-  'Healthcare/Education': healthcareProfessions,
-  'Business/Finance': businessProfessions,
+  Tech: techProfessions,
+  Creative: creativeProfessions,
+  Healthcare: healthcareProfessions,
+  Business: businessProfessions,
   Student: studentProfessions,
   Other: [],
 };
 
 const professionCategories = [
-  'Tech (Dev/Design/PM)',
-  'Creative (Artist/Writer/Creator)',
-  'Healthcare/Education',
-  'Business/Sales/Finance',
+  'Tech',
+  'Creative',
+  'Healthcare',
+  'Business',
   'Trades/Service Work',
   'Student/Career Starter',
   'Other',
