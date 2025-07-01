@@ -3,6 +3,8 @@ import type { Card, BlockType } from '@/src/interfaces';
 import type { PersonalizedReading } from '@/src/lib/claude-ai';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
+import SentimentTracking from './SentimentTracking';
+import { updateInsightSentiment } from '@/src/lib/insights/insight-queries';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -11,6 +13,9 @@ interface InsightDisplayProps {
   drawnCards: Card[];
   spreadType?: string;
   loadingMessage?: string;
+  insightId?: number;
+  initialResonated?: boolean;
+  initialTookAction?: boolean;
 }
 
 const InsightDisplay: React.FC<InsightDisplayProps> = ({
@@ -19,7 +24,21 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
   loadingReading,
   drawnCards,
   loadingMessage = 'Rob is analyzing your situation...',
+  insightId,
+  initialResonated,
+  initialTookAction,
 }) => {
+  const handleSentimentChange = async (
+    insightId: number,
+    resonated?: boolean,
+    tookAction?: boolean
+  ) => {
+    try {
+      await updateInsightSentiment(insightId, resonated, tookAction);
+    } catch (error) {
+      console.error('Failed to update insight sentiment:', error);
+    }
+  };
   if (loadingReading) {
     return (
       <div className="max-w-2xl mx-auto p-6">
@@ -136,6 +155,16 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
             "{personalizedReading.robQuip}"
           </p>
         </div>
+
+        {/* Sentiment Tracking */}
+        {insightId && (
+          <SentimentTracking
+            insightId={insightId}
+            initialResonated={initialResonated}
+            initialTookAction={initialTookAction}
+            onSentimentChange={handleSentimentChange}
+          />
+        )}
       </div>
     );
   }

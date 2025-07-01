@@ -245,3 +245,9 @@ Transformation hover states:
 .group-hover:text-breakthrough-300 .transition-colors
 
 */
+
+.acw-overrides {
+  border: 1px solid #ccc;
+  background-color: var(--color-liminal-overlay);
+  color: var(--color-primary) !important;
+}

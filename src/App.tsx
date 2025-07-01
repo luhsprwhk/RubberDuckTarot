@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import { AlertContainer } from './components/AlertContainer';
 import Upgrade from './pages/Upgrade';
 import Insights from './pages/Insights';
+import Blocks from './pages/Blocks';
 import ProtectedRoute from './components/ProtectedRoute';
 import Pricing from './pages/Pricing';
 import Preferences from './pages/Preferences';
@@ -18,6 +19,7 @@ import Login from './pages/Login';
 import NewReading from './pages/NewReading';
 import Cards from './pages/Cards';
 import CardDetail from './pages/CardDetail';
+import BlockDetails from './pages/BlockDetails';
 import BlockTypesProvider from './lib/blocktypes/BlockTypesProvider';
 
 function App() {
@@ -36,6 +38,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Insights />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blocks"
+              element={
+                <ProtectedRoute>
+                  <Blocks />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/blocks/:blockId"
+              element={
+                <ProtectedRoute>
+                  <BlockDetails />
                 </ProtectedRoute>
               }
             />

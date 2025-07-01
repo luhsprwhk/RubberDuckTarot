@@ -13,4 +13,11 @@ export interface DatabaseAdapter {
   createReading(reading: Omit<Reading, 'id' | 'created_at'>): Promise<Reading>;
   getUserReadings(userId?: string): Promise<Reading[]>;
   getReadingById(id: number): Promise<Reading | null>;
+
+  // Sentiment tracking
+  updateInsightSentiment(
+    insightId: number,
+    resonated?: boolean,
+    tookAction?: boolean
+  ): Promise<void>;
 }

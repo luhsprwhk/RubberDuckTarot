@@ -9,8 +9,10 @@ import type { BlockType } from '../interfaces';
 import { createInsight } from '../lib/insights/insight-queries';
 import {
   generatePersonalizedReading,
+  generateUserBlockName,
   type PersonalizedReading,
 } from '../lib/claude-ai';
+import { createUserBlock } from '../lib/blocks/block-queries';
 import { type UserProfile } from '../interfaces';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import duckCodingGIF from '../assets/wiz-duck-coding.gif';
@@ -139,8 +141,23 @@ const Reading: React.FC = () => {
             block_type_id: selectedBlock?.id ?? null,
             user_context: userContext ?? null,
             cards_drawn: drawnCards.map((dc) => dc.id),
+            resonated: false,
+            took_action: false,
             reading,
           });
+
+          const userBlockPayload = {
+            user_id: user?.id ?? null,
+            block_type_id: selectedBlock?.id ?? null,
+            name: await generateUserBlockName(selectedBlock?.name, userContext),
+            status: 'in-progress',
+            progress: 0,
+            notes: null,
+          };
+
+          console.log('Creating user block with:', userBlockPayload);
+
+          await createUserBlock(userBlockPayload);
 
           navigate(`/insights/${insight.id}`, {
             state: {
@@ -149,6 +166,9 @@ const Reading: React.FC = () => {
           });
         } catch (error) {
           console.error('Failed to generate personalized reading:', error);
+          if (error instanceof Error && error.message) {
+            console.error('Error message:', error.message);
+          }
           setReadingError(true);
         } finally {
           setLoadingReading(false);

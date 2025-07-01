@@ -25,6 +25,50 @@ export interface PersonalizedReading {
   reflectionPrompts?: string[]; // For longer spreads
 }
 
+export const generateUserBlockName = async (
+  blockTypeName?: string,
+  userContext?: string
+): Promise<string> => {
+  try {
+    const prompt = `You are helping create a personalized name for a user's block tracker entry.
+
+Block Type: ${blockTypeName || 'Personal Challenge'}
+User Context: ${userContext || 'Working on personal growth'}
+
+Generate a concise, personalized title (2-6 words) that captures the essence of this specific block. Make it actionable and personal. Examples:
+- "Breaking Through Creative Paralysis"
+- "Overcoming Perfectionism Trap"
+- "Building Confidence Muscle"
+- "Releasing Control Anxiety"
+
+Just return the title, nothing else.`;
+
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 50,
+      temperature: 0.8,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+    });
+
+    const response = message.content[0];
+    if (response.type !== 'text') {
+      throw new Error('Unexpected response type from Claude');
+    }
+
+    return response.text.trim().replace(/^"|"$/g, ''); // Remove quotes if present
+  } catch (error) {
+    console.error('Failed to generate block name:', error);
+    // Fallback to a generic name
+    return `${blockTypeName || 'Personal'} Block`;
+  }
+};
+
 export const generatePersonalizedReading = async (
   request: ReadingRequest
 ): Promise<PersonalizedReading> => {
@@ -111,9 +155,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       * Integrate the client's profile (profession, debugging style, superpower, kryptonite, spirit animal)
       directly into your interpretation of each card. Let these traits influence how you explain the card
       meanings and advice, tailoring insights and action steps to their unique strengths,
-      challenges, and mindset.
-      
-      * Use ${metaphorStyle.style}—keep it practical, not mystical.
+      challenges, and mindset. Use ${metaphorStyle.style}—keep it practical, not mystical.
     </profile_integration>
 
     <response_format>
@@ -122,7 +164,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       "interpretation": "Main reading combining the cards for their specific situation",
       "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 3-4 key insights"'}],
       "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 2-3 specific, actionable steps"'}],
-      "robQuip": "Rob's signature sarcastic but encouraging closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
+      "robQuip": "Rob's signature sarcastic, but encouraging and highly empathetic closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
     }
     ${spreadType === 'quick-draw' ? '\nIMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action step in the arrays.' : ''}
     </response_format>

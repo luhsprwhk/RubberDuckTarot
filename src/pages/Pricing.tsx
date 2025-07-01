@@ -354,9 +354,9 @@ const Pricing = () => {
                   same relationship/career/creative block every two weeks.
                 </p>
                 <p className={cn('text-secondary')}>
-                  Plus, it's $4.99. That's less than a fancy coffee. And unlike
-                  coffee, this actually fixes your problems instead of just
-                  caffeinating your way through them.
+                  Plus, it's just $5 bucks. That's less than a fancy coffee. And
+                  unlike coffee, this actually fixes your problems instead of
+                  just caffeinating your way through them.
                 </p>
               </div>
 

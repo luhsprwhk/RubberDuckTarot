@@ -12,7 +12,6 @@ CREATE TABLE "cards" (
 	"traditional_equivalent" text NOT NULL,
 	"core_meaning" text NOT NULL,
 	"duck_question" text NOT NULL,
-	"visual_description" text NOT NULL,
 	"perspective_prompts" jsonb NOT NULL,
 	"block_applications" jsonb NOT NULL,
 	"duck_wisdom" text NOT NULL,

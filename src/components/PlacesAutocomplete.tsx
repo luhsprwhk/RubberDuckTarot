@@ -29,6 +29,7 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace JSX {
     interface IntrinsicElements {
+      // @ts-expect-error: included-primary-types is not in standard typings, but is required for Google Maps custom element
       'gmp-place-autocomplete': React.DetailedHTMLProps<
         React.HTMLAttributes<HTMLElement> & {
           placeholder?: string;
@@ -54,7 +55,8 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
       return;
     }
 
-    const handlePlaceSelect = async (event: Event) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- event from custom element is dynamic
+    const handlePlaceSelect = async (event: any) => {
       try {
         // Access the event properties
         // The event structure might be different than expected
@@ -99,6 +101,14 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
     };
 
     const currentAutocompleteRef = autocompleteRef.current;
+    if (currentAutocompleteRef) {
+      console.log(
+        'Current autocomplete ref:',
+        // @ts-expect-error: ignore because Dg is a private property
+        (currentAutocompleteRef.Dg.style =
+          'color: var(--color-liminal-overlay); color: var(--color-primary); border-color: var(--color-liminal-border)')
+      );
+    }
 
     // Use the correct event name: 'gmp-select' instead of 'gmp-placechange'
     currentAutocompleteRef.addEventListener('gmp-select', handlePlaceSelect);
@@ -111,30 +121,15 @@ const PlacesAutocomplete: React.FC<PlacesAutocompleteProps> = ({
     };
   }, [onPlaceSelect]);
 
-  useEffect(() => {
-    if (autocompleteRef.current) {
-      const shadowRoot = autocompleteRef.current.shadowRoot;
-      if (shadowRoot) {
-        const style = document.createElement('style');
-        style.textContent = `
-          #input-container .focus-ring {
-            border: none !important;
-            opacity: 0 !important;
-          }
-        `;
-        shadowRoot.appendChild(style);
-      }
-    }
-  }, []);
-
   return (
+    // @ts-expect-error: gmp-place-autocomplete is a custom Google Maps element not in standard JSX typings
     <gmp-place-autocomplete
       id="places-autocomplete-widget"
       ref={autocompleteRef}
       placeholder="Enter a city"
       value={initialValue}
       fields="name,formatted_address,types"
-      className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md "
+      className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md bg-liminal-overlay focus:outline-none focus:ring-2 focus:ring-liminal-border focus:border-liminal-border"
       place-types="locality"
       included-primary-types={['locality']}
     />

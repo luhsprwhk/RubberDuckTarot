@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import type { DatabaseAdapter } from '../database-adapter';
 import type { Card, BlockType, Reading } from '@/src/interfaces';
+import { updateInsightSentiment as updateInsightSentimentQuery } from '../insights/insight-queries';
 
 export class SupabaseAdapter implements DatabaseAdapter {
   async getAllCards(): Promise<Card[]> {
@@ -94,5 +95,13 @@ export class SupabaseAdapter implements DatabaseAdapter {
       throw error;
     }
     return data;
+  }
+
+  async updateInsightSentiment(
+    insightId: number,
+    resonated?: boolean,
+    tookAction?: boolean
+  ): Promise<void> {
+    return updateInsightSentimentQuery(insightId, resonated, tookAction);
   }
 }

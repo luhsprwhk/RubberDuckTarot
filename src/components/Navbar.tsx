@@ -85,6 +85,14 @@ const Navbar = () => {
               )}
               {user && (
                 <Link
+                  to="/blocks"
+                  className="text-secondary hover:text-accent transition-colors duration-200"
+                >
+                  Blocks
+                </Link>
+              )}
+              {user && (
+                <Link
                   to="/new-reading"
                   className="text-secondary hover:text-accent transition-colors duration-200"
                 >

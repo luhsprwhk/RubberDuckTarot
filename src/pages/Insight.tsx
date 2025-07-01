@@ -79,6 +79,9 @@ const InsightPage: React.FC = () => {
       loadingMessage="Rob is analyzing your situation..."
       drawnCards={cards}
       spreadType={insight.spread_type}
+      insightId={insight.id}
+      initialResonated={insight.resonated}
+      initialTookAction={insight.took_action}
     />
   );
 };

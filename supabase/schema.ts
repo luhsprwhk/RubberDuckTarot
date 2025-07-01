@@ -45,6 +45,8 @@ export const insights = pgTable('insights', {
   user_context: text('user_context'),
   cards_drawn: jsonb('cards_drawn').$type<number[]>().notNull(),
   reading: jsonb('reading').$type<PersonalizedReading>().notNull(),
+  resonated: boolean('resonated').notNull().default(false), // Did the insight resonate with the user?
+  took_action: boolean('took_action').notNull().default(false), // Did the user take action based on the insight?
   created_at: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),
@@ -86,8 +88,25 @@ export const user_profiles = pgTable('user_profiles', {
     .defaultNow(),
 });
 
+export const userBlocks = pgTable('user_blocks', {
+  id: serial('id').primaryKey(),
+  user_id: text('user_id'),
+  block_type_id: text('block_type_id').notNull(),
+  name: text('name').notNull(),
+  status: text('status').notNull().default('active'), // 'active', 'resolved', 'paused'
+  progress: integer('progress').notNull().default(0), // 0-100
+  notes: text('notes'),
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
 export type Insight = typeof insights.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type UserProfile = typeof user_profiles.$inferSelect;
+export type UserBlock = typeof userBlocks.$inferSelect;

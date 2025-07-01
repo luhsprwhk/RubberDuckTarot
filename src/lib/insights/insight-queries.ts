@@ -43,3 +43,21 @@ export const getInsightById = async (id: number): Promise<Insight | null> => {
   if (error) throw error;
   return data;
 };
+
+export const updateInsightSentiment = async (
+  insightId: number,
+  resonated?: boolean,
+  tookAction?: boolean
+): Promise<void> => {
+  const updates: { resonated?: boolean; took_action?: boolean } = {};
+
+  if (resonated !== undefined) updates.resonated = resonated;
+  if (tookAction !== undefined) updates.took_action = tookAction;
+
+  const { error } = await supabase
+    .from('insights')
+    .update(updates)
+    .eq('id', insightId);
+
+  if (error) throw error;
+};
