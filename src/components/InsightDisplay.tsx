@@ -89,7 +89,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
         {personalizedReading.actionSteps.length > 0 && (
           <div className="bg-liminal-overlay rounded-lg p-4 mb-6">
             <h3 className="text-lg font-semibold text-accent mb-3">
-              🎯 Action Steps
+              🎯 Next Steps
             </h3>
             <ol className="space-y-2">
               {personalizedReading.actionSteps.map(
@@ -109,6 +109,23 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
         {/* Ad Banner */}
         <AdBanner />
 
+        {/* Reflection Prompts */}
+        {(personalizedReading?.reflectionPrompts ?? []).length > 0 && (
+          <div className="bg-liminal-overlay rounded-lg p-4 mt-6 mb-6">
+            <h3 className="text-lg font-semibold text-accent mb-2">
+              <span className="text-xl mr-2">🪞</span>
+              Explore Further
+            </h3>
+            <ul className="space-y-2 bullet-list">
+              {personalizedReading?.reflectionPrompts?.map((prompt, index) => (
+                <li key={index} className="flex items-start gap-2">
+                  <span className="text-accent mt-1">•</span>
+                  <span className="text-primary">{prompt}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {/* Rob's Quip */}
         <div className="bg-liminal-overlay rounded-lg p-4 mt-6 mb-6">
           <h3 className="text-lg font-semibold text-accent mb-2">

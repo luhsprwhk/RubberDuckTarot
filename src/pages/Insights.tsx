@@ -127,9 +127,16 @@ const Insights: React.FC = () => {
                           Key Insights
                         </span>
                       </div>
-                      <p className="text-secondary text-sm italic">
-                        {insight.reading.keyInsights.join(', ')}
-                      </p>
+                      <ul className="space-y-2 bullet-list">
+                        {insight.reading.keyInsights.map((insight, index) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <span className="text-primary mt-1">•</span>
+                            <span className="text-secondary text-sm">
+                              {insight}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   )}
                 </div>
