@@ -71,12 +71,6 @@ const Cards = () => {
                 {card.core_meaning}
               </p>
 
-              {/* Traditional Equivalent */}
-              <div className="text-xs text-muted mb-3">
-                <span className="font-medium">Traditional:</span>{' '}
-                {card.traditional_equivalent}
-              </div>
-
               {/* Tags */}
               <div className="flex flex-wrap gap-1">
                 {card.tags.slice(0, 3).map((tag, index) => (
