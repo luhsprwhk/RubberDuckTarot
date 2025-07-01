@@ -85,11 +85,11 @@ const Landing = () => {
             <div className="bg-surface p-6 rounded-lg border border-liminal-border hover:border-breakthrough-400/50 transition-all duration-300 group backdrop-blur-liminal">
               <Target className="w-12 h-12 text-breakthrough-400 mb-4 group-hover:text-breakthrough-300 transition-colors" />
               <h3 className="text-lg font-semibold mb-3 text-primary">
-                Decision Debugging
+                Life Direction
               </h3>
               <p className="text-secondary text-sm">
-                Break analysis paralysis with perspective shifts. Having died
-                from avoiding decisions, I now help others choose faster.
+                Navigate major life transitions and find clarity in chaos. Death
+                gives excellent perspective on what actually matters.
               </p>
             </div>
 

@@ -16,6 +16,8 @@ import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 import Login from './pages/Login';
 import NewReading from './pages/NewReading';
+import Cards from './pages/Cards';
+import CardDetail from './pages/CardDetail';
 import BlockTypesProvider from './lib/blocktypes/BlockTypesProvider';
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/reading" element={<Reading />} />
+            <Route path="/cards" element={<Cards />} />
+            <Route path="/cards/:cardName" element={<CardDetail />} />
             <Route
               path="/insights"
               element={

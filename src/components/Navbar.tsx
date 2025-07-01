@@ -61,6 +61,12 @@ const Navbar = () => {
               >
                 Home
               </Link>
+              <Link
+                to="/cards"
+                className="text-secondary hover:text-accent transition-colors duration-200"
+              >
+                Cards
+              </Link>
               {!user && (
                 <Link
                   to="/pricing"

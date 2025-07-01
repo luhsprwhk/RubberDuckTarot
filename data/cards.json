@@ -17,7 +17,6 @@
       ],
       "block_applications": {
         "creative": "Something new is coming to break your stalemate - a collaboration, feedback, or inspiration from an unexpected source. Stop waiting and start looking.",
-        "decision": "The information you need to decide is already en route. Check your messages, ask that person, or admit what you already know deep down.",
         "work": "A project update, client feedback, or team communication is about to shift your priorities. Prepare for pivot mode.",
         "life": "Someone's reaching out or something's changing in your environment. Pay attention to what's actually arriving instead of what you think should arrive.",
         "relationship": "Communication is coming - but are you ready to receive it? Clear the channel and listen for what's really being said."
@@ -43,7 +42,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to guarantee success and start experimenting. Your next breakthrough might come from the project you think is 'just for fun.'",
-        "decision": "You're paralyzed by trying to pick the sure thing. Make a small, reversible bet on the wild card option and see what happens.",
         "work": "That side project, skill, or networking opportunity you've been putting off might be your ticket out. Start small, but start.",
         "life": "You're stuck in the safe zone. What's one low-risk experiment that could open unexpected doors?",
         "relationship": "Someone or something unexpected might be worth a chance. Stop calculating and start connecting."
@@ -69,7 +67,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to force creativity in the same environment. Change your physical space, tools, or medium entirely. Sometimes the block isn't in you, it's in your setup.",
-        "decision": "You're stuck because you're trying to choose between bad options in the same framework. Zoom out - what if you changed the entire context of the decision?",
         "work": "That toxic team, outdated tech stack, or dead-end role isn't going to magically improve. Sometimes the best debugging is a clean migration to something better.",
         "life": "You're optimizing a life situation that fundamentally doesn't work. What would moving (literally or metaphorically) solve that no amount of local fixes can?",
         "relationship": "Stop trying to have the same conversation in the same setting. Change the venue, medium, or timing entirely."
@@ -95,7 +92,6 @@
       ],
       "block_applications": {
         "creative": "Your creative foundation is shaky - inconsistent workspace, unreliable tools, or unstable routine. Lock down your basics before expecting breakthrough work.",
-        "decision": "You're making big choices without a solid fallback plan. What safety net do you need to feel confident taking the leap?",
         "work": "Your professional foundation needs attention - skills, network, or financial runway. Shore up your base before making dramatic moves.",
         "life": "You're trying to build excitement on an unstable foundation. What core life infrastructure needs your attention first?",
         "relationship": "The relationship lacks a solid foundation of trust, communication, or shared values. Address the basics before tackling the complex stuff."
@@ -121,7 +117,6 @@
       ],
       "block_applications": {
         "creative": "You're burning creative energy on the wrong things. What systems, skills, or workflows could you build once to make future creative work effortless?",
-        "decision": "You're stuck in short-term thinking. What choice sets you up for sustainable success rather than quick wins that burn you out?",
         "work": "You're in an energy-draining cycle. What career investment now would compound into easier, more fulfilling work later?",
         "life": "You're running on willpower instead of building sustainable systems. What lifestyle change would give you more energy rather than requiring it?",
         "relationship": "You're putting in constant effort to maintain something. What foundation could you build to make the relationship naturally energizing instead of exhausting?"
@@ -147,7 +142,6 @@
       ],
       "block_applications": {
         "creative": "You're waiting for perfect creative conditions that don't exist. Start working with the uncertainty instead of waiting for inspiration to clear up.",
-        "decision": "You're trying to predict outcomes with incomplete data. Make the best reversible decision with what you know now.",
         "work": "You're paralyzed by unclear project requirements or shifting priorities. Build adaptable systems instead of perfect plans.",
         "life": "You're waiting for life circumstances to become clear before making moves. Start navigating the ambiguity instead of waiting it out.",
         "relationship": "You're trying to read unclear signals instead of creating clear communication. Stop forecasting their mood and start stating your needs."
@@ -179,7 +173,6 @@
       ],
       "block_applications": {
         "creative": "Your creative process is tangled up in too many tools, steps, or requirements. Find the direct path from idea to output.",
-        "decision": "You've created a complex decision matrix when you need to find the core connection between your values and options.",
         "work": "Your workflow is tangled up in unnecessary complexity. What's the simplest path from input to deliverable?",
         "life": "You're dealing with interconnected problems that feel impossible to separate. Pick one thread and follow it.",
         "relationship": "Communication is tangled up in old issues and misunderstandings. Find the direct connection point and start there."
@@ -211,7 +204,6 @@
       ],
       "block_applications": {
         "creative": "Your creative space is cluttered with old projects, tools, or ideas that are draining your energy. Clean house first, create second.",
-        "decision": "You're weighing options that include things that are already dead. Stop considering the zombie choices and focus on what's actually alive.",
         "work": "You're maintaining legacy systems, relationships, or responsibilities that should have been deprecated long ago.",
         "life": "You're carrying around old identities, habits, or commitments that don't fit your current life. Time for a major cleanup.",
         "relationship": "Old conflicts, grudges, or patterns are cluttering up the present relationship. Clear the cache and start fresh."
@@ -237,7 +229,6 @@
       ],
       "block_applications": {
         "creative": "You're so focused on the creative vision you can't execute that you're missing the interesting accident happening right in front of you. Embrace the happy mistake.",
-        "decision": "Stop looking for the perfect option and start appreciating what's actually available. Sometimes the 'consolation prize' is exactly what you needed.",
         "work": "That feedback, opportunity, or connection you're dismissing might be more valuable than you realize. Look again with fresh eyes.",
         "life": "You're so busy chasing what you think you want that you're missing what's actually good about your current situation. Inventory your gifts.",
         "relationship": "Someone's giving you something meaningful, but it's not packaged the way you expected. Look past the wrapping."
@@ -269,7 +260,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to save every idea. Delete the mediocre projects cluttering your mental space and focus on the one that actually excites you.",
-        "decision": "You're paralyzed by options. Pick the obvious 'no' choices and delete them from consideration immediately.",
         "work": "That meeting, project, or commitment you've been dreading? Just cancel it. Stop trying to optimize what should be eliminated.",
         "life": "You're maintaining too many things out of guilt or habit. What can you just stop doing without explanation or replacement?",
         "relationship": "Stop trying to fix what's clearly broken. Some conversations need to end, not evolve."
@@ -301,7 +291,6 @@
       ],
       "block_applications": {
         "creative": "The breakthrough isn't coming from more research or inspiration - it's already in your existing knowledge, waiting to be connected differently.",
-        "decision": "You already know what you want to do. Stop gathering information and start trusting your instinct about what feels right.",
         "work": "The solution to your problem already exists in your company, team, or network. You just haven't asked the right person yet.",
         "life": "You're making this more complicated than it needs to be. What's the obvious answer you're intellectualizing away?",
         "relationship": "The truth about the situation is already clear to you. Stop waiting for more evidence and act on what you know."
@@ -333,7 +322,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to create your masterpiece and just make something fun. Treat your next project like a Netflix pilot - low stakes, high experimentation.",
-        "decision": "You're treating this like a marriage when it's actually just a free trial. Pick something and see if you like it for a week.",
         "work": "Approach your career problem like browsing genres. What would you try if you could easily switch back to your current situation?",
         "life": "You're taking yourself too seriously. What would be fun to try, even if it doesn't fit your current identity?",
         "relationship": "Stop planning the perfect conversation and just start with casual curiosity. See what develops naturally."
@@ -365,7 +353,6 @@
       ],
       "block_applications": {
         "creative": "You have access to tools, people, or resources you're not using. Stop trying to break down doors when you already have keys.",
-        "decision": "The information you need to decide is behind an access wall. Who can give you the login credentials you need?",
         "work": "You're trying to solve problems with insufficient permissions. What access do you need to request to actually fix this?",
         "life": "You're locked out of opportunities because you're using outdated versions of yourself. Time to update your credentials.",
         "relationship": "You're trying to access someone's trust or openness without the right authentication. What credentials do you need to build first?"
@@ -397,7 +384,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to design the perfect creative process and just feed your creativity with whatever gets you started. Order the creative equivalent of pizza.",
-        "decision": "You're starving while reading restaurant reviews. Pick something good enough now and optimize your system later.",
         "work": "You're building elaborate solutions when you just need to solve the immediate problem. What's the work equivalent of ordering your usual?",
         "life": "You're so focused on the perfect lifestyle that you're not taking care of basic needs. What does your life actually require right now?",
         "relationship": "Stop planning the perfect interaction and just give the relationship what it needs to function today."
@@ -423,7 +409,6 @@
       ],
       "block_applications": {
         "creative": "You're waiting for inspiration instead of tracking creative habits. Start measuring creative consistency, not just creative quality.",
-        "decision": "You're making decisions in isolation instead of tracking decision patterns. What data about your choices would help you choose better?",
         "work": "You're not tracking the right metrics. What leading indicators would help you see problems before they become crises?",
         "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
         "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
@@ -449,7 +434,6 @@
       ],
       "block_applications": {
         "creative": "You're trying to create in a noisy environment. What distractions need to be eliminated before you can hear your own creative voice?",
-        "decision": "Too many voices are influencing your choice. Who actually gets a vote in this decision, and who's just background noise?",
         "work": "You're reactive instead of proactive because you can't filter incoming requests. What noise can you cancel to focus on what matters?",
         "life": "You're living according to other people's expectations instead of your own values. Time to tune out the external static.",
         "relationship": "Drama and old conflicts are drowning out real communication. What background noise needs to be eliminated?"
@@ -475,7 +459,6 @@
       ],
       "block_applications": {
         "creative": "You're not taking creative risks because you're afraid of 'wasting' time. What backup project could you work on if the main one fails?",
-        "decision": "You're paralyzed by the fear of making the wrong choice. What's your plan B if option A doesn't work out?",
         "work": "You're stuck in a job because you haven't built career backup options. What safety net do you need to take professional risks?",
         "life": "You're not pursuing what you want because you're afraid of failure. What foundation would let you experiment freely?",
         "relationship": "You're staying in something unsatisfying because you're afraid of being alone. What independence do you need to build first?"
@@ -501,7 +484,6 @@
       ],
       "block_applications": {
         "creative": "Look back at your recent creative attempts. What patterns show what actually works versus what you think should work?",
-        "decision": "Review your past decisions - what does your track record tell you about your judgment? Trust the data, not the anxiety.",
         "work": "What does your calendar/email/Slack history reveal about where your time actually goes versus where you think it goes?",
         "life": "If someone looked at your photos from the last month, what would they conclude about what makes you happy?",
         "relationship": "What does your communication history actually show about the relationship dynamic, stripped of emotion and assumptions?"
@@ -533,7 +515,6 @@
       ],
       "block_applications": {
         "creative": "Stop buying new creative tools and use what you already have. That expensive software won't make you more creative than starting with basics.",
-        "decision": "You're researching options instead of testing them. Pick from what you already know works and stop shopping for perfect solutions.",
         "work": "You're collecting skills, credentials, and tools instead of shipping work. Use your existing toolkit to solve real problems.",
         "life": "You're buying the lifestyle instead of living it. What experiences are you postponing while you acquire the 'right' equipment?",
         "relationship": "You're collecting relationship advice instead of having actual conversations. Act on what you already know."
@@ -565,7 +546,6 @@
       ],
       "block_applications": {
         "creative": "Treat your next project like a game level - set small objectives, celebrate wins, and don't worry about perfect scores on the first playthrough.",
-        "decision": "Game out different scenarios. What's the worst that happens if you 'die' in this choice? Usually you just respawn and try again.",
         "work": "Turn your boring tasks into a points system or competition. What would make this work actually fun to optimize?",
         "life": "You're treating life like a test instead of a sandbox game. Where can you experiment without permanent consequences?",
         "relationship": "Stop trying to win conversations and start playing cooperatively. How can you both level up together?"
@@ -591,7 +571,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to map the entire creative journey. Pick a destination and let the process navigate the route.",
-        "decision": "You're overthinking the path when you just need to choose where you want to end up. Let circumstances handle the details.",
         "work": "You're trying to solo something that would be easier with a collaborator. Who could share this professional ride?",
         "life": "You're paralyzed by trying to plan every step. Pick a direction and trust that course corrections happen naturally.",
         "relationship": "Someone else might need to drive this conversation. Stop backseat driving and see where they take it."
@@ -623,7 +602,6 @@
       ],
       "block_applications": {
         "creative": "Stop trying to explain your creative vision through messages. Show people what you mean, don't just describe it.",
-        "decision": "You're making assumptions about what others think. Get on a call and actually ask them directly.",
         "work": "That email chain has gone on too long. Schedule 15 minutes and resolve it with actual conversation.",
         "life": "You're managing relationships through status updates instead of real connection. Time for actual face time.",
         "relationship": "Stop texting about the issue. Have the conversation where you can hear tone and see expressions."
@@ -655,7 +633,6 @@
       ],
       "block_applications": {
         "creative": "You're researching inspiration instead of creating. Stop searching for the perfect reference and start making something.",
-        "decision": "You're googling pros and cons instead of testing options. The answer isn't in search results - it's in trying.",
         "work": "You're looking for external solutions when the answer is probably in your existing knowledge or team.",
         "life": "You're searching for life hacks instead of examining what's actually not working. Look inward first.",
         "relationship": "You're researching relationship advice instead of having the actual conversation with your person."
@@ -681,7 +658,6 @@
       ],
       "block_applications": {
         "creative": "Your creative environment is wrong - too hot, too cold, too comfortable, or too stressful. What needs calibration?",
-        "decision": "You're trying to make decisions in the wrong emotional temperature. Cool down the pressure or heat up the urgency.",
         "work": "Your work environment isn't supporting peak performance. What small adjustment would optimize your daily output?",
         "life": "You're stuck in a comfort zone that's actually uncomfortable. What lifestyle temperature change would energize you?",
         "relationship": "The emotional climate is off. Is it too hot (conflict) or too cold (distance)? Adjust accordingly."
@@ -713,7 +689,6 @@
       ],
       "block_applications": {
         "creative": "You're tunnel-visioned on one approach. What if you worked on two different versions of the same project simultaneously?",
-        "decision": "Stop switching between options - lay them out side by side and compare directly. What do you see when they're both visible?",
         "work": "You're context-switching too much. What if you could see the problem and the solution space at the same time?",
         "life": "You're looking at life one aspect at a time. What patterns emerge when you view work, relationships, and health together?",
         "relationship": "You're seeing their perspective OR yours, not both. What changes when you hold both viewpoints simultaneously?"
@@ -739,7 +714,6 @@
       ],
       "block_applications": {
         "creative": "Your best ideas are scattered across notebooks, phones, and random files. What creative work needs proper backup and organization?",
-        "decision": "You're making decisions with incomplete information because your past lessons aren't accessible. What decision-making wisdom needs to be archived?",
         "work": "Your valuable work knowledge is trapped on your local machine. What expertise should be preserved and shareable?",
         "life": "You keep relearning the same life lessons. What personal insights need better documentation and backup?",
         "relationship": "Important conversations and agreements get lost. What relationship knowledge needs to be preserved and accessible?"
@@ -765,7 +739,6 @@
       ],
       "block_applications": {
         "creative": "You're working in the wrong energy. What creative soundtrack would shift your mood from stuck to flowing?",
-        "decision": "You're making decisions in chaos mode. What mental playlist would help you think more clearly?",
         "work": "Your work rhythm is off. What sequence of tasks would create momentum instead of friction?",
         "life": "You're living to the wrong soundtrack. What daily rhythm would energize instead of drain you?",
         "relationship": "You're both operating to different emotional music. What shared rhythm could you create together?"
@@ -791,7 +764,6 @@
       ],
       "block_applications": {
         "creative": "Stop iterating and start shipping. What creative work is 80% done and ready for the world to see?",
-        "decision": "You've gathered enough information. What decision is ready to be delivered and communicated?",
         "work": "You're hoarding completed work instead of delivering value. What's ready to ship to users, clients, or stakeholders?",
         "life": "You're planning changes instead of implementing them. What life improvement is ready for delivery?",
         "relationship": "You've been preparing what to say for too long. What conversation or gesture is ready to be delivered?"
@@ -817,7 +789,6 @@
       ],
       "block_applications": {
         "creative": "You're spraying creative energy everywhere. What specific creative target deserves focused practice and refinement?",
-        "decision": "You're aiming at too many options. What's the one decision that would hit the center of what you actually want?",
         "work": "You're busy but not effective. What single work target would create the most impact with precise effort?",
         "life": "You're trying to improve everything at once. What one life area deserves your most focused attention right now?",
         "relationship": "You're addressing surface issues. What's the real target conversation you need to aim for?"
@@ -843,7 +814,6 @@
       ],
       "block_applications": {
         "creative": "You're waiting for inspiration instead of tracking creative habits. Start measuring creative consistency, not just creative quality.",
-        "decision": "You're making decisions in isolation instead of tracking decision patterns. What data about your choices would help you choose better?",
         "work": "You're not tracking the right metrics. What leading indicators would help you see problems before they become crises?",
         "life": "You're hoping for change instead of measuring change. What life metric, tracked consistently, would drive improvement?",
         "relationship": "You're hoping the relationship improves without tracking what actually makes it better. Start measuring relationship health."
@@ -869,7 +839,6 @@
       ],
       "block_applications": {
         "creative": "You're reinventing creative wheels. What successful creative process could you template and reuse?",
-        "decision": "You're making the same type of decision over and over. What decision template could you copy from past successes?",
         "work": "You're recreating solutions you've already built. What work patterns deserve to be systematized and reused?",
         "life": "You're solving the same life problems repeatedly. What life solution template could you copy and paste?",
         "relationship": "You're having the same conversations without learning. What communication pattern worked before and could be reused?"
@@ -895,7 +864,6 @@
       ],
       "block_applications": {
         "creative": "You're forcing the wrong creative tone. What natural creative voice are you suppressing to fit expectations?",
-        "decision": "You're approaching decisions with the wrong emotional tone. What decision-making style feels most natural to you?",
         "work": "Your professional tone doesn't match the situation. Are you being too formal, too casual, too aggressive, or too passive?",
         "life": "You're living in someone else's color palette. What authentic lifestyle tone would energize you?",
         "relationship": "The conversational tone is off. What communication style would create better harmony between you?"
@@ -921,7 +889,6 @@
       ],
       "block_applications": {
         "creative": "You're trying to have perfect quality, speed, and low effort simultaneously. What creative trade-off are you refusing to make?",
-        "decision": "You're comparing apples to oranges instead of weighing what actually matters. What's the real trade-off you need to evaluate?",
         "work": "You're pursuing work that's good, fast, and cheap when you can only pick two. What professional balance point makes sense?",
         "life": "You're trying to optimize every life area simultaneously. What life balance would you accept to stop the constant juggling?",
         "relationship": "You're demanding perfect balance instead of fair exchange. What relationship trade-offs are actually reasonable?"
@@ -947,7 +914,6 @@
       ],
       "block_applications": {
         "creative": "You're letting too much creative noise through. What influences, opinions, or distractions need to be filtered so you can hear your own voice?",
-        "decision": "You're processing too many irrelevant inputs. What decision criteria could automatically filter out the noise?",
         "work": "Your attention is getting spammed by non-essential requests. What professional boundaries would protect your focus?",
         "life": "You're saying yes to too much life spam. What activities, commitments, or people need to be filtered out?",
         "relationship": "Drama and negativity keep getting through. What communication boundaries would filter healthier interactions?"
@@ -973,7 +939,6 @@
       ],
       "block_applications": {
         "creative": "Your creative tools, skills, or approach are running on outdated versions. What creative upgrade would unlock new possibilities?",
-        "decision": "Your decision-making framework needs updating. What new criteria or methods would improve your choices?",
         "work": "Your professional skills, network, or methods are behind current versions. What career upgrade is overdue?",
         "life": "You're running life patterns that served you years ago but need updating. What lifestyle upgrade would optimize your current reality?",
         "relationship": "Your communication style or relationship patterns need updating. What relational upgrade would improve connection?"
@@ -999,7 +964,6 @@
       ],
       "block_applications": {
         "creative": "You already know what makes your best work happen. Stop searching for new methods and trust your proven creative process.",
-        "decision": "You've made harder decisions than this before. What worked then? Your instincts are probably better than you think.",
         "work": "You have more professional wisdom than you're using. What career advice would you give someone else in your position?",
         "life": "You know what makes you happy, healthy, and fulfilled. Stop complicating it and do those things.",
         "relationship": "You know what good relationships require. Stop overthinking and apply what you already understand about connection."

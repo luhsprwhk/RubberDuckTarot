@@ -6,12 +6,6 @@
     "emoji": "🎨"
   },
   {
-    "id": "decision",
-    "name": "Decision Block",
-    "description": "Can't choose? Let's find a fresh angle.",
-    "emoji": "🤔"
-  },
-  {
     "id": "work",
     "name": "Work Block",
     "description": "Career crossroads? Duck debugging activated.",

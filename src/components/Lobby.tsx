@@ -5,6 +5,7 @@ import NewReading from './NewReading';
 import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType } from '@/src/interfaces';
+import Loading from './Loading';
 
 export default function Lobby() {
   const { user } = useAuth();
@@ -79,7 +80,7 @@ export default function Lobby() {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div>Loading...</div>
+        <Loading />
       </div>
     );
   }

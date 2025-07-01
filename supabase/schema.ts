@@ -21,7 +21,6 @@ export const cards = pgTable('cards', {
   block_applications: jsonb('block_applications')
     .$type<{
       creative: string;
-      decision: string;
       work: string;
       life: string;
       relationship: string;
