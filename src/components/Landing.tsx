@@ -3,9 +3,11 @@ import useAuth from '@/src/lib/hooks/useAuth';
 import DuckHero from '@/src/assets/landing-hero.png';
 import DuckLinkedin from '@/src/assets/rob-linkedin.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
   const { showAuthModal } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-void-gradient">
       {/* Hero Section */}
@@ -33,7 +35,7 @@ const Landing = () => {
             When you're stuck, consult the duck. Rob's a dead developer who
             spent 25 years coding other people's dreams while his indie game
             prototypes collected dust. Now he helps creative people debug their
-            blocks from beyond the grave
+            lives from beyond the grave
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -44,8 +46,11 @@ const Landing = () => {
               Start Free Consultation
               <ArrowRight className="w-5 h-5" />
             </button>
-            <button className="border-2 border-default text-secondary px-8 py-4 rounded-lg font-semibold hover:border-hover hover:text-accent transition-all duration-200">
-              View Case Studies
+            <button
+              onClick={() => navigate('/cards')}
+              className="border-2 border-default text-secondary px-8 py-4 rounded-lg font-semibold hover:border-hover hover:text-accent transition-all duration-200"
+            >
+              View Cards
             </button>
           </div>
 
@@ -322,7 +327,7 @@ const Landing = () => {
             </span>
           </div>
           <p className="text-muted text-sm">
-            Professional debugging services from beyond the grave since 2023
+            Professional debugging services from beyond the grave since 2025
           </p>
           <p className="text-muted text-xs mt-2">
             Rob Chen (1977-2023) • Licensed Ethereal Consultant • No returns

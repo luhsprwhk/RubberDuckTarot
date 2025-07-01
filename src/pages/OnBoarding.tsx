@@ -108,7 +108,6 @@ const debuggingModes = [
 
 const blockPatterns = [
   'Creative (stuck on projects)',
-  'Decision (analysis paralysis)',
   'Work (career confusion)',
   'Life (routine ruts)',
   'Relationship (communication failures)',
@@ -225,18 +224,6 @@ const OnBoarding = () => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
 
-  const isCustomSuperpower =
-    profile.superpower && !superpowers.includes(profile.superpower);
-  const superpowerSelection = isCustomSuperpower
-    ? 'Other (specify below)'
-    : profile.superpower;
-
-  const isCustomKryptonite =
-    profile.kryptonite && !kryptonites.includes(profile.kryptonite);
-  const kryptoniteSelection = isCustomKryptonite
-    ? 'Other (specify below)'
-    : profile.kryptonite;
-
   const professionNameSelection =
     isOtherProfession ||
     (profile.profession.category &&
@@ -263,7 +250,7 @@ const OnBoarding = () => {
                 type="text"
                 value={profile.name}
                 onChange={(e) => updateProfile('name', e.target.value)}
-                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
+                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
                 placeholder="What should I call you?"
               />
             </div>
@@ -277,7 +264,7 @@ const OnBoarding = () => {
                 type="date"
                 value={profile.birthday}
                 onChange={(e) => updateProfile('birthday', e.target.value)}
-                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
+                className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
               />
             </div>
             <div>
@@ -324,7 +311,7 @@ const OnBoarding = () => {
                       professionsByCategory[category]?.length === 0
                     );
                   }}
-                  className={`p-4 text-left border text-primary border-liminal-border rounded-lg transition-all ${
+                  className={`p-4 text-left border text-primary bg-liminal-overlay  border-liminal-border rounded-lg transition-all ${
                     profile.profession.category === category
                       ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
                       : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
@@ -363,7 +350,7 @@ const OnBoarding = () => {
                     </option>
                     {professionsByCategory[profile.profession.category].map(
                       (p) => (
-                        <option key={p} value={p}>
+                        <option key={p} value={p} className="text-primary">
                           {p}
                         </option>
                       )
@@ -453,7 +440,7 @@ const OnBoarding = () => {
             </label>
             <div className="relative">
               <select
-                value={superpowerSelection || ''}
+                value={profile.superpower || ''}
                 onChange={(e) => updateProfile('superpower', e.target.value)}
                 className="w-full p-4 border rounded-lg text-primary appearance-none bg-void-800 border-liminal-border hover:border-terminal-pulse focus:outline-none focus:ring-2 focus:ring-terminal-pulse focus:border-terminal-pulse"
               >
@@ -488,7 +475,7 @@ const OnBoarding = () => {
             </label>
             <div className="relative">
               <select
-                value={kryptoniteSelection || ''}
+                value={profile.kryptonite || ''}
                 onChange={(e) => updateProfile('kryptonite', e.target.value)}
                 className="w-full p-4 border bg-void-800 rounded-lg text-primary appearance-none border-liminal-border hover:border-terminal-pulse focus:outline-none focus:ring-2 focus:ring-terminal-pulse focus:border-terminal-pulse"
               >
@@ -614,15 +601,14 @@ const OnBoarding = () => {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <img src={robEmoji} alt="Rob" className="w-16 h-16" />
-            <span className="text-6xl">🧙‍♂️</span>
+            <span role="img" aria-label="clipboard" className="text-6xl">
+              📋
+            </span>
           </div>
-          <h1 className="text-3xl font-bold text-primary mb-2">
-            Rubber Duck Tarot
-          </h1>
+          <h1 className="text-3xl font-bold text-primary mb-2">Onboarding</h1>
           <div className="w-full bg-void-gradient rounded-full h-2 mb-4">
             <div
-              className="bg-terminal-pulse h-2 rounded-full transition-all duration-300"
+              className="bg-breakthrough-400  h-2 rounded-full transition-all duration-300"
               style={{
                 width: `${((currentStep + 1) / (steps.length + 1)) * 100}%`,
               }}
@@ -633,20 +619,20 @@ const OnBoarding = () => {
           </p>
         </div>
 
-        <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
+        <div className="bg-liminal-surface border-liminal-border rounded-lg p-6 shadow-sm border mb-6">
           <div className="flex items-start">
             <div className="mr-4">
               <img src={robEmoji} alt="Rob" className="w-10 h-10" />
             </div>
             <div className="flex-1">
-              <div className="bg-void-700 rounded-lg p-4 relative">
+              <div className="bg-liminal-overlay border-liminal-border rounded-lg p-4 relative">
                 <p className="text-primary italic">{robMessage}</p>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-void-800 rounded-lg p-6 shadow-sm border mb-6">
+        <div className="bg-liminal-surface border-liminal-border rounded-lg p-6 shadow-sm border mb-6">
           <h2 className="text-xl font-semibold text-primary mb-6">
             {steps[currentStep].title}
           </h2>
@@ -658,7 +644,7 @@ const OnBoarding = () => {
             <button
               onClick={nextStep}
               disabled={!isStepComplete()}
-              className="flex items-center justify-center px-6 py-3 bg-terminal-pulse text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
+              className="flex items-center justify-center px-6 py-3 bg-breakthrough-400 text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
             >
               <span>Continue</span>
               <ChevronRight className="ml-2 h-5 w-5" />
@@ -667,7 +653,7 @@ const OnBoarding = () => {
             <button
               onClick={handleCompleteOnboarding}
               disabled={!isStepComplete() || loading}
-              className="flex items-center justify-center px-6 py-3 bg-terminal-pulse text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
+              className="flex items-center justify-center px-6 py-3 bg-breakthrough-400 text-primary font-bold rounded-lg shadow-lg hover:bg-opacity-90 hover:text-white transition-all duration-200 ease-in-out transform hover:scale-105 disabled:bg-gray-600 disabled:text-primary disabled:cursor-not-allowed disabled:transform-none"
             >
               {loading ? 'Saving...' : 'Complete & See Your Profile'}
             </button>
