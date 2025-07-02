@@ -7,6 +7,7 @@ import clsx from 'clsx';
 
 import { useUserProfile } from '../lib/hooks/useUserProfile';
 import robEmoji from '../assets/rob-emoji.png';
+import { isAuthEnabled } from '../lib/featureFlags';
 
 const Navbar = () => {
   const { user, signOut, showAuthModal } = useAuth();
@@ -14,6 +15,7 @@ const Navbar = () => {
   const { profile } = useUserProfile();
   const userMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const authEnabled = isAuthEnabled();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -149,7 +151,7 @@ const Navbar = () => {
                   </div>
                 </div>
               )}
-              {!user && (
+              {!user && authEnabled && (
                 <button
                   onClick={() => showAuthModal('signIn')}
                   className="bg-breakthrough-500 text-void-900 px-4 py-2 rounded-md hover:bg-breakthrough-400 transition-all duration-200 font-medium shadow-glow"

@@ -5,16 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
 import PricingPic from '@/src/assets/pricing-hero.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
+import { isAuthEnabled } from '@/src/lib/featureFlags';
 
 const Pricing = () => {
   const { showAuthModal, user } = useAuth();
   const navigate = useNavigate();
+  const authEnabled = isAuthEnabled();
 
   useEffect(() => {
-    if (user) {
+    if (authEnabled && user) {
       navigate('/upgrade', { replace: true });
     }
-  }, [user, navigate]);
+  }, [authEnabled, user, navigate]);
 
   return (
     <div className={cn('min-h-screen bg-void-gradient')}>
@@ -194,7 +196,7 @@ const Pricing = () => {
                   'w-full bg-void-700 text-primary px-6 py-3 rounded-lg font-medium hover:bg-void-600 transition-colors duration-200 border border-void-600'
                 )}
               >
-                Start Free Debugging
+                {authEnabled ? 'Start Free Debugging' : 'Join Waitlist'}
               </button>
             </div>
 
@@ -317,11 +319,12 @@ const Pricing = () => {
               </div>
 
               <button
+                onClick={() => showAuthModal('signUp')}
                 className={cn(
                   'w-full bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough flex items-center justify-center gap-2'
                 )}
               >
-                Upgrade to Premium
+                {authEnabled ? 'Upgrade to Premium' : 'Join Premium Waitlist'}
                 <ArrowRight className={cn('w-5 h-5')} />
               </button>
             </div>
@@ -515,14 +518,15 @@ const Pricing = () => {
                   'bg-breakthrough-400 text-void-900 px-8 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough'
                 )}
               >
-                Start Free Consultation
+                {authEnabled ? 'Start Free Consultation' : 'Join Waitlist'}
               </button>
               <button
+                onClick={() => showAuthModal('signUp')}
                 className={cn(
                   'border-2 border-breakthrough-400 text-breakthrough-400 px-8 py-3 rounded-lg font-medium hover:bg-breakthrough-400/10 transition-colors duration-200'
                 )}
               >
-                Go Premium Now
+                {authEnabled ? 'Go Premium Now' : 'Join Premium Waitlist'}
               </button>
             </div>
           </div>

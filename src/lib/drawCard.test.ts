@@ -10,11 +10,9 @@ describe('drawCard', () => {
     traditional_equivalent: 'Joker',
     core_meaning: 'core',
     duck_question: 'question',
-    visual_description: 'desc',
     perspective_prompts: [],
     block_applications: {
       creative: 'creative value',
-      decision: 'decision value',
       work: 'work value',
       life: 'life value',
       relationship: 'relationship value',
