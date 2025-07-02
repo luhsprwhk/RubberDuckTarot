@@ -13,6 +13,7 @@ import Insights from './pages/Insights';
 import Blocks from './pages/Blocks';
 import ProtectedRoute from './components/ProtectedRoute';
 import Pricing from './pages/Pricing';
+import Features from './pages/Features';
 import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 import Login from './pages/Login';
@@ -60,6 +61,7 @@ function App() {
             <Route path="/onboarding" element={<OnBoarding />} />
             <Route path="/upgrade" element={<Upgrade />} />
             <Route path="/pricing" element={<Pricing />} />
+            <Route path="/features" element={<Features />} />
             <Route path="/preferences" element={<Preferences />} />
             <Route path="/insights/:id" element={<Insight />} />
             <Route path="/login" element={<Login />} />
