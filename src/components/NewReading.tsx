@@ -38,7 +38,7 @@ const NewReading: React.FC<NewReadingProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-liminal-surface min-h-screen">
+    <div className="max-w-2xl mx-auto p-6 bg-surface min-h-screen">
       <div className="text-center mb-4">
         <div id="rob-divination-pic" className="mb-12 w-28 h-28 mx-auto">
           <img src={robDivinationPic} alt="Rob Divination" />
@@ -94,7 +94,7 @@ const NewReading: React.FC<NewReadingProps> = ({
                   'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
                   selectedBlockType === blockType.id
                     ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
-                    : 'border-liminal-border hover:border-liminal-border'
+                    : 'border-default hover:border-default'
                 )}
               >
                 <div className="flex items-center gap-3">
@@ -191,8 +191,8 @@ const SpreadSelector: React.FC<{
         className={cn(
           selectedSpread === 'quick-draw'
             ? 'bg-liminal-overlay border border-breakthrough-400 text-primary'
-            : 'bg-liminal-overlay hover:border-breakthrough-400 text-primary',
-          'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
+            : 'bg-liminal-overlay hover:border-breakthrough-400 border border-default text-primary',
+          'w-full font-semibold py-3 px-8 rounded-lg transition-colors'
         )}
       >
         Quick Duck Spread
@@ -206,8 +206,8 @@ const SpreadSelector: React.FC<{
         className={cn(
           selectedSpread === 'full-pond'
             ? 'bg-liminal-overlay border border-breakthrough-400 text-primary'
-            : 'bg-liminal-overlay hover:border-breakthrough-400 text-primary',
-          'w-full font-semibold py-3 px-8 rounded-lg shadow-lg transition-colors'
+            : 'bg-liminal-overlay hover:border-breakthrough-400 border border-default text-primary',
+          'w-full font-semibold py-3 px-8 rounded-lg transition-colors'
         )}
       >
         Full Pond Spread
