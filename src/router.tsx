@@ -1,6 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Reading from './pages/Reading';
+import CreateInsight from './pages/CreateInsight';
 import OnBoarding from './pages/OnBoarding';
 import Upgrade from './pages/Upgrade';
 import Insights from './pages/Insights';
@@ -19,7 +19,14 @@ import BlockDetails from './pages/BlockDetails';
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />
-    <Route path="/reading" element={<Reading />} />
+    <Route
+      path="/create-insight"
+      element={
+        <ProtectedRoute>
+          <CreateInsight />
+        </ProtectedRoute>
+      }
+    />
     <Route path="/cards" element={<Cards />} />
     <Route path="/cards/:cardName" element={<CardDetail />} />
     <Route
@@ -46,14 +53,35 @@ const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
-    <Route path="/onboarding" element={<OnBoarding />} />
+    <Route
+      path="/onboarding"
+      element={
+        <ProtectedRoute>
+          <OnBoarding />
+        </ProtectedRoute>
+      }
+    />
     <Route path="/upgrade" element={<Upgrade />} />
     <Route path="/pricing" element={<Pricing />} />
     <Route path="/features" element={<Features />} />
     <Route path="/preferences" element={<Preferences />} />
-    <Route path="/insights/:id" element={<Insight />} />
+    <Route
+      path="/insights/:id"
+      element={
+        <ProtectedRoute>
+          <Insight />
+        </ProtectedRoute>
+      }
+    />
     <Route path="/login" element={<Login />} />
-    <Route path="/new-insight" element={<NewInsight />} />
+    <Route
+      path="/new-insight"
+      element={
+        <ProtectedRoute>
+          <NewInsight />
+        </ProtectedRoute>
+      }
+    />
   </Routes>
 );
 

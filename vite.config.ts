@@ -10,4 +10,21 @@ export default defineConfig({
       '@': resolve(__dirname, '.'),
     },
   },
+  // Asset handling
+  build: {
+    assetsInlineLimit: 4096, // Inline small assets (4KB), keep larger ones separate
+    rollupOptions: {
+      output: {
+        // Organize assets by type
+        assetFileNames: (assetInfo) => {
+          const info = assetInfo.name?.split('.') || [];
+          const ext = info[info.length - 1];
+          if (/mp4|webm|gif|jpg|jpeg|png|svg/.test(ext || '')) {
+            return `assets/media/[name]-[hash][extname]`;
+          }
+          return `assets/[name]-[hash][extname]`;
+        },
+      },
+    },
+  },
 });

@@ -141,9 +141,9 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 3-4 key insights"'}],
       "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 2-3 specific, actionable steps"'}],
       "robQuip": "Rob's signature sarcastic, but encouraging and highly empathetic closing line",
-      ${spreadType !== 'quick-draw' ? '"reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
+      "reflectionPrompts": ["Questions to help them think deeper about the insights"]
     }
-    ${spreadType === 'quick-draw' ? '\nIMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action step in the arrays.' : ''}
+    IMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action and ONE reflection prompt in the arrays.
     </response_format>
   `;
 
@@ -157,9 +157,9 @@ const getSpreadSpecificInstructions = (spreadType: string): string => {
         - Follow Oblique Strategies approach: sharp, surgical insight
         - For the drawn card, use its core meaning (or reversed meaning if reversed) as the main lens for interpreting the user's situation or blocker.
         - Directly connect the card's meaning to the user's question or blocker, in a practical, literal way.
-        - Focus on ONE reframe question + ONE action
+        - Focus on ONE reframe question + ONE action + ONE reflection prompt
         - Keep interpretation to 2-3 sentences max
-        - No reflection prompts needed - they should figure it out themselves`;
+      `;
 
     case 'duck-insight':
       return `DUCK INSIGHT RULES:
@@ -241,15 +241,9 @@ const formatPreviousInsights = (
   previousInsights: NonNullable<ReadingRequest['previousInsights']>
 ): string => {
   return previousInsights
+    .filter((insight) => insight.resonated || insight.took_action) // Only include insights that resonated or took action
     .map((insight, index) => {
       const timeAgo = insight.created_at.toLocaleDateString();
-      const resonanceStatus = insight.resonated
-        ? '✅ Resonated'
-        : '❌ Did not resonate';
-      const actionStatus = insight.took_action
-        ? '🎯 Took action'
-        : '⏳ No action taken';
-
       return `
 Previous Consultation #${index + 1} (${timeAgo}):
 Context: "${insight.user_context || 'No specific context provided'}"
@@ -258,8 +252,7 @@ Rob's Previous Advice:
 - Key Insights: ${insight.reading.keyInsights.join('; ')}
 - Action Steps: ${insight.reading.actionSteps.join('; ')}
 - Rob's Quip: "${insight.reading.robQuip}"
-Client Feedback: ${resonanceStatus}, ${actionStatus}
-      `.trim();
+        `.trim();
     })
     .join('\n\n---\n\n');
 };
@@ -268,10 +261,10 @@ const formatCurrentBlock = (
   block: NonNullable<ReadingRequest['currentBlock']>
 ): string => {
   const timeWorking = Math.ceil(
-    (Date.now() - block.created_at.getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - new Date(block.created_at).getTime()) / (1000 * 60 * 60 * 24)
   );
   const lastUpdated = Math.ceil(
-    (Date.now() - block.updated_at.getTime()) / (1000 * 60 * 60 * 24)
+    (Date.now() - new Date(block.updated_at).getTime()) / (1000 * 60 * 60 * 24)
   );
 
   return `

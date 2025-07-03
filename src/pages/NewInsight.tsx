@@ -30,14 +30,14 @@ const NewInsightPage = () => {
   }, [locationState]);
 
   const handleNewReading = () => {
-    if (!selectedBlockType || !selectedSpread) return;
+    if (!selectedSpread || !userContext) return;
 
-    navigate('/reading', {
+    navigate('/create-insight', {
       state: {
-        selectedBlockTypeId: selectedBlockType,
+        selectedBlockTypeId: selectedBlockType || null,
         spreadType: selectedSpread,
         userContext: userContext,
-        existingUserBlockId: locationState?.userBlockId, // Pass existing block ID if available
+        existingUserBlockId: locationState?.userBlockId || null, // Pass existing block ID if available
       },
     });
 

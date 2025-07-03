@@ -87,9 +87,9 @@ const BlockDetails: React.FC = () => {
           </h1>
           <button
             onClick={handleNewInsight}
-            className="bg-breakthrough-400 text-void-900 px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300 transition-colors duration-200 flex items-center gap-2"
+            className="cursor-pointer bg-breakthrough-400 text-void-900 px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300 transition-colors duration-200 flex items-center gap-2"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 " />
             New Insight
           </button>
         </div>
@@ -103,7 +103,7 @@ const BlockDetails: React.FC = () => {
           <span className="text-primary">{block.status}</span>
           <div className="flex gap-2 mt-2">
             <button
-              className={`px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
+              className={`cursor-pointer px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
               disabled={block.status === 'resolved'}
               onClick={async () => {
                 if (!block) return;
@@ -122,7 +122,7 @@ const BlockDetails: React.FC = () => {
               Mark as Resolved
             </button>
             <button
-              className={`px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
+              className={`cursor-pointer px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
               onClick={async () => {
                 if (!block) return;
                 const newStatus =

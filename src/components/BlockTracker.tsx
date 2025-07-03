@@ -8,6 +8,7 @@ interface BlockTrackerProps {
   blockTypes: BlockType[];
   onUpdateStatus?: (blockId: number, status: string) => void;
   onDeleteBlock?: (blockId: number) => void;
+  onClickBlock?: (blockId: number) => void;
   compact?: boolean;
 }
 
@@ -15,6 +16,7 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
   blocks,
   blockTypes,
   onUpdateStatus,
+  onClickBlock,
   onDeleteBlock,
   compact = false,
 }) => {
@@ -59,10 +61,11 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
       {blocks.map((block) => (
         <div
           key={block.id}
-          className={`bg-void-800 rounded-lg shadow-sm border border-liminal-border p-${compact ? '4' : '5'} hover:shadow-md transition-shadow`}
+          onClick={() => onClickBlock?.(block.id)}
+          className={`bg-void-800 rounded-lg shadow-sm border border-liminal-border p-${compact ? '4' : '5'} cursor-pointer hover:shadow-md hover:border-breakthrough-400 transition-shadow`}
         >
-          <div className="flex justify-between items-start mb-3">
-            <div className="flex-1">
+          <div className="flex justify-between items-start mb-3 pl-2 py-2">
+            <div className="flex-1 ">
               <div className="flex items-center gap-2 mb-2">
                 <span
                   className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
@@ -93,7 +96,7 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
                       if (
                         confirm('Are you sure you want to delete this block?')
                       ) {
-                        onDeleteBlock(block.id);
+                        onDeleteBlock?.(block.id);
                       }
                     }}
                     className="p-1 text-accent hover:text-red-400 transition-colors"

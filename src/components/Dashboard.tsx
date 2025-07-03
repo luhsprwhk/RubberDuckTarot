@@ -98,6 +98,10 @@ export default function Dashboard() {
     );
   }
 
+  const handleBlockClick = (blockId: number) => {
+    navigate(`/blocks/${blockId}`);
+  };
+
   // If user has active blocks, show them and a 'New Block' button
   if (blocks && blocks.length > 0) {
     // Filter only active blocks (status === 'active' or 'in-progress')
@@ -109,7 +113,11 @@ export default function Dashboard() {
         <h2 className="text-2xl font-bold mb-4 text-primary">
           Your Active Blocks
         </h2>
-        <BlockTracker blocks={activeBlocks} blockTypes={blockTypes} />
+        <BlockTracker
+          blocks={activeBlocks}
+          blockTypes={blockTypes}
+          onClickBlock={handleBlockClick}
+        />
         <div className="mt-8 flex justify-center">
           <Link
             to="/new-insight"
