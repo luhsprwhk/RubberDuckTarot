@@ -61,3 +61,16 @@ export const updateInsightSentiment = async (
 
   if (error) throw error;
 };
+
+export const getInsightsByUserBlockId = async (
+  userBlockId: number
+): Promise<Insight[]> => {
+  const { data, error } = await supabase
+    .from('insights')
+    .select('*')
+    .eq('user_block_id', userBlockId)
+    .order('created_at', { ascending: false });
+
+  if (error) throw error;
+  return data;
+};

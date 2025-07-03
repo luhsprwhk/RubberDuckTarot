@@ -1,75 +1,9 @@
-import Anthropic from '@anthropic-ai/sdk';
-import type { UserProfile } from '../interfaces';
-import type { Card, BlockType } from '../interfaces';
-import { getProfessionMetaphors } from './ai/profession-metaphors';
-import systemPrompt from './ai/system-prompt.md?raw';
+import type { ReadingRequest, PersonalizedReading } from './index';
+import { getProfessionMetaphors } from './profession-metaphors';
+import systemPrompt from './system-prompt.md?raw';
+import { anthropic } from './index';
 
-const anthropic = new Anthropic({
-  apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
-  dangerouslyAllowBrowser: true,
-});
-
-export interface ReadingRequest {
-  cards: (Card & { reversed: boolean })[];
-  blockType: BlockType;
-  userContext: string;
-  userProfile: UserProfile;
-  spreadType: 'quick-draw' | 'duck-insight' | 'full-pond';
-}
-
-export interface PersonalizedReading {
-  interpretation: string;
-  keyInsights: string[];
-  actionSteps: string[];
-  robQuip: string;
-  reflectionPrompts?: string[]; // For longer spreads
-}
-
-export const generateUserBlockName = async (
-  blockTypeName?: string,
-  userContext?: string
-): Promise<string> => {
-  try {
-    const prompt = `You are helping create a personalized name for a user's block tracker entry.
-
-Block Type: ${blockTypeName || 'Personal Challenge'}
-User Context: ${userContext || 'Working on personal growth'}
-
-Generate a concise, personalized title (2-6 words) that captures the essence of this specific block. Make it actionable and personal. Examples:
-- "Breaking Through Creative Paralysis"
-- "Overcoming Perfectionism Trap"
-- "Building Confidence Muscle"
-- "Releasing Control Anxiety"
-
-Just return the title, nothing else.`;
-
-    const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 50,
-      temperature: 0.8,
-      system: systemPrompt,
-      messages: [
-        {
-          role: 'user',
-          content: prompt,
-        },
-      ],
-    });
-
-    const response = message.content[0];
-    if (response.type !== 'text') {
-      throw new Error('Unexpected response type from Claude');
-    }
-
-    return response.text.trim().replace(/^"|"$/g, ''); // Remove quotes if present
-  } catch (error) {
-    console.error('Failed to generate block name:', error);
-    // Fallback to a generic name
-    return `${blockTypeName || 'Personal'} Block`;
-  }
-};
-
-export const generatePersonalizedReading = async (
+export const generateInsight = async (
   request: ReadingRequest
 ): Promise<PersonalizedReading> => {
   try {
@@ -101,7 +35,15 @@ export const generatePersonalizedReading = async (
 };
 
 const buildReadingPrompt = (request: ReadingRequest): string => {
-  const { cards, blockType, userContext, userProfile, spreadType } = request;
+  const {
+    cards,
+    blockType,
+    userContext,
+    userProfile,
+    spreadType,
+    previousInsights,
+    currentBlock,
+  } = request;
 
   // Get profession-specific metaphor style
   const metaphorStyle = getProfessionMetaphors(userProfile.profession);
@@ -138,6 +80,17 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     Problem-solving Spirit: ${userProfile.spirit_animal}
   `;
 
+  // Format previous insights for context
+  const previousInsightsContext =
+    previousInsights && previousInsights.length > 0
+      ? formatPreviousInsights(previousInsights)
+      : null;
+
+  // Format current block context
+  const currentBlockContext = currentBlock
+    ? formatCurrentBlock(currentBlock)
+    : null;
+
   const basePrompt = `
     <client_profile>${clientProfile}</client_profile>
 
@@ -146,6 +99,10 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       Block Category: ${blockType.name}
       Client's Situation: "${userContext}"
     </consultation_details>
+
+    ${currentBlockContext ? `<current_block>${currentBlockContext}</current_block>` : ''}
+
+    ${previousInsightsContext ? `<previous_consultations>${previousInsightsContext}</previous_consultations>` : ''}
 
     <cards_drawn>${cardDetails}</cards_drawn>
 
@@ -158,13 +115,28 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
       challenges, and mindset. Use ${metaphorStyle.style}—keep it practical, not mystical.
     </profile_integration>
 
+    ${
+      currentBlockContext || previousInsightsContext
+        ? `<consultation_continuity>
+      ${currentBlockContext ? "* IMPORTANT: Reference the current block status, progress, and any notes. This shows how far they've come and what specific challenges remain." : ''}
+      ${previousInsightsContext ? "* Reference previous consultations for this block. Note what advice was given before, what resonated, and what actions they took (or didn't take)." : ''}
+      ${previousInsightsContext ? '* Build on previous insights rather than repeating them. Ask follow-up questions about implementation.' : ''}
+      ${previousInsightsContext ? '* If they ignored previous advice, address this directly but supportively.' : ''}
+      * Show progression in your understanding of their specific block pattern.
+      * Rob remembers everything and should reference specifics naturally.
+      ${currentBlockContext ? '* Use block progress and status to calibrate advice - different strategies for 10% vs 90% complete blocks.' : ''}
+    </consultation_continuity>`
+        : ''
+    }
+
     <response_format>
     Respond in valid JSON format:
     {
       "interpretation": "Main reading combining the cards for their specific situation",
       "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 3-4 key insights"'}],
       "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 2-3 specific, actionable steps"'}],
-      "robQuip": "Rob's signature sarcastic, but encouraging and highly empathetic closing line"${spreadType !== 'quick-draw' ? ',\n  "reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
+      "robQuip": "Rob's signature sarcastic, but encouraging and highly empathetic closing line",
+      ${spreadType !== 'quick-draw' ? '"reflectionPrompts": ["Questions to help them think deeper about the insights"]' : ''}
     }
     ${spreadType === 'quick-draw' ? '\nIMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action step in the arrays.' : ''}
     </response_format>
@@ -258,4 +230,58 @@ const parseReadingResponse = (
           : undefined,
     };
   }
+};
+
+const formatPreviousInsights = (
+  previousInsights: NonNullable<ReadingRequest['previousInsights']>
+): string => {
+  return previousInsights
+    .map((insight, index) => {
+      const timeAgo = insight.created_at.toLocaleDateString();
+      const resonanceStatus = insight.resonated
+        ? '✅ Resonated'
+        : '❌ Did not resonate';
+      const actionStatus = insight.took_action
+        ? '🎯 Took action'
+        : '⏳ No action taken';
+
+      return `
+Previous Consultation #${index + 1} (${timeAgo}):
+Context: "${insight.user_context || 'No specific context provided'}"
+Cards Used: ${insight.cards_drawn.length} cards
+Rob's Previous Advice:
+- Key Insights: ${insight.reading.keyInsights.join('; ')}
+- Action Steps: ${insight.reading.actionSteps.join('; ')}
+- Rob's Quip: "${insight.reading.robQuip}"
+Client Feedback: ${resonanceStatus}, ${actionStatus}
+      `.trim();
+    })
+    .join('\n\n---\n\n');
+};
+
+const formatCurrentBlock = (
+  block: NonNullable<ReadingRequest['currentBlock']>
+): string => {
+  const timeWorking = Math.ceil(
+    (Date.now() - block.created_at.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  const lastUpdated = Math.ceil(
+    (Date.now() - block.updated_at.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  return `
+Current Block Status:
+Name: "${block.name}"
+Status: ${block.status}
+Progress: ${block.progress}% complete
+Days Working: ${timeWorking} days
+Last Updated: ${lastUpdated} days ago
+${block.notes ? `Notes: "${block.notes}"` : 'No notes recorded'}
+
+Block Analysis:
+- This is ${block.progress < 25 ? 'early stage' : block.progress < 75 ? 'mid-progress' : 'nearly complete'}
+- Status indicates they are ${block.status === 'active' ? 'actively working' : block.status === 'paused' ? 'taking a break' : 'considering it resolved'}
+- Time investment: ${timeWorking < 7 ? 'Just started' : timeWorking < 30 ? 'Working for weeks' : 'Long-term project'}
+- Recent activity: ${lastUpdated === 0 ? 'Updated today' : lastUpdated === 1 ? 'Updated yesterday' : lastUpdated < 7 ? 'Updated recently' : 'Stalled for a while'}
+  `.trim();
 };

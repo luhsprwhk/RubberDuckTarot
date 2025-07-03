@@ -6,13 +6,17 @@ import { getUserProfile } from '../lib/userPreferences';
 import useAuth from '../lib/hooks/useAuth';
 import useCards from '../lib/cards/useCards';
 import type { BlockType } from '../interfaces';
-import { createInsight } from '../lib/insights/insight-queries';
 import {
-  generatePersonalizedReading,
+  createInsight,
+  getInsightsByUserBlockId,
+} from '../lib/insights/insight-queries';
+import type { Insight, UserBlock } from '../interfaces';
+import {
+  generateInsight,
   generateUserBlockName,
   type PersonalizedReading,
-} from '../lib/claude-ai';
-import { createUserBlock } from '../lib/blocks/block-queries';
+} from '../ai';
+import { createUserBlock, getUserBlockById } from '../lib/blocks/block-queries';
 import { type UserProfile } from '../interfaces';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import duckCodingGIF from '../assets/wiz-duck-coding.gif';
@@ -26,6 +30,7 @@ interface ReadingState {
   selectedBlockTypeId: string;
   spreadType: 'quick-draw' | 'full-pond';
   userContext?: string;
+  existingUserBlockId?: number; // If adding insight to existing block
 }
 
 const Reading: React.FC = () => {
@@ -35,7 +40,12 @@ const Reading: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const state = location.state as ReadingState | null;
-  const { spreadType, selectedBlockTypeId, userContext = '' } = state || {};
+  const {
+    spreadType,
+    selectedBlockTypeId,
+    userContext = '',
+    existingUserBlockId,
+  } = state || {};
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
@@ -46,6 +56,8 @@ const Reading: React.FC = () => {
     useState<PersonalizedReading | null>(null);
   const [loadingReading, setLoadingReading] = useState(false);
   const [readingError, setReadingError] = useState(false);
+  const [previousInsights, setPreviousInsights] = useState<Insight[]>([]);
+  const [currentBlock, setCurrentBlock] = useState<UserBlock | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -89,6 +101,28 @@ const Reading: React.FC = () => {
         if (isMounted) {
           setDrawnCards(drawnCardsList);
         }
+
+        // Fetch current block and previous insights if we're adding to an existing block
+        if (existingUserBlockId && isMounted) {
+          try {
+            const [userBlock, blockInsights] = await Promise.all([
+              getUserBlockById(existingUserBlockId),
+              getInsightsByUserBlockId(existingUserBlockId),
+            ]);
+
+            if (isMounted) {
+              setCurrentBlock(userBlock);
+              setPreviousInsights(blockInsights);
+            }
+          } catch (error) {
+            console.error('Failed to fetch block data:', error);
+            // Continue without block context if fetch fails
+            if (isMounted) {
+              setCurrentBlock(null);
+              setPreviousInsights([]);
+            }
+          }
+        }
       } catch (error) {
         console.error('An error occurred during data fetching:', error);
       } finally {
@@ -111,6 +145,7 @@ const Reading: React.FC = () => {
     cardsLoading,
     cardsError,
     blockTypes,
+    existingUserBlockId,
   ]);
 
   useEffect(() => {
@@ -126,25 +161,37 @@ const Reading: React.FC = () => {
         setLoadingReading(true);
         setReadingError(false);
         try {
-          const reading = await generatePersonalizedReading({
+          const reading = await generateInsight({
             cards: drawnCards,
             blockType: selectedBlock,
             userContext: userContext || '',
             userProfile,
             spreadType,
+            previousInsights:
+              previousInsights.length > 0 ? previousInsights : undefined,
+            currentBlock: currentBlock || undefined,
           });
           setPersonalizedReading(reading);
 
-          const userBlockPayload = {
-            user_id: user?.id ?? null,
-            block_type_id: selectedBlock?.id ?? null,
-            name: await generateUserBlockName(selectedBlock?.name, userContext),
-            status: 'in-progress',
-            progress: 0,
-            notes: null,
-          };
+          // Use existing block or create new one
+          let userBlockId = existingUserBlockId;
 
-          const userBlock = await createUserBlock(userBlockPayload);
+          if (!userBlockId) {
+            const userBlockPayload = {
+              user_id: user?.id ?? null,
+              block_type_id: selectedBlock?.id ?? null,
+              name: await generateUserBlockName(
+                selectedBlock?.name,
+                userContext
+              ),
+              status: 'in-progress',
+              progress: 0,
+              notes: null,
+            };
+
+            const userBlock = await createUserBlock(userBlockPayload);
+            userBlockId = userBlock.id;
+          }
 
           const insight = await createInsight({
             user_id: user?.id ?? null,
@@ -155,7 +202,7 @@ const Reading: React.FC = () => {
             resonated: false,
             took_action: false,
             reading,
-            user_block_id: userBlock.id,
+            user_block_id: userBlockId,
           });
 
           navigate(`/insights/${insight.id}`, {
@@ -186,6 +233,9 @@ const Reading: React.FC = () => {
     spreadType,
     user?.id,
     navigate,
+    existingUserBlockId,
+    previousInsights,
+    currentBlock,
   ]);
 
   const handleReset = () => {

@@ -7,6 +7,7 @@ export type {
   Insight,
   User,
   UserProfile,
+  UserBlock,
 } from '@/supabase/schema';
 
 // Legacy alias for backward compatibility
