@@ -27,7 +27,7 @@ export const generateInsight = async (
       throw new Error('Unexpected response type from Claude');
     }
 
-    return parseReadingResponse(response.text, request.spreadType);
+    return parseReadingResponse(response.text);
   } catch (error) {
     console.error('Failed to generate personalized reading:', error);
     throw new Error('Unable to generate reading. Please try again.');
@@ -179,10 +179,7 @@ const getSpreadSpecificInstructions = (spreadType: string): string => {
   }
 };
 
-const parseReadingResponse = (
-  response: string,
-  spreadType: string
-): PersonalizedReading => {
+const parseReadingResponse = (response: string): PersonalizedReading => {
   // Remove code block markers if present
   let cleaned = response.trim();
   // Remove leading/trailing ```json or ``` if present
@@ -206,7 +203,11 @@ const parseReadingResponse = (
       parsed.robQuip ||
       "Now quit overthinking and go debug your life. I've got other ethereal consultations to handle.";
     const reflectionPrompts =
-      spreadType !== 'quick-draw' ? parsed.reflectionPrompts || [] : undefined;
+      parsed.reflectionPrompts &&
+      Array.isArray(parsed.reflectionPrompts) &&
+      parsed.reflectionPrompts.length > 0
+        ? [parsed.reflectionPrompts[0]]
+        : ['What insight resonates most with your current situation?'];
 
     return {
       interpretation,
@@ -229,10 +230,9 @@ const parseReadingResponse = (
       actionSteps: ['Take one small step forward today'],
       robQuip:
         'Well, my JSON parsing just crashed like a startup demo. But the advice stands - go make something happen.',
-      reflectionPrompts:
-        spreadType !== 'quick-draw'
-          ? ['What insight resonates most with your current situation?']
-          : undefined,
+      reflectionPrompts: [
+        'What insight resonates most with your current situation?',
+      ],
     };
   }
 };

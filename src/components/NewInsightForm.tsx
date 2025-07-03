@@ -55,7 +55,7 @@ const NewReading: React.FC<NewReadingProps> = ({
             : 'When youre stuck, consult the duck'}
         </h1>
         <p className="text-accent text-sm">
-          {hasUserBlock ? `${userBlockName}` : "What's blocking you?"}
+          {hasUserBlock ? `Block: ${userBlockName}` : "What's blocking you?"}
         </p>
       </div>
 

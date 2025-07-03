@@ -18,10 +18,11 @@ import { type UserProfile } from '../interfaces';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import duckCodingMP4 from '../assets/wiz-duck-coding.mp4';
 import duckCardCatchMP4 from '../assets/duck-card-catch.mp4';
+import retroRobMP4 from '../assets/retro-rob.mp4';
 import ErrorState from '../components/ErrorState';
 
 // Use MP4 videos instead of GIFs for better performance
-const duckVideos = [duckCodingMP4, duckCardCatchMP4];
+const duckVideos = [duckCodingMP4, duckCardCatchMP4, retroRobMP4];
 
 interface ReadingState {
   selectedBlockTypeId: string;
@@ -70,6 +71,7 @@ const CreateInsight: React.FC = () => {
         if (!cardsLoading && !cardsError) {
           console.error('No cards available');
         }
+
         setIsDrawing(false);
         return;
       }
@@ -79,15 +81,18 @@ const CreateInsight: React.FC = () => {
 
       try {
         const profile = await getUserProfile(user.id);
-        if (!isMounted) return;
+
+        if (!isMounted) {
+          return;
+        }
         setUserProfile(profile);
 
         let blockType: BlockType | null = null;
         let userBlock: UserBlock | null = null;
 
         if (existingUserBlockId) {
-          // Fetch user block and its type
           userBlock = await getUserBlockById(existingUserBlockId);
+
           if (userBlock) {
             blockType =
               blockTypes.find((bt) => bt.id === userBlock?.block_type_id) ??
@@ -108,6 +113,7 @@ const CreateInsight: React.FC = () => {
               'No valid block type found. Please select or create a block type.'
             );
           }
+
           setIsDrawing(false);
           return;
         }
@@ -119,8 +125,10 @@ const CreateInsight: React.FC = () => {
         const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
         const drawnCardsList = [];
+
         for (let i = 0; i < numCardsToDraw; i++) {
           const drawn = drawCard(availableCards);
+
           if (!drawn) break;
           // Flatten the drawn card: merge all card properties + reversed
           drawnCardsList.push({ ...drawn.card, reversed: drawn.reversed });
@@ -211,11 +219,17 @@ const CreateInsight: React.FC = () => {
             user_block_id: userBlockId,
           });
 
+          setLoadingReading(false); // Move before navigate
+          console.log(
+            '[generateInsightAndSave] Navigating to insight',
+            insight.id
+          );
           navigate(`/insights/${insight.id}`, {
             state: {
               spreadType,
             },
           });
+          console.log('[generateInsightAndSave] Navigation called');
         } catch (error) {
           console.error('Failed to generate personalized reading:', error);
           if (error instanceof Error && error.message) {
@@ -237,7 +251,6 @@ const CreateInsight: React.FC = () => {
     selectedBlock,
     userProfile,
     userContext,
-    personalizedReading,
     spreadType,
     user?.id,
     navigate,
