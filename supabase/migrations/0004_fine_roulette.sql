@@ -1,1 +1,0 @@
-ALTER TABLE "insights" ADD COLUMN "user_block_id" integer;

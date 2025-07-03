@@ -24,9 +24,12 @@ CREATE TABLE "insights" (
 	"user_id" text,
 	"spread_type" text NOT NULL,
 	"block_type_id" text NOT NULL,
+	"user_block_id" integer,
 	"user_context" text,
 	"cards_drawn" jsonb NOT NULL,
 	"reading" jsonb NOT NULL,
+	"resonated" boolean DEFAULT false NOT NULL,
+	"took_action" boolean DEFAULT false NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
@@ -36,7 +39,9 @@ CREATE TABLE "user_profiles" (
 	"name" text NOT NULL,
 	"birthday" text NOT NULL,
 	"birth_place" text NOT NULL,
-	"profession" jsonb NOT NULL,
+	"creative_identity" text NOT NULL,
+	"work_context" text NOT NULL,
+	"zodiac_sign" text NOT NULL,
 	"debugging_mode" text NOT NULL,
 	"block_pattern" text NOT NULL,
 	"superpower" text NOT NULL,
@@ -45,6 +50,17 @@ CREATE TABLE "user_profiles" (
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
 	CONSTRAINT "user_profiles_user_id_unique" UNIQUE("user_id")
+);
+--> statement-breakpoint
+CREATE TABLE "user_blocks" (
+	"id" serial PRIMARY KEY NOT NULL,
+	"user_id" text,
+	"block_type_id" text NOT NULL,
+	"name" text NOT NULL,
+	"status" text DEFAULT 'active' NOT NULL,
+	"notes" text,
+	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
@@ -66,6 +82,10 @@ ALTER TABLE "insights" ADD CONSTRAINT "insights_user_id_users_id_fk" FOREIGN KEY
 --> statement-breakpoint
 ALTER TABLE "user_profiles" ADD CONSTRAINT "user_profiles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
 --> statement-breakpoint
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_block_type_id_block_types_id_fk" FOREIGN KEY ("block_type_id") REFERENCES "public"."block_types"("id") ON DELETE no action ON UPDATE no action;
+--> statement-breakpoint
+ALTER TABLE "user_blocks" ADD CONSTRAINT "user_blocks_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE set null ON UPDATE no action;
+--> statement-breakpoint
 
 -- Enable RLS on all tables
 ALTER TABLE "public"."cards" ENABLE ROW LEVEL SECURITY;
@@ -75,6 +95,8 @@ ALTER TABLE "public"."block_types" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "public"."users" ENABLE ROW LEVEL SECURITY;
 --> statement-breakpoint
 ALTER TABLE "public"."user_profiles" ENABLE ROW LEVEL SECURITY;
+--> statement-breakpoint
+ALTER TABLE "public"."user_blocks" ENABLE ROW LEVEL SECURITY;
 --> statement-breakpoint
 ALTER TABLE "public"."insights" ENABLE ROW LEVEL SECURITY;
 --> statement-breakpoint
@@ -99,6 +121,18 @@ CREATE POLICY "Users can view their own user_profile" ON "public"."user_profiles
 CREATE POLICY "Users can update their own user_profile" ON "public"."user_profiles" FOR UPDATE USING (auth.uid()::text = user_id);
 --> statement-breakpoint
 CREATE POLICY "Users can insert their own user_profile" ON "public"."user_profiles" FOR INSERT WITH CHECK (auth.uid()::text = user_id);
+--> statement-breakpoint
+
+-- Create policies for user_blocks (users can only access their own blocks)
+CREATE POLICY "Users can view their own user_blocks" ON "public"."user_blocks" FOR SELECT USING (auth.uid()::text = user_id);
+--> statement-breakpoint
+CREATE POLICY "Users can insert their own user_blocks" ON "public"."user_blocks" FOR INSERT WITH CHECK (auth.uid()::text = user_id);
+--> statement-breakpoint
+CREATE POLICY "Users can update their own user_blocks" ON "public"."user_blocks" FOR UPDATE USING (auth.uid()::text = user_id);
+--> statement-breakpoint
+CREATE POLICY "Users can delete their own user_blocks" ON "public"."user_blocks" FOR DELETE USING (auth.uid()::text = user_id);
+--> statement-breakpoint
+CREATE POLICY "Allow anonymous user_blocks" ON "public"."user_blocks" FOR ALL USING (user_id IS NULL);
 --> statement-breakpoint
 
 -- Create policies for insights (users can only access their own insights)

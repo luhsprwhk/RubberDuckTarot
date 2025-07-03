@@ -1,5 +1,5 @@
 import type { ReadingRequest, PersonalizedReading } from './index';
-import { getProfessionMetaphors } from './profession-metaphors';
+import { getContextMetaphors } from './profession-metaphors';
 import systemPrompt from './system-prompt.md?raw';
 import { anthropic } from './index';
 
@@ -45,8 +45,11 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     currentBlock,
   } = request;
 
-  // Get profession-specific metaphor style
-  const metaphorStyle = getProfessionMetaphors(userProfile.profession);
+  // Get context-specific metaphor style
+  const metaphorStyle = getContextMetaphors({
+    creative_identity: userProfile.creative_identity,
+    work_context: userProfile.work_context,
+  });
 
   // Build card context with perspective prompts
   const cardDetails = cards
@@ -72,12 +75,14 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
 
   const clientProfile = `
     Name: ${userProfile.name}
-    Profession: ${userProfile.profession.name} - ${metaphorStyle.note}
+    Creative Identity: ${userProfile.creative_identity}
+    Work Context: ${userProfile.work_context} - ${metaphorStyle.note}
     Debugging Style: ${userProfile.debugging_mode}
     Primary Block Pattern: ${userProfile.block_pattern}
     Superpower: "${userProfile.superpower}"
     Kryptonite: "${userProfile.kryptonite}"
     Problem-solving Spirit: ${userProfile.spirit_animal}
+    Zodiac Sign: ${userProfile.zodiac_sign}
   `;
 
   // Format previous insights for context
@@ -109,7 +114,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     <spread_instructions>${getSpreadSpecificInstructions(spreadType)}</spread_instructions>
 
     <profile_integration>
-      * Integrate the client's profile (profession, debugging style, superpower, kryptonite, spirit animal)
+      * Integrate the client's profile (creative identity, work context, zodiac sign, debugging style, superpower, kryptonite, spirit animal)
       directly into your interpretation of each card. Let these traits influence how you explain the card
       meanings and advice, tailoring insights and action steps to their unique strengths,
       challenges, and mindset. Use ${metaphorStyle.style}—keep it practical, not mystical.
@@ -118,13 +123,13 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     ${
       currentBlockContext || previousInsightsContext
         ? `<consultation_continuity>
-      ${currentBlockContext ? "* IMPORTANT: Reference the current block status, progress, and any notes. This shows how far they've come and what specific challenges remain." : ''}
+      ${currentBlockContext ? '* IMPORTANT: Reference the current block status and any notes. This shows their current approach and what specific challenges remain.' : ''}
       ${previousInsightsContext ? "* Reference previous consultations for this block. Note what advice was given before, what resonated, and what actions they took (or didn't take)." : ''}
       ${previousInsightsContext ? '* Build on previous insights rather than repeating them. Ask follow-up questions about implementation.' : ''}
       ${previousInsightsContext ? '* If they ignored previous advice, address this directly but supportively.' : ''}
       * Show progression in your understanding of their specific block pattern.
       * Rob remembers everything and should reference specifics naturally.
-      ${currentBlockContext ? '* Use block progress and status to calibrate advice - different strategies for 10% vs 90% complete blocks.' : ''}
+      ${currentBlockContext ? '* Use block status and timeline to calibrate advice - different strategies for new vs long-term blocks.' : ''}
     </consultation_continuity>`
         : ''
     }
@@ -273,13 +278,11 @@ const formatCurrentBlock = (
 Current Block Status:
 Name: "${block.name}"
 Status: ${block.status}
-Progress: ${block.progress}% complete
 Days Working: ${timeWorking} days
 Last Updated: ${lastUpdated} days ago
 ${block.notes ? `Notes: "${block.notes}"` : 'No notes recorded'}
 
 Block Analysis:
-- This is ${block.progress < 25 ? 'early stage' : block.progress < 75 ? 'mid-progress' : 'nearly complete'}
 - Status indicates they are ${block.status === 'active' ? 'actively working' : block.status === 'paused' ? 'taking a break' : 'considering it resolved'}
 - Time investment: ${timeWorking < 7 ? 'Just started' : timeWorking < 30 ? 'Working for weeks' : 'Long-term project'}
 - Recent activity: ${lastUpdated === 0 ? 'Updated today' : lastUpdated === 1 ? 'Updated yesterday' : lastUpdated < 7 ? 'Updated recently' : 'Stalled for a while'}

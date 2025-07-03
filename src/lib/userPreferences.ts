@@ -65,12 +65,13 @@ export const isProfileComplete = (profile: UserProfile | null): boolean => {
     'name',
     'birthday',
     'birth_place',
-    'profession',
+    'creative_identity',
+    'work_context',
+    'zodiac_sign',
     'debugging_mode',
     'block_pattern',
     'superpower',
     'kryptonite',
-
     'spirit_animal',
   ];
 

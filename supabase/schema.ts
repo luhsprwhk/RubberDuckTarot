@@ -73,9 +73,9 @@ export const user_profiles = pgTable('user_profiles', {
   name: text('name').notNull(),
   birthday: text('birthday').notNull(),
   birth_place: text('birth_place').notNull(),
-  profession: jsonb('profession')
-    .$type<{ category: string; name: string }>()
-    .notNull(),
+  creative_identity: text('creative_identity').notNull(),
+  work_context: text('work_context').notNull(),
+  zodiac_sign: text('zodiac_sign').notNull(),
   debugging_mode: text('debugging_mode').notNull(),
   block_pattern: text('block_pattern').notNull(),
   superpower: text('superpower').notNull(),
@@ -95,7 +95,6 @@ export const userBlocks = pgTable('user_blocks', {
   block_type_id: text('block_type_id').notNull(),
   name: text('name').notNull(),
   status: text('status').notNull().default('active'), // 'active', 'resolved', 'paused'
-  progress: integer('progress').notNull().default(0), // 0-100
   notes: text('notes'),
   created_at: timestamp('created_at', { withTimezone: true })
     .notNull()

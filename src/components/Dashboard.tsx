@@ -2,12 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import NewInsightForm from './NewInsightForm';
+import BlockTracker from './BlockTracker';
+import { useUserBlocks } from '../lib/blocks/useUserBlocks';
+import { Link } from 'react-router-dom';
 import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType } from '@/src/interfaces';
 import Loading from './Loading';
 
-export default function Lobby() {
+export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   // State management
@@ -16,6 +19,16 @@ export default function Lobby() {
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
+
+  // UserBlocks
+  const { blocks, loading: blocksLoading, fetchUserBlocks } = useUserBlocks();
+
+  useEffect(() => {
+    if (user) {
+      fetchUserBlocks(user.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   useEffect(() => {
     let isMounted = true;
@@ -77,7 +90,7 @@ export default function Lobby() {
   };
 
   // Conditional rendering logic
-  if (loading) {
+  if (loading || blocksLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loading />
@@ -85,6 +98,31 @@ export default function Lobby() {
     );
   }
 
+  // If user has active blocks, show them and a 'New Block' button
+  if (blocks && blocks.length > 0) {
+    // Filter only active blocks (status === 'active' or 'in-progress')
+    const activeBlocks = blocks.filter(
+      (block) => block.status === 'active' || block.status === 'in-progress'
+    );
+    return (
+      <div className="max-w-3xl mx-auto p-6">
+        <h2 className="text-2xl font-bold mb-4 text-primary">
+          Your Active Blocks
+        </h2>
+        <BlockTracker blocks={activeBlocks} blockTypes={blockTypes} />
+        <div className="mt-8 flex justify-center">
+          <Link
+            to="/new-insight"
+            className="inline-flex items-center px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors shadow-lg"
+          >
+            + New Insight
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Otherwise, show the new reading component
   return (
     <NewInsightForm
       blockTypes={blockTypes}

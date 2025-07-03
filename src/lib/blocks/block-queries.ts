@@ -49,23 +49,20 @@ export const getUserBlockById = async (
   return data;
 };
 
-export const updateUserBlockProgress = async (
+export const updateUserBlockStatus = async (
   blockId: number,
-  progress: number,
-  status?: string,
+  status: string,
   notes?: string
 ): Promise<void> => {
   const updates: {
-    progress: number;
-    status?: string;
+    status: string;
     notes?: string;
     updated_at: string;
   } = {
-    progress,
+    status,
     updated_at: new Date().toISOString(),
   };
 
-  if (status !== undefined) updates.status = status;
   if (notes !== undefined) updates.notes = notes;
 
   const { error } = await supabase

@@ -68,13 +68,6 @@ const Blocks: React.FC = () => {
     }
   };
 
-  const getProgressColor = (progress: number): string => {
-    if (progress >= 80) return 'bg-green-400';
-    if (progress >= 50) return 'bg-breakthrough-400';
-    if (progress >= 25) return 'bg-yellow-400';
-    return 'bg-red-400';
-  };
-
   if (initialLoading) {
     return <Loading text="Loading your blocks..." />;
   }
@@ -128,20 +121,6 @@ const Blocks: React.FC = () => {
                 <p className="text-sm text-accent mb-3">
                   {getBlockTypeName(block.block_type_id)}
                 </p>
-
-                {/* Progress Bar */}
-                <div className="w-full bg-void-600 rounded-full h-2 mb-2">
-                  <div
-                    className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(block.progress)}`}
-                    style={{ width: `${block.progress}%` }}
-                  ></div>
-                </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-secondary">Progress</span>
-                  <span className="text-primary font-medium">
-                    {block.progress}%
-                  </span>
-                </div>
 
                 {block.notes && (
                   <div className="mt-3 p-3 bg-void-700 rounded-lg">

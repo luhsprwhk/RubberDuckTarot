@@ -7,6 +7,7 @@ import useAuth from '../lib/hooks/useAuth';
 import { saveUserProfile, getUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';
 import { useNavigate } from 'react-router-dom';
+import { getZodiacSign } from '../lib/zodiacUtils';
 import robEmoji from '../assets/rob-emoji.png';
 
 const superpowers = [
@@ -29,73 +30,27 @@ const kryptonites = [
   'Comparing myself to others',
 ];
 
-const techProfessions = [
-  'Dev',
-  'Designer',
-  'PM',
-  'Marketing',
-  'Manager',
-  'Sales',
-  'Executive',
-  'Founder',
-  'Intern',
-  'Other',
+const creativeIdentities = [
+  'Developer with creative side projects',
+  'Artist with a day job',
+  'Entrepreneur building multiple things',
+  'Creative professional in corporate world',
+  'Founder/CEO questioning everything',
+  'Career changer/pivoter',
+  'Multi-passionate creative',
+  'Burned out high achiever',
+  'Student/early career figuring it out',
 ];
 
-const creativeProfessions = [
-  'Artist',
-  'Writer',
-  'Musician',
-  'Filmmaker',
-  'Dancer',
-  'Actor',
-  'Other',
-];
-const healthcareProfessions = [
-  'Doctor',
-  'Nurse',
-  'Therapist',
-  'Researcher',
-  'Administrator',
-  'Educator',
-  'Other',
-];
-const businessProfessions = [
-  'Analyst',
-  'Consultant',
-  'Accountant',
-  'HR',
-  'Operations',
-  'Sales',
-  'Marketing',
-  'Other',
-];
-const studentProfessions = [
-  'High School',
-  'Undergraduate',
-  'Graduate',
-  'PhD Candidate',
-  'Bootcamp',
-  'Other',
-];
-
-const professionsByCategory: { [key: string]: string[] } = {
-  Tech: techProfessions,
-  Creative: creativeProfessions,
-  Healthcare: healthcareProfessions,
-  Business: businessProfessions,
-  Student: studentProfessions,
-  Other: [],
-};
-
-const professionCategories = [
-  'Tech',
-  'Creative',
+const workContexts = [
+  'Tech/Engineering',
+  'Design/Creative',
+  'Business/Finance',
   'Healthcare',
-  'Business',
-  'Trades/Service Work',
-  'Student/Career Starter',
-  'Other',
+  'Education',
+  'Freelance/Consulting',
+  'Between jobs',
+  'Student',
 ];
 
 const debuggingModes = [
@@ -154,18 +109,15 @@ const OnBoarding = () => {
     name: '',
     birthday: '',
     birth_place: '',
-    profession: {
-      category: '',
-      name: '',
-    },
+    creative_identity: '',
+    work_context: '',
+    zodiac_sign: '',
     debugging_mode: '',
     block_pattern: '',
     superpower: '',
     kryptonite: '',
     spirit_animal: '',
   });
-
-  const [isOtherProfession, setIsOtherProfession] = useState(false);
 
   const [robMessage, setRobMessage] = useState(
     "Welcome to the Rubber Duck Tarot. I'm Rob, a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
@@ -180,20 +132,6 @@ const OnBoarding = () => {
           if (existingProfile) {
             const { ...loadedProfile } = existingProfile;
             setProfile(loadedProfile);
-
-            if (loadedProfile.profession && loadedProfile.profession.category) {
-              const { category, name } = loadedProfile.profession;
-              const categoryProfessions = professionsByCategory[category];
-              if (
-                !categoryProfessions ||
-                categoryProfessions.length === 0 ||
-                !categoryProfessions.includes(name)
-              ) {
-                setIsOtherProfession(true);
-              } else {
-                setIsOtherProfession(false);
-              }
-            }
           }
         } catch (error) {
           console.error('Failed to load profile:', error);
@@ -221,18 +159,17 @@ const OnBoarding = () => {
     field: K,
     value: (typeof profile)[K]
   ) => {
-    setProfile((prev) => ({ ...prev, [field]: value }));
-  };
+    setProfile((prev) => {
+      const updated = { ...prev, [field]: value };
 
-  const professionNameSelection =
-    isOtherProfession ||
-    (profile.profession.category &&
-      profile.profession.name &&
-      !professionsByCategory[profile.profession.category]?.includes(
-        profile.profession.name
-      ))
-      ? 'Other'
-      : profile.profession.name;
+      // Automatically calculate zodiac sign when birthday is updated
+      if (field === 'birthday' && value && typeof value === 'string') {
+        updated.zodiac_sign = getZodiacSign(value);
+      }
+
+      return updated;
+    });
+  };
 
   const steps = [
     {
@@ -287,95 +224,48 @@ const OnBoarding = () => {
       ),
     },
     {
-      title: 'Profession Assessment',
+      title: 'Creative Identity & Work Context',
       robMessage:
-        "What's your day job? This helps me calibrate my metaphor game.",
+        "Let's understand your creative identity and work context. This helps me tune my insights to your unique situation.",
       content: (
-        <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-3">
-            {professionCategories
-              .filter(
-                (category) =>
-                  !profile.profession.category ||
-                  category === profile.profession.category
-              )
-              .map((category) => (
-                <button
-                  key={category}
-                  onClick={() => {
-                    updateProfile('profession', {
-                      category: category,
-                      name: '',
-                    });
-                    setIsOtherProfession(
-                      professionsByCategory[category]?.length === 0
-                    );
-                  }}
-                  className={`p-4 text-left border text-primary bg-liminal-overlay  border-liminal-border rounded-lg transition-all ${
-                    profile.profession.category === category
-                      ? 'border-terminal-pulse bg-terminal-pulse ring-2 ring-terminal-pulse'
-                      : 'border-liminal-border hover:border-terminal-pulse hover:bg-terminal-pulse'
-                  }`}
-                >
-                  {category}
-                </button>
+        <div className="space-y-6">
+          <div>
+            <label className="block text-sm font-medium text-primary mb-3">
+              Creative Identity
+            </label>
+            <select
+              className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
+              value={profile.creative_identity}
+              onChange={(e) =>
+                updateProfile('creative_identity', e.target.value)
+              }
+            >
+              <option value="">Select your creative identity...</option>
+              {creativeIdentities.map((identity) => (
+                <option key={identity} value={identity}>
+                  {identity}
+                </option>
               ))}
+            </select>
           </div>
-          {profile.profession.category && (
-            <div className="grid grid-cols-1 gap-3">
-              {!isOtherProfession &&
-                professionsByCategory[profile.profession.category]?.length >
-                  0 && (
-                  <select
-                    value={professionNameSelection}
-                    onChange={(e) => {
-                      if (e.target.value === 'Other') {
-                        setIsOtherProfession(true);
-                        updateProfile('profession', {
-                          ...profile.profession,
-                          name: '',
-                        });
-                      } else {
-                        setIsOtherProfession(false);
-                        updateProfile('profession', {
-                          ...profile.profession,
-                          name: e.target.value,
-                        });
-                      }
-                    }}
-                    className="w-full px-3 py-2 bg-void-800 text-primary border border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:terminal-glow"
-                  >
-                    <option value="" disabled>
-                      Select your profession
-                    </option>
-                    {professionsByCategory[profile.profession.category].map(
-                      (p) => (
-                        <option key={p} value={p} className="text-primary">
-                          {p}
-                        </option>
-                      )
-                    )}
-                  </select>
-                )}
 
-              {isOtherProfession && (
-                <input
-                  type="text"
-                  value={profile.profession.name}
-                  onChange={(e) =>
-                    updateProfile('profession', {
-                      ...profile.profession,
-                      name: e.target.value,
-                    })
-                  }
-                  onBlur={() => setIsOtherProfession(false)}
-                  className="w-full px-3 py-2 border border-liminal-border bg-void-800 text-primary rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  placeholder="What's your profession?"
-                  autoFocus
-                />
-              )}
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-primary mb-3">
+              Work Context
+            </label>
+            <select
+              className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
+              value={profile.work_context}
+              onChange={(e) => updateProfile('work_context', e.target.value)}
+            >
+              <option value="">Select your work context...</option>
+              {workContexts.map((context) => (
+                <option key={context} value={context}>
+                  {context}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       ),
     },
@@ -578,8 +468,8 @@ const OnBoarding = () => {
         );
       case 1:
         return (
-          profile.profession.category.trim() !== '' &&
-          profile.profession.name.trim() !== ''
+          profile.creative_identity.trim() !== '' &&
+          profile.work_context.trim() !== ''
         );
       case 2:
         return profile.debugging_mode.trim() !== '';

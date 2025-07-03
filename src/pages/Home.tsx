@@ -1,7 +1,7 @@
 import useAuth from '../lib/hooks/useAuth';
 import Landing from '../components/Landing';
-import Lobby from '../components/Lobby';
 import Loading from '../components/Loading';
+import Dashboard from '../components/Dashboard';
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -15,5 +15,5 @@ export default function Home() {
   }
 
   const isUserLoggedIn = !!user;
-  return isUserLoggedIn ? <Lobby /> : <Landing />;
+  return isUserLoggedIn ? <Dashboard /> : <Landing />;
 }

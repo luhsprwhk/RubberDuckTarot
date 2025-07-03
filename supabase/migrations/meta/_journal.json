@@ -8,34 +8,6 @@
       "when": 1751331880984,
       "tag": "0000_powerful_sphinx",
       "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1751334432877,
-      "tag": "0001_third_maximus",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1751349507409,
-      "tag": "0002_careful_starhawk",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1751390946313,
-      "tag": "0003_fine_zombie",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1751409880913,
-      "tag": "0004_fine_roulette",
-      "breakpoints": true
     }
   ]
 }

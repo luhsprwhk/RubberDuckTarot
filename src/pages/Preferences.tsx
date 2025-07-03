@@ -4,6 +4,7 @@ import useAuth from '../lib/hooks/useAuth';
 import { useUserProfile } from '../lib/hooks/useUserProfile';
 import { updateUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';
+import { getZodiacSign } from '../lib/zodiacUtils';
 
 const superpowers = [
   'Breaking complex problems into simple steps',
@@ -35,6 +36,29 @@ const debuggingModes = [
   'collaborative',
   'analytical',
   'intuitive',
+];
+
+const creativeIdentities = [
+  'Developer with creative side projects',
+  'Artist with a day job',
+  'Entrepreneur building multiple things',
+  'Creative professional in corporate world',
+  'Founder/CEO questioning everything',
+  'Career changer/pivoter',
+  'Multi-passionate creative',
+  'Burned out high achiever',
+  'Student/early career figuring it out',
+];
+
+const workContexts = [
+  'Tech/Engineering',
+  'Design/Creative',
+  'Business/Finance',
+  'Healthcare',
+  'Education',
+  'Freelance/Consulting',
+  'Between jobs',
+  'Student',
 ];
 
 const spiritAnimals = [
@@ -75,7 +99,16 @@ const Preferences = () => {
     field: keyof UserProfile,
     value: string | number
   ) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    setFormData((prev) => {
+      const updated = { ...prev, [field]: value };
+
+      // Automatically calculate zodiac sign when birthday is updated
+      if (field === 'birthday' && value && typeof value === 'string') {
+        updated.zodiac_sign = getZodiacSign(value);
+      }
+
+      return updated;
+    });
   };
 
   const handleSave = async () => {
@@ -196,17 +229,47 @@ const Preferences = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Profession
+                <label className="block text-sm font-medium text-primary mb-2">
+                  Creative Identity
                 </label>
-                <input
-                  type="text"
-                  value={formData.profession?.name || profile.profession.name}
+                <select
+                  value={formData.creative_identity || ''}
                   onChange={(e) =>
-                    handleInputChange('profession', e.target.value)
+                    handleInputChange('creative_identity', e.target.value)
                   }
                   className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                />
+                >
+                  <option value="" disabled>
+                    Select your creative identity
+                  </option>
+                  {creativeIdentities.map((identity) => (
+                    <option key={identity} value={identity}>
+                      {identity}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-primary mb-2">
+                  Work Context
+                </label>
+                <select
+                  value={formData.work_context || ''}
+                  onChange={(e) =>
+                    handleInputChange('work_context', e.target.value)
+                  }
+                  className="w-full px-3 py-2 border border-liminal-border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                >
+                  <option value="" disabled>
+                    Select your work context
+                  </option>
+                  {workContexts.map((context) => (
+                    <option key={context} value={context}>
+                      {context}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>

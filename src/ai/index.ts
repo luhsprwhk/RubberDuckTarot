@@ -30,7 +30,6 @@ export interface ReadingRequest {
     id: number;
     name: string;
     status: string;
-    progress: number;
     notes: string | null;
     created_at: Date;
     updated_at: Date;

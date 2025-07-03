@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Card, BlockType } from '@/src/interfaces';
-import type { PersonalizedReading } from '@/src/lib/claude-ai';
+import type { PersonalizedReading } from '@/src/ai';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
 import SentimentTracking from './SentimentTracking';

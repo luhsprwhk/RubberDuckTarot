@@ -1,12 +1,11 @@
 import React from 'react';
-import { Target, Edit, Trash2 } from 'lucide-react';
+import { Target, Trash2 } from 'lucide-react';
 import type { UserBlock } from '@/supabase/schema';
 import type { BlockType } from '../interfaces';
 
 interface BlockTrackerProps {
   blocks: UserBlock[];
   blockTypes: BlockType[];
-  onUpdateProgress?: (blockId: number, progress: number) => void;
   onUpdateStatus?: (blockId: number, status: string) => void;
   onDeleteBlock?: (blockId: number) => void;
   compact?: boolean;
@@ -15,7 +14,6 @@ interface BlockTrackerProps {
 const BlockTracker: React.FC<BlockTrackerProps> = ({
   blocks,
   blockTypes,
-  onUpdateProgress,
   onUpdateStatus,
   onDeleteBlock,
   compact = false,
@@ -44,13 +42,6 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
       default:
         return 'text-accent bg-accent/20';
     }
-  };
-
-  const getProgressColor = (progress: number): string => {
-    if (progress >= 80) return 'bg-green-400';
-    if (progress >= 50) return 'bg-breakthrough-400';
-    if (progress >= 25) return 'bg-yellow-400';
-    return 'bg-red-400';
   };
 
   if (blocks.length === 0) {
@@ -94,29 +85,8 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
               )}
             </div>
 
-            {(onUpdateProgress || onUpdateStatus || onDeleteBlock) && (
+            {(onUpdateStatus || onDeleteBlock) && (
               <div className="flex gap-2">
-                {onUpdateProgress && (
-                  <button
-                    onClick={() => {
-                      const newProgress = prompt(
-                        'Enter progress (0-100):',
-                        block.progress.toString()
-                      );
-                      if (newProgress !== null) {
-                        const progress = Math.max(
-                          0,
-                          Math.min(100, parseInt(newProgress) || 0)
-                        );
-                        onUpdateProgress(block.id, progress);
-                      }
-                    }}
-                    className="p-1 text-accent hover:text-breakthrough-400 transition-colors"
-                    title="Update progress"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </button>
-                )}
                 {onDeleteBlock && (
                   <button
                     onClick={() => {
@@ -134,18 +104,6 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
                 )}
               </div>
             )}
-          </div>
-
-          {/* Progress Bar */}
-          <div className="w-full bg-void-600 rounded-full h-2 mb-2">
-            <div
-              className={`h-2 rounded-full transition-all duration-300 ${getProgressColor(block.progress)}`}
-              style={{ width: `${block.progress}%` }}
-            ></div>
-          </div>
-          <div className="flex justify-between items-center text-xs">
-            <span className="text-secondary">Progress</span>
-            <span className="text-primary font-medium">{block.progress}%</span>
           </div>
 
           {block.notes && !compact && (

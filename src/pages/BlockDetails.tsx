@@ -98,63 +98,49 @@ const BlockDetails: React.FC = () => {
           {block.name}
         </div>
 
-        <div className="grid grid-cols-2 gap-4 mb-4">
-          <div>
-            <span className="font-semibold text-secondary">Status:</span>{' '}
-            <span className="text-primary">{block.status}</span>
-            <div className="flex gap-2 mt-2">
-              <button
-                className={`px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
-                disabled={block.status === 'resolved'}
-                onClick={async () => {
-                  if (!block) return;
-                  try {
-                    await import('../lib/blocks/block-queries').then(
-                      ({ updateUserBlockProgress }) =>
-                        updateUserBlockProgress(
-                          block.id,
-                          block.progress,
-                          'resolved'
-                        )
-                    );
-                    setBlock({ ...block, status: 'resolved' });
-                  } catch (err) {
-                    alert('Failed to update status');
-                    console.error(err);
-                  }
-                }}
-              >
-                Mark as Resolved
-              </button>
-              <button
-                className={`px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
-                onClick={async () => {
-                  if (!block) return;
-                  const newStatus =
-                    block.status === 'paused' ? 'active' : 'paused';
-                  try {
-                    await import('../lib/blocks/block-queries').then(
-                      ({ updateUserBlockProgress }) =>
-                        updateUserBlockProgress(
-                          block.id,
-                          block.progress,
-                          newStatus
-                        )
-                    );
-                    setBlock({ ...block, status: newStatus });
-                  } catch (err) {
-                    console.error(err);
-                    alert('Failed to update status.');
-                  }
-                }}
-              >
-                {block.status === 'paused' ? 'Mark as Active' : 'Pause'}
-              </button>
-            </div>
-          </div>
-          <div>
-            <span className="font-semibold text-secondary">Progress:</span>{' '}
-            <span className="text-primary">{block.progress}%</span>
+        <div className="mb-4">
+          <span className="font-semibold text-secondary">Status:</span>{' '}
+          <span className="text-primary">{block.status}</span>
+          <div className="flex gap-2 mt-2">
+            <button
+              className={`px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
+              disabled={block.status === 'resolved'}
+              onClick={async () => {
+                if (!block) return;
+                try {
+                  await import('../lib/blocks/block-queries').then(
+                    ({ updateUserBlockStatus }) =>
+                      updateUserBlockStatus(block.id, 'resolved')
+                  );
+                  setBlock({ ...block, status: 'resolved' });
+                } catch (err) {
+                  alert('Failed to update status');
+                  console.error(err);
+                }
+              }}
+            >
+              Mark as Resolved
+            </button>
+            <button
+              className={`px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
+              onClick={async () => {
+                if (!block) return;
+                const newStatus =
+                  block.status === 'paused' ? 'active' : 'paused';
+                try {
+                  await import('../lib/blocks/block-queries').then(
+                    ({ updateUserBlockStatus }) =>
+                      updateUserBlockStatus(block.id, newStatus)
+                  );
+                  setBlock({ ...block, status: newStatus });
+                } catch (err) {
+                  console.error(err);
+                  alert('Failed to update status.');
+                }
+              }}
+            >
+              {block.status === 'paused' ? 'Mark as Active' : 'Pause'}
+            </button>
           </div>
         </div>
 

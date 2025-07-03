@@ -60,6 +60,7 @@ const NewInsightPage = () => {
       onSpreadSelect={setSelectedSpread}
       onNewReading={handleNewReading}
       selectedSpread={selectedSpread}
+      userContext={userContext}
       hasUserBlock={Boolean(locationState?.userBlockId)}
       userBlockName={locationState?.blockName}
     />
