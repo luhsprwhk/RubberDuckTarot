@@ -185,7 +185,6 @@ const Reading: React.FC = () => {
                 userContext
               ),
               status: 'in-progress',
-              progress: 0,
               notes: null,
             };
 
