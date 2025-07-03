@@ -12,6 +12,9 @@ interface NewReadingProps {
   onUserContextChange: (context: string) => void;
   onNewReading: () => void;
   onSpreadSelect: (spread: string) => void;
+  hasUserBlock?: boolean;
+  userBlockName?: string;
+  userContextPlaceholder?: string;
 }
 
 const NewReading: React.FC<NewReadingProps> = ({
@@ -23,6 +26,9 @@ const NewReading: React.FC<NewReadingProps> = ({
   onNewReading,
   onSpreadSelect,
   selectedSpread,
+  userContextPlaceholder,
+  hasUserBlock = false,
+  userBlockName = '',
 }) => {
   const [blockTypeLocked, setBlockTypeLocked] = React.useState(false);
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
@@ -38,103 +44,107 @@ const NewReading: React.FC<NewReadingProps> = ({
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-surface min-h-screen">
+    <div className="max-w-2xl mx-auto p-6 bg-surface min-h-screen backdrop-blur-liminal border border-liminal-border">
       <div className="text-center mb-4">
         <div id="rob-divination-pic" className="mb-12 w-28 h-28 mx-auto">
           <img src={robDivinationPic} alt="Rob Divination" />
         </div>
         <h1 className="text-3xl font-bold text-primary mb-2 pt-4">
-          What's blocking you?
+          {hasUserBlock
+            ? 'Get More Insight'
+            : 'When youre stuck, consult the duck'}
         </h1>
         <p className="text-accent text-sm">
-          When you're stuck, consult the duck
+          {hasUserBlock ? `${userBlockName}` : "What's blocking you?"}
         </p>
       </div>
 
       {/* Block Type Selection */}
-      <div className="mb-6">
-        {blockTypeLocked && selectedBlock ? (
-          <>
-            <div className="grid grid-cols-1 mb-4">
-              <button
-                key={selectedBlock.id}
-                className={cn(
-                  'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-liminal-overlay'
-                )}
-                disabled
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{selectedBlock.emoji}</span>
-                  <div>
-                    <div className="font-medium text-primary">
-                      {selectedBlock.name}
-                    </div>
-                    <div className="text-sm text-secondary">
-                      {selectedBlock.description}
+      {!hasUserBlock && (
+        <div className="mb-6">
+          {blockTypeLocked && selectedBlock ? (
+            <>
+              <div className="grid grid-cols-1 mb-4">
+                <button
+                  key={selectedBlock.id}
+                  className={cn(
+                    'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-liminal-overlay'
+                  )}
+                  disabled
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{selectedBlock.emoji}</span>
+                    <div>
+                      <div className="font-medium text-primary">
+                        {selectedBlock.name}
+                      </div>
+                      <div className="text-sm text-secondary">
+                        {selectedBlock.description}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </button>
+              </div>
+              <button
+                type="button"
+                className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
+                onClick={handleUnlockBlockType}
+              >
+                Pick a different block type
               </button>
+            </>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {blockTypes.map((blockType) => (
+                <button
+                  key={blockType.id}
+                  onClick={() => handleBlockSelect(blockType.id)}
+                  className={cn(
+                    'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
+                    selectedBlockType === blockType.id
+                      ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
+                      : 'border-default hover:border-default'
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{blockType.emoji}</span>
+                    <div>
+                      <div
+                        className={cn(
+                          'font-medium',
+                          selectedBlockType === blockType.id
+                            ? 'text-void-800'
+                            : 'text-secondary'
+                        )}
+                      >
+                        {blockType.name}
+                      </div>
+                      <div
+                        className={cn(
+                          'text-sm',
+                          selectedBlockType === blockType.id
+                            ? 'text-void-800'
+                            : 'text-secondary'
+                        )}
+                      >
+                        {blockType.description}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
             </div>
-            <button
-              type="button"
-              className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
-              onClick={handleUnlockBlockType}
-            >
-              Pick a different block type
-            </button>
-          </>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {blockTypes.map((blockType) => (
-              <button
-                key={blockType.id}
-                onClick={() => handleBlockSelect(blockType.id)}
-                className={cn(
-                  'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
-                  selectedBlockType === blockType.id
-                    ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
-                    : 'border-default hover:border-default'
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <span className="text-2xl">{blockType.emoji}</span>
-                  <div>
-                    <div
-                      className={cn(
-                        'font-medium',
-                        selectedBlockType === blockType.id
-                          ? 'text-void-800'
-                          : 'text-secondary'
-                      )}
-                    >
-                      {blockType.name}
-                    </div>
-                    <div
-                      className={cn(
-                        'text-sm',
-                        selectedBlockType === blockType.id
-                          ? 'text-void-800'
-                          : 'text-secondary'
-                      )}
-                    >
-                      {blockType.description}
-                    </div>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
 
       {/* Select Spread */}
-      {selectedBlockType && (
+      {hasUserBlock || selectedBlockType ? (
         <SpreadSelector
           selectedSpread={selectedSpread}
           onSpreadSelect={onSpreadSelect}
         />
-      )}
+      ) : null}
 
       {/* Context Input */}
       {selectedSpread && (
@@ -145,7 +155,10 @@ const NewReading: React.FC<NewReadingProps> = ({
           <textarea
             value={userContext}
             onChange={(e) => onUserContextChange(e.target.value)}
-            placeholder={`Describe your ${selectedBlock?.name.toLowerCase()} or ask a question`}
+            placeholder={
+              userContextPlaceholder ||
+              `Describe your ${selectedBlock?.name.toLowerCase()} or ask a question`
+            }
             className={cn(
               'w-full text-secondary p-4 border border-default rounded-lg resize-none focus:ring-2 focus:ring-breakthrough-400 focus:border-transparent',
               'bg-liminal-overlay'
@@ -156,9 +169,16 @@ const NewReading: React.FC<NewReadingProps> = ({
       )}
 
       {/* Draw Button */}
-      {selectedBlockType && userContext.trim() !== '' && (
-        <DrawButton onNewReading={onNewReading} />
-      )}
+      {(() => {
+        const safeUserContext = userContext ?? '';
+        return hasUserBlock
+          ? safeUserContext.trim() !== '' && (
+              <DrawButton onNewReading={onNewReading} />
+            )
+          : selectedBlockType && safeUserContext.trim() !== '' && (
+              <DrawButton onNewReading={onNewReading} />
+            );
+      })()}
     </div>
   );
 };

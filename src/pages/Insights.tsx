@@ -128,14 +128,16 @@ const Insights: React.FC = () => {
                         </span>
                       </div>
                       <ul className="space-y-2 bullet-list">
-                        {insight.reading.keyInsights.map((insight, index) => (
-                          <li key={index} className="flex items-start gap-2">
-                            <span className="text-primary mt-1">•</span>
-                            <span className="text-secondary text-sm">
-                              {insight}
-                            </span>
-                          </li>
-                        ))}
+                        {insight.reading.keyInsights.map(
+                          (keyInsight: string, index: number) => (
+                            <li key={index} className="flex items-start gap-2">
+                              <span className="text-primary mt-1">•</span>
+                              <span className="text-secondary text-sm">
+                                {keyInsight}
+                              </span>
+                            </li>
+                          )
+                        )}
                       </ul>
                     </div>
                   )}
@@ -143,7 +145,7 @@ const Insights: React.FC = () => {
               </div>
 
               <div className="flex gap-3 mt-4">
-                {insight.cards_drawn.map((cardId, index) => {
+                {insight.cards_drawn.map((cardId: number, index: number) => {
                   const card = cards.find((c) => c.id === cardId);
                   if (!card) return null;
                   return (

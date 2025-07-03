@@ -53,9 +53,8 @@ const BlockDetails: React.FC = () => {
   const handleNewInsight = () => {
     if (!block || !blockType) return;
 
-    navigate('/new-reading', {
+    navigate('/new-insight', {
       state: {
-        selectedBlockTypeId: blockType.id,
         userBlockId: block.id,
         blockName: block.name,
       },

@@ -11,7 +11,7 @@ import Features from './pages/Features';
 import Preferences from './pages/Preferences';
 import Insight from './pages/Insight';
 import Login from './pages/Login';
-import NewReading from './pages/NewReading';
+import NewInsight from './pages/NewInsight';
 import Cards from './pages/Cards';
 import CardDetail from './pages/CardDetail';
 import BlockDetails from './pages/BlockDetails';
@@ -53,7 +53,7 @@ const AppRoutes = () => (
     <Route path="/preferences" element={<Preferences />} />
     <Route path="/insights/:id" element={<Insight />} />
     <Route path="/login" element={<Login />} />
-    <Route path="/new-reading" element={<NewReading />} />
+    <Route path="/new-insight" element={<NewInsight />} />
   </Routes>
 );
 

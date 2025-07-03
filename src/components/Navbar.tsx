@@ -44,7 +44,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="bg-void-950 border-b border-liminal-border backdrop-blur-liminal">
+      <nav className="bg-void-950 border-b border-liminal-border backdrop-blur-liminal border border-default">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <Link
@@ -103,15 +103,6 @@ const Navbar = () => {
                   className="text-secondary hover:text-accent transition-colors duration-200"
                 >
                   Insights
-                </Link>
-              )}
-
-              {user && (
-                <Link
-                  to="/new-reading"
-                  className="text-secondary hover:text-accent transition-colors duration-200"
-                >
-                  New Reading
                 </Link>
               )}
 

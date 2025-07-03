@@ -1,9 +1,9 @@
-import NewReading from '../components/NewReading';
+import NewInsightForm from '../components/NewInsightForm';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 
-const NewReadingPage = () => {
+const NewInsightPage = () => {
   const { blockTypes } = useBlockTypes();
   const location = useLocation();
   const navigate = useNavigate();
@@ -11,21 +11,21 @@ const NewReadingPage = () => {
   const [selectedBlockType, setSelectedBlockType] = useState<string>('');
   const [userContext, setUserContext] = useState<string>('');
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
+  const [userContextPlaceholder, setUserContextPlaceholder] =
+    useState<string>('');
 
   // Get block data from navigation state if coming from BlockDetails
   const locationState = location.state as {
-    selectedBlockTypeId?: string;
     userBlockId?: number;
     blockName?: string;
   } | null;
 
   // Pre-populate form if coming from a specific block
   useEffect(() => {
-    if (locationState?.selectedBlockTypeId) {
-      setSelectedBlockType(locationState.selectedBlockTypeId);
-    }
     if (locationState?.blockName) {
-      setUserContext(`Continue working on: ${locationState.blockName}`);
+      setUserContextPlaceholder(
+        `Add more details or updates about "${locationState.blockName}". What’s changed, or what else is important?`
+      );
     }
   }, [locationState]);
 
@@ -51,17 +51,19 @@ const NewReadingPage = () => {
   };
 
   return (
-    <NewReading
+    <NewInsightForm
       blockTypes={blockTypes}
       selectedBlockType={selectedBlockType}
-      userContext={userContext}
+      userContextPlaceholder={userContextPlaceholder}
       onBlockSelect={setSelectedBlockType}
       onUserContextChange={setUserContext}
       onSpreadSelect={setSelectedSpread}
       onNewReading={handleNewReading}
       selectedSpread={selectedSpread}
+      hasUserBlock={Boolean(locationState?.userBlockId)}
+      userBlockName={locationState?.blockName}
     />
   );
 };
 
-export default NewReadingPage;
+export default NewInsightPage;
