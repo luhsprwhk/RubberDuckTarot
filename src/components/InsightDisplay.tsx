@@ -5,6 +5,8 @@ import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
 import SentimentTracking from './SentimentTracking';
 import { updateInsightSentiment } from '@/src/lib/insights/insight-queries';
+import { useNavigate } from 'react-router-dom';
+import { createCardSlug } from '@/src/lib/cards/card-helpers';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -28,6 +30,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
   initialResonated,
   initialTookAction,
 }) => {
+  const navigate = useNavigate();
   const handleSentimentChange = async (
     insightId: number,
     resonated?: boolean,
@@ -62,6 +65,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
               <div
                 key={card.id}
                 className="bg-void-gradient rounded-lg p-4 text-center shadow-md"
+                onClick={() => navigate(`/cards/${createCardSlug(card.name)}`)}
               >
                 <div
                   className={`text-4xl mb-2 ${card.reversed ? 'transform rotate-180' : ''}`}

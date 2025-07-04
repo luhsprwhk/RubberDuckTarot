@@ -1,6 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import useCards from '../lib/cards/useCards';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
+import useAuth from '../lib/hooks/useAuth';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import {
@@ -12,10 +13,227 @@ import {
   Sparkles,
 } from 'lucide-react';
 import robEmoji from '../assets/rob-emoji.png';
+import { type Card } from '@/src/interfaces';
+import { type User } from '@/src/interfaces';
+import { type ReactElement } from 'react';
+
+const StaticCardContent = ({
+  card,
+  getBlockTypeIcon,
+  getBlockTypeName,
+}: {
+  card: Card;
+  getBlockTypeIcon: (blockId: string) => ReactElement;
+  getBlockTypeName: (blockId: string) => string;
+}) => {
+  return (
+    <>
+      {/* Block Applications */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
+        <div className="grid md:grid-cols-2 gap-4">
+          {Object.entries(card.block_applications).map(([blockId, advice]) => (
+            <div
+              key={blockId}
+              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
+            >
+              <div className="flex items-center gap-2 mb-3 text-accent">
+                {getBlockTypeIcon(blockId)}
+                <h3 className="font-semibold text-accent">
+                  {getBlockTypeName(blockId)}
+                </h3>
+              </div>
+              <p className="text-secondary text-sm leading-relaxed">{advice}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Rob's Wisdom */}
+      <div className="bg-breakthrough-500/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <img src={robEmoji} alt="Rob" className="w-8 h-8" />
+          <h2 className="text-2xl font-semibold text-breakthrough-300">
+            Rob's Debugging Wisdom
+          </h2>
+        </div>
+        <p className="text-primary italic text-lg leading-relaxed">
+          "{card.duck_wisdom}"
+        </p>
+      </div>
+
+      {/* Perspective Prompts */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
+        <h2 className="text-2xl font-semibold text-primary mb-4">
+          Reflection Questions
+        </h2>
+        <div className="space-y-3">
+          {card.perspective_prompts.slice(0, 3).map((prompt, index) => (
+            <div key={index} className="flex items-start gap-3">
+              <span className="text-accent font-semibold mt-1">
+                {index + 1}.
+              </span>
+              <p className="text-secondary leading-relaxed">{prompt}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
+        <h2 className="text-2xl font-semibold text-primary mb-4">Tags</h2>
+        <div className="flex flex-wrap gap-2">
+          {card.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 bg-accent/10 text-accent text-sm rounded-full border border-accent/20"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const AdaptiveCardContent = ({
+  card,
+  user,
+  getBlockTypeIcon,
+  getBlockTypeName,
+}: {
+  card: Card;
+  user: User;
+  getBlockTypeIcon: (blockId: string) => ReactElement;
+  getBlockTypeName: (blockId: string) => string;
+}) => {
+  return (
+    <>
+      {/* User-specific insights banner */}
+      <div className="bg-gradient-to-r from-breakthrough-500/10 to-accent/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Sparkles className="w-6 h-6 text-breakthrough-300" />
+          <h2 className="text-2xl font-semibold text-breakthrough-300">
+            Your Adaptive Card Experience
+          </h2>
+        </div>
+        <p className="text-primary text-lg leading-relaxed">
+          Welcome back{user.email ? `, ${user.email.split('@')[0]}` : ''}! This
+          card adapts to your journey and preferences. The insights below are
+          tailored specifically for you.
+        </p>
+      </div>
+
+      {/* Personalized Block Applications */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
+        <div className="flex items-center gap-2 mb-4">
+          <Sparkles className="w-5 h-5 text-accent" />
+          <h2 className="text-2xl font-semibold text-primary">
+            Personalized Guidance
+          </h2>
+        </div>
+        <div className="grid md:grid-cols-2 gap-4">
+          {Object.entries(card.block_applications).map(([blockId, advice]) => (
+            <div
+              key={blockId}
+              className="bg-gradient-to-br from-liminal-surface to-liminal-surface/50 rounded-lg p-4 border border-breakthrough-500/20"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                {getBlockTypeIcon(blockId)}
+                <h3 className="font-semibold text-accent">
+                  {getBlockTypeName(blockId)} - For You
+                </h3>
+              </div>
+              <p className="text-secondary text-sm leading-relaxed mb-3">
+                {advice}
+              </p>
+              <div className="text-xs text-breakthrough-300 bg-breakthrough-500/10 p-2 rounded">
+                💡 This guidance adapts based on your reading history and
+                preferences
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Enhanced Rob's Wisdom */}
+      <div className="bg-breakthrough-500/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6">
+        <div className="flex items-center gap-3 mb-4">
+          <img src={robEmoji} alt="Rob" className="w-8 h-8" />
+          <h2 className="text-2xl font-semibold text-breakthrough-300">
+            Rob's Personal Debugging Wisdom
+          </h2>
+        </div>
+        <p className="text-primary italic text-lg leading-relaxed mb-4">
+          "{card.duck_wisdom}"
+        </p>
+        <div className="bg-breakthrough-500/5 border border-breakthrough-500/20 rounded-lg p-4">
+          <p className="text-breakthrough-200 text-sm">
+            <strong>💭 Rob's personal note:</strong> Based on your journey, this
+            card often appears when you're ready to {card.name.toLowerCase()} in
+            new ways. Pay attention to how this resonates with your current
+            challenges.
+          </p>
+        </div>
+      </div>
+
+      {/* Interactive Reflection Questions */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
+        <h2 className="text-2xl font-semibold text-primary mb-4">
+          Your Reflection Journey
+        </h2>
+        <div className="space-y-4">
+          {card.perspective_prompts.map((prompt, index) => (
+            <div
+              key={index}
+              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-accent font-semibold mt-1">
+                  {index + 1}.
+                </span>
+                <p className="text-secondary leading-relaxed">{prompt}</p>
+              </div>
+              <div className="ml-6">
+                <textarea
+                  placeholder="Write your thoughts here... (saved automatically)"
+                  className="w-full p-3 bg-void-800 border border-liminal-border rounded-lg text-secondary text-sm resize-none"
+                  rows={3}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Enhanced Tags with Personalization */}
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
+        <h2 className="text-2xl font-semibold text-primary mb-4">
+          Tags & Your Connections
+        </h2>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {card.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="px-3 py-1 bg-accent/10 text-accent text-sm rounded-full border border-accent/20 hover:bg-accent/20 transition-colors cursor-pointer"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        <div className="text-xs text-secondary bg-liminal-surface p-3 rounded-lg">
+          💡 These tags connect to your reading themes. Click any tag to explore
+          related cards in your personalized library.
+        </div>
+      </div>
+    </>
+  );
+};
 
 const CardDetail = () => {
   const { cardName } = useParams<{ cardName: string }>();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const { cards, loading: cardsLoading, error: cardsError } = useCards();
   const {
     blockTypes,
@@ -23,7 +241,7 @@ const CardDetail = () => {
     error: blockTypesError,
   } = useBlockTypes();
 
-  const loading = cardsLoading || blockTypesLoading;
+  const loading = cardsLoading || blockTypesLoading || authLoading;
   const error = cardsError || blockTypesError;
 
   if (loading) return <Loading text="Loading card details..." />;
@@ -82,70 +300,21 @@ const CardDetail = () => {
         </div>
       </div>
 
-      {/* Block Applications */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <div className="grid md:grid-cols-2 gap-4">
-          {Object.entries(card.block_applications).map(([blockId, advice]) => (
-            <div
-              key={blockId}
-              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                {getBlockTypeIcon(blockId)}
-                <h3 className="font-semibold text-accent">
-                  {getBlockTypeName(blockId)}
-                </h3>
-              </div>
-              <p className="text-secondary text-sm leading-relaxed">{advice}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Rob's Wisdom */}
-      <div className="bg-breakthrough-500/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <img src={robEmoji} alt="Rob" className="w-8 h-8" />
-          <h2 className="text-2xl font-semibold text-breakthrough-300">
-            Rob's Debugging Wisdom
-          </h2>
-        </div>
-        <p className="text-primary italic text-lg leading-relaxed">
-          "{card.duck_wisdom}"
-        </p>
-      </div>
-
-      {/* Perspective Prompts */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-4">
-          Reflection Questions
-        </h2>
-        <div className="space-y-3">
-          {card.perspective_prompts.slice(0, 3).map((prompt, index) => (
-            <div key={index} className="flex items-start gap-3">
-              <span className="text-accent font-semibold mt-1">
-                {index + 1}.
-              </span>
-              <p className="text-secondary leading-relaxed">{prompt}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Tags */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
-        <h2 className="text-2xl font-semibold text-primary mb-4">Tags</h2>
-        <div className="flex flex-wrap gap-2">
-          {card.tags.map((tag, index) => (
-            <span
-              key={index}
-              className="px-3 py-1 bg-accent/10 text-accent text-sm rounded-full border border-accent/20"
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
+      {/* Conditional content based on auth state */}
+      {user ? (
+        <AdaptiveCardContent
+          card={card}
+          user={user as unknown as User}
+          getBlockTypeIcon={getBlockTypeIcon}
+          getBlockTypeName={getBlockTypeName}
+        />
+      ) : (
+        <StaticCardContent
+          card={card}
+          getBlockTypeIcon={getBlockTypeIcon}
+          getBlockTypeName={getBlockTypeName}
+        />
+      )}
 
       {/* Action Buttons */}
       <div className="text-center space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
