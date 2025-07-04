@@ -44,7 +44,9 @@ export const insights = pgTable('insights', {
   block_type_id: text('block_type_id').notNull(),
   user_block_id: integer('user_block_id'),
   user_context: text('user_context'),
-  cards_drawn: jsonb('cards_drawn').$type<number[]>().notNull(),
+  cards_drawn: jsonb('cards_drawn')
+    .$type<{ id: number; reversed: boolean }[]>()
+    .notNull(),
   reading: jsonb('reading').$type<PersonalizedReading>().notNull(),
   resonated: boolean('resonated').notNull().default(false), // Did the insight resonate with the user?
   took_action: boolean('took_action').notNull().default(false), // Did the user take action based on the insight?

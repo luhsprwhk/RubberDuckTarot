@@ -145,22 +145,36 @@ const Insights: React.FC = () => {
               </div>
 
               <div className="flex gap-3 mt-4">
-                {insight.cards_drawn.map((cardId: number, index: number) => {
-                  const card = cards.find((c) => c.id === cardId);
-                  if (!card) return null;
-                  return (
-                    <div
-                      key={`${insight.id}-${card.id}-${index}`}
-                      className="flex-1 bg-void-800 rounded-lg p-3 text-center"
-                      onClick={() => navigate(`/insights/${insight.id}`)}
-                    >
-                      <div className="text-2xl mb-1">{card.emoji}</div>
-                      <div className="text-sm font-medium text-secondary">
-                        {card.name}
+                {insight.cards_drawn.map(
+                  (
+                    cardData: { id: number; reversed: boolean },
+                    index: number
+                  ) => {
+                    const card = cards.find((c) => c.id === cardData.id);
+                    if (!card) return null;
+                    return (
+                      <div
+                        key={`${insight.id}-${card.id}-${index}`}
+                        className="flex-1 bg-void-800 rounded-lg p-3 text-center"
+                        onClick={() => navigate(`/insights/${insight.id}`)}
+                      >
+                        <div
+                          className={`text-2xl mb-1 ${cardData.reversed ? 'transform rotate-180' : ''}`}
+                        >
+                          {card.emoji}
+                        </div>
+                        <div className="text-sm font-medium text-secondary">
+                          {card.name}
+                          {cardData.reversed && (
+                            <span className="text-xs text-accent ml-1">
+                              (R)
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  }
+                )}
               </div>
             </div>
           );

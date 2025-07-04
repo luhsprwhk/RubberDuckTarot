@@ -10,7 +10,7 @@ interface InsightDisplayProps {
   selectedBlock: BlockType | null;
   personalizedReading: PersonalizedReading | null;
   loadingReading: boolean;
-  drawnCards: Card[];
+  drawnCards: (Card & { reversed?: boolean })[];
   spreadType?: string;
   loadingMessage?: string;
   insightId?: number;
@@ -63,9 +63,16 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
                 key={card.id}
                 className="bg-void-gradient rounded-lg p-4 text-center shadow-md"
               >
-                <div className="text-4xl mb-2">{card.emoji}</div>
+                <div
+                  className={`text-4xl mb-2 ${card.reversed ? 'transform rotate-180' : ''}`}
+                >
+                  {card.emoji}
+                </div>
                 <div className="text-lg font-semibold text-primary mb-1">
                   {card.name}
+                  {card.reversed && (
+                    <span className="text-xs text-accent ml-1">(Reversed)</span>
+                  )}
                 </div>
                 <div className="text-secondary text-sm italic">
                   {card.duck_question}

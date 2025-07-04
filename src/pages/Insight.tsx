@@ -32,13 +32,20 @@ const InsightPage: React.FC = () => {
         }
         setInsight(insightData);
 
-        const cardPromises = insightData.cards_drawn.map((cardId: number) =>
-          getCardById(cardId)
+        const cardPromises = insightData.cards_drawn.map(
+          (cardData: { id: number; reversed: boolean }) =>
+            getCardById(cardData.id)
         );
         const fetchedCards = (await Promise.all(cardPromises)).filter(
           (c: Card | null): c is Card => c !== null
         );
-        setCards(fetchedCards);
+
+        // Add reversed state to cards
+        const cardsWithReversed = fetchedCards.map((card, index) => ({
+          ...card,
+          reversed: insightData.cards_drawn[index]?.reversed || false,
+        }));
+        setCards(cardsWithReversed);
 
         const fetchedBlockType = await getBlockTypeById(
           insightData.block_type_id

@@ -53,6 +53,37 @@ const CreateInsight: React.FC = () => {
   const [personalizedReading, setPersonalizedReading] =
     useState<PersonalizedReading | null>(null);
   const [loadingReading, setLoadingReading] = useState(false);
+
+  // Occult/astral humor loading messages
+  const astralMessages = [
+    'Consulting the Akashic records…',
+    'Casting minor divinations…',
+    'Summoning the spirit of insight…',
+    'Shuffling the cosmic deck…',
+    'Peering through the veil…',
+    'Reading tea leaves in zero gravity…',
+    'Negotiating with astral bureaucrats…',
+    'Aligning the quantum tarot…',
+    'Waiting for the stars to answer…',
+    'Translating celestial whispers…',
+    'Contacting your higher duck…',
+    'Sacrificing RAM to the algorithm…',
+    'Unraveling the threads of fate…',
+    'Dowsing for digital wisdom…',
+    'Charging the insight crystals…',
+    'Decoding the cosmic punchline…',
+  ];
+  const [astralIndex, setAstralIndex] = useState(0);
+
+  // Rotate message every 2.5 seconds while loadingReading
+  useEffect(() => {
+    if (!loadingReading) return;
+    const interval = setInterval(() => {
+      setAstralIndex((i) => (i + 1) % astralMessages.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, [loadingReading, astralMessages.length]);
+
   // readingError: false means no error, string means error message
   const [readingError, setReadingError] = useState<string | false>(false);
 
@@ -212,7 +243,10 @@ const CreateInsight: React.FC = () => {
             spread_type: spreadType,
             block_type_id: selectedBlock?.id ?? null,
             user_context: userContext ?? null,
-            cards_drawn: drawnCards.map((dc) => dc.id),
+            cards_drawn: drawnCards.map((dc) => ({
+              id: dc.id,
+              reversed: dc.reversed,
+            })),
             resonated: false,
             took_action: false,
             reading,
@@ -288,7 +322,13 @@ const CreateInsight: React.FC = () => {
   } else if (isDrawing) {
     loadingText = 'Rob is shuffling the deck...';
   } else if (loadingReading) {
-    loadingText = 'Generating your insight...';
+    // Show 3 rotating messages for flavor
+    const msgCount = 3;
+    const indices = Array.from(
+      { length: msgCount },
+      (_, idx) => (astralIndex + idx) % astralMessages.length
+    );
+    loadingText = indices.map((i) => astralMessages[i]).join('\n');
   }
 
   if (cardsLoading || isDrawing || loadingReading) {
@@ -297,7 +337,9 @@ const CreateInsight: React.FC = () => {
         <div className="text-center w-full">
           {renderLoader()}
           {loadingText && (
-            <p className="text-lg text-primary font-semibold">{loadingText}</p>
+            <div className="text-lg text-primary font-semibold whitespace-pre-line">
+              {loadingText}
+            </div>
           )}
         </div>
       </div>
