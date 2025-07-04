@@ -143,7 +143,7 @@ const Navbar = () => {
                     <div className="border-t border-liminal-border my-1"></div>
                     <button
                       onClick={handleSignOut}
-                      className="flex items-center w-full px-4 py-2 text-sm text-muted hover:bg-liminal-hover hover:text-secondary transition-colors duration-200"
+                      className="flex cursor-pointer items-center w-full px-4 py-2 text-sm text-muted hover:bg-liminal-hover hover:text-secondary transition-colors duration-200"
                     >
                       <LogOut className="w-4 h-4 mr-2" />
                       Sign Out

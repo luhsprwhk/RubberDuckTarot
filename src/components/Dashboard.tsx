@@ -72,7 +72,7 @@ export default function Dashboard() {
   const handleNewReading = () => {
     if (!selectedBlockType || !selectedSpread) return;
 
-    navigate('/reading', {
+    navigate('/create-insight', {
       state: {
         selectedBlockTypeId: selectedBlockType,
         spreadType: selectedSpread,

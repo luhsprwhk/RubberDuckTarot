@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Loader } from '@googlemaps/js-api-loader';
 import PlacesAutocomplete from '../components/PlacesAutocomplete';
-import { ChevronRight, Zap, Brain, Target, Users, Bird } from 'lucide-react';
+import { ChevronRight, Zap, Target } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 
 import { saveUserProfile, getUserProfile } from '../lib/userPreferences';
@@ -10,71 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { getZodiacSign } from '../lib/zodiacUtils';
 import robEmoji from '../assets/rob-emoji.png';
 
-const superpowers = [
-  'Breaking complex problems into simple steps',
-  'Seeing patterns others miss',
-  'Finding creative workarounds',
-  'Research and gathering information',
-  'Getting people to open up and share',
-  'Staying calm under pressure',
-  'Learning new things quickly',
-];
-
-const kryptonites = [
-  'Overthinking simple decisions',
-  'Getting distracted by new ideas',
-  'Avoiding difficult conversations',
-  'Perfectionism and never finishing',
-  'Taking on too much at once',
-  'Procrastinating on boring tasks',
-  'Comparing myself to others',
-];
-
-const creativeIdentities = [
-  'Developer with creative side projects',
-  'Artist with a day job',
-  'Entrepreneur building multiple things',
-  'Creative professional in corporate world',
-  'Founder/CEO questioning everything',
-  'Career changer/pivoter',
-  'Multi-passionate creative',
-  'Burned out high achiever',
-  'Student/early career figuring it out',
-];
-
-const workContexts = [
-  'Tech/Engineering',
-  'Design/Creative',
-  'Business/Finance',
-  'Healthcare',
-  'Education',
-  'Freelance/Consulting',
-  'Between jobs',
-  'Student',
-];
-
-const debuggingModes = [
-  'Panic and Google everything',
-  'Overthink until paralyzed',
-  'Ask everyone for advice',
-  'Ignore it and hope it fixes itself',
-  'Break it down step by step',
-];
-
-const blockPatterns = [
-  'Creative (stuck on projects)',
-  'Work (career confusion)',
-  'Life (routine ruts)',
-  'Relationship (communication failures)',
-];
-
-const spiritAnimals = [
-  { id: 'eagle', name: '🦅 Eagle (big picture)', icon: Bird },
-  { id: 'ant', name: '🐜 Ant (detail-oriented)', icon: Brain },
-  { id: 'fox', name: '🦊 Fox (creative solutions)', icon: Zap },
-  { id: 'turtle', name: '🐢 Turtle (methodical)', icon: Target },
-  { id: 'wolf', name: '🐺 Wolf (collaborative)', icon: Users },
-];
+import {
+  superpowers,
+  kryptonites,
+  creativeIdentities,
+  workContexts,
+  debuggingModes,
+  blockPatterns,
+  spiritAnimals,
+} from '../lib/userProfileValues';
 
 const OnBoarding = () => {
   const [isGoogleMapsLoaded, setGoogleMapsLoaded] = useState(false);

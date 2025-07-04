@@ -256,6 +256,7 @@ const CreateInsight: React.FC = () => {
     navigate,
     existingUserBlockId,
     currentBlock,
+    personalizedReading,
   ]);
 
   const handleReset = () => {

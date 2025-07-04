@@ -11,7 +11,7 @@ import robEmoji from '../assets/rob-emoji.png';
 
 const Upgrade = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+    <div className="min-h-screen bg-surface text-primary">
       {/* Header */}
       <div className="container mx-auto px-6 py-12">
         <div className="text-center mb-16">
@@ -25,10 +25,8 @@ const Upgrade = () => {
               </div>
             </div>
           </div>
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-            Premium Duck
-          </h1>
-          <p className="text-xl text-blue-200 max-w-2xl mx-auto">
+          <h1 className="text-5xl font-bold mb-4 text-accent">Premium Duck</h1>
+          <p className="text-xl text-secondary max-w-2xl mx-auto">
             Look, I died avoiding a startup pitch. Now I'm stuck helping people
             debug their lives. The least you can do is upgrade so I don't have
             to show you ads.
@@ -38,17 +36,17 @@ const Upgrade = () => {
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
           {/* Free Duck */}
-          <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
+          <div className="bg-surface rounded-xl shadow-breakthrough border border-liminal-border backdrop-blur-liminal p-8">
             <div className="text-center mb-6">
               <div className="mb-4">
                 <img src={robEmoji} alt="Rob" className="w-10 h-10 mx-auto" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">Free Duck</h3>
-              <div className="text-3xl font-bold text-gray-300">
+              <h3 className="text-2xl font-bold mb-2 text-accent">Free Duck</h3>
+              <div className="text-3xl font-bold text-secondary">
                 $0<span className="text-lg">/month</span>
               </div>
             </div>
-            <ul className="space-y-3 text-gray-300">
+            <ul className="space-y-3 text-secondary">
               <li className="flex items-center">
                 <span className="text-green-400 mr-3">✓</span>
                 Unlimited consultations
@@ -69,9 +67,9 @@ const Upgrade = () => {
           </div>
 
           {/* Premium Duck */}
-          <div className="bg-gradient-to-br from-purple-600/30 to-blue-600/30 backdrop-blur-sm rounded-xl p-8 border-2 border-yellow-400 relative overflow-hidden">
+          <div className="bg-surface rounded-xl shadow-breakthrough border-2 border-accent backdrop-blur-liminal p-8 relative overflow-hidden">
             <div className="absolute top-4 right-4">
-              <span className="bg-yellow-400 text-purple-900 px-3 py-1 rounded-full text-sm font-bold">
+              <span className="bg-accent text-primary px-3 py-1 rounded-full text-sm font-bold shadow-glow">
                 RECOMMENDED
               </span>
             </div>
@@ -80,12 +78,14 @@ const Upgrade = () => {
                 <span className="text-4xl">👑</span>
                 <img src={robEmoji} alt="Rob" className="w-10 h-10" />
               </div>
-              <h3 className="text-2xl font-bold mb-2">Premium Duck</h3>
-              <div className="text-3xl font-bold text-yellow-400">
+              <h3 className="text-2xl font-bold mb-2 text-accent">
+                Premium Duck
+              </h3>
+              <div className="text-3xl font-bold text-accent">
                 $2.99<span className="text-lg">/month</span>
               </div>
             </div>
-            <ul className="space-y-3">
+            <ul className="space-y-3 text-secondary">
               <li className="flex items-center">
                 <span className="text-green-600 mr-3">
                   <Check />
