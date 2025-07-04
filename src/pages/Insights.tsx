@@ -44,7 +44,8 @@ const Insights: React.FC = () => {
       refreshBlockTypes();
     }
     // Optionally, clear context if user logs out
-  }, [user?.id, fetchUserInsights, refreshBlockTypes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);

@@ -12,9 +12,11 @@ export const useUserBlocks = () => {
     setError(null);
     try {
       const userBlocks = await getUserBlocks(userId);
-      setBlocks(userBlocks);
+
+      setBlocks(userBlocks || []); // Always set to an array
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch blocks');
+      setBlocks([]); // Ensure blocks is always an array on error
     } finally {
       setLoading(false);
     }

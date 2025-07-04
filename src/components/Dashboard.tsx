@@ -23,6 +23,8 @@ export default function Dashboard() {
   // UserBlocks
   const { blocks, loading: blocksLoading, fetchUserBlocks } = useUserBlocks();
 
+  // Logging for debugging
+
   useEffect(() => {
     if (user) {
       fetchUserBlocks(user.id);
@@ -32,9 +34,11 @@ export default function Dashboard() {
 
   useEffect(() => {
     let isMounted = true;
+
     const fetchUserData = async () => {
       if (user) {
         setLoading(true);
+
         try {
           const [db, profile] = await Promise.all([
             getDb(),
@@ -89,11 +93,11 @@ export default function Dashboard() {
     setUserContext('');
   };
 
-  // Conditional rendering logic
-  if (loading || blocksLoading) {
+  // Defensive loading: if user is not present, show loading spinner
+  if (!user) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <Loading />
+        <Loading text="Loading user..." />
       </div>
     );
   }
@@ -101,6 +105,17 @@ export default function Dashboard() {
   const handleBlockClick = (blockId: number) => {
     navigate(`/blocks/${blockId}`);
   };
+
+  // Log the blocks state for debugging
+
+  // Improved conditional: also check if blocks is undefined
+  if (loading || blocksLoading || typeof blocks === 'undefined') {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading text="Loading..." />
+      </div>
+    );
+  }
 
   // If user has active blocks, show them and a 'New Block' button
   if (blocks && blocks.length > 0) {

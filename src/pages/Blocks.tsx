@@ -39,7 +39,8 @@ const Blocks: React.FC = () => {
       fetchUserBlocks(user.id);
       refreshBlockTypes();
     }
-  }, [user?.id, fetchUserBlocks, refreshBlockTypes]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
