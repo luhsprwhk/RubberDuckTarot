@@ -435,6 +435,28 @@ const OnBoarding = () => {
     }
   };
 
+  // Helper to add a timeout to any promise
+  function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const timeoutId = setTimeout(() => {
+        reject(
+          new Error(
+            'Request timed out. Please check your connection and try again.'
+          )
+        );
+      }, ms);
+      promise
+        .then((res) => {
+          clearTimeout(timeoutId);
+          resolve(res);
+        })
+        .catch((err) => {
+          clearTimeout(timeoutId);
+          reject(err);
+        });
+    });
+  }
+
   const handleCompleteOnboarding = async () => {
     if (!user) {
       alert('Please sign in to save your preferences');
@@ -447,12 +469,20 @@ const OnBoarding = () => {
         user_id: user.id,
         ...profile,
       };
-
-      await saveUserProfile(dbProfile);
+      // Add a 10 second timeout to the save operation
+      await withTimeout(saveUserProfile(dbProfile), 10000);
       navigate('/');
     } catch (error) {
-      console.error('Failed to save profile:', error);
-      alert('Failed to save your preferences. Please try again.');
+      // Log more context for debugging
+      console.error('Failed to save profile:', { error, user, profile });
+      // Show a user-friendly error message
+      if (error instanceof Error && error.message.includes('timed out')) {
+        alert(
+          'Saving your profile took too long. Please check your internet connection and try again.'
+        );
+      } else {
+        alert('Failed to save your preferences. Please try again.');
+      }
     } finally {
       setLoading(false);
     }

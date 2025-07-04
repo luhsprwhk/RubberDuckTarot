@@ -1,4 +1,5 @@
 import { Check, X, Zap, Crown, Ghost, ArrowRight } from 'lucide-react';
+import Footer from '@/src/components/Footer';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -520,36 +521,21 @@ const Pricing = () => {
               >
                 {authEnabled ? 'Start Free Consultation' : 'Join Waitlist'}
               </button>
-              <button
-                onClick={() => showAuthModal('signUp')}
-                className={cn(
-                  'border-2 border-breakthrough-400 text-breakthrough-400 px-8 py-3 rounded-lg font-medium hover:bg-breakthrough-400/10 transition-colors duration-200'
-                )}
-              >
-                {authEnabled ? 'Go Premium Now' : 'Join Premium Waitlist'}
-              </button>
+              {authEnabled && (
+                <button
+                  onClick={() => showAuthModal('signUp')}
+                  className={cn(
+                    'border-2 border-breakthrough-400 text-breakthrough-400 px-8 py-3 rounded-lg font-medium hover:bg-breakthrough-400/10 transition-colors duration-200'
+                  )}
+                >
+                  Go Premium now
+                </button>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div
-        className={cn(
-          'flex text-center items-center justify-center gap-2 mt-4 p-4 bg-black text-muted'
-        )}
-      >
-        <span className={cn('text-sm')}>
-          An app by
-          <a
-            href="https://luhsprwhk.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn('text-accent hover:underline ml-1 mr-1')}
-          >
-            @luhsprwhk
-          </a>
-          &copy; {new Date().getFullYear()}
-        </span>
-      </div>
+      <Footer />
     </div>
   );
 };

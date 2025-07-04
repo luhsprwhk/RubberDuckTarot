@@ -4,6 +4,7 @@ import useCards from '../lib/cards/useCards';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { Search } from 'lucide-react';
+import Footer from '../components/Footer';
 
 const Cards = () => {
   const { cards, loading, error } = useCards();
@@ -121,6 +122,7 @@ const Cards = () => {
           <p>{cards.length} cards in the ethereal deck</p>
         )}
       </div>
+      <Footer />
     </div>
   );
 };

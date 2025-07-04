@@ -9,6 +9,7 @@ import {
   MessageSquare,
   Lightbulb,
 } from 'lucide-react';
+import Footer from '@/src/components/Footer';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { isAuthEnabled } from '@/src/lib/featureFlags';
@@ -562,20 +563,7 @@ const Features = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="bg-void-950 border-t border-liminal-border py-8">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <img src={robEmoji} alt="Rob" className="w-8 h-8" />
-            <span className="font-semibold text-primary">
-              Rubber Duck Tarot
-            </span>
-          </div>
-          <p className="text-muted text-sm">
-            Debugging tools built by someone who actually lived these problems
-          </p>
-        </div>
-      </div>
+      <Footer />
     </div>
   );
 };

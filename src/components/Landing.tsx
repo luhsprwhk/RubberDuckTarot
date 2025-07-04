@@ -5,6 +5,7 @@ import DuckLinkedin from '@/src/assets/rob-linkedin.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import { useNavigate } from 'react-router-dom';
 import { isAuthEnabled } from '@/src/lib/featureFlags';
+import Footer from './Footer';
 
 const Landing = () => {
   const { showAuthModal } = useAuth();
@@ -338,20 +339,7 @@ const Landing = () => {
           </p>
         </div>
       </div>
-      <div className="flex text-center items-center justify-center gap-2 mt-4 p-4 bg-black text-muted ">
-        <span className="text-sm">
-          An app by
-          <a
-            href="https://luhsprwhk.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent hover:underline ml-1 mr-1"
-          >
-            @luhsprwhk
-          </a>
-          &copy; {new Date().getFullYear()}
-        </span>
-      </div>
+      <Footer />
     </div>
   );
 };
