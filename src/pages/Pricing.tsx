@@ -28,7 +28,7 @@ const Pricing = () => {
             <div
               id="rob-pricing-pic"
               className={cn(
-                'w-96 h-96 mx-auto',
+                'w-80 h-80 mx-auto',
                 'bg-gradient-to-br from-breakthrough-400 to-breakthrough-500',
                 'rounded-full flex items-center justify-center mb-4 animate-flicker'
               )}
@@ -325,7 +325,7 @@ const Pricing = () => {
                   'w-full bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough flex items-center justify-center gap-2'
                 )}
               >
-                {authEnabled ? 'Upgrade to Premium' : 'Join Premium Waitlist'}
+                {authEnabled ? 'Upgrade to Premium' : 'Join Waitlist'}
                 <ArrowRight className={cn('w-5 h-5')} />
               </button>
             </div>

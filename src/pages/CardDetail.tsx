@@ -318,18 +318,28 @@ const CardDetail = () => {
 
       {/* Action Buttons */}
       <div className="text-center space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
-        <Link
-          to="/new-reading"
-          className="block sm:inline-block bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-colors"
-        >
-          Get an Insight with This Card
-        </Link>
+        {user && (
+          <Link
+            to="/new-insight"
+            className="block sm:inline-block bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-colors"
+          >
+            Get an Insight with This Card
+          </Link>
+        )}
         <Link
           to="/cards"
           className="block sm:inline-block border-2 border-accent text-accent px-6 py-3 rounded-lg font-semibold hover:bg-accent hover:text-void-900 transition-colors"
         >
-          Explore More Cards
+          {user ? 'Explore More Cards' : 'Back to Cards'}
         </Link>
+        {!user && (
+          <Link
+            to="/pricing"
+            className="block sm:inline-block border-2 border-accent text-accent px-6 py-3 rounded-lg font-semibold hover:bg-accent hover:text-void-900 transition-colors"
+          >
+            Get Started
+          </Link>
+        )}
       </div>
     </div>
   );

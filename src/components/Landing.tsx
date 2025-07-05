@@ -194,10 +194,10 @@ const Landing = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-primary mb-4">
-              Client Testimonials
+              Messages From the Living
             </h2>
             <p className="text-secondary">
-              What the living are saying about my otherworldly services
+              Hear what souls on your side of the veil have to say.
             </p>
           </div>
 
