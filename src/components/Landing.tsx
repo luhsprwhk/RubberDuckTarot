@@ -21,7 +21,7 @@ const Landing = () => {
             <img
               src={DuckHero}
               alt="Rubber Duck"
-              className="w-96 h-96 mx-auto"
+              className="w-80 h-80 mx-auto"
             />
           </div>
 
@@ -55,23 +55,6 @@ const Landing = () => {
             >
               View Cards
             </button>
-          </div>
-
-          {/* Social Proof */}
-          <div className="flex items-center justify-center gap-8 text-sm text-muted">
-            <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 fill-breakthrough-400 text-breakthrough-400" />
-              <span className="font-medium text-primary">4.9/5</span>
-              <span>ethereal rating</span>
-            </div>
-            <div>
-              <span className="font-medium text-primary">1,247</span> souls
-              debugged
-            </div>
-            <div>
-              <span className="font-medium text-primary">25+</span> years
-              experience
-            </div>
           </div>
         </div>
       </div>
