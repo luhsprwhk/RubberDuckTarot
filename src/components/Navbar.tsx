@@ -43,7 +43,12 @@ const Navbar = () => {
   }, [showUserMenu, mobileMenuOpen]);
 
   const handleSignOut = async () => {
-    await signOut();
+    console.log('Signing out...');
+    try {
+      await signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
     setShowUserMenu(false);
     setMobileMenuOpen(false);
     navigate('/');

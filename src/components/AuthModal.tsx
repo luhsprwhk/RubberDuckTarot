@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { isAuthEnabled } from '@/src/lib/featureFlags';
-import { useNavigate } from 'react-router-dom';
 import { X, Mail, Lock, AlertCircle } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 import useAlert from '../lib/hooks/useAlert';
+import { isAuthEnabled } from '../lib/featureFlags';
 
 export const AuthModal = () => {
   const {
@@ -24,7 +23,6 @@ export const AuthModal = () => {
   const { showSuccess, showInfo } = useAlert();
 
   const isSignUp = authModalMode === 'signUp';
-  const navigate = useNavigate();
 
   const resetForm = () => {
     setEmail('');
@@ -61,14 +59,16 @@ export const AuthModal = () => {
         setError(authError.message);
       } else {
         if (isSignUp) {
-          showInfo(
-            'Please check your email and click the confirmation link to complete your registration.',
-            'Check Your Email'
-          );
-          if (!isAuthEnabled()) {
-            navigate('/');
-            hideAuthModal();
-            return;
+          if (isAuthEnabled()) {
+            showInfo(
+              'Please check your email and click the confirmation link to complete your registration.',
+              'Check Your Email'
+            );
+          } else {
+            showInfo(
+              'Welcome to Rubber Duck Tarot! You will be notified when the app is ready.',
+              'Welcome'
+            );
           }
         } else {
           showSuccess('Successfully signed in!');
