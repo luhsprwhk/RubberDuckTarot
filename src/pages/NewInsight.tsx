@@ -51,19 +51,21 @@ const NewInsightPage = () => {
   };
 
   return (
-    <NewInsightForm
-      blockTypes={blockTypes}
-      selectedBlockType={selectedBlockType}
-      userContextPlaceholder={userContextPlaceholder}
-      onBlockSelect={setSelectedBlockType}
-      onUserContextChange={setUserContext}
-      onSpreadSelect={setSelectedSpread}
-      onNewReading={handleNewReading}
-      selectedSpread={selectedSpread}
-      userContext={userContext}
-      hasUserBlock={Boolean(locationState?.userBlockId)}
-      userBlockName={locationState?.blockName}
-    />
+    <div className="min-h-screen bg-liminal-surface text-primary shadow-breakthrough border border-liminal-border max-w-2xl mx-auto">
+      <NewInsightForm
+        blockTypes={blockTypes}
+        selectedBlockType={selectedBlockType}
+        userContextPlaceholder={userContextPlaceholder}
+        onBlockSelect={setSelectedBlockType}
+        onUserContextChange={setUserContext}
+        onSpreadSelect={setSelectedSpread}
+        onNewReading={handleNewReading}
+        selectedSpread={selectedSpread}
+        userContext={userContext}
+        hasUserBlock={Boolean(locationState?.userBlockId)}
+        userBlockName={locationState?.blockName}
+      />
+    </div>
   );
 };
 
