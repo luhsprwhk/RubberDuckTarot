@@ -416,6 +416,7 @@ const OnBoarding = () => {
       // Add a 10 second timeout to the save operation
       await withTimeout(saveUserProfile(dbProfile), 10000);
       navigate('/');
+      window.location.reload();
     } catch (error) {
       // Log more context for debugging
       console.error('Failed to save profile:', { error, user, profile });
