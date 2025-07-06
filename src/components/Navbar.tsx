@@ -58,7 +58,11 @@ const Navbar = () => {
             <Link
               to="/"
               className="text-xl font-bold text-primary hover:text-accent transition-colors duration-200 flex items-center gap-2"
-              onClick={handleNavLinkClick}
+              onClick={() => {
+                setMobileMenuOpen(false);
+                navigate('/');
+                window.location.reload();
+              }}
             >
               <img
                 src={robEmoji}
@@ -92,6 +96,7 @@ const Navbar = () => {
               <Link
                 to="/"
                 className="text-secondary hover:text-accent transition-colors duration-200"
+                onClick={() => {}}
               >
                 Home
               </Link>
