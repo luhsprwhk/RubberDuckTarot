@@ -1,18 +1,24 @@
 import { supabase } from '../supabase/supabase';
 import type { UserBlock } from '@/supabase/schema';
+import { encryptObject, decryptObject } from '../encryption';
 
 // User Blocks
 export const createUserBlock = async (
   userBlock: Omit<UserBlock, 'id' | 'created_at' | 'updated_at'>
 ): Promise<UserBlock> => {
+  // Encrypt sensitive fields before saving
+  const encryptedUserBlock = await encryptObject(userBlock, ['name', 'notes']);
+
   const { data, error } = await supabase
     .from('user_blocks')
-    .insert(userBlock)
+    .insert(encryptedUserBlock)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+
+  // Decrypt the returned data for the client
+  return await decryptObject(data, ['name', 'notes']);
 };
 
 export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
@@ -30,7 +36,11 @@ export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
   const { data, error } = await query;
 
   if (error) throw error;
-  return data;
+
+  // Decrypt sensitive fields for all user blocks
+  return await Promise.all(
+    data.map((block) => decryptObject(block, ['name', 'notes']))
+  );
 };
 
 export const getUserBlockById = async (
@@ -46,7 +56,9 @@ export const getUserBlockById = async (
     if (error.code === 'PGRST116') return null; // No rows returned
     throw error;
   }
-  return data;
+
+  // Decrypt sensitive fields before returning
+  return data ? await decryptObject(data, ['name', 'notes']) : null;
 };
 
 export const updateUserBlockStatus = async (
@@ -63,7 +75,11 @@ export const updateUserBlockStatus = async (
     updated_at: new Date().toISOString(),
   };
 
-  if (notes !== undefined) updates.notes = notes;
+  if (notes !== undefined) {
+    // Encrypt notes if provided
+    const encryptedUpdates = await encryptObject({ notes }, ['notes']);
+    updates.notes = encryptedUpdates.notes;
+  }
 
   const { error } = await supabase
     .from('user_blocks')

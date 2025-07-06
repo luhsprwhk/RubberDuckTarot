@@ -147,16 +147,18 @@ export default function Dashboard() {
 
   // Otherwise, show the new reading component
   return (
-    <NewInsightForm
-      blockTypes={blockTypes}
-      selectedBlockType={selectedBlockType}
-      userContext={userContext}
-      onBlockSelect={setSelectedBlockType}
-      onUserContextChange={setUserContext}
-      onSpreadSelect={setSelectedSpread}
-      onNewReading={handleNewReading}
-      selectedSpread={selectedSpread}
-      hasUserBlock={false}
-    />
+    <div className="max-w-3xl mx-auto p-6 bg-surface rounded-lg border border-liminal-border backdrop-blur-liminal shadow-glow mt-16">
+      <NewInsightForm
+        blockTypes={blockTypes}
+        selectedBlockType={selectedBlockType}
+        userContext={userContext}
+        onBlockSelect={setSelectedBlockType}
+        onUserContextChange={setUserContext}
+        onSpreadSelect={setSelectedSpread}
+        onNewReading={handleNewReading}
+        selectedSpread={selectedSpread}
+        hasUserBlock={false}
+      />
+    </div>
   );
 }

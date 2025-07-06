@@ -46,13 +46,19 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     captchaToken?: string | null
   ) => {
     // Create new user and send magic link
-    const emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
+    const waitlistEnabled = import.meta.env.VITE_WAITLIST_ENABLED === 'true';
+    const options: {
+      captchaToken?: string;
+      emailRedirectTo?: string;
+    } = {
+      captchaToken: captchaToken || undefined,
+    };
+    if (waitlistEnabled) {
+      options.emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
+    }
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo,
-        captchaToken: captchaToken || undefined,
-      },
+      options,
     });
     return { error };
   };

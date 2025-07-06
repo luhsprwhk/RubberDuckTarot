@@ -8,6 +8,13 @@
       "when": 1751331880984,
       "tag": "0000_powerful_sphinx",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751839221365,
+      "tag": "0001_add_encryption_to_users",
+      "breakpoints": true
     }
   ]
 }

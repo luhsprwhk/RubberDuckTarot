@@ -1,4 +1,5 @@
 import { supabase } from '../supabase/supabase';
+import { decryptObject } from '../encryption';
 
 export const getUserFromAuth = async (userId: string) => {
   const { data: user } = await supabase
@@ -6,5 +7,7 @@ export const getUserFromAuth = async (userId: string) => {
     .select('*')
     .eq('auth_uid', userId)
     .single();
-  return user;
+
+  // Decrypt the email field before returning
+  return user ? await decryptObject(user, ['email']) : null;
 };

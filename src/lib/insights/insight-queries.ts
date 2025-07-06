@@ -1,18 +1,27 @@
 import { supabase } from '../supabase/supabase';
 import type { Insight } from '@/src/interfaces';
+import { encryptObject, decryptObject } from '../encryption';
 
 // Insights
 export const createInsight = async (
   insight: Omit<Insight, 'id' | 'created_at'>
 ): Promise<Insight> => {
+  // Encrypt sensitive fields before saving
+  const encryptedInsight = await encryptObject(insight, [
+    'user_context',
+    'reading',
+  ]);
+
   const { data, error } = await supabase
     .from('insights')
-    .insert(insight)
+    .insert(encryptedInsight)
     .select()
     .single();
 
   if (error) throw error;
-  return data;
+
+  // Decrypt the returned data for the client
+  return await decryptObject(data, ['user_context', 'reading']);
 };
 
 export const getUserInsights = async (userId?: string): Promise<Insight[]> => {
@@ -30,7 +39,11 @@ export const getUserInsights = async (userId?: string): Promise<Insight[]> => {
   const { data, error } = await query;
 
   if (error) throw error;
-  return data;
+
+  // Decrypt sensitive fields for all insights
+  return await Promise.all(
+    data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+  );
 };
 
 export const getInsightById = async (id: number): Promise<Insight | null> => {
@@ -41,7 +54,9 @@ export const getInsightById = async (id: number): Promise<Insight | null> => {
     .single();
 
   if (error) throw error;
-  return data;
+
+  // Decrypt sensitive fields before returning
+  return data ? await decryptObject(data, ['user_context', 'reading']) : null;
 };
 
 export const updateInsightSentiment = async (
@@ -72,5 +87,9 @@ export const getInsightsByUserBlockId = async (
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data;
+
+  // Decrypt sensitive fields for all insights
+  return await Promise.all(
+    data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+  );
 };
