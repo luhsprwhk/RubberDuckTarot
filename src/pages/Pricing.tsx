@@ -29,14 +29,13 @@ const Pricing = () => {
               id="rob-pricing-pic"
               className={cn(
                 'w-80 h-80 mx-auto',
-                'bg-gradient-to-br from-breakthrough-400 to-breakthrough-500',
-                'rounded-full flex items-center justify-center mb-4 animate-flicker'
+                'flex items-center justify-center mb-4 shadow-glow animate-flicker'
               )}
             >
               <img
                 src={PricingPic}
                 alt="Rubber Duck"
-                className="w-full h-full"
+                className="w-full h-full object-contain"
               />
             </div>
           </div>

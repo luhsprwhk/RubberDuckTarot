@@ -17,11 +17,11 @@ const Landing = () => {
       <div className="container mx-auto px-4 pt-16 pb-8">
         <div className="text-center max-w-4xl mx-auto">
           {/* Logo/Mascot Area */}
-          <div className="mb-8">
+          <div className="mb-8 w-80 h-80 mx-auto flex items-center justify-center shadow-glow animate-flicker">
             <img
               src={DuckHero}
               alt="Rubber Duck"
-              className="w-80 h-80 mx-auto"
+              className="w-full h-full object-cover"
             />
           </div>
 

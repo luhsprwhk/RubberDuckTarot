@@ -28,7 +28,7 @@ const Features = () => {
         <div className="container mx-auto px-4 pt-16 pb-8">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-8">
-              <div className="w-80 h-80 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 shadow-glow animate-flicker">
+              <div className="w-80 h-80 mx-auto flex items-center justify-center mb-8 shadow-glow animate-flicker">
                 <img
                   src={featuresHero}
                   alt="Rubber Duck"
