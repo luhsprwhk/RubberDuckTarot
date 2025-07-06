@@ -42,14 +42,18 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const signUpForWaitlist = async (email: string) => {
-    // Just send the magic link - user will be created automatically by trigger when they click it
+    // Create new user and send magic link
     const { error } = await supabase.auth.signInWithOtp({
       email,
+      options: {
+        emailRedirectTo: 'http://localhost:5173/welcome',
+      },
     });
     return { error };
   };
 
   const signInWithMagicLink = async (email: string) => {
+    // Only send magic link to existing users
     const { error } = await supabase.auth.signInWithOtp({
       email,
     });

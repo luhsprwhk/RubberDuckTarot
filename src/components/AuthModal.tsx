@@ -6,15 +6,15 @@ import { isAuthEnabled } from '../lib/featureFlags';
 import { useNavigate } from 'react-router-dom';
 
 export const AuthModal = () => {
+  const navigate = useNavigate();
   const {
     isAuthModalOpen,
     hideAuthModal,
     authModalMode,
-    setAuthModalMode,
+    // setAuthModalMode,
     signUpForWaitlist,
     signInWithMagicLink,
   } = useAuth();
-  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -34,10 +34,10 @@ export const AuthModal = () => {
     }
   }, [isAuthModalOpen]);
 
-  const toggleMode = () => {
+  /*   const toggleMode = () => {
     setAuthModalMode(isSignUp ? 'signIn' : 'signUp');
     resetForm();
-  };
+  }; */
 
   if (!isAuthModalOpen) return null;
 
@@ -128,7 +128,7 @@ export const AuthModal = () => {
           </button>
         </form>
 
-        <div className="mt-6 text-center">
+        {/*         <div className="mt-6 text-center">
           <button
             onClick={toggleMode}
             className="text-primary hover:text-secondary text-sm"
@@ -137,7 +137,7 @@ export const AuthModal = () => {
               ? 'Already on the waitlist? Sign in'
               : 'New to Rubber Duck Tarot? Join waitlist'}
           </button>
-        </div>
+        </div> */}
 
         {isSignUp && (
           <p className="mt-4 text-xs text-gray-500 text-center">
