@@ -25,6 +25,7 @@ export const AuthModal = () => {
   const { showInfo } = useAlert();
 
   const isSignUp = authModalMode === 'signUp';
+  const isSignIn = authModalMode === 'signIn';
 
   const resetForm = () => {
     setEmail('');
@@ -101,9 +102,11 @@ export const AuthModal = () => {
               <Dialog.Panel className="bg-surface rounded-lg max-w-md w-full p-6 text-left align-middle shadow-xl transform transition-all">
                 <div className="flex justify-between items-center mb-6">
                   <Dialog.Title className="text-2xl font-bold text-primary">
-                    {isSignUp && !isWaitlistEnabled()
-                      ? 'Join the Waitlist'
-                      : 'Sign In'}
+                    {isSignIn
+                      ? 'Sign In'
+                      : isSignUp && isWaitlistEnabled()
+                        ? 'Join the Waitlist'
+                        : 'Sign Up'}
                   </Dialog.Title>
                   <button
                     onClick={hideAuthModal}
