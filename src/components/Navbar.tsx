@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import useAuth from '../lib/hooks/useAuth';
+import { Menu } from '@headlessui/react';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { User, Settings, LogOut, CircleFadingArrowUpIcon } from 'lucide-react';
@@ -11,10 +12,8 @@ import { isWaitlistEnabled } from '../lib/featureFlags';
 
 const Navbar = () => {
   const { user, signOut, showAuthModal } = useAuth();
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { profile } = useUserProfile();
-  const userMenuRef = useRef<HTMLDivElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const authEnabled = isWaitlistEnabled();
@@ -22,25 +21,19 @@ const Navbar = () => {
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
-        setShowUserMenu(false);
-      }
-      if (
         mobileMenuRef.current &&
         !mobileMenuRef.current.contains(event.target as Node)
       ) {
         setMobileMenuOpen(false);
       }
     }
-    if (showUserMenu || mobileMenuOpen) {
+    if (mobileMenuOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showUserMenu, mobileMenuOpen]);
+  }, [mobileMenuOpen]);
 
   const handleSignOut = async () => {
     console.log('Signing out...');
@@ -49,14 +42,12 @@ const Navbar = () => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
-    setShowUserMenu(false);
     setMobileMenuOpen(false);
     navigate('/');
   };
 
   const handleNavLinkClick = () => {
     setMobileMenuOpen(false);
-    setShowUserMenu(false);
   };
 
   return (
@@ -146,49 +137,66 @@ const Navbar = () => {
               )}
 
               {user && (
-                <div className="relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center space-x-2 text-secondary hover:text-accent transition-colors duration-200 group"
-                  >
+                <Menu as="div" className="relative">
+                  <Menu.Button className="flex items-center space-x-2 text-secondary hover:text-accent transition-colors duration-200 group">
                     <User className="w-5 h-5 group-hover:text-breakthrough-300" />
                     <span className="hidden sm:inline">
                       {profile?.name || user.email}
                     </span>
-                  </button>
+                  </Menu.Button>
 
-                  <div
-                    className={clsx(
-                      'absolute right-0 mt-2 w-48 bg-surface border border-liminal-border rounded-md shadow-void py-1 z-50 backdrop-blur-liminal',
-                      { hidden: !showUserMenu }
-                    )}
-                  >
-                    <Link
-                      to="/preferences"
-                      className="flex items-center px-4 py-2 text-sm text-secondary hover:bg-liminal-hover hover:text-accent transition-colors duration-200"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Preferences
-                    </Link>
-                    <Link
-                      to="/upgrade"
-                      className="flex items-center px-4 py-2 text-sm text-secondary hover:bg-liminal-hover hover:text-breakthrough-400 transition-colors duration-200"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      <CircleFadingArrowUpIcon className="w-4 h-4 mr-2" />
-                      Upgrade
-                    </Link>
+                  <Menu.Items className="absolute right-0 mt-2 w-48 bg-surface border border-liminal-border rounded-md shadow-void py-1 z-50 backdrop-blur-liminal">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/preferences"
+                          className={clsx(
+                            'flex items-center px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-accent'
+                              : 'text-secondary'
+                          )}
+                        >
+                          <Settings className="w-4 h-4 mr-2" />
+                          Preferences
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/upgrade"
+                          className={clsx(
+                            'flex items-center px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-breakthrough-400'
+                              : 'text-secondary'
+                          )}
+                        >
+                          <CircleFadingArrowUpIcon className="w-4 h-4 mr-2" />
+                          Upgrade
+                        </Link>
+                      )}
+                    </Menu.Item>
                     <div className="border-t border-liminal-border my-1"></div>
-                    <button
-                      onClick={handleSignOut}
-                      className="flex cursor-pointer items-center w-full px-4 py-2 text-sm text-muted hover:bg-liminal-hover hover:text-secondary transition-colors duration-200"
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={handleSignOut}
+                          className={clsx(
+                            'flex cursor-pointer items-center w-full px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-secondary'
+                              : 'text-muted'
+                          )}
+                        >
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
               )}
               {!user && !authEnabled && (
                 <button
@@ -300,46 +308,65 @@ const Navbar = () => {
                 </Link>
               )}
               {user && (
-                <div className="relative" ref={userMenuRef}>
-                  <button
-                    onClick={() => setShowUserMenu((s) => !s)}
-                    className="flex items-center space-x-2 text-secondary hover:text-accent px-2 py-2 rounded transition-colors duration-200 group w-full"
-                  >
+                <Menu as="div" className="relative">
+                  <Menu.Button className="flex items-center space-x-2 text-secondary hover:text-accent px-2 py-2 rounded transition-colors duration-200 group w-full">
                     <User className="w-5 h-5 group-hover:text-breakthrough-300" />
                     <span>{profile?.name || user.email}</span>
-                  </button>
-                  <div
-                    className={clsx(
-                      'absolute left-0 mt-2 w-48 bg-surface border border-liminal-border rounded-md shadow-void py-1 z-50 backdrop-blur-liminal',
-                      { hidden: !showUserMenu }
-                    )}
-                  >
-                    <Link
-                      to="/preferences"
-                      className="flex items-center px-4 py-2 text-sm text-secondary hover:bg-liminal-hover hover:text-accent transition-colors duration-200"
-                      onClick={handleNavLinkClick}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Preferences
-                    </Link>
-                    <Link
-                      to="/upgrade"
-                      className="flex items-center px-4 py-2 text-sm text-secondary hover:bg-liminal-hover hover:text-breakthrough-400 transition-colors duration-200"
-                      onClick={handleNavLinkClick}
-                    >
-                      <CircleFadingArrowUpIcon className="w-4 h-4 mr-2" />
-                      Upgrade
-                    </Link>
+                  </Menu.Button>
+                  <Menu.Items className="absolute left-0 mt-2 w-48 bg-surface border border-liminal-border rounded-md shadow-void py-1 z-50 backdrop-blur-liminal">
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/preferences"
+                          className={clsx(
+                            'flex items-center px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-accent'
+                              : 'text-secondary'
+                          )}
+                          onClick={handleNavLinkClick}
+                        >
+                          <Settings className="w-4 h-4 mr-2" />
+                          Preferences
+                        </Link>
+                      )}
+                    </Menu.Item>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <Link
+                          to="/upgrade"
+                          className={clsx(
+                            'flex items-center px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-breakthrough-400'
+                              : 'text-secondary'
+                          )}
+                          onClick={handleNavLinkClick}
+                        >
+                          <CircleFadingArrowUpIcon className="w-4 h-4 mr-2" />
+                          Upgrade
+                        </Link>
+                      )}
+                    </Menu.Item>
                     <div className="border-t border-liminal-border my-1"></div>
-                    <button
-                      onClick={handleSignOut}
-                      className="flex cursor-pointer items-center w-full px-4 py-2 text-sm text-muted hover:bg-liminal-hover hover:text-secondary transition-colors duration-200"
-                    >
-                      <LogOut className="w-4 h-4 mr-2" />
-                      Sign Out
-                    </button>
-                  </div>
-                </div>
+                    <Menu.Item>
+                      {({ active }) => (
+                        <button
+                          onClick={handleSignOut}
+                          className={clsx(
+                            'flex cursor-pointer items-center w-full px-4 py-2 text-sm transition-colors duration-200',
+                            active
+                              ? 'bg-liminal-hover text-secondary'
+                              : 'text-muted'
+                          )}
+                        >
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </button>
+                      )}
+                    </Menu.Item>
+                  </Menu.Items>
+                </Menu>
               )}
               {!user && !authEnabled && (
                 <button
