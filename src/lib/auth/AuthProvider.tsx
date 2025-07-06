@@ -41,18 +41,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+  const signUpForWaitlist = async (email: string) => {
+    // Create new user and send magic link
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
+      options: {
+        emailRedirectTo: 'http://localhost:5173/welcome',
+      },
     });
     return { error };
   };
 
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+  const signInWithMagicLink = async (email: string) => {
+    // Only send magic link to existing users
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
     });
     return { error };
   };
@@ -74,8 +77,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     session,
     loading,
-    signUp,
-    signIn,
+    signUpForWaitlist,
+    signInWithMagicLink,
     signOut,
     isAuthModalOpen,
     authModalMode,

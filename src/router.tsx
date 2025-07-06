@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import Welcome from './pages/Welcome';
 import CreateInsight from './pages/CreateInsight';
 import OnBoarding from './pages/OnBoarding';
 import Upgrade from './pages/Upgrade';
@@ -64,6 +65,7 @@ const AppRoutes = () => (
     <Route path="/upgrade" element={<Upgrade />} />
     <Route path="/pricing" element={<Pricing />} />
     <Route path="/features" element={<Features />} />
+    <Route path="/welcome" element={<Welcome />} />
     <Route path="/preferences" element={<Preferences />} />
     <Route
       path="/insights/:id"
