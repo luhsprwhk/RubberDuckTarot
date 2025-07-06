@@ -5,7 +5,16 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), ViteImageOptimizer()],
+  plugins: [
+    react(),
+    ViteImageOptimizer({
+      png: {
+        quality: 80,
+        compressionLevel: 9,
+        force: true,
+      },
+    }),
+  ],
   resolve: {
     alias: {
       '@': resolve(__dirname, '.'),
