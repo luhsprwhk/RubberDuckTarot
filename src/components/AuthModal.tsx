@@ -3,11 +3,9 @@ import { X, Mail, AlertCircle } from 'lucide-react';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import useAuth from '../lib/hooks/useAuth';
 import useAlert from '../lib/hooks/useAlert';
-import { isAuthEnabled } from '../lib/featureFlags';
-import { useNavigate } from 'react-router-dom';
+import { isWaitlistEnabled } from '../lib/featureFlags';
 
 export const AuthModal = () => {
-  const navigate = useNavigate();
   const {
     isAuthModalOpen,
     hideAuthModal,
@@ -59,18 +57,10 @@ export const AuthModal = () => {
       if (authError) {
         setError(authError.message);
       } else {
-        if (isAuthEnabled()) {
-          showInfo(
-            'Please check your email and click the magic link to complete your registration.',
-            'Check Your Email'
-          );
-        } else {
-          showInfo(
-            'Welcome to Rubber Duck Tarot! You will be notified when the app is ready.',
-            'Welcome'
-          );
-          navigate('/welcome');
-        }
+        showInfo(
+          'Please check your email and click the magic link to complete your registration.',
+          'Check Your Email'
+        );
         hideAuthModal();
       }
     } catch {
@@ -85,7 +75,7 @@ export const AuthModal = () => {
       <div className="bg-surface rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-primary">
-            {isSignUp && !isAuthEnabled() ? 'Join the Waitlist' : 'Sign In'}
+            {isSignUp && !isWaitlistEnabled() ? 'Join the Waitlist' : 'Sign In'}
           </h2>
           <button
             onClick={hideAuthModal}
@@ -140,7 +130,7 @@ export const AuthModal = () => {
           >
             {loading
               ? 'Sending...'
-              : isSignUp && !isAuthEnabled()
+              : isSignUp && !isWaitlistEnabled()
                 ? 'Join Waitlist'
                 : 'Send Magic Link'}
           </button>
@@ -157,7 +147,7 @@ export const AuthModal = () => {
           </button>
         </div> */}
 
-        {isSignUp && !isAuthEnabled() && (
+        {isSignUp && !isWaitlistEnabled() && (
           <p className="mt-4 text-xs text-gray-500 text-center">
             By joining the waitlist, you'll be notified when Rubber Duck Tarot
             is ready.

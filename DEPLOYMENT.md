@@ -8,7 +8,7 @@ This deployment mode shows only the landing page and pricing page, with signup b
 
 ```bash
 # Build with auth disabled
-VITE_ENABLE_AUTH=false npm run build
+VITE_ENABLE_WAITLIST=false npm run build
 ```
 
 ### Environment Variables
@@ -16,7 +16,7 @@ VITE_ENABLE_AUTH=false npm run build
 For production deployment, set:
 
 ```bash
-VITE_ENABLE_AUTH=false
+VITE_ENABLE_WAITLIST=false
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
@@ -44,14 +44,14 @@ For development or full feature deployment:
 
 ```bash
 # Build with all features
-VITE_ENABLE_AUTH=true npm run build
+VITE_ENABLE_WAITLIST=true npm run build
 ```
 
 Set all environment variables from `.env.example`.
 
 ## Switching Between Modes
 
-The feature flag `VITE_ENABLE_AUTH` controls whether authentication features are shown:
+The feature flag `VITE_ENABLE_WAITLIST` controls whether authentication features are shown:
 
 - `true`: Full app with authentication, user accounts, readings
 - `false`: Marketing site with waitlist signup only

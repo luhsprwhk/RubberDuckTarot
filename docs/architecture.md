@@ -138,14 +138,14 @@ The app uses **React Context** for global state management:
 
 - **File**: `src/lib/featureFlags.ts`
 - **Purpose**: Control feature availability between development and production
-- **Key Flag**: `VITE_ENABLE_AUTH` - Controls authentication features
+- **Key Flag**: `VITE_ENABLE_WAITLIST` - Controls authentication features
 
 ### Deployment Modes
 
-1. **Development Mode** (`VITE_ENABLE_AUTH=true`)
+1. **Development Mode** (`VITE_ENABLE_WAITLIST=true`)
    - Full authentication and user features
    - Complete app functionality
-2. **Marketing Mode** (`VITE_ENABLE_AUTH=false`)
+2. **Marketing Mode** (`VITE_ENABLE_WAITLIST=false`)
    - Logged-out views only (Landing, Pricing, Features, Cards)
    - "Join Waitlist" CTAs instead of authentication
    - No sign-in functionality

@@ -1,9 +1,21 @@
 import { Link } from 'react-router-dom';
 import { CheckCircle, Users, Zap, ArrowRight } from 'lucide-react';
+import { useEffect } from 'react';
+import useAuth from '@/src/lib/hooks/useAuth';
+import { isWaitlistEnabled } from '@/src/lib/featureFlags';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import welcomeHero from '@/src/assets/welcome-hero.png';
 
 export default function Welcome() {
+  const { user, signOut } = useAuth();
+
+  useEffect(() => {
+    if (isWaitlistEnabled() && user) {
+      console.log('User is signed in and waitlist is enabled');
+      signOut();
+    }
+  }, [user, signOut]);
+
   return (
     <div className="min-h-screen bg-void-gradient">
       {/* Hero Section */}

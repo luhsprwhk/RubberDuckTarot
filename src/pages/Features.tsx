@@ -12,14 +12,14 @@ import {
 import Footer from '@/src/components/Footer';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { isAuthEnabled } from '@/src/lib/featureFlags';
+import { isWaitlistEnabled } from '@/src/lib/featureFlags';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import featuresHero from '@/src/assets/features-hero.png';
 
 const Features = () => {
   const { showAuthModal } = useAuth();
   const navigate = useNavigate();
-  const authEnabled = isAuthEnabled();
+  const authEnabled = isWaitlistEnabled();
 
   return (
     <>

@@ -4,13 +4,13 @@ import DuckHero from '@/src/assets/landing-hero.png';
 import DuckLinkedin from '@/src/assets/rob-linkedin.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import { useNavigate } from 'react-router-dom';
-import { isAuthEnabled } from '@/src/lib/featureFlags';
+import { isWaitlistEnabled } from '@/src/lib/featureFlags';
 import Footer from './Footer';
 
 const Landing = () => {
   const { showAuthModal } = useAuth();
   const navigate = useNavigate();
-  const authEnabled = isAuthEnabled();
+  const waitlistEnabled = isWaitlistEnabled();
   return (
     <div className="min-h-screen bg-void-gradient">
       {/* Hero Section */}
@@ -46,7 +46,7 @@ const Landing = () => {
               onClick={() => showAuthModal('signUp')}
               className="bg-breakthrough-400 text-void-900 px-8 py-4 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 flex items-center justify-center gap-2 shadow-breakthrough"
             >
-              {authEnabled ? 'Start Free Consultation' : 'Join Waitlist'}
+              {waitlistEnabled ? 'Join Waitlist' : 'Start Free Consultation'}
               <ArrowRight className="w-5 h-5" />
             </button>
             <button
@@ -295,7 +295,7 @@ const Landing = () => {
               onClick={() => showAuthModal('signUp')}
               className="bg-breakthrough-400 text-void-900 px-8 py-4 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 text-lg shadow-breakthrough"
             >
-              {authEnabled ? 'Begin Free Consultation' : 'Join Waitlist'}
+              {waitlistEnabled ? 'Begin Free Consultation' : 'Join Waitlist'}
             </button>
             <p className="text-sm text-muted mt-4">
               * No seance required. Standard spiritual rates apply.
