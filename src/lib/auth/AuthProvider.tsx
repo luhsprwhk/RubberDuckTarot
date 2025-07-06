@@ -41,21 +41,31 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  const signUpForWaitlist = async (email: string) => {
+  const signUpForWaitlist = async (
+    email: string,
+    captchaToken?: string | null
+  ) => {
     // Create new user and send magic link
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
         emailRedirectTo: 'http://localhost:5173/welcome',
+        captchaToken: captchaToken || undefined,
       },
     });
     return { error };
   };
 
-  const signInWithMagicLink = async (email: string) => {
+  const signInWithMagicLink = async (
+    email: string,
+    captchaToken?: string | null
+  ) => {
     // Only send magic link to existing users
     const { error } = await supabase.auth.signInWithOtp({
       email,
+      options: {
+        captchaToken: captchaToken || undefined,
+      },
     });
     return { error };
   };

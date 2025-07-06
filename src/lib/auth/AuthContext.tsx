@@ -5,8 +5,14 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signUpForWaitlist: (email: string) => Promise<{ error: AuthError | null }>;
-  signInWithMagicLink: (email: string) => Promise<{ error: AuthError | null }>;
+  signUpForWaitlist: (
+    email: string,
+    captchaToken?: string | null
+  ) => Promise<{ error: AuthError | null }>;
+  signInWithMagicLink: (
+    email: string,
+    captchaToken?: string | null
+  ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   isAuthModalOpen: boolean;
   authModalMode: 'signIn' | 'signUp';

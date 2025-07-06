@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Mail, AlertCircle } from 'lucide-react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
 import useAuth from '../lib/hooks/useAuth';
 import useAlert from '../lib/hooks/useAlert';
 import { isAuthEnabled } from '../lib/featureFlags';
@@ -18,6 +19,8 @@ export const AuthModal = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const { showInfo } = useAlert();
 
@@ -26,6 +29,8 @@ export const AuthModal = () => {
   const resetForm = () => {
     setEmail('');
     setError('');
+    setCaptchaToken(null);
+    captchaRef.current?.resetCaptcha();
   };
 
   useEffect(() => {
@@ -48,8 +53,8 @@ export const AuthModal = () => {
 
     try {
       const { error: authError } = isSignUp
-        ? await signUpForWaitlist(email)
-        : await signInWithMagicLink(email);
+        ? await signUpForWaitlist(email, captchaToken)
+        : await signInWithMagicLink(email, captchaToken);
 
       if (authError) {
         setError(authError.message);
@@ -80,7 +85,7 @@ export const AuthModal = () => {
       <div className="bg-surface rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-primary">
-            {isSignUp ? 'Join the Waitlist' : 'Sign In'}
+            {isSignUp && !isAuthEnabled() ? 'Join the Waitlist' : 'Sign In'}
           </h2>
           <button
             onClick={hideAuthModal}
@@ -115,14 +120,27 @@ export const AuthModal = () => {
             </div>
           )}
 
+          <div className="flex justify-center">
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
+              onVerify={(token) => setCaptchaToken(token)}
+              onExpire={() => setCaptchaToken(null)}
+              onError={(error) => {
+                console.error('hCaptcha error:', error);
+                setCaptchaToken(null);
+              }}
+            />
+          </div>
+
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || !captchaToken}
             className="w-full bg-breakthrough-500 text-dark   py-2 px-4 rounded-md hover:bg-breakthrough-400 focus:outline-none focus:ring-2 focus:ring-breakthrough-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading
               ? 'Sending...'
-              : isSignUp
+              : isSignUp && !isAuthEnabled()
                 ? 'Join Waitlist'
                 : 'Send Magic Link'}
           </button>
@@ -139,7 +157,7 @@ export const AuthModal = () => {
           </button>
         </div> */}
 
-        {isSignUp && (
+        {isSignUp && !isAuthEnabled() && (
           <p className="mt-4 text-xs text-gray-500 text-center">
             By joining the waitlist, you'll be notified when Rubber Duck Tarot
             is ready.
