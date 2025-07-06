@@ -1,3 +1,3 @@
-export const isAuthEnabled = () => {
-  return import.meta.env.VITE_ENABLE_AUTH === 'true';
+export const isWaitlistEnabled = () => {
+  return import.meta.env.VITE_ENABLE_WAITLIST === 'true';
 };

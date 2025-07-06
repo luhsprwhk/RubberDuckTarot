@@ -46,10 +46,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     captchaToken?: string | null
   ) => {
     // Create new user and send magic link
+    const emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: 'http://localhost:5173/welcome',
+        emailRedirectTo,
         captchaToken: captchaToken || undefined,
       },
     });

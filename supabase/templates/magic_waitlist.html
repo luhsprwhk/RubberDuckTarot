@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>You're in Rob's Queue</title>
+    <title>Confirm your spot with Rubber Duck Tarot</title>
   </head>
   <body
     style="
@@ -36,7 +36,7 @@
           >
             <tr>
               <td align="center" style="padding-bottom: 24px">
-                <h2
+                <h3
                   style="
                     margin: 0;
                     color: #1e293b;
@@ -44,8 +44,8 @@
                     letter-spacing: 0.5px;
                   "
                 >
-                  🦆 You're in the Debugging Queue
-                </h2>
+                  🦆 Welcome to Rubber Duck Tarot
+                </h3>
               </td>
             </tr>
             <tr>
@@ -85,8 +85,9 @@
                     border: 1.5px solid #00ffff;
                     margin-bottom: 8px;
                   "
-                  >✅ Queued for Consultation</span
-                >
+                  >
+                  <a href="{{ .ConfirmationURL }}">✅ Confirm your spot</a>
+                </span>
               </td>
             </tr>
             <tr>

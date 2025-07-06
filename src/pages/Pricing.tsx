@@ -6,18 +6,18 @@ import { useNavigate } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
 import PricingPic from '@/src/assets/pricing-hero.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
-import { isAuthEnabled } from '@/src/lib/featureFlags';
+import { isWaitlistEnabled } from '@/src/lib/featureFlags';
 
 const Pricing = () => {
   const { showAuthModal, user } = useAuth();
   const navigate = useNavigate();
-  const authEnabled = isAuthEnabled();
+  const waitlistEnabled = isWaitlistEnabled();
 
   useEffect(() => {
-    if (authEnabled && user) {
+    if (waitlistEnabled && user) {
       navigate('/upgrade', { replace: true });
     }
-  }, [authEnabled, user, navigate]);
+  }, [waitlistEnabled, user, navigate]);
 
   return (
     <div className={cn('min-h-screen bg-void-gradient')}>
@@ -196,7 +196,7 @@ const Pricing = () => {
                   'w-full bg-void-700 text-primary px-6 py-3 rounded-lg font-medium hover:bg-void-600 transition-colors duration-200 border border-void-600'
                 )}
               >
-                {authEnabled ? 'Start Free Debugging' : 'Join Waitlist'}
+                {waitlistEnabled ? 'Start Free Debugging' : 'Join Waitlist'}
               </button>
             </div>
 
@@ -324,7 +324,7 @@ const Pricing = () => {
                   'w-full bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough flex items-center justify-center gap-2'
                 )}
               >
-                {authEnabled ? 'Upgrade to Premium' : 'Join Waitlist'}
+                {waitlistEnabled ? 'Upgrade to Premium' : 'Join Waitlist'}
                 <ArrowRight className={cn('w-5 h-5')} />
               </button>
             </div>
@@ -518,9 +518,9 @@ const Pricing = () => {
                   'bg-breakthrough-400 text-void-900 px-8 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough'
                 )}
               >
-                {authEnabled ? 'Start Free Consultation' : 'Join Waitlist'}
+                {waitlistEnabled ? 'Start Free Consultation' : 'Join Waitlist'}
               </button>
-              {authEnabled && (
+              {waitlistEnabled && (
                 <button
                   onClick={() => showAuthModal('signUp')}
                   className={cn(
