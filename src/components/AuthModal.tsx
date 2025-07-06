@@ -86,6 +86,19 @@ export const AuthModal = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex justify-center">
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
+              onVerify={(token) => setCaptchaToken(token)}
+              onExpire={() => setCaptchaToken(null)}
+              onError={(error) => {
+                console.error('hCaptcha error:', error);
+                setCaptchaToken(null);
+              }}
+              theme="dark"
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-primary mb-2">
               Email Address
@@ -109,19 +122,6 @@ export const AuthModal = () => {
               <span className="text-sm">{error}</span>
             </div>
           )}
-
-          <div className="flex justify-center">
-            <HCaptcha
-              ref={captchaRef}
-              sitekey={import.meta.env.VITE_HCAPTCHA_SITE_KEY}
-              onVerify={(token) => setCaptchaToken(token)}
-              onExpire={() => setCaptchaToken(null)}
-              onError={(error) => {
-                console.error('hCaptcha error:', error);
-                setCaptchaToken(null);
-              }}
-            />
-          </div>
 
           <button
             type="submit"
