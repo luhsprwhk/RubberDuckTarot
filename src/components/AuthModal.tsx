@@ -3,10 +3,11 @@ import { X, Mail, AlertCircle } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 import useAlert from '../lib/hooks/useAlert';
 import { isAuthEnabled } from '../lib/featureFlags';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthModal = () => {
   const { isAuthModalOpen, hideAuthModal, signInWithMagicLink } = useAuth();
-
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -47,6 +48,7 @@ export const AuthModal = () => {
             'Welcome to Rubber Duck Tarot! You will be notified when the app is ready.',
             'Welcome'
           );
+          navigate('/welcome');
         }
         hideAuthModal();
       }

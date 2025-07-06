@@ -44,12 +44,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const signInWithMagicLink = async (email: string) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
-      options: {
-        emailRedirectTo:
-          import.meta.env.MODE === 'development'
-            ? 'http://localhost:5173/welcome'
-            : 'https://rubberducktarot.app/welcome',
-      },
     });
     return { error };
   };
