@@ -184,11 +184,11 @@ otp_expiry = 3600
 # content_path = "./supabase/templates/invite.html"
 
 [auth.email.template.magic_link]
-subject = "Summoning your credentials"
+subject = "Summoning your credentials for Rubber Duck Tarot"
 content_path = "./supabase/templates/magic_link.html"
 
 [auth.email.template.confirmation]
-subject = "Confirm your spot"
+subject = "Confirm your spot on the Rubber Duck Tarot waitlist"
 content_path = "./supabase/templates/magic_waitlist.html"
 
 
