@@ -30,6 +30,7 @@
     "@anthropic-ai/sdk": "^0.54.0",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@hcaptcha/react-hcaptcha": "^1.12.0",
+    "@headlessui/react": "^2.2.4",
     "@supabase/supabase-js": "^2.50.0",
     "@types/google.maps": "^3.58.1",
     "@types/pg": "^8.15.4",
