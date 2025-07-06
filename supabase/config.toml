@@ -188,7 +188,7 @@ subject = "Summoning your credentials for Rubber Duck Tarot"
 content_path = "./supabase/templates/magic_link.html"
 
 [auth.email.template.confirmation]
-subject = "Confirm your spot on the Rubber Duck Tarot waitlist"
+subject = "Confirm your spot with Rubber Duck Tarot"
 content_path = "./supabase/templates/magic_waitlist.html"
 
 
