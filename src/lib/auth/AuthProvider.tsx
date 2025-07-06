@@ -41,18 +41,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, []);
 
-  const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+  const signInWithMagicLink = async (email: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
-    });
-    return { error };
-  };
-
-  const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      options: {
+        emailRedirectTo:
+          import.meta.env.MODE === 'development'
+            ? 'http://localhost:5173/welcome'
+            : 'https://rubberducktarot.app/welcome',
+      },
     });
     return { error };
   };
@@ -74,8 +71,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     user,
     session,
     loading,
-    signUp,
-    signIn,
+    signInWithMagicLink,
     signOut,
     isAuthModalOpen,
     authModalMode,
