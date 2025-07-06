@@ -6,13 +6,22 @@ import { isAuthEnabled } from '../lib/featureFlags';
 import { useNavigate } from 'react-router-dom';
 
 export const AuthModal = () => {
-  const { isAuthModalOpen, hideAuthModal, signInWithMagicLink } = useAuth();
+  const {
+    isAuthModalOpen,
+    hideAuthModal,
+    authModalMode,
+    setAuthModalMode,
+    signUpForWaitlist,
+    signInWithMagicLink,
+  } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const { showInfo } = useAlert();
+
+  const isSignUp = authModalMode === 'signUp';
 
   const resetForm = () => {
     setEmail('');
@@ -25,6 +34,11 @@ export const AuthModal = () => {
     }
   }, [isAuthModalOpen]);
 
+  const toggleMode = () => {
+    setAuthModalMode(isSignUp ? 'signIn' : 'signUp');
+    resetForm();
+  };
+
   if (!isAuthModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,7 +47,9 @@ export const AuthModal = () => {
     setLoading(true);
 
     try {
-      const { error: authError } = await signInWithMagicLink(email);
+      const { error: authError } = isSignUp
+        ? await signUpForWaitlist(email)
+        : await signInWithMagicLink(email);
 
       if (authError) {
         setError(authError.message);
@@ -63,7 +79,9 @@ export const AuthModal = () => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-surface rounded-lg max-w-md w-full p-6">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-primary">Join the Waitlist</h2>
+          <h2 className="text-2xl font-bold text-primary">
+            {isSignUp ? 'Join the Waitlist' : 'Sign In'}
+          </h2>
           <button
             onClick={hideAuthModal}
             className="text-secondary hover:text-primary"
@@ -102,14 +120,31 @@ export const AuthModal = () => {
             disabled={loading}
             className="w-full bg-breakthrough-500 text-dark   py-2 px-4 rounded-md hover:bg-breakthrough-400 focus:outline-none focus:ring-2 focus:ring-breakthrough-500 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? 'Sending...' : 'Join Waitlist'}
+            {loading
+              ? 'Sending...'
+              : isSignUp
+                ? 'Join Waitlist'
+                : 'Send Magic Link'}
           </button>
         </form>
 
-        <p className="mt-4 text-xs text-gray-500 text-center">
-          By joining the waitlist, you'll be notified when Rubber Duck Tarot is
-          ready.
-        </p>
+        <div className="mt-6 text-center">
+          <button
+            onClick={toggleMode}
+            className="text-primary hover:text-secondary text-sm"
+          >
+            {isSignUp
+              ? 'Already on the waitlist? Sign in'
+              : 'New to Rubber Duck Tarot? Join waitlist'}
+          </button>
+        </div>
+
+        {isSignUp && (
+          <p className="mt-4 text-xs text-gray-500 text-center">
+            By joining the waitlist, you'll be notified when Rubber Duck Tarot
+            is ready.
+          </p>
+        )}
       </div>
     </div>
   );
