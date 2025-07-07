@@ -7,8 +7,12 @@ import Loading from '../components/Loading';
 import type { Insight, Card, BlockType } from '@/src/interfaces';
 import ErrorState from '../components/ErrorState';
 import InsightDisplay from '../components/InsightDisplay';
+import { getUserBlockById } from '@/src/lib/blocks/block-queries';
+import type { UserBlock } from '@/src/interfaces';
 
 const InsightPage: React.FC = () => {
+  // ...
+  const [userBlock, setUserBlock] = useState<UserBlock | null>(null);
   const { id } = useParams<{ id: string }>();
   const [insight, setInsight] = useState<Insight | null>(null);
   const [cards, setCards] = useState<Card[]>([]);
@@ -31,6 +35,18 @@ const InsightPage: React.FC = () => {
           return;
         }
         setInsight(insightData);
+
+        // Fetch user block if present
+        if (insightData.user_block_id) {
+          try {
+            const block = await getUserBlockById(insightData.user_block_id);
+            setUserBlock(block);
+          } catch {
+            setUserBlock(null);
+          }
+        } else {
+          setUserBlock(null);
+        }
 
         const cardPromises = insightData.cards_drawn.map(
           (cardData: { id: number; reversed: boolean }) =>
@@ -89,6 +105,7 @@ const InsightPage: React.FC = () => {
       insightId={insight.id}
       initialResonated={insight.resonated}
       initialTookAction={insight.took_action}
+      userBlock={userBlock}
     />
   );
 };
