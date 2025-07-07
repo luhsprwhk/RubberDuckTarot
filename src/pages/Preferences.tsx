@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Save, User, Settings, Bell, Eye, Palette } from 'lucide-react';
+import { Save, User, Settings, Eye } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 import { useUserProfile } from '../lib/hooks/useUserProfile';
 import { updateUserProfile } from '../lib/userPreferences';
 import { type UserProfile } from '../interfaces';
 import { getZodiacSign } from '../lib/zodiacUtils';
+import { Link } from 'react-router-dom';
 import {
   superpowers,
   kryptonites,
@@ -93,19 +94,7 @@ const Preferences = () => {
   }
 
   if (!profile) {
-    return (
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="text-center py-12">
-          <User className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            No Profile Found
-          </h2>
-          <p className="text-gray-600">
-            Please complete your onboarding to access preferences.
-          </p>
-        </div>
-      </div>
-    );
+    return <NoProfileFound />;
   }
 
   return (
@@ -349,40 +338,6 @@ const Preferences = () => {
                 <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
               </label>
             </div>
-
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Bell className="h-5 w-5 text-breakthrough-500" />
-                <div>
-                  <p className="text-sm font-semibold text-primary">
-                    Daily Insights
-                  </p>
-                  <p className="text-xs text-secondary">
-                    Get reminded to draw your daily card
-                  </p>
-                </div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
-                <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
-              </label>
-            </div>
-
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Palette className="h-5 w-5 text-breakthrough-500" />
-                <div>
-                  <p className="text-sm font-semibold text-primary">
-                    Dark Mode
-                  </p>
-                  <p className="text-xs text-secondary">Switch to dark theme</p>
-                </div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
-                <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
-              </label>
-            </div>
           </div>
         </div>
 
@@ -391,7 +346,7 @@ const Preferences = () => {
           <div>
             {saveMessage && (
               <p
-                className={`text-sm ${saveMessage.includes('success') ? 'text-green-600' : 'text-red-600'}`}
+                className={`text-sm ${saveMessage.includes('success') ? 'text-breakthrough-600' : 'text-red-500'}`}
               >
                 {saveMessage}
               </p>
@@ -400,16 +355,46 @@ const Preferences = () => {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 px-6 py-2 bg-breakthrough-500 text-primary rounded-lg shadow-glow hover:bg-breakthrough-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 px-6 py-2 bg-breakthrough-500 text-primary rounded-lg shadow-glow hover:bg-breakthrough-600 transition disabled:opacity-50 disabled:cursor-not-allowed border border-liminal-border"
           >
             {saving ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
             ) : (
-              <Save className="h-4 w-4" />
+              <Save className="h-4 w-4 text-primary" />
             )}
             <span>{saving ? 'Saving...' : 'Save Changes'}</span>
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * A visually engaging component shown when no user profile is found.
+ */
+const NoProfileFound = () => {
+  return (
+    <div className="max-w-2xl mx-auto p-8 bg-surface rounded-xl shadow-glow border border-liminal-border mt-16">
+      <div className="flex flex-col items-center py-14 backdrop-blur-liminal">
+        <div className="bg-breakthrough-50 rounded-full p-4 mb-5">
+          <User className="h-14 w-14 text-breakthrough-400" />
+        </div>
+        <h2 className="text-2xl font-bold text-primary mb-3">
+          Profile Missing
+        </h2>
+        <p className="text-secondary mb-6 text-center max-w-md">
+          We couldn't find your profile information.
+          <br />
+          To unlock your personalized preferences, please complete the
+          onboarding process.
+        </p>
+        <Link
+          to="/onboarding"
+          className="inline-block px-6 py-2 rounded-lg bg-breakthrough-500 text-primary font-semibold shadow-glow hover:bg-breakthrough-600 transition"
+        >
+          Start Onboarding
+        </Link>
       </div>
     </div>
   );

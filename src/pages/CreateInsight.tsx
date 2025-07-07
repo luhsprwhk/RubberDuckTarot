@@ -336,10 +336,38 @@ const CreateInsight: React.FC = () => {
       <div className="max-w-2xl mx-auto p-6 bg-void-gradient min-h-screen flex items-center justify-center">
         <div className="text-center w-full">
           {renderLoader()}
-          {loadingText && (
-            <div className="text-lg text-primary font-semibold whitespace-pre-line">
-              {loadingText}
+          {loadingReading && Array.isArray(loadingText.split('\n')) ? (
+            <div className="flex flex-col items-center gap-1 mb-2">
+              {loadingText.split('\n').map((msg, idx) => {
+                if (idx === 1) {
+                  // Middle message: bold, big, primary
+                  return (
+                    <div
+                      key={msg}
+                      className="text-xl font-bold text-primary leading-snug"
+                    >
+                      {msg}
+                    </div>
+                  );
+                } else {
+                  // Top/bottom: small, muted
+                  return (
+                    <div
+                      key={msg}
+                      className="text-sm text-secondary opacity-70"
+                    >
+                      {msg}
+                    </div>
+                  );
+                }
+              })}
             </div>
+          ) : (
+            loadingText && (
+              <div className="text-lg text-primary font-semibold whitespace-pre-line">
+                {loadingText}
+              </div>
+            )
           )}
         </div>
       </div>

@@ -1,11 +1,13 @@
 import React from 'react';
+import { InsightAd } from './ads/SmartAd';
 
-const AdBanner: React.FC = () => (
-  <div className="mt-4 bg-liminal-surface border border-liminal-border rounded-lg p-4 text-center">
-    <p className="text-secondary text-sm">
-      📺 Friendly Ad Space • Upgrade to Premium Duck for ad-free wisdom
-    </p>
-  </div>
-);
+interface AdBannerProps {
+  className?: string;
+}
+
+// Legacy AdBanner component - now uses the smart ad system
+const AdBanner: React.FC<AdBannerProps> = ({ className }) => {
+  return <InsightAd className={className} />;
+};
 
 export default AdBanner;

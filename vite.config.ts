@@ -2,14 +2,16 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import basicSsl from '@vitejs/plugin-basic-ssl';
 
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: ['dev.rubberducktarot.com'],
+    allowedHosts: ['dev.rubberducktarot.app'],
   },
   plugins: [
     react(),
+    basicSsl(),
     ViteImageOptimizer({
       png: {
         quality: 80,

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { User, Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
+import type { User } from '../../interfaces';
 import { supabase } from '../supabase/supabase';
 import AuthContext from '@/src/lib/auth/AuthContext';
 import { AuthModal } from '@/src/components/AuthModal';
@@ -19,20 +20,59 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   useEffect(() => {
-    setLoading(true);
+    const initializeAuth = async () => {
+      try {
+        setLoading(true);
+
+        // Get initial session
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        setSession(session);
+        if (session?.user) {
+          try {
+            const user = await getUserFromAuth(session.user.id);
+            setUser(user ?? null);
+          } catch (error) {
+            console.error('Failed to load initial user data:', error);
+            // Still set user to null but don't prevent the app from loading
+            setUser(null);
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
+
+    // Set up auth state change listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       try {
         setSession(session);
         if (session?.user) {
-          const user = await getUserFromAuth(session.user.id);
-          setUser(user ?? null);
+          try {
+            const user = await getUserFromAuth(session.user.id);
+            setUser(user ?? null);
+          } catch (error) {
+            console.error('Failed to load user data:', error);
+            // Still set user to null but don't prevent the app from loading
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
-      } finally {
-        setLoading(false);
+      } catch (error) {
+        console.error('Error in auth state change:', error);
+        setUser(null);
       }
     });
 
@@ -43,14 +83,38 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signUpForWaitlist = async (
     email: string,
+    captchaToken?: string | null,
+    shouldCreateUser: boolean = true
+  ) => {
+    // Create new user and send magic link
+    const waitlistEnabled = import.meta.env.VITE_WAITLIST_ENABLED === 'true';
+    const options: {
+      captchaToken?: string;
+      emailRedirectTo?: string;
+      shouldCreateUser: boolean;
+    } = {
+      captchaToken: captchaToken || undefined,
+      shouldCreateUser,
+    };
+    if (waitlistEnabled) {
+      options.emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
+    }
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options,
+    });
+    return { error };
+  };
+
+  const signUpWithMagicLink = async (
+    email: string,
     captchaToken?: string | null
   ) => {
     // Create new user and send magic link
-    const emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo,
+        shouldCreateUser: true,
         captchaToken: captchaToken || undefined,
       },
     });
@@ -65,6 +129,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
+        shouldCreateUser: false,
         captchaToken: captchaToken || undefined,
       },
     });
@@ -96,6 +161,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     showAuthModal,
     hideAuthModal,
     setAuthModalMode,
+    signUpWithMagicLink,
   };
 
   return (

@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import type { User, Session, AuthError } from '@supabase/supabase-js';
+import type { Session, AuthError } from '@supabase/supabase-js';
+import type { User } from '../../interfaces';
 
 interface AuthContextType {
   user: User | null;
@@ -7,11 +8,18 @@ interface AuthContextType {
   loading: boolean;
   signUpForWaitlist: (
     email: string,
-    captchaToken?: string | null
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
+  ) => Promise<{ error: AuthError | null }>;
+  signUpWithMagicLink: (
+    email: string,
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
   signInWithMagicLink: (
     email: string,
-    captchaToken?: string | null
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   isAuthModalOpen: boolean;

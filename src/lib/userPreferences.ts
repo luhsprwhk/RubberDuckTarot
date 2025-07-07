@@ -1,12 +1,20 @@
 import { supabase } from './supabase/supabase';
 import type { UserProfile } from '../interfaces';
+import { encryptObject, decryptObject } from './encryption';
 
 export const saveUserProfile = async (
   profile: Omit<UserProfile, 'id' | 'created_at' | 'updated_at'>
 ) => {
+  // Encrypt sensitive fields before saving
+  const encryptedProfile = await encryptObject(profile, [
+    'name',
+    'birthday',
+    'birth_place',
+  ]);
+
   const { data, error } = await supabase
     .from('user_profiles')
-    .upsert(profile, {
+    .upsert(encryptedProfile, {
       onConflict: 'user_id',
       ignoreDuplicates: false,
     })
@@ -17,7 +25,14 @@ export const saveUserProfile = async (
     throw new Error(`Failed to save profile: ${error.message}`);
   }
 
-  return data;
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt saved profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getUserProfile = async (
@@ -37,16 +52,31 @@ export const getUserProfile = async (
     throw new Error(`Failed to get profile: ${error.message}`);
   }
 
-  return data;
+  try {
+    // Decrypt sensitive fields before returning
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt user profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    // This allows the app to continue working even if encryption is not properly configured
+    return data;
+  }
 };
 
 export const updateUserProfile = async (
   userId: string,
   updates: Partial<UserProfile>
 ) => {
+  // Encrypt sensitive fields in updates
+  const encryptedUpdates = await encryptObject(updates, [
+    'name',
+    'birthday',
+    'birth_place',
+  ]);
+
   const { data, error } = await supabase
     .from('user_profiles')
-    .update({ ...updates, updated_at: new Date().toISOString() })
+    .update({ ...encryptedUpdates, updated_at: new Date().toISOString() })
     .eq('user_id', userId)
     .select()
     .single();
@@ -55,7 +85,14 @@ export const updateUserProfile = async (
     throw new Error(`Failed to update profile: ${error.message}`);
   }
 
-  return data;
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt updated profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const isProfileComplete = (profile: UserProfile | null): boolean => {

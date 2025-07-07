@@ -15,6 +15,7 @@ export const AuthModal = () => {
     // setAuthModalMode,
     signUpForWaitlist,
     signInWithMagicLink,
+    signUpWithMagicLink,
   } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,7 @@ export const AuthModal = () => {
   const { showInfo } = useAlert();
 
   const isSignUp = authModalMode === 'signUp';
+  const isSignIn = authModalMode === 'signIn';
 
   const resetForm = () => {
     setEmail('');
@@ -52,9 +54,20 @@ export const AuthModal = () => {
     setLoading(true);
 
     try {
-      const { error: authError } = isSignUp
-        ? await signUpForWaitlist(email, captchaToken)
-        : await signInWithMagicLink(email, captchaToken);
+      let authError;
+      if (isSignUp) {
+        const waitlistEnabled = import.meta.env.VITE_ENABLE_WAITLIST === 'true';
+        if (waitlistEnabled) {
+          ({ error: authError } = await signUpForWaitlist(email, captchaToken));
+        } else {
+          ({ error: authError } = await signUpWithMagicLink(
+            email,
+            captchaToken
+          ));
+        }
+      } else {
+        ({ error: authError } = await signInWithMagicLink(email, captchaToken));
+      }
 
       if (authError) {
         setError(authError.message);
@@ -101,9 +114,11 @@ export const AuthModal = () => {
               <Dialog.Panel className="bg-surface rounded-lg max-w-md w-full p-6 text-left align-middle shadow-xl transform transition-all">
                 <div className="flex justify-between items-center mb-6">
                   <Dialog.Title className="text-2xl font-bold text-primary">
-                    {isSignUp && !isWaitlistEnabled()
-                      ? 'Join the Waitlist'
-                      : 'Sign In'}
+                    {isSignIn
+                      ? 'Sign In'
+                      : isSignUp && isWaitlistEnabled()
+                        ? 'Join the Waitlist'
+                        : 'Sign Up'}
                   </Dialog.Title>
                   <button
                     onClick={hideAuthModal}
