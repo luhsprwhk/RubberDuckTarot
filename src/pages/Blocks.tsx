@@ -8,6 +8,7 @@ import ErrorState from '../components/ErrorState';
 import { useUserBlocks } from '../lib/blocks/useUserBlocks';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import robEmoji from '../assets/rob-emoji.png';
+import { BlocksAd, NativeContentAd } from '../components/ads/SmartAd';
 
 const Blocks: React.FC = () => {
   const { user } = useAuth();
@@ -95,42 +96,51 @@ const Blocks: React.FC = () => {
         </p>
       </div>
 
-      <div className="space-y-6">
-        {blocks.map((block) => (
-          <Link
-            to={`/blocks/${block.id}`}
-            key={block.id}
-            className="block bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
-            style={{ textDecoration: 'none', color: 'inherit' }}
-          >
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span
-                    className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
-                  >
-                    {block.status.charAt(0).toUpperCase() +
-                      block.status.slice(1)}
-                  </span>
-                  <span className="text-sm text-secondary">
-                    {formatDate(block.created_at)}
-                  </span>
-                </div>
-                <h3 className="text-lg font-semibold text-secondary mb-1">
-                  {block.name}
-                </h3>
-                <p className="text-sm text-accent mb-3">
-                  {getBlockTypeName(block.block_type_id)}
-                </p>
+      {/* Blocks list ad */}
+      <BlocksAd className="mb-6" />
 
-                {block.notes && (
-                  <div className="mt-3 p-3 bg-void-700 rounded-lg">
-                    <p className="text-sm text-secondary">{block.notes}</p>
+      <div className="space-y-6">
+        {blocks.map((block, index) => (
+          <React.Fragment key={block.id}>
+            <Link
+              to={`/blocks/${block.id}`}
+              className="block bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span
+                      className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
+                    >
+                      {block.status.charAt(0).toUpperCase() +
+                        block.status.slice(1)}
+                    </span>
+                    <span className="text-sm text-secondary">
+                      {formatDate(block.created_at)}
+                    </span>
                   </div>
-                )}
+                  <h3 className="text-lg font-semibold text-secondary mb-1">
+                    {block.name}
+                  </h3>
+                  <p className="text-sm text-accent mb-3">
+                    {getBlockTypeName(block.block_type_id)}
+                  </p>
+
+                  {block.notes && (
+                    <div className="mt-3 p-3 bg-void-700 rounded-lg">
+                      <p className="text-sm text-secondary">{block.notes}</p>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+
+            {/* Show native ad after every 3rd block */}
+            {(index + 1) % 3 === 0 && index < blocks.length - 1 && (
+              <NativeContentAd className="my-4" />
+            )}
+          </React.Fragment>
         ))}
       </div>
 
@@ -154,39 +164,31 @@ const EmptyBlocksState = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        <div className="bg-void-800 rounded-xl shadow-lg p-8 border-l-4 border-liminal-border">
-          <h2 className="text-2xl font-bold text-primary mb-4">
-            No Blocks Being Tracked Yet
-          </h2>
-
-          <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-breakthrough-400">
-            <div className="flex items-start space-x-3">
-              <div className="flex items-center justify-center p-2 md:p-4 gap-4 min-w-[72px]">
-                <img src={robEmoji} alt="Rob" className="w-20 h-16" />
-              </div>
-              <div className="text-left">
-                <p className="text-primary mb-3">
-                  <strong>Rob here.</strong> No blocks in your tracker means
-                  you're either living life with zero obstacles (impressive!) or
-                  you haven't started identifying what's actually getting in
-                  your way.
-                </p>
-
-                <p className="text-primary font-medium">
-                  Let's find out what's blocking you and turn it into a
-                  trackable goal.
-                </p>
-              </div>
+        <div className="max-w-3xl w-full mx-auto bg-surface p-8 rounded-xl border border-liminal-border shadow-lg">
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center shadow-glow mb-2">
+              <img src={robEmoji} alt="Rob" className="w-16 h-16" />
             </div>
+            <h2 className="text-3xl font-bold text-primary mb-2">
+              No Blocks Being Tracked Yet
+            </h2>
+            <p className="text-secondary mb-2">
+              <strong>Rob here.</strong> No blocks in your tracker means you're
+              either living life with zero obstacles (impressive!) or you
+              haven't started identifying what's actually getting in your way.
+            </p>
+            <p className="text-secondary mb-6 font-medium">
+              Let's find out what's blocking you and turn it into a trackable
+              goal.
+            </p>
+            <Link
+              to="/new-reading"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <Target className="w-5 h-5 mr-2" />
+              Identify Your First Block
+            </Link>
           </div>
-
-          <Link
-            to="/new-reading"
-            className="inline-flex items-center px-8 py-3 bg-void-gradient text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-          >
-            <Target className="w-5 h-5 mr-2" />
-            Identify Your First Block
-          </Link>
         </div>
       </div>
     </div>

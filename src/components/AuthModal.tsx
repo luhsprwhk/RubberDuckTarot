@@ -15,6 +15,7 @@ export const AuthModal = () => {
     // setAuthModalMode,
     signUpForWaitlist,
     signInWithMagicLink,
+    signUpWithMagicLink,
   } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,9 +54,20 @@ export const AuthModal = () => {
     setLoading(true);
 
     try {
-      const { error: authError } = isSignUp
-        ? await signUpForWaitlist(email, captchaToken)
-        : await signInWithMagicLink(email, captchaToken);
+      let authError;
+      if (isSignUp) {
+        const waitlistEnabled = import.meta.env.VITE_ENABLE_WAITLIST === 'true';
+        if (waitlistEnabled) {
+          ({ error: authError } = await signUpForWaitlist(email, captchaToken));
+        } else {
+          ({ error: authError } = await signUpWithMagicLink(
+            email,
+            captchaToken
+          ));
+        }
+      } else {
+        ({ error: authError } = await signInWithMagicLink(email, captchaToken));
+      }
 
       if (authError) {
         setError(authError.message);

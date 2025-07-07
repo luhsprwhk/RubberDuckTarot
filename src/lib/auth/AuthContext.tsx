@@ -7,11 +7,18 @@ interface AuthContextType {
   loading: boolean;
   signUpForWaitlist: (
     email: string,
-    captchaToken?: string | null
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
+  ) => Promise<{ error: AuthError | null }>;
+  signUpWithMagicLink: (
+    email: string,
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
   signInWithMagicLink: (
     email: string,
-    captchaToken?: string | null
+    captchaToken?: string | null,
+    shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   isAuthModalOpen: boolean;

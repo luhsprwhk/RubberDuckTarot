@@ -198,39 +198,30 @@ const EmptyInsightsState = () => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-        {/* Rob's Empty State */}
-
-        <div className="bg-void-800 rounded-xl shadow-lg p-8 border-l-4 border-liminal-border">
-          <h2 className="text-2xl font-bold text-primary mb-4">
-            Your Insight Archive is Empty
-          </h2>
-
-          <div className="bg-void-800 rounded-lg p-6 mb-6 border-l-4 border-breakthrough-400">
-            <div className="flex items-start space-x-3">
-              <div className="flex items-center justify-center p-2 md:p-4 gap-4 min-w-[72px]">
-                <img src={robEmoji} alt="Rob" className="w-20 h-16" />
-              </div>
-              <div className="text-left">
-                <p className="text-primary mb-3">
-                  <strong>Rob here.</strong> I'm floating around in the ethereal
-                  realm with zero debugging sessions logged. That's either
-                  impressive life management or serious avoidance behavior.
-                </p>
-
-                <p className="text-primary font-medium">
-                  Let's fix that. What's blocking you right now?
-                </p>
-              </div>
+        <div className="max-w-3xl w-full mx-auto bg-surface p-8 rounded-xl border border-liminal-border shadow-lg">
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-20 h-20 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center shadow-glow mb-2">
+              <img src={robEmoji} alt="Rob" className="w-16 h-16" />
             </div>
+            <h2 className="text-3xl font-bold text-primary mb-2">
+              Your Insight Archive is Empty
+            </h2>
+            <p className="text-secondary mb-2">
+              <strong>Rob here.</strong> I'm floating around in the ethereal
+              realm with zero debugging sessions logged. That's either
+              impressive life management or serious avoidance behavior.
+            </p>
+            <p className="text-secondary mb-6 font-medium">
+              Let's fix that. What's blocking you right now?
+            </p>
+            <Link
+              to="/new-insight"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+            >
+              <MessageCircle className="w-5 h-5 mr-2" />
+              Get your first insight
+            </Link>
           </div>
-
-          <Link
-            to="/new-insight"
-            className="inline-flex items-center px-8 py-3 bg-void-gradient text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
-          >
-            <MessageCircle className="w-5 h-5 mr-2" />
-            Get your first insight
-          </Link>
         </div>
       </div>
     </div>

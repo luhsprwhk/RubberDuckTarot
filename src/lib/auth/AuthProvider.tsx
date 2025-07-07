@@ -82,15 +82,18 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const signUpForWaitlist = async (
     email: string,
-    captchaToken?: string | null
+    captchaToken?: string | null,
+    shouldCreateUser: boolean = true
   ) => {
     // Create new user and send magic link
     const waitlistEnabled = import.meta.env.VITE_WAITLIST_ENABLED === 'true';
     const options: {
       captchaToken?: string;
       emailRedirectTo?: string;
+      shouldCreateUser: boolean;
     } = {
       captchaToken: captchaToken || undefined,
+      shouldCreateUser,
     };
     if (waitlistEnabled) {
       options.emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
@@ -98,6 +101,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options,
+    });
+    return { error };
+  };
+
+  const signUpWithMagicLink = async (
+    email: string,
+    captchaToken?: string | null
+  ) => {
+    // Create new user and send magic link
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: true,
+        captchaToken: captchaToken || undefined,
+      },
     });
     return { error };
   };
@@ -110,6 +128,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
+        shouldCreateUser: false,
         captchaToken: captchaToken || undefined,
       },
     });
@@ -141,6 +160,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     showAuthModal,
     hideAuthModal,
     setAuthModalMode,
+    signUpWithMagicLink,
   };
 
   return (

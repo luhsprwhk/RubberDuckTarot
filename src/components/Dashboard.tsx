@@ -9,6 +9,7 @@ import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType } from '@/src/interfaces';
 import Loading from './Loading';
+import { DashboardAd, NativeContentAd } from './ads/SmartAd';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -125,6 +126,9 @@ export default function Dashboard() {
     );
     return (
       <div className="max-w-3xl mx-auto p-6">
+        {/* Dashboard Header Ad */}
+        <DashboardAd className="mb-6" />
+
         <h2 className="text-2xl font-bold mb-4 text-primary">
           Your Active Blocks
         </h2>
@@ -133,6 +137,10 @@ export default function Dashboard() {
           blockTypes={blockTypes}
           onClickBlock={handleBlockClick}
         />
+
+        {/* Native content ad between blocks and action */}
+        {activeBlocks.length >= 3 && <NativeContentAd className="my-6" />}
+
         <div className="mt-8 flex justify-center">
           <Link
             to="/new-insight"
