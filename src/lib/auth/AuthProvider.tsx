@@ -87,7 +87,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     shouldCreateUser: boolean = true
   ) => {
     // Create new user and send magic link
-    const waitlistEnabled = import.meta.env.VITE_WAITLIST_ENABLED === 'true';
     const options: {
       captchaToken?: string;
       emailRedirectTo?: string;
@@ -96,9 +95,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       captchaToken: captchaToken || undefined,
       shouldCreateUser,
     };
-    if (waitlistEnabled) {
-      options.emailRedirectTo = import.meta.env.VITE_EMAIL_REDIRECT_URL;
-    }
+    options.emailRedirectTo = import.meta.env.VITE_EMAIL_WELCOME_URL;
+    console.log('options', options);
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options,
