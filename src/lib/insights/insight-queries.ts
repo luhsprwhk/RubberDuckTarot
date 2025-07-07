@@ -20,8 +20,14 @@ export const createInsight = async (
 
   if (error) throw error;
 
-  // Decrypt the returned data for the client
-  return await decryptObject(data, ['user_context', 'reading']);
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['user_context', 'reading']);
+  } catch (error) {
+    console.error('Failed to decrypt created insight:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getUserInsights = async (userId?: string): Promise<Insight[]> => {
@@ -41,9 +47,15 @@ export const getUserInsights = async (userId?: string): Promise<Insight[]> => {
   if (error) throw error;
 
   // Decrypt sensitive fields for all insights
-  return await Promise.all(
-    data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
-  );
+  try {
+    return await Promise.all(
+      data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt user insights:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getInsightById = async (id: number): Promise<Insight | null> => {
@@ -55,8 +67,16 @@ export const getInsightById = async (id: number): Promise<Insight | null> => {
 
   if (error) throw error;
 
-  // Decrypt sensitive fields before returning
-  return data ? await decryptObject(data, ['user_context', 'reading']) : null;
+  if (!data) return null;
+
+  try {
+    // Decrypt sensitive fields before returning
+    return await decryptObject(data, ['user_context', 'reading']);
+  } catch (error) {
+    console.error('Failed to decrypt insight by ID:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const updateInsightSentiment = async (
@@ -89,7 +109,13 @@ export const getInsightsByUserBlockId = async (
   if (error) throw error;
 
   // Decrypt sensitive fields for all insights
-  return await Promise.all(
-    data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
-  );
+  try {
+    return await Promise.all(
+      data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt insights by user block ID:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };

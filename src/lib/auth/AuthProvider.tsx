@@ -19,7 +19,39 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   );
 
   useEffect(() => {
-    setLoading(true);
+    const initializeAuth = async () => {
+      try {
+        setLoading(true);
+
+        // Get initial session
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        setSession(session);
+        if (session?.user) {
+          try {
+            const user = await getUserFromAuth(session.user.id);
+            setUser(user ?? null);
+          } catch (error) {
+            console.error('Failed to load initial user data:', error);
+            // Still set user to null but don't prevent the app from loading
+            setUser(null);
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Error initializing auth:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
+
+    // Set up auth state change listener
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
@@ -40,8 +72,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       } catch (error) {
         console.error('Error in auth state change:', error);
         setUser(null);
-      } finally {
-        setLoading(false);
       }
     });
 

@@ -17,8 +17,14 @@ export const createUserBlock = async (
 
   if (error) throw error;
 
-  // Decrypt the returned data for the client
-  return await decryptObject(data, ['name', 'notes']);
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['name', 'notes']);
+  } catch (error) {
+    console.error('Failed to decrypt user block:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
@@ -38,9 +44,15 @@ export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
   if (error) throw error;
 
   // Decrypt sensitive fields for all user blocks
-  return await Promise.all(
-    data.map((block) => decryptObject(block, ['name', 'notes']))
-  );
+  try {
+    return await Promise.all(
+      data.map((block) => decryptObject(block, ['name', 'notes']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt user blocks:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getUserBlockById = async (
@@ -57,8 +69,16 @@ export const getUserBlockById = async (
     throw error;
   }
 
-  // Decrypt sensitive fields before returning
-  return data ? await decryptObject(data, ['name', 'notes']) : null;
+  if (!data) return null;
+
+  try {
+    // Decrypt sensitive fields before returning
+    return await decryptObject(data, ['name', 'notes']);
+  } catch (error) {
+    console.error('Failed to decrypt user block by ID:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const updateUserBlockStatus = async (
