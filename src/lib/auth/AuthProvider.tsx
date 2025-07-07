@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { User, Session } from '@supabase/supabase-js';
+import type { Session } from '@supabase/supabase-js';
+import type { User } from '../../interfaces';
 import { supabase } from '../supabase/supabase';
 import AuthContext from '@/src/lib/auth/AuthContext';
 import { AuthModal } from '@/src/components/AuthModal';
