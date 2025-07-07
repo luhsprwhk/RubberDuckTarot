@@ -7,11 +7,12 @@ import Loading from '../components/Loading';
 import type { Insight, Card, BlockType } from '@/src/interfaces';
 import ErrorState from '../components/ErrorState';
 import InsightDisplay from '../components/InsightDisplay';
+import useAuth from '@/src/lib/hooks/useAuth';
 import { getUserBlockById } from '@/src/lib/blocks/block-queries';
 import type { UserBlock } from '@/src/interfaces';
 
 const InsightPage: React.FC = () => {
-  // ...
+  const { user } = useAuth();
   const [userBlock, setUserBlock] = useState<UserBlock | null>(null);
   const { id } = useParams<{ id: string }>();
   const [insight, setInsight] = useState<Insight | null>(null);
@@ -106,6 +107,7 @@ const InsightPage: React.FC = () => {
       initialResonated={insight.resonated}
       initialTookAction={insight.took_action}
       userBlock={userBlock}
+      isPremium={user?.premium ?? false}
     />
   );
 };

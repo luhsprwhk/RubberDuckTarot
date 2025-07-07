@@ -15,6 +15,13 @@
       "when": 1751839221365,
       "tag": "0001_add_encryption_to_users",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751847000000,
+      "tag": "0002_add_notion_integration",
+      "breakpoints": true
     }
   ]
 }

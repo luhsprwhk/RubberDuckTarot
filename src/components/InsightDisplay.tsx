@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/src/lib/utils';
 
-const insightPanelClass =
-  'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg';
+const insightPanelClass = cn(
+  'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg'
+);
+
 import type { Card, BlockType, UserBlock } from '@/src/interfaces';
 import type { PersonalizedReading } from '@/src/ai';
 import robEmoji from '@/src/assets/rob-emoji.png';
@@ -11,6 +13,10 @@ import SentimentTracking from './SentimentTracking';
 import { updateInsightSentiment } from '@/src/lib/insights/insight-queries';
 import { useNavigate } from 'react-router-dom';
 import { createCardSlug } from '@/src/lib/cards/card-helpers';
+import { NotionService } from '@/src/lib/notion/notion-service';
+import { NotionOperations } from '@/src/lib/notion/notion-operations';
+import useAuth from '@/src/lib/hooks/useAuth';
+import useAlerts from '@/src/lib/hooks/useAlert';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -23,6 +29,7 @@ interface InsightDisplayProps {
   initialResonated?: boolean;
   initialTookAction?: boolean;
   userBlock?: UserBlock | null;
+  isPremium: boolean;
 }
 
 const InsightDisplay: React.FC<InsightDisplayProps> = ({
@@ -35,6 +42,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
   initialResonated,
   initialTookAction,
   userBlock,
+  isPremium,
 }) => {
   const navigate = useNavigate();
   const handleSentimentChange = async (
@@ -142,23 +150,13 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
 
           {/* Action Steps */}
           {personalizedReading.actionSteps.length > 0 && (
-            <div className="bg-liminal-overlay rounded-lg p-4 mb-6 shadow-breakthrough border border-liminal-border">
-              <h3 className="text-lg font-semibold text-accent mb-3">
-                🎯 Next Steps
-              </h3>
-              <ol className={cn('space-y-2')}>
-                {personalizedReading.actionSteps.map(
-                  (step: string, index: number) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <span className={cn('text-accent font-semibold')}>
-                        {index + 1}.
-                      </span>
-                      <span className={cn('text-primary')}>{step}</span>
-                    </li>
-                  )
-                )}
-              </ol>
-            </div>
+            <NextSteps
+              actionSteps={personalizedReading.actionSteps}
+              isPremium={isPremium}
+              personalizedReading={personalizedReading}
+              selectedBlock={selectedBlock}
+              drawnCards={drawnCards}
+            />
           )}
 
           {/* Ad Banner */}
@@ -241,6 +239,106 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
   return (
     <div className={cn('max-w-2xl mx-auto p-6 text-center')}>
       <p className={cn('text-secondary')}>No insight data available.</p>
+    </div>
+  );
+};
+
+type NextStepsProps = {
+  actionSteps: string[];
+  isPremium: boolean;
+  personalizedReading: PersonalizedReading;
+  selectedBlock: BlockType | null;
+  drawnCards: Card[] | null;
+};
+
+const NextSteps: React.FC<NextStepsProps> = ({
+  actionSteps,
+  isPremium,
+  personalizedReading,
+  selectedBlock,
+  drawnCards,
+}) => {
+  const { user } = useAuth();
+  const { showSuccess, showError } = useAlerts();
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportToNotion = async () => {
+    if (!isPremium || !user) return;
+
+    setIsExporting(true);
+    try {
+      // Check if user has Notion integration
+      const integration = await NotionOperations.getNotionIntegration(user.id);
+
+      if (!integration) {
+        // Start OAuth flow
+        const authUrl = await NotionService.initiateOAuth();
+        window.location.href = authUrl;
+        return;
+      }
+
+      // Create page title
+      const title = selectedBlock
+        ? `🔮 ${selectedBlock.name} - ${new Date().toLocaleDateString()}`
+        : `🔮 Tarot Reading - ${new Date().toLocaleDateString()}`;
+
+      // Export to Notion
+      const pageUrl = await NotionService.createPage(integration.accessToken, {
+        title,
+        content: personalizedReading,
+        blockName: selectedBlock?.name,
+        cardNames: drawnCards?.map((card) => card.name),
+      });
+
+      showSuccess('Successfully exported to Notion!');
+
+      // Optionally open the created page
+      window.open(pageUrl, '_blank');
+    } catch (error) {
+      console.error('Export to Notion failed:', error);
+      showError('Failed to export to Notion. Please try again.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  return (
+    <div className="bg-liminal-overlay rounded-lg p-4 mb-6 shadow-breakthrough border border-liminal-border">
+      <h3 className="text-lg font-semibold text-accent mb-3">🎯 Next Steps</h3>
+      <ol className={cn('space-y-2')}>
+        {actionSteps.map((step, index) => (
+          <li key={index} className="flex items-start gap-2">
+            <span className={cn('text-accent font-semibold')}>
+              {index + 1}.
+            </span>
+            <span className={cn('text-primary')}>{step}</span>
+          </li>
+        ))}
+      </ol>
+      <div className="mt-4 flex items-center gap-2">
+        <button
+          className={cn(
+            'px-4 py-2 text-xs rounded-lg font-semibold shadow-sm transition-colors',
+            isPremium
+              ? 'bg-accent text-primary hover:bg-accent/90'
+              : 'bg-muted text-secondary cursor-not-allowed opacity-60'
+          )}
+          disabled={!isPremium || isExporting}
+          title={
+            isPremium
+              ? 'Export your next steps to Notion'
+              : 'Upgrade to Premium to export to Notion'
+          }
+          onClick={handleExportToNotion}
+        >
+          {isExporting ? 'Exporting...' : 'Export to Notion'}
+        </button>
+        {!isPremium && (
+          <span className="text-xs text-secondary" title="Premium required">
+            (Premium only)
+          </span>
+        )}
+      </div>
     </div>
   );
 };
