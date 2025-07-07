@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../lib/auth/AuthContext';
+import useAuth from '../lib/hooks/useAuth';
 import { NotionService } from '../lib/notion/notion-service';
 import { NotionOperations } from '../lib/notion/notion-operations';
-import { useAlerts } from '../lib/alerts/AlertContext';
+import useAlerts from '../lib/hooks/useAlert';
 
 export default function NotionCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { addAlert } = useAlerts();
+  const { showSuccess, showError } = useAlerts();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'
   );
@@ -39,7 +39,7 @@ export default function NotionCallback() {
         await NotionOperations.saveNotionIntegration(user.id, integration);
 
         setStatus('success');
-        addAlert('success', 'Successfully connected to Notion!');
+        showSuccess('Successfully connected to Notion!');
 
         // Redirect back to the page they came from or insights
         setTimeout(() => {
@@ -48,7 +48,7 @@ export default function NotionCallback() {
       } catch (error) {
         console.error('Notion callback error:', error);
         setStatus('error');
-        addAlert('error', 'Failed to connect to Notion. Please try again.');
+        showError('Failed to connect to Notion. Please try again.');
 
         setTimeout(() => {
           navigate('/insights', { replace: true });
@@ -57,7 +57,7 @@ export default function NotionCallback() {
     };
 
     handleCallback();
-  }, [searchParams, user, navigate, addAlert]);
+  }, [searchParams, user, navigate, showSuccess, showError]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">
