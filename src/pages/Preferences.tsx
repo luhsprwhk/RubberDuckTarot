@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, User, Settings, Bell, Eye, Palette } from 'lucide-react';
+import { Save, User, Settings, Eye } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 import { useUserProfile } from '../lib/hooks/useUserProfile';
 import { updateUserProfile } from '../lib/userPreferences';
@@ -335,40 +335,6 @@ const Preferences = () => {
                   className="sr-only peer"
                   defaultChecked
                 />
-                <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
-              </label>
-            </div>
-
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Bell className="h-5 w-5 text-breakthrough-500" />
-                <div>
-                  <p className="text-sm font-semibold text-primary">
-                    Daily Insights
-                  </p>
-                  <p className="text-xs text-secondary">
-                    Get reminded to draw your daily card
-                  </p>
-                </div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
-                <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
-              </label>
-            </div>
-
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <Palette className="h-5 w-5 text-breakthrough-500" />
-                <div>
-                  <p className="text-sm font-semibold text-primary">
-                    Dark Mode
-                  </p>
-                  <p className="text-xs text-secondary">Switch to dark theme</p>
-                </div>
-              </div>
-              <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" />
                 <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
               </label>
             </div>
