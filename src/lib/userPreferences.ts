@@ -25,8 +25,14 @@ export const saveUserProfile = async (
     throw new Error(`Failed to save profile: ${error.message}`);
   }
 
-  // Decrypt the returned data for the client
-  return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt saved profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const getUserProfile = async (
@@ -46,8 +52,15 @@ export const getUserProfile = async (
     throw new Error(`Failed to get profile: ${error.message}`);
   }
 
-  // Decrypt sensitive fields before returning
-  return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  try {
+    // Decrypt sensitive fields before returning
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt user profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    // This allows the app to continue working even if encryption is not properly configured
+    return data;
+  }
 };
 
 export const updateUserProfile = async (
@@ -72,8 +85,14 @@ export const updateUserProfile = async (
     throw new Error(`Failed to update profile: ${error.message}`);
   }
 
-  // Decrypt the returned data for the client
-  return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  try {
+    // Decrypt the returned data for the client
+    return await decryptObject(data, ['name', 'birthday', 'birth_place']);
+  } catch (error) {
+    console.error('Failed to decrypt updated profile:', error);
+    // Return profile with encrypted fields if decryption fails
+    return data;
+  }
 };
 
 export const isProfileComplete = (profile: UserProfile | null): boolean => {

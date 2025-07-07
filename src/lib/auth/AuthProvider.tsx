@@ -26,11 +26,20 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       try {
         setSession(session);
         if (session?.user) {
-          const user = await getUserFromAuth(session.user.id);
-          setUser(user ?? null);
+          try {
+            const user = await getUserFromAuth(session.user.id);
+            setUser(user ?? null);
+          } catch (error) {
+            console.error('Failed to load user data:', error);
+            // Still set user to null but don't prevent the app from loading
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
+      } catch (error) {
+        console.error('Error in auth state change:', error);
+        setUser(null);
       } finally {
         setLoading(false);
       }

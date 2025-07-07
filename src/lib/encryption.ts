@@ -46,6 +46,9 @@ async function deriveKey(
 function getMasterKey(): string {
   const masterKey = import.meta.env.VITE_ENCRYPTION_MASTER_KEY;
   if (!masterKey) {
+    console.warn(
+      'VITE_ENCRYPTION_MASTER_KEY environment variable is missing. Encryption features will not work properly.'
+    );
     throw new Error(
       'VITE_ENCRYPTION_MASTER_KEY environment variable is required'
     );
