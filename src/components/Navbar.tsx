@@ -11,7 +11,7 @@ import robEmoji from '../assets/rob-emoji.png';
 import { isWaitlistEnabled } from '../lib/featureFlags';
 
 const Navbar = () => {
-  const { user, signOut, showAuthModal } = useAuth();
+  const { user, signOut, showAuthModal, hideAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { profile } = useUserProfile();
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,9 @@ const Navbar = () => {
       console.error('Error signing out:', error);
     }
     setMobileMenuOpen(false);
+    hideAuthModal();
     navigate('/');
+    window.location.reload();
   };
 
   const handleNavLinkClick = () => {
