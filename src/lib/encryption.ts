@@ -156,9 +156,27 @@ export async function decryptFromDatabase(
   if (!encryptedJson) return null;
 
   try {
+    // First check if the data is valid JSON
     const encryptedData = JSON.parse(encryptedJson) as EncryptedData;
+
+    // Validate that it has the expected structure
+    if (!encryptedData.encrypted || !encryptedData.iv || !encryptedData.salt) {
+      console.warn(
+        'Invalid encrypted data structure, returning original value'
+      );
+      return encryptedJson; // Return as-is if not properly encrypted
+    }
+
     return await decrypt(encryptedData);
   } catch (error) {
+    if (error instanceof SyntaxError) {
+      console.warn(
+        'Data is not JSON encrypted format, returning original value:',
+        encryptedJson
+      );
+      // If it's not JSON, assume it's plain text (legacy data or not encrypted)
+      return encryptedJson;
+    }
     console.error('Failed to decrypt data:', error);
     return null;
   }
@@ -195,7 +213,17 @@ export async function decryptObject<T extends Record<string, unknown>>(
   for (const field of fieldsToDecrypt) {
     const value = obj[field];
     if (typeof value === 'string') {
-      result[field] = (await decryptFromDatabase(value)) as T[keyof T];
+      try {
+        const decryptedValue = await decryptFromDatabase(value);
+        result[field] = (decryptedValue ?? value) as T[keyof T];
+      } catch (error) {
+        console.warn(
+          `Failed to decrypt field ${String(field)}, keeping original value:`,
+          error
+        );
+        // Keep the original value if decryption fails
+        result[field] = value as T[keyof T];
+      }
     }
   }
 
