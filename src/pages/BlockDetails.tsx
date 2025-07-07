@@ -201,11 +201,19 @@ const BlockDetails: React.FC = () => {
                   </div>
                 </div>
 
-                {insight.user_context && (
-                  <div className="text-sm text-secondary mb-2">
-                    Context: {insight.user_context}
-                  </div>
-                )}
+                {Array.isArray(insight.reading?.keyInsights) &&
+                  insight.reading.keyInsights.length > 0 && (
+                    <div className="text-sm text-secondary mb-2">
+                      Key Insight:{' '}
+                      {insight.reading.keyInsights.length === 1
+                        ? insight.reading.keyInsights[0]
+                        : insight.reading.keyInsights[
+                            Math.floor(
+                              Math.random() * insight.reading.keyInsights.length
+                            )
+                          ]}
+                    </div>
+                  )}
 
                 <div className="flex items-center gap-4 text-xs">
                   <span className="text-breakthrough-400">
