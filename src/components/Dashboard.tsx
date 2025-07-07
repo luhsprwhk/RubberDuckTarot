@@ -108,8 +108,8 @@ export default function Dashboard() {
 
   // Log the blocks state for debugging
 
-  // Improved conditional: also check if blocks is undefined
-  if (loading || blocksLoading || typeof blocks === 'undefined') {
+  // Show loading while fetching user data or blocks
+  if (loading || blocksLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Loading text="Loading..." />
