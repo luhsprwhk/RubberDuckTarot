@@ -67,6 +67,8 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   premium: boolean('premium').notNull().default(false),
   auth_uid: text('auth_uid').notNull().unique(),
+  notion_access_token: text('notion_access_token'),
+  notion_workspace_id: text('notion_workspace_id'),
 });
 
 export const user_profiles = pgTable('user_profiles', {

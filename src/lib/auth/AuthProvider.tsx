@@ -3,12 +3,15 @@ import type { Session } from '@supabase/supabase-js';
 import type { User } from '../../interfaces';
 import { supabase } from '../supabase/supabase';
 import AuthContext from '@/src/lib/auth/AuthContext';
+import { Resend } from 'resend';
 import { AuthModal } from '@/src/components/AuthModal';
 import { getUserFromAuth } from '../user/user-queries';
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
+
+const resend = new Resend(import.meta.env.VITE_RESEND_API_KEY);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
@@ -96,11 +99,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       shouldCreateUser,
     };
     options.emailRedirectTo = import.meta.env.VITE_EMAIL_WELCOME_URL;
-    console.log('options', options);
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options,
     });
+    if (!error) {
+      await subscribeToNewsletter(email);
+    }
     return { error };
   };
 
@@ -115,6 +120,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         shouldCreateUser: true,
         captchaToken: captchaToken || undefined,
       },
+    });
+    if (!error) {
+      // Subscribe user to newsletter
+      const { error: newsletterError } = await subscribeToNewsletter(email);
+      if (newsletterError) {
+        console.error('Newsletter subscription failed:', newsletterError);
+      }
+    }
+    return { error };
+  };
+
+  const subscribeToNewsletter = async (email: string) => {
+    const { error } = await resend.contacts.create({
+      email,
+      audienceId: 'c8cb077b-1d36-4b24-95e4-42ee7b5a59af',
     });
     return { error };
   };
@@ -138,6 +158,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     await supabase.auth.signOut();
   };
 
+  const refreshUser = async () => {
+    if (session?.user) {
+      try {
+        const user = await getUserFromAuth(session.user.id);
+        setUser(user ?? null);
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
+      }
+    }
+  };
+
   const showAuthModal = (mode: 'signIn' | 'signUp') => {
     setAuthModalMode(mode);
     setIsAuthModalOpen(true);
@@ -154,12 +185,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     signUpForWaitlist,
     signInWithMagicLink,
     signOut,
+    refreshUser,
     isAuthModalOpen,
     authModalMode,
     showAuthModal,
     hideAuthModal,
     setAuthModalMode,
     signUpWithMagicLink,
+    subscribeToNewsletter,
   };
 
   return (

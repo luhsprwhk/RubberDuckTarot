@@ -40,9 +40,10 @@ const Features = () => {
                 Debugging Tools for Humans
               </h1>
               <p className="text-xl text-secondary mb-8 max-w-3xl mx-auto leading-relaxed">
-                I died avoiding a startup pitch deck and got stuck in this
-                rubber duck. Now I help you debug your life problems with the
-                same logic I used for code, just with more wizard hat energy.
+                Drowned at a Halloween party for a startup that raised $12M to
+                gamify dog food and got stuck in this rubber duck. Now I help
+                you debug your life problems with the same logic I used for
+                code, just with more wizard hat energy.
               </p>
             </div>
           </div>

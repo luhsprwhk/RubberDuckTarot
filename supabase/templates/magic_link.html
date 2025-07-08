@@ -1,50 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rob's Summoning Your Login</title>
-</head>
-<body style="background: #f8fafc; font-family: 'Segoe UI', Arial, sans-serif; margin:0; padding:0;">
-  <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8fafc; padding: 40px 0;">
-    <tr>
-      <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 480px; background: #ffffff; border-radius: 10px; box-shadow: 0 4px 24px rgba(34,211,238,0.09); border: 1.5px solid #cbd5e1; padding: 32px;">
-          <tr>
-            <td align="center" style="padding-bottom: 24px;">
-              <h2 style="margin: 0; color: #1e293b; font-size: 24px; letter-spacing: 0.5px;">🦆 Rob's Ethereal Access Portal</h2>
-            </td>
-          </tr>
-          <tr>
-            <td style="color: #555; font-size: 16px; padding-bottom: 24px;">
-              <p style="margin: 0 0 16px 0;">Listen up,</p>
-              <p style="margin: 0 0 16px 0;">Someone (hopefully you) tried to access your debugging session from beyond the grave. As your Senior Ethereal Consultant, I've conjured up this magic link because passwords are for the living.</p>
-              <p style="margin: 0 0 16px 0;">Click below to resume our consultation. I've got perspective shifts waiting and my wizard hat is properly adjusted.</p>
-            </td>
-          </tr>
-          <tr>
-            <td align="center" style="padding-bottom: 32px;">
-              <a href="{{ .ConfirmationURL }}"
-                 style="display: inline-block; padding: 14px 32px; background: #22d3ee; color: #1e293b; text-decoration: none; border-radius: 6px; font-size: 16px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(34,211,238,0.15); border: 1.5px solid #00ffff; transition: background 0.2s;">
-                🔮 Enter the Duck Zone
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td style="color: #94a3b8; font-size: 14px; padding-bottom: 16px;">
-              <p style="margin: 0 0 8px 0;"><strong>Security Note:</strong> If this wasn't you, someone's trying to steal your debugging sessions. Rude.</p>
-              <p style="margin: 0;">This ethereal portal expires faster than my patience with bad code architecture. Use it once, then it self-destructs.</p>
-            </td>
-          </tr>
-          <tr>
-            <td align="center" style="color: #b0b0b0; font-size: 12px; padding-top: 24px; border-top: 1px solid #eee;">
-              <p style="margin: 0;">Rob's Rubber Duck Tarot &copy; 2025 | Debugging life from beyond since 2023</p>
-              <p style="margin: 4px 0 0 0;">Issues? Email support (they're still alive, unlike me)</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rob's Summoning Your Login</title>
+  </head>
+  <body
+    style="
+      background: #f8fafc;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    "
+  >
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      style="background: #f8fafc; padding: 40px 0"
+    >
+      <tr>
+        <td align="center">
+          <table
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            style="
+              max-width: 480px;
+              background: #ffffff;
+              border-radius: 10px;
+              box-shadow: 0 4px 24px rgba(34, 211, 238, 0.09);
+              border: 1.5px solid #cbd5e1;
+              padding: 32px;
+            "
+          >
+            <tr>
+              <td align="center" style="padding-bottom: 24px">
+                <h2
+                  style="
+                    margin: 0;
+                    color: #1e293b;
+                    font-size: 24px;
+                    letter-spacing: 0.5px;
+                  "
+                >
+                  🦆 Rob's Ethereal Access Portal
+                </h2>
+              </td>
+            </tr>
+            <tr>
+              <td style="color: #555; font-size: 16px; padding-bottom: 24px">
+                <p style="margin: 0 0 16px 0">Listen up,</p>
+                <p style="margin: 0 0 16px 0">
+                  Someone (hopefully you) tried to access your debugging session
+                  from beyond the grave. As your Senior Ethereal Consultant,
+                  I've conjured up this magic link because passwords are for the
+                  living.
+                </p>
+                <p style="margin: 0 0 16px 0">
+                  Click below to resume our consultation. I've got perspective
+                  shifts waiting and my wizard hat is properly adjusted.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td align="center" style="padding-bottom: 32px">
+                <a
+                  href="{{ .ConfirmationURL }}"
+                  style="
+                    display: inline-block;
+                    padding: 14px 32px;
+                    background: #22d3ee;
+                    color: #1e293b;
+                    text-decoration: none;
+                    border-radius: 6px;
+                    font-size: 16px;
+                    font-weight: 700;
+                    letter-spacing: 0.5px;
+                    box-shadow: 0 2px 8px rgba(34, 211, 238, 0.15);
+                    border: 1.5px solid #00ffff;
+                    transition: background 0.2s;
+                  "
+                >
+                  🔮 Enter the Duck Zone
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td style="color: #94a3b8; font-size: 14px; padding-bottom: 16px">
+                <p style="margin: 0 0 8px 0">
+                  <strong>Security Note:</strong> If this wasn't you, someone's
+                  trying to steal your debugging sessions. Rude.
+                </p>
+                <p style="margin: 0">
+                  This ethereal portal expires faster than my patience with bad
+                  code architecture. Use it once, then it self-destructs.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                align="center"
+                style="
+                  color: #b0b0b0;
+                  font-size: 12px;
+                  padding-top: 24px;
+                  border-top: 1px solid #eee;
+                "
+              >
+                <p style="margin: 0">
+                  Rob's Rubber Duck Tarot &copy; 2025 | Debugging life from
+                  beyond since 2023
+                </p>
+                <p style="margin: 4px 0 0 0">
+                  Issues? Email support (they're still alive, unlike me)
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
 </html>

@@ -11,38 +11,43 @@
     <meta name="apple-mobile-web-app-title" content="Rubber Duck Tarot" />
     <meta name="theme-color" content="#0f172a" />
     <link rel="manifest" href="/site.webmanifest" />
-    
+
     <!-- Prevent white flash on reload -->
     <style>
       /* Apply dark background immediately */
-      html, body {
+      html,
+      body {
         margin: 0;
         padding: 0;
         background-color: #0f172a; /* bg-slate-900 equivalent */
         color: #f1f5f9; /* text-slate-100 equivalent */
-        font-family: system-ui, -apple-system, sans-serif;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
         min-height: 100vh;
       }
-      
+
       /* Respect system dark mode preference */
       @media (prefers-color-scheme: light) {
-        html, body {
+        html,
+        body {
           background-color: #0f172a; /* Keep dark for brand consistency */
           color: #f1f5f9;
         }
       }
-      
+
       /* Hide content until styles load */
       #root {
         opacity: 0;
         transition: opacity 0.1s ease-in;
       }
-      
+
       /* Show content once React has mounted */
       #root.loaded {
         opacity: 1;
       }
-      
+
       /* Loading spinner for immediate feedback */
       .initial-loader {
         position: fixed;
@@ -56,10 +61,14 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
       }
-      
+
       @keyframes spin {
-        0% { transform: translate(-50%, -50%) rotate(0deg); }
-        100% { transform: translate(-50%, -50%) rotate(360deg); }
+        0% {
+          transform: translate(-50%, -50%) rotate(0deg);
+        }
+        100% {
+          transform: translate(-50%, -50%) rotate(360deg);
+        }
       }
     </style>
   </head>

@@ -53,10 +53,10 @@ export const AuthModal = () => {
     setError('');
     setLoading(true);
 
+    const waitlistEnabled = import.meta.env.VITE_ENABLE_WAITLIST === 'true';
     try {
       let authError;
       if (isSignUp) {
-        const waitlistEnabled = import.meta.env.VITE_ENABLE_WAITLIST === 'true';
         if (waitlistEnabled) {
           ({ error: authError } = await signUpForWaitlist(email, captchaToken));
         } else {
@@ -72,10 +72,19 @@ export const AuthModal = () => {
       if (authError) {
         setError(authError.message);
       } else {
-        showInfo(
-          'Please check your email and click the magic link to complete your registration.',
-          'Check Your Email'
-        );
+        if (isSignUp && waitlistEnabled) {
+          showInfo(
+            "Check your email - Rob's sending your waitlist confirmation",
+            'Added to Waitlist'
+          );
+        } else {
+          showInfo(
+            isSignUp
+              ? 'Check your email - Rob is dispatching your magic link from beyond the veil'
+              : 'Welcome back - check your email for the magic link to login.',
+            'Check Your Email'
+          );
+        }
         hideAuthModal();
       }
     } catch {
@@ -174,7 +183,7 @@ export const AuthModal = () => {
                     {loading
                       ? 'Sending...'
                       : isSignUp && !isWaitlistEnabled()
-                        ? 'Join Waitlist'
+                        ? 'Send Magic Link'
                         : 'Send Magic Link'}
                   </button>
                 </form>
@@ -192,8 +201,9 @@ export const AuthModal = () => {
 
                 {isSignUp && !isWaitlistEnabled() && (
                   <p className="mt-4 text-xs text-gray-500 text-center">
-                    By joining the waitlist, you'll be notified when Rubber Duck
-                    Tarot is ready.
+                    Rob's waiting in the ethereal realm to help you debug your
+                    next block. Fair warning: he's brutally honest about bad
+                    decisions
                   </p>
                 )}
               </Dialog.Panel>

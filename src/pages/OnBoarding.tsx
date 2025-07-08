@@ -413,8 +413,8 @@ const OnBoarding = () => {
         user_id: user.id,
         ...profile,
       };
-      // Add a 10 second timeout to the save operation
-      await withTimeout(saveUserProfile(dbProfile), 10000);
+      // Add a 20 second timeout to the save operation
+      await withTimeout(saveUserProfile(dbProfile), 20000);
       navigate('/');
       window.location.reload();
     } catch (error) {

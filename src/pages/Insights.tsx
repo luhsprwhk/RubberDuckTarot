@@ -9,7 +9,10 @@ import ErrorState from '../components/ErrorState';
 import { useInsights } from '../lib/insights/useInsights';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import robEmoji from '../assets/rob-emoji.png';
+import { ArrowRight } from 'lucide-react';
 
+const insightPanelClass =
+  'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg';
 const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
@@ -52,17 +55,6 @@ const Insights: React.FC = () => {
     return blockType ? `${blockType.emoji} ${blockType.name}` : blockTypeId;
   };
 
-  const formatDate = (timestamp: Date | number | string): string => {
-    const date = new Date(timestamp);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
   if (initialLoading) {
     return <Loading text="Loading your insights..." />;
   }
@@ -90,25 +82,20 @@ const Insights: React.FC = () => {
         </p>
       </div>
 
-      <div className="space-y-6">
+      <div className={`space-y-6 p-6 ${insightPanelClass}`}>
         {insights.map((insight) => {
           return (
             <div
               key={insight.id}
-              className="bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+              className="p-6 bg-void-gradient border-l-4 border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="text-sm font-medium text-primary bg-liminal-overlay px-2 py-1 rounded">
-                      {insight.spread_type === 'quick-draw'
-                        ? 'Quick Draw'
-                        : 'Full Pond'}
-                    </span>
-                    <span className="text-sm text-secondary">
-                      {formatDate(insight.created_at)}
-                    </span>
-                  </div>
+                  <InsightHeader
+                    spreadType={insight.spread_type}
+                    createdAt={insight.created_at}
+                    onView={() => navigate(`/insights/${insight.id}`)}
+                  />
                   <h3 className="text-lg font-semibold text-secondary mb-1">
                     {getBlockTypeName(insight.block_type_id)}
                   </h3>
@@ -154,25 +141,13 @@ const Insights: React.FC = () => {
                     const card = cards.find((c) => c.id === cardData.id);
                     if (!card) return null;
                     return (
-                      <div
+                      <InsightCardPreview
                         key={`${insight.id}-${card.id}-${index}`}
-                        className="flex-1 bg-void-800 rounded-lg p-3 text-center"
+                        card={card}
+                        reversed={cardData.reversed}
                         onClick={() => navigate(`/insights/${insight.id}`)}
-                      >
-                        <div
-                          className={`text-2xl mb-1 ${cardData.reversed ? 'transform rotate-180' : ''}`}
-                        >
-                          {card.emoji}
-                        </div>
-                        <div className="text-sm font-medium text-secondary">
-                          {card.name}
-                          {cardData.reversed && (
-                            <span className="text-xs text-accent ml-1">
-                              (R)
-                            </span>
-                          )}
-                        </div>
-                      </div>
+                        label={`View insight for ${card.name}`}
+                      />
                     );
                   }
                 )}
@@ -224,6 +199,114 @@ const EmptyInsightsState = () => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
+
+import { cn } from '../lib/utils';
+
+interface InsightCardPreviewProps {
+  card: { id: number; emoji: string; name: string };
+  reversed: boolean;
+  onClick: () => void;
+  label: string;
+}
+
+const InsightCardPreview: React.FC<InsightCardPreviewProps> = ({
+  card,
+  reversed,
+  onClick,
+  label,
+}) => {
+  return (
+    <div
+      className={cn(
+        'relative flex-1 bg-void-gradient border border-default shadow-breakthrough border-liminal-border rounded-lg p-3 text-center cursor-pointer',
+        'hover:scale-[1.03] hover:shadow-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70',
+        'active:scale-[0.98]'
+      )}
+      onClick={onClick}
+      tabIndex={0}
+      role="button"
+      aria-label={label}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') onClick();
+      }}
+    >
+      <div className={cn('text-2xl mb-1', reversed && 'transform rotate-180')}>
+        {card.emoji}
+      </div>
+      <div className="text-sm font-medium text-secondary">
+        {card.name}
+        {reversed && <span className="text-xs text-accent ml-1">(R)</span>}
+      </div>
+      <div className="absolute top-2 right-2 opacity-70 pointer-events-none">
+        <svg
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+        >
+          <path
+            d="M9 18l6-6-6-6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </div>
+    </div>
+  );
+};
+
+// --- Subcomponent for insight header ---
+
+interface InsightHeaderProps {
+  spreadType: string;
+  createdAt: string | number | Date;
+  onView: () => void;
+}
+
+const InsightHeader: React.FC<InsightHeaderProps> = ({
+  spreadType,
+  createdAt,
+  onView,
+}) => {
+  return (
+    <div className="flex items-center gap-2 mb-2 relative">
+      <span className="text-sm font-medium text-primary bg-liminal-overlay px-2 py-1 rounded">
+        {spreadType === 'quick-draw' ? 'Quick Draw' : 'Full Pond'}
+      </span>
+      <span className="text-sm text-secondary">
+        {typeof createdAt === 'string' || typeof createdAt === 'number'
+          ? new Date(createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })
+          : createdAt.toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            })}
+      </span>
+      <button
+        className={cn(
+          'ml-auto px-3 py-2 text-xs font-semibold rounded border',
+          'border-accent bg-void-gradient text-secondary',
+          'hover:bg-liminal-overlay hover:text-primary',
+          'transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70',
+          'active:scale-[0.98]',
+          'hover:scale-[1.03] hover:shadow-lg',
+          'cursor-pointer'
+        )}
+        onClick={onView}
+        tabIndex={0}
+        aria-label="View Insight"
+      >
+        View Insight <ArrowRight className="inline ml-1 size-4" />
+      </button>
     </div>
   );
 };

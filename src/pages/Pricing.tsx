@@ -75,7 +75,7 @@ const Pricing = () => {
                   Rob's Honest Take
                 </h3>
                 <p className={cn('text-secondary text-sm leading-relaxed')}>
-                  Look, I spent 25 years watching companies overcomplicate their
+                  I spent 25 years watching companies overcomplicate their
                   pricing pages with "Enterprise" and "Contact Sales" nonsense.
                   I'm dead now, so I can tell you the truth:{' '}
                   <span className={cn('text-breakthrough-400')}>
@@ -94,244 +94,10 @@ const Pricing = () => {
         </div>
       </div>
 
-      {/* Pricing Cards */}
-      <div className={cn('py-16')}>
-        <div className={cn('container mx-auto px-4')}>
-          <div className={cn('grid md:grid-cols-2 gap-8 max-w-5xl mx-auto')}>
-            {/* Free Plan */}
-            <div
-              className={cn(
-                'bg-surface p-8 rounded-xl border border-liminal-border backdrop-blur-liminal'
-              )}
-            >
-              <div className={cn('text-center mb-6')}>
-                <div
-                  className={cn(
-                    'w-16 h-16 mx-auto bg-void-700 rounded-full flex items-center justify-center mb-4'
-                  )}
-                >
-                  <Ghost className={cn('w-8 h-8 text-secondary')} />
-                </div>
-                <h3 className={cn('text-2xl font-bold text-primary mb-2')}>
-                  Free Duck
-                </h3>
-                <div className={cn('text-3xl font-bold text-primary mb-1')}>
-                  $0
-                </div>
-                <div className={cn('text-muted text-sm')}>forever</div>
-              </div>
-
-              <div className={cn('mb-8')}>
-                <div
-                  className={cn(
-                    'bg-void-800/50 p-4 rounded-lg border border-void-600 mb-6'
-                  )}
-                >
-                  <p className={cn('text-secondary text-sm italic')}>
-                    "Perfect for skeptics, dabblers, and people who think
-                    talking to rubber ducks is weird but are desperate enough to
-                    try it anyway."
-                  </p>
-                </div>
-
-                <ul className={cn('space-y-3')}>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Limited Consultations
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      7-day consultation history
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Zap
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Predictive unblocking suggestions
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Rob's standard debugging wisdom
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <X className={cn('w-5 h-5 text-muted flex-shrink-0')} />
-                    <span className={cn('text-muted text-sm line-through')}>
-                      Ad-free experience
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <X className={cn('w-5 h-5 text-muted flex-shrink-0')} />
-                    <span className={cn('text-secondary text-sm')}>
-                      Rob's Intelligence Engine (limited to 100 consultations)
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => showAuthModal('signUp')}
-                className={cn(
-                  'w-full bg-void-700 text-primary px-6 py-3 rounded-lg font-medium hover:bg-void-600 transition-colors duration-200 border border-void-600'
-                )}
-              >
-                {waitlistEnabled ? 'Start Free Debugging' : 'Join Waitlist'}
-              </button>
-            </div>
-
-            {/* Premium Plan */}
-            <div
-              className={cn(
-                'bg-surface p-8 rounded-xl border border-breakthrough-400/50 backdrop-blur-liminal relative overflow-hidden'
-              )}
-            >
-              {/* Premium Badge */}
-              <div
-                className={cn(
-                  'absolute top-0 right-0 bg-gradient-to-r from-breakthrough-400 to-breakthrough-500 text-void-900 px-4 py-1 text-xs font-bold'
-                )}
-              >
-                MOST POPULAR
-              </div>
-
-              <div className={cn('text-center mb-6')}>
-                <div
-                  className={cn(
-                    'w-16 h-16 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 animate-pulse-glow shadow-glow'
-                  )}
-                >
-                  <Crown className={cn('w-8 h-8 text-primary')} />
-                </div>
-                <h3 className={cn('text-2xl font-bold text-primary mb-2')}>
-                  Premium Duck
-                </h3>
-                <div className={cn('text-3xl font-bold text-primary mb-1')}>
-                  $4.99
-                </div>
-                <div className={cn('text-muted text-sm')}>per month</div>
-              </div>
-
-              <div className={cn('mb-8')}>
-                <div
-                  className={cn(
-                    'bg-breakthrough-500/10 p-4 rounded-lg border border-breakthrough-500/30 mb-6'
-                  )}
-                >
-                  <p className={cn('text-secondary text-sm italic')}>
-                    "For people serious about debugging their lives. I've seen
-                    your consultation patterns, and trust me, you need the
-                    pattern analysis more than you think."
-                  </p>
-                </div>
-
-                <div
-                  className={cn(
-                    'text-breakthrough-400 text-sm font-medium mb-3'
-                  )}
-                >
-                  Everything in Free, plus:
-                </div>
-                <ul className={cn('space-y-3')}>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Unlimited consultations (no daily limits)
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Ad-free experience
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Check
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Complete consultation history archive
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Zap
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      <strong>Rob's Intelligence Engine</strong> - pattern
-                      analysis
-                    </span>
-                  </li>
-                  <li className={cn('flex items-center gap-3')}>
-                    <Zap
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Monthly "Rob's Assessment" reports
-                    </span>
-                  </li>
-
-                  <li className={cn('flex items-center gap-3')}>
-                    <Zap
-                      className={cn(
-                        'w-5 h-5 text-breakthrough-400 flex-shrink-0'
-                      )}
-                    />
-                    <span className={cn('text-secondary text-sm')}>
-                      Priority ethereal support
-                    </span>
-                  </li>
-                </ul>
-              </div>
-
-              <button
-                onClick={() => showAuthModal('signUp')}
-                className={cn(
-                  'w-full bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough flex items-center justify-center gap-2'
-                )}
-              >
-                {waitlistEnabled ? 'Upgrade to Premium' : 'Join Waitlist'}
-                <ArrowRight className={cn('w-5 h-5')} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
+      <PricingCards
+        showAuthModal={showAuthModal}
+        waitlistEnabled={waitlistEnabled}
+      />
       {/* Rob's Sales Pitch */}
       <div className={cn('bg-liminal-overlay py-16 backdrop-blur-liminal')}>
         <div className={cn('container mx-auto px-4')}>
@@ -535,6 +301,299 @@ const Pricing = () => {
         </div>
       </div>
       <Footer />
+    </div>
+  );
+};
+
+const PricingCards = ({
+  showAuthModal,
+  waitlistEnabled,
+}: {
+  showAuthModal: (type: 'signUp' | 'signIn') => void;
+  waitlistEnabled: boolean;
+}) => {
+  {
+    /* Pricing Cards */
+  }
+  return (
+    <div className={cn('py-16')}>
+      <div className={cn('container mx-auto px-4')}>
+        <div className={cn('grid md:grid-cols-2 gap-8 max-w-5xl mx-auto')}>
+          {/* Free Plan */}
+          <div
+            className={cn(
+              'bg-surface p-8 rounded-xl border border-liminal-border backdrop-blur-liminal'
+            )}
+          >
+            <div className={cn('text-center mb-6')}>
+              <div
+                className={cn(
+                  'w-16 h-16 mx-auto bg-void-700 rounded-full flex items-center justify-center mb-4'
+                )}
+              >
+                <Ghost className={cn('w-8 h-8 text-secondary')} />
+              </div>
+              <h3 className={cn('text-2xl font-bold text-primary mb-2')}>
+                Free Duck
+              </h3>
+              <div className={cn('text-3xl font-bold text-primary mb-1')}>
+                $0
+              </div>
+              <div className={cn('text-muted text-sm')}>
+                forever (ad-supported)
+              </div>
+            </div>
+
+            <div className={cn('mb-8')}>
+              <div
+                className={cn(
+                  'bg-void-800/50 p-4 rounded-lg border border-void-600 mb-6'
+                )}
+              >
+                <p className={cn('text-secondary text-sm italic')}>
+                  "All features available with limits. No barriers to entry, but
+                  you'll hit daily consultation limits right when things get
+                  interesting."
+                </p>
+              </div>
+
+              <div
+                className={cn('text-breakthrough-400 text-sm font-medium mb-3')}
+              >
+                All Features With Limits:
+              </div>
+              <ul className={cn('space-y-3')}>
+                <li className={cn('flex items-center gap-3')}>
+                  <Check
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>7 insights per day</strong> (Quick Duck or Full
+                    Pond)
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Check
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Intelligence Engine</strong> - last 7 days of
+                    pattern analysis
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Check
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Block Tracker</strong> - current week tracking +
+                    basic stats
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Check
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Rob's full personality</strong> and animations
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Check
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Duck History</strong> - limited to 7 days
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <X className={cn('w-5 h-5 text-muted flex-shrink-0')} />
+                  <span className={cn('text-muted text-sm')}>
+                    Friendly themed ads after each consultation
+                  </span>
+                </li>
+              </ul>
+              <div className={cn('flex items-start justify-center gap-3 mt-4')}>
+                <div className="flex-shrink-0 w-10 h-10 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center shadow-glow">
+                  <img src={robEmoji} alt="Rob" className="w-8 h-8" />
+                </div>
+                <div className="relative">
+                  <div
+                    className={cn(
+                      'bg-surface border border-liminal-border rounded-xl px-4 py-3 text-secondary text-xs italic text-left shadow-md'
+                    )}
+                  >
+                    I picked 7 because it's a nice round number that gives you
+                    plenty of runway. The fact that it's also considered
+                    'mystical' is pure coincidence - I'm a ghost stuck in a
+                    rubber duck, not a numerologist. Though I did die at a
+                    startup party with an actual ouija board, so maybe there's
+                    some cosmic irony here.
+                  </div>
+                  <div className="absolute left-4 -bottom-2 w-4 h-4 bg-surface border-liminal-border border-b border-l rounded-bl-xl rotate-45 -z-10"></div>
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => showAuthModal('signUp')}
+              className={cn(
+                'w-full bg-void-700 text-primary px-6 py-3 rounded-lg font-medium hover:bg-void-600 transition-colors duration-200 border border-void-600'
+              )}
+            >
+              {waitlistEnabled ? 'Start Free Debugging' : 'Join Waitlist'}
+            </button>
+          </div>
+
+          {/* Premium Plan */}
+          <div
+            className={cn(
+              'bg-surface p-8 rounded-xl border border-breakthrough-400/50 backdrop-blur-liminal relative overflow-hidden'
+            )}
+          >
+            {/* Premium Badge */}
+            <div
+              className={cn(
+                'absolute top-0 right-0 bg-gradient-to-r from-breakthrough-400 to-breakthrough-500 text-void-900 px-4 py-1 text-xs font-bold'
+              )}
+            >
+              MOST POPULAR
+            </div>
+
+            <div className={cn('text-center mb-6')}>
+              <div
+                className={cn(
+                  'w-16 h-16 mx-auto bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center mb-4 animate-pulse-glow shadow-glow'
+                )}
+              >
+                <Crown className={cn('w-8 h-8 text-primary')} />
+              </div>
+              <h3 className={cn('text-2xl font-bold text-primary mb-2')}>
+                Premium Duck
+              </h3>
+              <div className={cn('text-3xl font-bold text-primary mb-1')}>
+                $4.99
+              </div>
+              <div className={cn('text-muted text-sm')}>per month (no ads)</div>
+            </div>
+
+            <div className={cn('mb-8')}>
+              <div
+                className={cn(
+                  'bg-breakthrough-500/10 p-4 rounded-lg border border-breakthrough-500/30 mb-6'
+                )}
+              >
+                <p className={cn('text-secondary text-sm italic')}>
+                  "For regular users who want unlimited access and advanced
+                  features. Removes friction + adds depth = faster debugging."
+                </p>
+              </div>
+
+              <div
+                className={cn('text-breakthrough-400 text-sm font-medium mb-3')}
+              >
+                Everything Unlimited + Advanced Features:
+              </div>
+              <ul className={cn('space-y-3')}>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Ad-free forever</strong>
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Unlimited daily consultations</strong> (all types)
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Full Intelligence Engine</strong> - complete history
+                    + predictive analysis
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Advanced Block Tracker</strong> - full history +
+                    trend analysis + achievements
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Complete Duck History archive</strong>
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Premium Rob features</strong> - weekly check-ins +
+                    advanced pattern recognition
+                  </span>
+                </li>
+                <li className={cn('flex items-center gap-3')}>
+                  <Zap
+                    className={cn(
+                      'w-5 h-5 text-breakthrough-400 flex-shrink-0'
+                    )}
+                  />
+                  <span className={cn('text-secondary text-sm')}>
+                    <strong>Export capabilities</strong> - download your
+                    insights and patterns
+                  </span>
+                </li>
+              </ul>
+            </div>
+
+            <button
+              onClick={() => showAuthModal('signUp')}
+              className={cn(
+                'w-full bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough flex items-center justify-center gap-2'
+              )}
+            >
+              {waitlistEnabled ? 'Upgrade to Premium' : 'Join Waitlist'}
+              <ArrowRight className={cn('w-5 h-5')} />
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
