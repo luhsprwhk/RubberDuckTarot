@@ -61,7 +61,6 @@ export class NotionService {
     }
 
     const data = await response.json();
-    console.log('Notion OAuth response:', data);
 
     return {
       accessToken: data.access_token,
