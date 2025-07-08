@@ -16,6 +16,8 @@ import NewInsight from './pages/NewInsight';
 import Cards from './pages/Cards';
 import CardDetail from './pages/CardDetail';
 import BlockDetails from './pages/BlockDetails';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 const AppRoutes = () => (
   <Routes>
@@ -84,6 +86,8 @@ const AppRoutes = () => (
         </ProtectedRoute>
       }
     />
+    <Route path="/privacy" element={<Privacy />} />
+    <Route path="/terms" element={<Terms />} />
   </Routes>
 );
 
