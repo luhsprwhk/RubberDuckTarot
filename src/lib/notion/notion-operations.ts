@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import { NotionIntegration } from './notion-service';
+import type { NotionIntegration } from './notion-service';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,

@@ -1,4 +1,4 @@
-import { PersonalizedReading } from '../../ai';
+import type { PersonalizedReading } from '../../ai';
 
 export interface NotionIntegration {
   accessToken: string;
