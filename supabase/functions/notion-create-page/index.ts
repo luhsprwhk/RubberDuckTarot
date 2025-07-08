@@ -1,3 +1,5 @@
+/* eslint-disable */
+// @ts-nocheck
 /// <reference types="deno.ns" />
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 

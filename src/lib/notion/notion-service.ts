@@ -6,7 +6,6 @@ export interface NotionIntegration {
 
 export class NotionService {
   private static readonly NOTION_API_URL = 'https://api.notion.com/v1';
-  private static readonly NOTION_VERSION = '2022-06-28';
 
   static async initiateOAuth(): Promise<string> {
     const clientId = import.meta.env.VITE_NOTION_CLIENT_ID;
