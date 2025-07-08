@@ -8,7 +8,7 @@ import useAlerts from '../lib/hooks/useAlert';
 export default function NotionCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const { showSuccess, showError } = useAlerts();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'
@@ -45,6 +45,9 @@ export default function NotionCallback() {
         // Save integration to database
         await NotionOperations.saveNotionIntegration(user.id, integration);
 
+        // Refresh user data to include the new integration
+        await refreshUser();
+
         setStatus('success');
         showSuccess('Successfully connected to Notion!');
 
@@ -66,7 +69,7 @@ export default function NotionCallback() {
     if (user) {
       handleCallback();
     }
-  }, [searchParams, user, navigate, showSuccess, showError]);
+  }, [searchParams, user, navigate, showSuccess, showError, refreshUser]);
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center">

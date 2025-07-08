@@ -18,7 +18,9 @@ export class NotionService {
 
   static async initiateOAuth(): Promise<string> {
     const clientId = import.meta.env.VITE_NOTION_CLIENT_ID;
-    const redirectUri = `${window.location.origin}/notion-callback`;
+    const redirectUri = import.meta.env.DEV
+      ? 'http://localhost:5173/notion-callback'
+      : 'https://rubberducktarot.app/notion-callback';
 
     const authUrl = new URL('https://api.notion.com/v1/oauth/authorize');
     authUrl.searchParams.set('client_id', clientId);
@@ -59,6 +61,7 @@ export class NotionService {
     }
 
     const data = await response.json();
+    console.log('Notion OAuth response:', data);
 
     return {
       accessToken: data.access_token,

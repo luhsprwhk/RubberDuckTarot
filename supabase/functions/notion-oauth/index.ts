@@ -5,6 +5,7 @@ const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
     'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 };
 
 serve(async (req) => {
@@ -47,22 +48,22 @@ serve(async (req) => {
       grant_type: 'authorization_code',
       code,
       redirect_uri: redirectUri,
-      client_id: clientId,
-      client_secret: clientSecret,
     };
+
+    // Create basic auth header
+    const credentials = btoa(`${clientId}:${clientSecret}`);
 
     console.log('Making request to Notion:', {
       url: 'https://api.notion.com/v1/oauth/token',
-      body: {
-        ...requestBody,
-        client_secret: clientSecret,
-      },
+      body: requestBody,
+      hasAuth: !!credentials,
     });
 
     const tokenResponse = await fetch('https://api.notion.com/v1/oauth/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Basic ${credentials}`,
       },
       body: JSON.stringify(requestBody),
     });

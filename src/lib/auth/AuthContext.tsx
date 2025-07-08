@@ -22,6 +22,7 @@ interface AuthContextType {
     shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   isAuthModalOpen: boolean;
   authModalMode: 'signIn' | 'signUp';
   showAuthModal: (mode: 'signIn' | 'signUp') => void;

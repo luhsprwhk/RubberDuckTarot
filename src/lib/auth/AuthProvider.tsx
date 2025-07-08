@@ -158,6 +158,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     await supabase.auth.signOut();
   };
 
+  const refreshUser = async () => {
+    if (session?.user) {
+      try {
+        const user = await getUserFromAuth(session.user.id);
+        setUser(user ?? null);
+      } catch (error) {
+        console.error('Failed to refresh user data:', error);
+      }
+    }
+  };
+
   const showAuthModal = (mode: 'signIn' | 'signUp') => {
     setAuthModalMode(mode);
     setIsAuthModalOpen(true);
@@ -174,6 +185,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     signUpForWaitlist,
     signInWithMagicLink,
     signOut,
+    refreshUser,
     isAuthModalOpen,
     authModalMode,
     showAuthModal,
