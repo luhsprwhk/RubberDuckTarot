@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import { NotionService } from '../lib/notion/notion-service';
@@ -13,9 +13,16 @@ export default function NotionCallback() {
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'
   );
+  const hasProcessed = useRef(false);
 
   useEffect(() => {
     const handleCallback = async () => {
+      // Prevent multiple calls
+      if (hasProcessed.current) {
+        return;
+      }
+      hasProcessed.current = true;
+
       try {
         const code = searchParams.get('code');
         const error = searchParams.get('error');
@@ -56,7 +63,9 @@ export default function NotionCallback() {
       }
     };
 
-    handleCallback();
+    if (user) {
+      handleCallback();
+    }
   }, [searchParams, user, navigate, showSuccess, showError]);
 
   return (

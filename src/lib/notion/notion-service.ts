@@ -25,32 +25,36 @@ export class NotionService {
     authUrl.searchParams.set('response_type', 'code');
     authUrl.searchParams.set('owner', 'user');
     authUrl.searchParams.set('redirect_uri', redirectUri);
+    authUrl.searchParams.set('state', crypto.randomUUID()); // Add CSRF protection
 
     return authUrl.toString();
   }
 
   static async exchangeCodeForToken(code: string): Promise<NotionIntegration> {
-    const clientId = import.meta.env.VITE_NOTION_CLIENT_ID;
-    const clientSecret = import.meta.env.VITE_NOTION_CLIENT_SECRET;
     const redirectUri = `${window.location.origin}/notion-callback`;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-    const response = await fetch('https://api.notion.com/v1/oauth/token', {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error('Supabase configuration not found');
+    }
+
+    const response = await fetch(`${supabaseUrl}/functions/v1/notion-oauth`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${supabaseAnonKey}`,
       },
       body: JSON.stringify({
-        grant_type: 'authorization_code',
         code,
-        redirect_uri: redirectUri,
-        client_id: clientId,
-        client_secret: clientSecret,
+        redirectUri,
       }),
     });
 
     if (!response.ok) {
+      const errorData = await response.json();
       throw new Error(
-        `Failed to exchange code for token: ${response.statusText}`
+        `Failed to exchange code for token: ${errorData.error || response.statusText}`
       );
     }
 
