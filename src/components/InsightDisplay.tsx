@@ -262,7 +262,7 @@ const NextSteps: React.FC<NextStepsProps> = ({
   const { showSuccess, showError } = useAlerts();
   const [isExporting, setIsExporting] = useState(false);
 
-  const handleExportToNotion = async () => {
+  const handleExportToNotion = async (stepIndex: number, step: string) => {
     if (!isPremium || !user) return;
 
     setIsExporting(true);
@@ -277,23 +277,20 @@ const NextSteps: React.FC<NextStepsProps> = ({
         return;
       }
 
-      // Create page title
-      const title = selectedBlock
-        ? `🔮 ${selectedBlock.name} - ${new Date().toLocaleDateString()}`
-        : `🔮 Tarot Reading - ${new Date().toLocaleDateString()}`;
+      // Create page title using the next step
+      const title = step;
 
-      // Export to Notion
-      const pageUrl = await NotionService.createPage(integration.accessToken, {
+      // Export to Notion with the step as title and supporting info as content
+      await NotionService.createPage(integration.accessToken, {
         title,
+        nextStep: step,
+        stepIndex: stepIndex + 1,
         content: personalizedReading,
         blockName: selectedBlock?.name,
         cardNames: drawnCards?.map((card) => card.name),
       });
 
-      showSuccess('Successfully exported to Notion!');
-
-      // Optionally open the created page
-      window.open(pageUrl, '_blank');
+      showSuccess(`Successfully exported step ${stepIndex + 1} to Notion!`);
     } catch (error) {
       console.error('Export to Notion failed:', error);
       showError('Failed to export to Notion. Please try again.');
