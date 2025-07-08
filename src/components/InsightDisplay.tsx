@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '@/src/lib/utils';
+import { FaSpinner } from 'react-icons/fa';
 
 const insightPanelClass = cn(
   'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg'
@@ -255,7 +256,7 @@ type NextStepsProps = {
 const NextSteps: React.FC<NextStepsProps> = ({
   actionSteps,
   isPremium,
-  personalizedReading,
+  // personalizedReading,
   selectedBlock,
 }) => {
   const { user } = useAuth();
@@ -288,7 +289,6 @@ const NextSteps: React.FC<NextStepsProps> = ({
         insightUrl: window.location.href, // Link back to current insight
         nextStep: true,
         content: {
-          robQuip: personalizedReading.robQuip,
           actionStep: step,
         },
       });
@@ -329,7 +329,11 @@ const NextSteps: React.FC<NextStepsProps> = ({
               }
               onClick={() => handleExportToNotion(index, step)}
             >
-              {isExporting ? '...' : 'Export'}
+              {isExporting ? (
+                <FaSpinner className="animate-spin" />
+              ) : (
+                'Save to Notion'
+              )}
             </button>
           </li>
         ))}

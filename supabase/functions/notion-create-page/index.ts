@@ -196,9 +196,6 @@ async function getOrCreateDatabase(accessToken: string): Promise<string> {
         Block: {
           rich_text: {},
         },
-        Cards: {
-          rich_text: {},
-        },
       },
     }),
   });
@@ -219,7 +216,6 @@ export interface PageData {
   insightUrl?: string;
   title?: string;
   content?: {
-    robQuip?: string;
     actionStep?: string;
   };
 }
@@ -293,24 +289,6 @@ function formatContentBlocks(pageData: PageData): unknown[] {
                 bold: true,
               },
               href: pageData.insightUrl,
-            },
-          ],
-        },
-      });
-    }
-
-    // add rob quip
-    if (pageData.content && pageData.content.robQuip) {
-      blocks.push({
-        object: 'block',
-        type: 'paragraph',
-        paragraph: {
-          rich_text: [
-            {
-              type: 'text',
-              text: {
-                content: pageData.content.robQuip,
-              },
             },
           ],
         },
