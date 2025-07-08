@@ -1,15 +1,7 @@
-import type { PersonalizedReading } from '../../ai';
-
+import type { PageData } from '../../../supabase/functions/notion-create-page/index';
 export interface NotionIntegration {
   accessToken: string;
   workspaceId: string;
-}
-
-export interface NotionPageData {
-  title: string;
-  content: PersonalizedReading;
-  blockName?: string;
-  cardNames?: string[];
 }
 
 export class NotionService {
@@ -70,7 +62,7 @@ export class NotionService {
 
   static async createPage(
     accessToken: string,
-    pageData: NotionPageData
+    pageData: PageData
   ): Promise<string> {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
     const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;

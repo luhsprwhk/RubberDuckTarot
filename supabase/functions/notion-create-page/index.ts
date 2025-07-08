@@ -1,6 +1,27 @@
 /// <reference types="deno.ns" />
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 
+/**
+ * Generate a short, pretty, descriptive title from a long action step.
+ * This is a simple heuristic; you can replace this with an AI call (Claude, OpenAI, etc) later.
+ */
+function prettyTitle(longText: string): string {
+  if (!longText) return 'Untitled';
+  // Take first sentence, or first 12 words, whichever is shorter
+  let firstSentence = longText.split(/[.!?\n]/)[0];
+  const words = firstSentence.split(' ');
+  if (words.length > 12) {
+    firstSentence = words.slice(0, 12).join(' ');
+  }
+  // Title case
+  return firstSentence
+    .replace(
+      /\w\S*/g,
+      (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+    )
+    .trim();
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
@@ -8,7 +29,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders });
   }
@@ -47,7 +68,7 @@ serve(async (req) => {
             title: [
               {
                 text: {
-                  content: pageData.title,
+                  content: prettyTitle(pageData.title),
                 },
               },
             ],
@@ -62,15 +83,6 @@ serve(async (req) => {
               {
                 text: {
                   content: pageData.blockName || 'N/A',
-                },
-              },
-            ],
-          },
-          Cards: {
-            rich_text: [
-              {
-                text: {
-                  content: pageData.cardNames?.join(', ') || 'N/A',
                 },
               },
             ],
@@ -199,247 +211,112 @@ async function getOrCreateDatabase(accessToken: string): Promise<string> {
   return createData.id;
 }
 
-interface PageData {
+export interface PageData {
   blockName?: string;
   cardNames?: string[];
-  content: {
-    interpretation: string;
-    keyInsights?: string[];
-    actionSteps?: string[];
+  nextStep?: boolean;
+  insightDate?: string;
+  insightUrl?: string;
+  title?: string;
+  content?: {
     robQuip?: string;
-    reflectionPrompts?: string[];
+    actionStep?: string;
   };
 }
 
 function formatContentBlocks(pageData: PageData): unknown[] {
   const blocks: unknown[] = [];
 
-  // Add heading
-  blocks.push({
-    object: 'block',
-    type: 'heading_1',
-    heading_1: {
-      rich_text: [
-        {
-          type: 'text',
-          text: {
-            content: '🔮 Rubber Duck Insights',
-          },
-        },
-      ],
-    },
-  });
+  // If this is a next step export, add minimal context
+  if (pageData.nextStep) {
+    // Add brief context
+    const contextParts = [];
+    if (pageData.blockName) {
+      contextParts.push(`Block: ${pageData.blockName}`);
+    }
 
-  // Add block name if available
-  if (pageData.blockName) {
-    blocks.push({
-      object: 'block',
-      type: 'heading_2',
-      heading_2: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: `Block: ${pageData.blockName}`,
-            },
-          },
-        ],
-      },
-    });
-  }
+    if (pageData.insightDate) {
+      contextParts.push(`Date: ${pageData.insightDate}`);
+    }
 
-  // Add cards if available
-  if (pageData.cardNames && pageData.cardNames.length > 0) {
-    blocks.push({
-      object: 'block',
-      type: 'heading_3',
-      heading_3: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: '🃏 Cards Drawn',
-            },
-          },
-        ],
-      },
-    });
-
-    blocks.push({
-      object: 'block',
-      type: 'paragraph',
-      paragraph: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: pageData.cardNames.join(', '),
-            },
-          },
-        ],
-      },
-    });
-  }
-
-  // Add interpretation
-  blocks.push({
-    object: 'block',
-    type: 'heading_3',
-    heading_3: {
-      rich_text: [
-        {
-          type: 'text',
-          text: {
-            content: '📖 Interpretation',
-          },
-        },
-      ],
-    },
-  });
-
-  blocks.push({
-    object: 'block',
-    type: 'paragraph',
-    paragraph: {
-      rich_text: [
-        {
-          type: 'text',
-          text: {
-            content: pageData.content.interpretation,
-          },
-        },
-      ],
-    },
-  });
-
-  // Add key insights
-  if (pageData.content.keyInsights && pageData.content.keyInsights.length > 0) {
-    blocks.push({
-      object: 'block',
-      type: 'heading_3',
-      heading_3: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: '💡 Key Insights',
-            },
-          },
-        ],
-      },
-    });
-
-    pageData.content.keyInsights.forEach((insight: string) => {
+    if (contextParts.length > 0) {
       blocks.push({
         object: 'block',
-        type: 'bulleted_list_item',
-        bulleted_list_item: {
+        type: 'paragraph',
+        paragraph: {
           rich_text: [
             {
               type: 'text',
               text: {
-                content: insight,
+                content: contextParts.join(' • '),
+              },
+              annotations: {
+                italic: true,
               },
             },
           ],
         },
       });
-    });
-  }
+    }
 
-  // Add action steps
-  if (pageData.content.actionSteps && pageData.content.actionSteps.length > 0) {
-    blocks.push({
-      object: 'block',
-      type: 'heading_3',
-      heading_3: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: '🎯 Next Steps',
-            },
-          },
-        ],
-      },
-    });
-
-    pageData.content.actionSteps.forEach((step: string) => {
+    // add action step
+    if (pageData.content?.actionStep) {
       blocks.push({
         object: 'block',
-        type: 'numbered_list_item',
-        numbered_list_item: {
+        type: 'paragraph',
+        paragraph: {
           rich_text: [
             {
               type: 'text',
               text: {
-                content: step,
+                content: pageData.content.actionStep,
               },
             },
           ],
         },
       });
-    });
-  }
+    }
 
-  // Add Rob's quip
-  if (pageData.content.robQuip) {
-    blocks.push({
-      object: 'block',
-      type: 'callout',
-      callout: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: pageData.content.robQuip,
-            },
-          },
-        ],
-        icon: {
-          type: 'emoji',
-          emoji: '🦆',
-        },
-      },
-    });
-  }
-
-  // Add reflection prompts if available
-  if (
-    pageData.content.reflectionPrompts &&
-    pageData.content.reflectionPrompts.length > 0
-  ) {
-    blocks.push({
-      object: 'block',
-      type: 'heading_3',
-      heading_3: {
-        rich_text: [
-          {
-            type: 'text',
-            text: {
-              content: '🤔 Reflection Prompts',
-            },
-          },
-        ],
-      },
-    });
-
-    pageData.content.reflectionPrompts.forEach((prompt: string) => {
+    // Add link to full insight
+    if (pageData.insightUrl) {
       blocks.push({
         object: 'block',
-        type: 'bulleted_list_item',
-        bulleted_list_item: {
+        type: 'paragraph',
+        paragraph: {
           rich_text: [
             {
               type: 'text',
               text: {
-                content: prompt,
+                content: '→ View full insight',
+              },
+              annotations: {
+                bold: true,
+              },
+              href: pageData.insightUrl,
+            },
+          ],
+        },
+      });
+    }
+
+    // add rob quip
+    if (pageData.content && pageData.content.robQuip) {
+      blocks.push({
+        object: 'block',
+        type: 'paragraph',
+        paragraph: {
+          rich_text: [
+            {
+              type: 'text',
+              text: {
+                content: pageData.content.robQuip,
               },
             },
           ],
         },
       });
-    });
+    }
+    return blocks;
   }
 
   return blocks;

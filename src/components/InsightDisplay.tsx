@@ -11,6 +11,7 @@ import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
 import SentimentTracking from './SentimentTracking';
 import { updateInsightSentiment } from '@/src/lib/insights/insight-queries';
+import { generatePrettyTitle } from '@/src/ai/generate_pretty_title';
 import { useNavigate } from 'react-router-dom';
 import { createCardSlug } from '@/src/lib/cards/card-helpers';
 import { NotionService } from '@/src/lib/notion/notion-service';
@@ -256,7 +257,6 @@ const NextSteps: React.FC<NextStepsProps> = ({
   isPremium,
   personalizedReading,
   selectedBlock,
-  drawnCards,
 }) => {
   const { user } = useAuth();
   const { showSuccess, showError } = useAlerts();
@@ -277,17 +277,20 @@ const NextSteps: React.FC<NextStepsProps> = ({
         return;
       }
 
-      // Create page title using the next step
-      const title = step;
+      // Create page title using the next step and AI summarizer
+      const title = await generatePrettyTitle(step);
 
-      // Export to Notion with the step as title and supporting info as content
+      // Export to Notion with the AI-generated title and supporting info as content
       await NotionService.createPage(integration.accessToken, {
         title,
-        nextStep: step,
-        stepIndex: stepIndex + 1,
-        content: personalizedReading,
         blockName: selectedBlock?.name,
-        cardNames: drawnCards?.map((card) => card.name),
+        insightDate: new Date().toLocaleDateString(),
+        insightUrl: window.location.href, // Link back to current insight
+        nextStep: true,
+        content: {
+          robQuip: personalizedReading.robQuip,
+          actionStep: step,
+        },
       });
 
       showSuccess(`Successfully exported step ${stepIndex + 1} to Notion!`);
@@ -302,40 +305,40 @@ const NextSteps: React.FC<NextStepsProps> = ({
   return (
     <div className="bg-liminal-overlay rounded-lg p-4 mb-6 shadow-breakthrough border border-liminal-border">
       <h3 className="text-lg font-semibold text-accent mb-3">🎯 Next Steps</h3>
-      <ol className={cn('space-y-2')}>
+      <ol className={cn('space-y-3')}>
         {actionSteps.map((step, index) => (
-          <li key={index} className="flex items-start gap-2">
-            <span className={cn('text-accent font-semibold')}>
-              {index + 1}.
-            </span>
-            <span className={cn('text-primary')}>{step}</span>
+          <li key={index} className="flex items-start justify-between gap-2">
+            <div className="flex items-start gap-2 flex-1">
+              <span className={cn('text-accent font-semibold')}>
+                {index + 1}.
+              </span>
+              <span className={cn('text-primary')}>{step}</span>
+            </div>
+            <button
+              className={cn(
+                'px-2 py-1 text-xs rounded-md font-medium shadow-sm transition-colors shrink-0',
+                isPremium
+                  ? 'bg-accent text-primary hover:bg-accent/90'
+                  : 'bg-muted text-secondary cursor-not-allowed opacity-60'
+              )}
+              disabled={!isPremium || isExporting}
+              title={
+                isPremium
+                  ? 'Export this step to Notion'
+                  : 'Upgrade to Premium to export to Notion'
+              }
+              onClick={() => handleExportToNotion(index, step)}
+            >
+              {isExporting ? '...' : 'Export'}
+            </button>
           </li>
         ))}
       </ol>
-      <div className="mt-4 flex items-center gap-2">
-        <button
-          className={cn(
-            'px-4 py-2 text-xs rounded-lg font-semibold shadow-sm transition-colors',
-            isPremium
-              ? 'bg-accent text-primary hover:bg-accent/90'
-              : 'bg-muted text-secondary cursor-not-allowed opacity-60'
-          )}
-          disabled={!isPremium || isExporting}
-          title={
-            isPremium
-              ? 'Export your next steps to Notion'
-              : 'Upgrade to Premium to export to Notion'
-          }
-          onClick={handleExportToNotion}
-        >
-          {isExporting ? 'Exporting...' : 'Export to Notion'}
-        </button>
-        {!isPremium && (
-          <span className="text-xs text-secondary" title="Premium required">
-            (Premium only)
-          </span>
-        )}
-      </div>
+      {!isPremium && (
+        <div className="mt-3 text-xs text-secondary" title="Premium required">
+          Premium required for Notion export
+        </div>
+      )}
     </div>
   );
 };
