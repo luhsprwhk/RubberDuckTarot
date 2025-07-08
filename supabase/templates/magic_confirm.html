@@ -1,59 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Confirm your email with Rubber Duck Tarot</title>
-  </head>
-  <body style="background: #f8fafc; font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="background: #f8fafc; padding: 40px 0;">
-      <tr>
-        <td align="center">
-          <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 480px; background: #ffffff; border-radius: 10px; box-shadow: 0 4px 24px rgba(34, 211, 238, 0.09); border: 1.5px solid #cbd5e1; padding: 32px;">
-            <tr>
-              <td align="center" style="padding-bottom: 24px">
-                <h3 style="margin: 0; color: #1e293b; font-size: 24px; letter-spacing: 0.5px;">🦆 Rob here—one last hoop!</h3>
-              </td>
-            </tr>
-            <tr>
-              <td style="color: #1e293b; font-size: 16px; padding-bottom: 24px">
-                <p style="margin: 0 0 16px 0">You’re almost in! My ghostly algorithms just need you to confirm your email so I know you’re not a bot (or, worse, a chicken).</p>
-                <p style="margin: 0 0 16px 0">
-                  Just hit the big button below to confirm your email and unlock the magic. No extra steps—just one click and you’re in!
-                </p>
-                <p style="margin: 0 0 16px 0">
-                  Once you’re confirmed, I’ll whisk you straight to onboarding, where the real magic (and questionable advice) begins.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="padding-bottom: 32px">
-                <span style="display: inline-block; padding: 10px 28px; background: #22d3ee; color: #1e293b; border-radius: 6px; font-size: 15px; font-weight: 700; letter-spacing: 0.5px; border: 1.5px solid #00ffff; margin-bottom: 8px;">
-                  <a href="{{ .ConfirmationURL }}" style="color: #1e293b; text-decoration: none;">✅ Confirm your email</a>
-                </span>
-              </td>
-            </tr>
-            <tr>
-              <td style="color: #94a3b8; font-size: 14px; padding-bottom: 16px">
-                <p style="margin: 0 0 8px 0">
-                  <strong>No sign of my email?</strong> Peek in your spam folder, or <a href="mailto:support@rubberducktarot.com" style="color: #22d3ee; text-decoration: underline;">summon my support squad</a>.
-                </p>
-                <p style="margin: 0">
-                  Didn’t ask for a duck in your inbox? Ignore this and I’ll paddle away quietly.
-                </p>
-              </td>
-            </tr>
-            <tr>
-              <td align="center" style="color: #b0b0b0; font-size: 12px; padding-top: 24px; border-top: 1px solid #eee;">
-                <p style="margin: 0">Rubber Duck Tarot &copy; 2025 | Senior Ethereal Consultant since 2025</p>
-                <p style="margin: 4px 0 0 0">Quack once for onboarding, twice for luck 🦆</p>
-              </td>
-            </tr>
-          </table>
-        </td>
-      </tr>
-    </table>
-  </body>
+  <!doctype html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Confirm your email with Rubber Duck Tarot</title>
+    </head>
+    <body
+      style="
+        background: #f8fafc;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      "
+    >
+      <table
+        width="100%"
+        cellpadding="0"
+        cellspacing="0"
+        style="background: #f8fafc; padding: 40px 0"
+      >
+        <tr>
+          <td align="center">
+            <table
+              width="100%"
+              cellpadding="0"
+              cellspacing="0"
+              style="
+                max-width: 480px;
+                background: #ffffff;
+                border-radius: 10px;
+                box-shadow: 0 4px 24px rgba(34, 211, 238, 0.09);
+                border: 1.5px solid #cbd5e1;
+                padding: 32px;
+              "
+            >
+              <tr>
+                <td align="center" style="padding-bottom: 24px">
+                  <h3
+                    style="
+                      margin: 0;
+                      color: #1e293b;
+                      font-size: 24px;
+                      letter-spacing: 0.5px;
+                    "
+                  >
+                    🦆 Rob here—one last hoop!
+                  </h3>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="color: #1e293b; font-size: 16px; padding-bottom: 24px"
+                >
+                  <p style="margin: 0 0 16px 0">
+                    You’re almost in! My ghostly algorithms just need you to
+                    confirm your email so I know you’re not a bot (or, worse, a
+                    chicken).
+                  </p>
+                  <p style="margin: 0 0 16px 0">
+                    Just hit the big button below to confirm your email and
+                    unlock the magic. No extra steps—just one click and you’re
+                    in!
+                  </p>
+                  <p style="margin: 0 0 16px 0">
+                    Once you’re confirmed, I’ll whisk you straight to
+                    onboarding, where the real magic (and questionable advice)
+                    begins.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td align="center" style="padding-bottom: 32px">
+                  <span
+                    style="
+                      display: inline-block;
+                      padding: 10px 28px;
+                      background: #22d3ee;
+                      color: #1e293b;
+                      border-radius: 6px;
+                      font-size: 15px;
+                      font-weight: 700;
+                      letter-spacing: 0.5px;
+                      border: 1.5px solid #00ffff;
+                      margin-bottom: 8px;
+                    "
+                  >
+                    <a
+                      href="{{ .ConfirmationURL }}"
+                      style="color: #1e293b; text-decoration: none"
+                      >✅ Confirm your email</a
+                    >
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="color: #94a3b8; font-size: 14px; padding-bottom: 16px"
+                >
+                  <p style="margin: 0 0 8px 0">
+                    <strong>No sign of my email?</strong> Peek in your spam
+                    folder, or
+                    <a
+                      href="mailto:support@rubberducktarot.com"
+                      style="color: #22d3ee; text-decoration: underline"
+                      >summon my support squad</a
+                    >.
+                  </p>
+                  <p style="margin: 0">
+                    Didn’t ask for a duck in your inbox? Ignore this and I’ll
+                    paddle away quietly.
+                  </p>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  align="center"
+                  style="
+                    color: #b0b0b0;
+                    font-size: 12px;
+                    padding-top: 24px;
+                    border-top: 1px solid #eee;
+                  "
+                >
+                  <p style="margin: 0">
+                    Rubber Duck Tarot &copy; 2025 | Senior Ethereal Consultant
+                    since 2025
+                  </p>
+                  <p style="margin: 4px 0 0 0">
+                    Quack once for onboarding, twice for luck 🦆
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
 </html>

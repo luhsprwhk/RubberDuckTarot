@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Save, User, Settings, Eye } from 'lucide-react';
+import { Save, User, Settings, Eye, BookOpen } from 'lucide-react';
 import useAuth from '../lib/hooks/useAuth';
 import { useUserProfile } from '../lib/hooks/useUserProfile';
 import { updateUserProfile } from '../lib/userPreferences';
@@ -15,6 +15,7 @@ import {
   blockPatterns,
   spiritAnimals,
 } from '../lib/userProfileValues';
+import { NotionService } from '../lib/notion/notion-service';
 
 const Preferences = () => {
   const { user } = useAuth();
@@ -24,6 +25,7 @@ const Preferences = () => {
   const [formData, setFormData] = useState<Partial<UserProfile>>({});
   const [customSuperpower, setCustomSuperpower] = useState('');
   const [customKryptonite, setCustomKryptonite] = useState('');
+  const [connectingNotion, setConnectingNotion] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -84,6 +86,29 @@ const Preferences = () => {
       setSaving(false);
     }
   };
+
+  const handleNotionConnect = async () => {
+    if (!user?.premium) {
+      setSaveMessage('Notion integration is only available for premium users.');
+      setTimeout(() => setSaveMessage(''), 3000);
+      return;
+    }
+
+    try {
+      setConnectingNotion(true);
+      const authUrl = await NotionService.initiateOAuth();
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error('Error connecting to Notion:', error);
+      setSaveMessage('Failed to connect to Notion. Please try again.');
+      setTimeout(() => setSaveMessage(''), 3000);
+    } finally {
+      setConnectingNotion(false);
+    }
+  };
+
+  const isNotionConnected =
+    user?.notion_access_token && user?.notion_workspace_id;
 
   if (loading) {
     return (
@@ -337,6 +362,43 @@ const Preferences = () => {
                 />
                 <div className="w-11 h-6 bg-liminal-surface peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-breakthrough-400/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-primary after:border-liminal-border after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-breakthrough-500"></div>
               </label>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <BookOpen className="h-5 w-5 text-breakthrough-500" />
+                <div>
+                  <p className="text-sm font-semibold text-primary">
+                    Connect to Notion
+                  </p>
+                  <p className="text-xs text-secondary">
+                    {user?.premium
+                      ? 'Export your insights directly to Notion'
+                      : 'Available for premium users only'}
+                  </p>
+                </div>
+              </div>
+
+              {isNotionConnected ? (
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span className="text-sm text-green-600 font-medium">
+                    Connected
+                  </span>
+                </div>
+              ) : (
+                <button
+                  onClick={handleNotionConnect}
+                  disabled={!user?.premium || connectingNotion}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    user?.premium
+                      ? 'bg-breakthrough-500 text-primary hover:bg-breakthrough-600 focus:ring-2 focus:ring-breakthrough-400'
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  }`}
+                >
+                  {connectingNotion ? 'Connecting...' : 'Connect'}
+                </button>
+              )}
             </div>
           </div>
         </div>
