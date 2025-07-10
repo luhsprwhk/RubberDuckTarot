@@ -90,7 +90,7 @@ const PublicCardContent = ({
       {/* Perspective Prompts */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
         <h2 className="text-2xl font-semibold text-primary mb-4">
-          Reflection Questions
+          Reflect on These
         </h2>
         <div className="space-y-3">
           {card.perspective_prompts.slice(0, 3).map((prompt, index) => (
@@ -147,7 +147,7 @@ const ReflectionQuestions = ({
         className="flex items-center justify-between w-full text-left focus:outline-none"
       >
         <h2 className="text-2xl font-semibold text-primary">
-          <span className="text-primary">Your Thoughts</span>
+          <span className="text-primary">Reflect on These</span>
         </h2>
         <ChevronDown
           className={`w-5 h-5 text-secondary transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}

@@ -316,23 +316,23 @@ const NextSteps: React.FC<NextStepsProps> = ({
             </div>
             <button
               className={cn(
-                'px-2 py-1 text-xs rounded-md font-medium shadow-sm transition-colors shrink-0',
+                'px-2 py-1 cursor-pointer text-xs rounded-md font-medium shadow-sm transition-colors shrink-0',
                 isPremium
-                  ? 'bg-accent text-primary hover:bg-accent/90'
+                  ? 'bg-accent text-void-900 hover:bg-accent/90'
                   : 'bg-muted text-secondary cursor-not-allowed opacity-60'
               )}
               disabled={!isPremium || isExporting}
               title={
                 isPremium
-                  ? 'Export this step to Notion'
-                  : 'Upgrade to Premium to export to Notion'
+                  ? 'Send this step to Notion'
+                  : 'Upgrade to Premium to send to Notion'
               }
               onClick={() => handleExportToNotion(index, step)}
             >
               {isExporting ? (
                 <FaSpinner className="animate-spin" />
               ) : (
-                'Save to Notion'
+                'Send to Notion'
               )}
             </button>
           </li>
