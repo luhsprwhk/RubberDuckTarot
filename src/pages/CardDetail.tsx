@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
 import TextArea from '../components/TextArea';
 import { Listbox } from '@headlessui/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -29,6 +29,49 @@ import {
   saveReflection,
   getReflectionByUserCardPrompt,
 } from '../lib/reflections/reflection-queries';
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+  error: Error | null;
+}
+
+interface ErrorBoundaryProps {
+  children: ReactNode;
+  fallback?: ReactNode;
+}
+
+class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error(
+      'CardDetail Error Boundary caught an error:',
+      error,
+      errorInfo
+    );
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <ErrorState
+            error={this.state.error?.message || 'An unexpected error occurred'}
+          />
+        )
+      );
+    }
+
+    return this.props.children;
+  }
+}
 
 const PublicCardContent = ({
   card,
@@ -219,6 +262,7 @@ const ReflectionItem = ({
         }
       } catch (error) {
         console.error('Error loading reflection:', error);
+        // Silently fail to allow the component to render
       }
     };
     loadReflection();
@@ -240,6 +284,7 @@ const ReflectionItem = ({
         );
       } catch (error) {
         console.error('Error saving reflection:', error);
+        // Don't prevent the component from continuing to work
       } finally {
         setSaving(false);
       }
@@ -378,15 +423,29 @@ const PersonalizedCardContent = ({
         const [adviceResults, robsTakeResult] = await Promise.all([
           Promise.all(
             relevantBlocks.map(async (block) => {
-              const advice = await getAdviceForUser(
-                card,
-                block.block_type_id,
-                user
-              );
-              return { blockType: block.block_type_id, advice };
+              try {
+                const advice = await getAdviceForUser(
+                  card,
+                  block.block_type_id,
+                  user
+                );
+                return { blockType: block.block_type_id, advice };
+              } catch (error) {
+                console.error(
+                  `Error fetching advice for block ${block.block_type_id}:`,
+                  error
+                );
+                return {
+                  blockType: block.block_type_id,
+                  advice: card.block_applications[block.block_type_id] || '',
+                };
+              }
             })
           ),
-          generateRobsTake(card, user),
+          generateRobsTake(card, user).catch((error) => {
+            console.error("Error generating Rob's take:", error);
+            return card.duck_wisdom; // Fallback to default wisdom
+          }),
         ]);
 
         const adviceMap = adviceResults.reduce(
@@ -401,6 +460,10 @@ const PersonalizedCardContent = ({
         setRobsTake(robsTakeResult);
       } catch (error) {
         console.error('Error fetching advice:', error);
+        // Set fallback state to prevent blank page
+        setHasInsightsForCard(true);
+        setBlockAdvice({});
+        setRobsTake(card.duck_wisdom);
       } finally {
         setLoading(false);
       }
@@ -497,13 +560,15 @@ const PersonalizedCardContent = ({
       </div>
 
       {/* Interactive Reflection Questions */}
-      <ReflectionQuestions
-        prompts={card.perspective_prompts.slice(0, 3)}
-        blockTypeIds={Object.keys(card.block_applications)}
-        getBlockTypeName={getBlockTypeName}
-        card={card}
-        user={user}
-      />
+      <ErrorBoundary>
+        <ReflectionQuestions
+          prompts={card.perspective_prompts.slice(0, 3)}
+          blockTypeIds={Object.keys(card.block_applications)}
+          getBlockTypeName={getBlockTypeName}
+          card={card}
+          user={user}
+        />
+      </ErrorBoundary>
 
       {/* Enhanced Tags with Personalization */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
@@ -597,18 +662,30 @@ const CardDetail = () => {
 
       {/* Conditional content based on auth state */}
       {user ? (
-        <PersonalizedCardContent
-          card={card}
-          user={user}
-          getBlockTypeIcon={getBlockTypeIcon}
-          getBlockTypeName={getBlockTypeName}
-        />
+        <ErrorBoundary
+          fallback={
+            <PublicCardContent
+              card={card}
+              getBlockTypeIcon={getBlockTypeIcon}
+              getBlockTypeName={getBlockTypeName}
+            />
+          }
+        >
+          <PersonalizedCardContent
+            card={card}
+            user={user}
+            getBlockTypeIcon={getBlockTypeIcon}
+            getBlockTypeName={getBlockTypeName}
+          />
+        </ErrorBoundary>
       ) : (
-        <PublicCardContent
-          card={card}
-          getBlockTypeIcon={getBlockTypeIcon}
-          getBlockTypeName={getBlockTypeName}
-        />
+        <ErrorBoundary>
+          <PublicCardContent
+            card={card}
+            getBlockTypeIcon={getBlockTypeIcon}
+            getBlockTypeName={getBlockTypeName}
+          />
+        </ErrorBoundary>
       )}
 
       {/* Action Buttons */}

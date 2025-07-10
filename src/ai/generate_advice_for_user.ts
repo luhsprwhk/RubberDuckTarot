@@ -101,8 +101,8 @@ Example of ideal advice (format & tone):
 The advice should feel like Rob knows this person and their specific challenges, learning from their past consultation patterns.`;
 
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 100,
+      model: import.meta.env.VITE_ANTHROPIC_MODEL ?? 'claude-sonnet-4-20250514',
+      max_tokens: 200,
       system: systemPrompt,
       messages: [
         {
