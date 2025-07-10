@@ -12,6 +12,7 @@ import {
   Briefcase,
   Users,
   Sparkles,
+  ChevronDown,
   X,
 } from 'lucide-react';
 import robEmoji from '../assets/rob-emoji.png';
@@ -119,6 +120,51 @@ const PublicCardContent = ({
   );
 };
 
+// Local subcomponent for interactive reflection questions (collapsible)
+const ReflectionQuestions = ({ prompts }: { prompts: string[] }) => {
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const toggle = () => setExpanded((prev) => !prev);
+
+  return (
+    <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
+      <button
+        onClick={toggle}
+        className="flex items-center justify-between w-full text-left focus:outline-none"
+      >
+        <h2 className="text-2xl font-semibold text-primary">
+          Your Reflection Journey
+        </h2>
+        <ChevronDown
+          className={`w-5 h-5 text-secondary transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {expanded && (
+        <div className="space-y-4 mt-4">
+          {prompts.map((prompt, index) => (
+            <div
+              key={index}
+              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
+            >
+              <div className="flex items-start gap-3 mb-3">
+                <span className="text-accent font-semibold mt-1">
+                  {index + 1}.
+                </span>
+                <p className="text-secondary leading-relaxed">{prompt}</p>
+              </div>
+              <div className="ml-6">
+                <textarea
+                  placeholder="Write your thoughts here... (saved automatically)"
+                  className="w-full p-3 bg-void-800 border border-liminal-border rounded-lg text-secondary text-sm resize-none"
+                  rows={3}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 const PersonalizedCardContent = ({
   card,
   user,
@@ -258,33 +304,7 @@ const PersonalizedCardContent = ({
       </div>
 
       {/* Interactive Reflection Questions */}
-      <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
-        <h2 className="text-2xl font-semibold text-primary mb-4">
-          Your Reflection Journey
-        </h2>
-        <div className="space-y-4">
-          {card.perspective_prompts.map((prompt, index) => (
-            <div
-              key={index}
-              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
-            >
-              <div className="flex items-start gap-3 mb-3">
-                <span className="text-accent font-semibold mt-1">
-                  {index + 1}.
-                </span>
-                <p className="text-secondary leading-relaxed">{prompt}</p>
-              </div>
-              <div className="ml-6">
-                <textarea
-                  placeholder="Write your thoughts here... (saved automatically)"
-                  className="w-full p-3 bg-void-800 border border-liminal-border rounded-lg text-secondary text-sm resize-none"
-                  rows={3}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <ReflectionQuestions prompts={card.perspective_prompts} />
 
       {/* Enhanced Tags with Personalization */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
