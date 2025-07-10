@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import TextArea from '../components/TextArea';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import useCards from '../lib/cards/useCards';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
@@ -152,9 +153,8 @@ const ReflectionQuestions = ({ prompts }: { prompts: string[] }) => {
                 <p className="text-secondary leading-relaxed">{prompt}</p>
               </div>
               <div className="ml-6">
-                <textarea
+                <TextArea
                   placeholder="Write your thoughts here... (saved automatically)"
-                  className="w-full p-3 bg-void-800 border border-liminal-border rounded-lg text-secondary text-sm resize-none"
                   rows={3}
                 />
               </div>
@@ -252,7 +252,7 @@ const PersonalizedCardContent = ({
         </div>
       )}
 
-      {/* Personalized Block Applications */}
+      {/* Personalized Block Guidance */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
         <div className="flex items-center gap-2 mb-4">
           <Sparkles className="w-5 h-5 text-accent" />
