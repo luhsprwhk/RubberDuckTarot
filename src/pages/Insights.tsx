@@ -68,7 +68,7 @@ const Insights: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 bg-liminal-overlay min-h-screen">
       <div className="text-center mb-8">
         <div className="mb-4">
           <img src={robEmoji} alt="Rob" className="w-16 h-16 mx-auto" />
@@ -87,7 +87,7 @@ const Insights: React.FC = () => {
           return (
             <div
               key={insight.id}
-              className="p-6 bg-void-gradient border-l-4 border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="p-6 bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
