@@ -17,7 +17,7 @@ import { type Card } from '@/src/interfaces';
 import { type User } from '@/src/interfaces';
 import { type ReactElement } from 'react';
 
-const StaticCardContent = ({
+const PublicCardContent = ({
   card,
   getBlockTypeIcon,
   getBlockTypeName,
@@ -28,6 +28,26 @@ const StaticCardContent = ({
 }) => {
   return (
     <>
+      <div
+        id="public-card-banner"
+        className="bg-gradient-to-r from-breakthrough-500/20 to-accent/20 border border-breakthrough-500/30 rounded-xl p-6 mb-6 text-center"
+      >
+        <h2 className="text-2xl font-semibold text-primary mb-3">
+          This card doesn't know you yet
+        </h2>
+        <p className="text-secondary mb-4 max-w-2xl mx-auto">
+          Right now you're getting generic rubber duck wisdom. Create an account
+          and Rob starts learning your specific brand of getting stuck; then
+          watch his advice get uncomfortably accurate.
+        </p>
+        <Link
+          to="/pricing"
+          className="inline-block bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-colors"
+        >
+          <span className="ml-2 text-sm ">Teach Rob About You</span>
+        </Link>
+      </div>
+
       {/* Block Applications */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
         <div className="grid md:grid-cols-2 gap-4">
@@ -53,7 +73,7 @@ const StaticCardContent = ({
         <div className="flex items-center gap-3 mb-4">
           <img src={robEmoji} alt="Rob" className="w-8 h-8" />
           <h2 className="text-2xl font-semibold text-breakthrough-300">
-            Rob's Debugging Wisdom
+            Rob's Take
           </h2>
         </div>
         <p className="text-primary italic text-lg leading-relaxed">
@@ -96,7 +116,7 @@ const StaticCardContent = ({
   );
 };
 
-const AdaptiveCardContent = ({
+const PersonalizedCardContent = ({
   card,
   user,
   getBlockTypeIcon,
@@ -144,13 +164,7 @@ const AdaptiveCardContent = ({
                   {getBlockTypeName(blockId)} - For You
                 </h3>
               </div>
-              <p className="text-secondary text-sm leading-relaxed mb-3">
-                {advice}
-              </p>
-              <div className="text-xs text-breakthrough-300 bg-breakthrough-500/10 p-2 rounded">
-                💡 This guidance adapts based on your reading history and
-                preferences
-              </div>
+              <p className="text-secondary text-sm leading-relaxed">{advice}</p>
             </div>
           ))}
         </div>
@@ -302,14 +316,14 @@ const CardDetail = () => {
 
       {/* Conditional content based on auth state */}
       {user ? (
-        <AdaptiveCardContent
+        <PersonalizedCardContent
           card={card}
           user={user as unknown as User}
           getBlockTypeIcon={getBlockTypeIcon}
           getBlockTypeName={getBlockTypeName}
         />
       ) : (
-        <StaticCardContent
+        <PublicCardContent
           card={card}
           getBlockTypeIcon={getBlockTypeIcon}
           getBlockTypeName={getBlockTypeName}
