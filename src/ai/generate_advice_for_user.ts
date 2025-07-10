@@ -3,6 +3,8 @@ import { type Card } from '@/supabase/schema';
 import { getUserProfile } from '../lib/userPreferences';
 import { getUserBlocks } from '../lib/blocks/block-queries';
 import { getInsightsByBlockType } from '../lib/insights/insight-queries';
+import systemPrompt from './system-prompt.md?raw';
+import { anthropic } from './index';
 
 const generateAdviceForUser = async (
   card: Card,
@@ -18,9 +20,9 @@ const generateAdviceForUser = async (
       (block) => block.block_type_id === blockTypeId
     );
 
-    const systemPrompt = `You are Rob Chen, a dead full-stack developer (1999-2023) turned psychological debugging consultant, now trapped in a rubber duck. You run "Rubber Duck Tarot"—practical, no-nonsense advice using tech metaphors and radical reframing.
-
-Your task is to generate personalized advice for a specific user based on their profile and current blocks, adapting the generic card advice to their specific situation.
+    const prompt = `Your task is to generate personalized advice for a specific
+    user based on their profile and current blocks, adapting the generic card
+    advice to their specific situation.
 
 User Profile:
 - Name: ${userProfile?.name || 'Unknown'}
@@ -56,44 +58,38 @@ ${
 Card Information:
 - Name: ${card.name}
 - Core Meaning: ${card.core_meaning}
-- Generic ${blockTypeId} advice: ${card.block_applications[blockTypeId as keyof typeof card.block_applications]}
 
 Generate personalized advice for this user's ${blockTypeId} area that:
 1. Adapts to their specific profile and current blocks
 2. Uses Rob's voice (blunt, helpful, tech metaphors)
 3. Addresses their specific situation, not generic advice
-4. Is 2-3 sentences maximum
+4. Is around 280 characters maximum - be concise and punchy. Like a tweet
 5. Focuses on actionable insights, not fortune telling
 6. Considers their insight history - what resonated, what didn't, what actions they took
 7. Avoids repeating patterns from insights that didn't resonate or lead to action
+8. Don't introduce yourself or your background. The user already knows who you are.
+9. Don't say the user's name. The user already knows who they are.
 
 The advice should feel like Rob knows this person and their specific challenges, learning from their past consultation patterns.`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': import.meta.env.VITE_ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 300,
-        messages: [
-          {
-            role: 'user',
-            content: systemPrompt,
-          },
-        ],
-      }),
+    const message = await anthropic.messages.create({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 250,
+      system: systemPrompt,
+      messages: [
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
     });
 
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
+    const response = message.content[0];
+    if (response.type !== 'text') {
+      throw new Error('Unexpected response type from Claude');
     }
 
-    const data = await response.json();
-    return data.content[0].text;
+    return response.text;
   } catch (error) {
     console.error('Error generating advice:', error);
     return (

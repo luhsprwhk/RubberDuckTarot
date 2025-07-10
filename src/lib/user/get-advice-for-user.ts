@@ -12,20 +12,27 @@ const getAdviceForUser = async (
   user: User
 ): Promise<string> => {
   try {
-    const existingAdvice = await getAdviceForUserCardBlock({
-      userId: user.id,
-      cardId: card.id,
-      blockTypeId,
-    });
+    // Disable advice cache in development for easier testing
+    const IS_DEV =
+      import.meta.env.MODE === 'development' ||
+      process.env.NODE_ENV === 'development';
 
-    if (existingAdvice) {
-      const daysSinceUpdate = Math.floor(
-        (Date.now() - new Date(existingAdvice.last_updated).getTime()) /
-          (1000 * 60 * 60 * 24)
-      );
+    if (!IS_DEV) {
+      const existingAdvice = await getAdviceForUserCardBlock({
+        userId: user.id,
+        cardId: card.id,
+        blockTypeId,
+      });
 
-      if (daysSinceUpdate < 7) {
-        return existingAdvice.advice;
+      if (existingAdvice) {
+        const daysSinceUpdate = Math.floor(
+          (Date.now() - new Date(existingAdvice.last_updated).getTime()) /
+            (1000 * 60 * 60 * 24)
+        );
+
+        if (daysSinceUpdate < 7) {
+          return existingAdvice.advice;
+        }
       }
     }
 
