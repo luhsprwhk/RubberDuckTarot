@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import type { BlockType } from '../interfaces';
@@ -104,14 +105,17 @@ const Blocks: React.FC = () => {
           <React.Fragment key={block.id}>
             <Link
               to={`/blocks/${block.id}`}
-              className="block bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="block bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer hover:border-breakthrough-400"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span
-                      className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
+                      className={cn(
+                        'text-xs font-medium px-2 py-1 rounded',
+                        getStatusColor(block.status)
+                      )}
                     >
                       {block.status.charAt(0).toUpperCase() +
                         block.status.slice(1)}
