@@ -122,6 +122,21 @@ export const userCardAdvice = pgTable('user_card_advice', {
     .defaultNow(),
 });
 
+export const userCardReflections = pgTable('user_card_reflections', {
+  id: serial('id').primaryKey(),
+  user_id: text('user_id').notNull(),
+  card_id: integer('card_id').notNull(),
+  prompt_index: integer('prompt_index').notNull(), // Which reflection question (0, 1, 2, etc.)
+  reflection_text: text('reflection_text').notNull(),
+  block_type_id: text('block_type_id'), // Optional: which block type this reflection relates to
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
 export type Insight = typeof insights.$inferSelect;
@@ -129,3 +144,4 @@ export type User = typeof users.$inferSelect;
 export type UserProfile = typeof user_profiles.$inferSelect;
 export type UserBlock = typeof userBlocks.$inferSelect;
 export type UserCardAdvice = typeof userCardAdvice.$inferSelect;
+export type UserCardReflection = typeof userCardReflections.$inferSelect;

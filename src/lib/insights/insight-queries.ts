@@ -145,3 +145,25 @@ export const getInsightsByBlockType = async (
     return data;
   }
 };
+
+export const getInsightsByUser = async (userId: string): Promise<Insight[]> => {
+  const { data, error } = await supabase
+    .from('insights')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error) throw error;
+
+  // Decrypt sensitive fields for all insights
+  try {
+    return await Promise.all(
+      data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt insights by user:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
+};

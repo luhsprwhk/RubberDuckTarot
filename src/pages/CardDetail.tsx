@@ -23,6 +23,11 @@ import { type User } from '@/src/interfaces';
 import { type ReactElement } from 'react';
 import getAdviceForUser from '../lib/user/get-advice-for-user';
 import { getUserBlocks } from '../lib/blocks/block-queries';
+import generateRobsTake from '../ai/generate_robs_take';
+import {
+  saveReflection,
+  getReflectionByUserCardPrompt,
+} from '../lib/reflections/reflection-queries';
 
 const PublicCardContent = ({
   card,
@@ -133,12 +138,16 @@ const ReflectionQuestions = ({
   prompts,
   blockTypeIds,
   getBlockTypeName,
+  card,
+  user,
 }: {
   prompts: string[];
   blockTypeIds: string[];
   getBlockTypeName: (id: string) => string;
+  card: Card;
+  user: User;
 }) => {
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const [expanded, setExpanded] = useState<boolean>(true);
   const toggle = () => setExpanded((prev) => !prev);
 
   return (
@@ -164,6 +173,8 @@ const ReflectionQuestions = ({
               prompt={prompt}
               blockTypeIds={blockTypeIds}
               getBlockTypeName={getBlockTypeName}
+              card={card}
+              user={user}
             />
           ))}
         </div>
@@ -178,13 +189,64 @@ const ReflectionItem = ({
   prompt,
   blockTypeIds,
   getBlockTypeName,
+  card,
+  user,
 }: {
   index: number;
   prompt: string;
   blockTypeIds: string[];
   getBlockTypeName: (id: string) => string;
+  card: Card;
+  user: User;
 }) => {
   const [selectedBlock, setSelectedBlock] = useState<string>('');
+  const [reflectionText, setReflectionText] = useState<string>('');
+  const [saving, setSaving] = useState<boolean>(false);
+
+  // Load existing reflection on mount
+  useEffect(() => {
+    const loadReflection = async () => {
+      try {
+        const existing = await getReflectionByUserCardPrompt(
+          user.id,
+          card.id,
+          index
+        );
+        if (existing) {
+          setReflectionText(existing.reflection_text);
+          setSelectedBlock(existing.block_type_id || '');
+        }
+      } catch (error) {
+        console.error('Error loading reflection:', error);
+      }
+    };
+    loadReflection();
+  }, [user.id, card.id, index]);
+
+  // Auto-save reflection text with debounce
+  useEffect(() => {
+    if (!reflectionText.trim()) return;
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        setSaving(true);
+        await saveReflection(
+          user.id,
+          card.id,
+          index,
+          reflectionText,
+          selectedBlock || undefined
+        );
+      } catch (error) {
+        console.error('Error saving reflection:', error);
+      } finally {
+        setSaving(false);
+      }
+    }, 1000);
+
+    return () => clearTimeout(timeoutId);
+  }, [reflectionText, selectedBlock, user.id, card.id, index]);
+
   return (
     <div className="bg-liminal-surface rounded-lg p-4 border border-liminal-border">
       <div className="flex items-start gap-3 mb-3">
@@ -192,10 +254,19 @@ const ReflectionItem = ({
         <p className="text-secondary leading-relaxed flex-1">{prompt}</p>
       </div>
       <div className="ml-6 space-y-2">
-        <TextArea
-          placeholder="Write your thoughts here... (saved automatically)"
-          rows={2}
-        />
+        <div className="relative">
+          <TextArea
+            placeholder="Write your thoughts here... (saved automatically)"
+            rows={2}
+            value={reflectionText}
+            onChange={(e) => setReflectionText(e.target.value)}
+          />
+          {saving && (
+            <div className="absolute top-2 right-2 text-xs text-secondary">
+              Saving...
+            </div>
+          )}
+        </div>
         <BlockTypeSelect
           blockTypeIds={blockTypeIds}
           selected={selectedBlock}
@@ -265,6 +336,7 @@ const PersonalizedCardContent = ({
   getBlockTypeName: (blockId: string) => string;
 }) => {
   const [blockAdvice, setBlockAdvice] = useState<Record<string, string>>({});
+  const [robsTake, setRobsTake] = useState<string>('');
   // Banner visibility state (persisted in localStorage)
   const [showBanner, setShowBanner] = useState<boolean>(() => {
     if (typeof window === 'undefined') return true; // SSR safeguard
@@ -286,17 +358,23 @@ const PersonalizedCardContent = ({
         const relevantBlocks = userBlocks.filter((block) =>
           blockTypes.includes(block.block_type_id)
         );
-        const advicePromises = relevantBlocks.map(async (block) => {
-          const advice = await getAdviceForUser(
-            card,
-            block.block_type_id,
-            user
-          );
-          return { blockType: block.block_type_id, advice };
-        });
 
-        const results = await Promise.all(advicePromises);
-        const adviceMap = results.reduce(
+        // Fetch block advice and Rob's take in parallel
+        const [adviceResults, robsTakeResult] = await Promise.all([
+          Promise.all(
+            relevantBlocks.map(async (block) => {
+              const advice = await getAdviceForUser(
+                card,
+                block.block_type_id,
+                user
+              );
+              return { blockType: block.block_type_id, advice };
+            })
+          ),
+          generateRobsTake(card, user),
+        ]);
+
+        const adviceMap = adviceResults.reduce(
           (acc, { blockType, advice }) => {
             acc[blockType] = advice;
             return acc;
@@ -305,6 +383,7 @@ const PersonalizedCardContent = ({
         );
 
         setBlockAdvice(adviceMap);
+        setRobsTake(robsTakeResult);
       } catch (error) {
         console.error('Error fetching advice:', error);
       } finally {
@@ -386,9 +465,8 @@ const PersonalizedCardContent = ({
             Rob's Take
           </h2>
         </div>
-        {/* TODO: Generate Rob's take */}
         <p className="text-primary italic text-lg leading-relaxed mb-4">
-          "{card.duck_wisdom}"
+          "{robsTake || card.duck_wisdom}"
         </p>
       </div>
 
@@ -397,6 +475,8 @@ const PersonalizedCardContent = ({
         prompts={card.perspective_prompts.slice(0, 3)}
         blockTypeIds={Object.keys(card.block_applications)}
         getBlockTypeName={getBlockTypeName}
+        card={card}
+        user={user}
       />
 
       {/* Enhanced Tags with Personalization */}
