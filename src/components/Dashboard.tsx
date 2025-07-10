@@ -126,35 +126,36 @@ export default function Dashboard() {
       (block) => block.status === 'active' || block.status === 'in-progress'
     );
     return (
-      <div
-        className={cn(
-          'max-w-3xl mx-auto p-6',
-          'bg-liminal-surface border-liminal-border border',
-          'rounded-lg shadow-breakthrough mt-6 mb-6'
-        )}
-      >
-        {/* Dashboard Header Ad */}
-        <DashboardAd className="mb-6" />
-
-        <h2 className="text-2xl font-bold mb-4 text-primary">
-          Your Active Blocks
-        </h2>
-        <BlockTracker
-          blocks={activeBlocks}
-          blockTypes={blockTypes}
-          onClickBlock={handleBlockClick}
-        />
-
-        {/* Native content ad between blocks and action */}
-        {activeBlocks.length >= 3 && <NativeContentAd className="my-6" />}
-
-        <div className="mt-8 flex justify-center">
+      <div>
+        <div className="mt-8 flex justify-end max-w-3xl mx-auto">
           <Link
             to="/new-insight"
-            className="inline-flex items-center px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors shadow-lg"
+            className="inline-flex items-center px-6 py-3 text-xs bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors shadow-lg"
           >
             + New Insight
           </Link>
+        </div>
+        <div
+          className={cn(
+            'max-w-3xl mx-auto p-6',
+            'bg-liminal-surface border-liminal-border border',
+            'rounded-lg shadow-breakthrough mt-6 mb-6'
+          )}
+        >
+          {/* Dashboard Header Ad */}
+          <DashboardAd className="mb-6" />
+
+          <h2 className="text-2xl font-bold mb-4 text-primary">
+            Your Active Blocks
+          </h2>
+          <BlockTracker
+            blocks={activeBlocks}
+            blockTypes={blockTypes}
+            onClickBlock={handleBlockClick}
+          />
+
+          {/* Native content ad between blocks and action */}
+          {activeBlocks.length >= 3 && <NativeContentAd className="my-6" />}
         </div>
       </div>
     );

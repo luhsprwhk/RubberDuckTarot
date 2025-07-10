@@ -2,6 +2,7 @@ import React from 'react';
 import { Target, Trash2 } from 'lucide-react';
 import type { UserBlock } from '@/supabase/schema';
 import type { BlockType } from '../interfaces';
+import { cn } from '../lib/utils';
 
 interface BlockTrackerProps {
   blocks: UserBlock[];
@@ -62,13 +63,16 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
         <div
           key={block.id}
           onClick={() => onClickBlock?.(block.id)}
-          className={`bg-void-800 rounded-lg shadow-sm border border-liminal-border p-${compact ? '4' : '5'} cursor-pointer hover:shadow-md hover:border-breakthrough-400 transition-shadow`}
+          className={`bg-liminal-overlay rounded-lg shadow-sm border border-default p-${compact ? '4' : '5'} cursor-pointer hover:shadow-md hover:border-breakthrough-400 transition-shadow`}
         >
           <div className="flex justify-between items-start mb-3 pl-2 py-2">
             <div className="flex-1 ">
               <div className="flex items-center gap-2 mb-2">
                 <span
-                  className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
+                  className={cn(
+                    'text-xs font-medium px-2 py-1 rounded',
+                    getStatusColor(block.status)
+                  )}
                 >
                   {block.status.charAt(0).toUpperCase() + block.status.slice(1)}
                 </span>
@@ -110,7 +114,7 @@ const BlockTracker: React.FC<BlockTrackerProps> = ({
           </div>
 
           {block.notes && !compact && (
-            <div className="mt-3 p-3 bg-void-700 rounded-lg">
+            <div className="mt-3 p-3 bg-liminal-overlay rounded-lg">
               <p className="text-sm text-secondary">{block.notes}</p>
             </div>
           )}
