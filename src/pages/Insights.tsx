@@ -191,7 +191,7 @@ const EmptyInsightsState = () => {
             </p>
             <Link
               to="/new-insight"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-void-900 font-semibold rounded-lg hover:from-breakthrough-300 hover:to-breakthrough-400 transition-all transform hover:scale-105 shadow-lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
               Get your first insight
