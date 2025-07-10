@@ -10,6 +10,7 @@ import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType } from '@/src/interfaces';
 import Loading from './Loading';
 import { DashboardAd, NativeContentAd } from './ads/SmartAd';
+import { cn } from '../lib/utils';
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -125,7 +126,13 @@ export default function Dashboard() {
       (block) => block.status === 'active' || block.status === 'in-progress'
     );
     return (
-      <div className="max-w-3xl mx-auto p-6">
+      <div
+        className={cn(
+          'max-w-3xl mx-auto p-6',
+          'bg-liminal-surface border-liminal-border border',
+          'rounded-lg shadow-breakthrough mt-6 mb-6'
+        )}
+      >
         {/* Dashboard Header Ad */}
         <DashboardAd className="mb-6" />
 
