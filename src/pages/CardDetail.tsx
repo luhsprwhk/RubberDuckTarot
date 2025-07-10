@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import TextArea from '../components/TextArea';
+import { Listbox } from '@headlessui/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import useCards from '../lib/cards/useCards';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
@@ -116,13 +117,26 @@ const PublicCardContent = ({
             </span>
           ))}
         </div>
+        <br />
+        <div className="text-xs text-secondary bg-liminal-surface p-4 rounded-lg">
+          💡 These tags connect to your reading themes. Click any tag to explore
+          related cards in your personalized library.
+        </div>
       </div>
     </>
   );
 };
 
 // Local subcomponent for interactive reflection questions (collapsible)
-const ReflectionQuestions = ({ prompts }: { prompts: string[] }) => {
+const ReflectionQuestions = ({
+  prompts,
+  blockTypeIds,
+  getBlockTypeName,
+}: {
+  prompts: string[];
+  blockTypeIds: string[];
+  getBlockTypeName: (id: string) => string;
+}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
   const toggle = () => setExpanded((prev) => !prev);
 
@@ -133,7 +147,7 @@ const ReflectionQuestions = ({ prompts }: { prompts: string[] }) => {
         className="flex items-center justify-between w-full text-left focus:outline-none"
       >
         <h2 className="text-2xl font-semibold text-primary">
-          Your Reflection Journey
+          <span className="text-primary">Your Thoughts</span>
         </h2>
         <ChevronDown
           className={`w-5 h-5 text-secondary transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
@@ -142,27 +156,99 @@ const ReflectionQuestions = ({ prompts }: { prompts: string[] }) => {
       {expanded && (
         <div className="space-y-4 mt-4">
           {prompts.map((prompt, index) => (
-            <div
+            <ReflectionItem
               key={index}
-              className="bg-liminal-surface rounded-lg p-4 border border-liminal-border"
-            >
-              <div className="flex items-start gap-3 mb-3">
-                <span className="text-accent font-semibold mt-1">
-                  {index + 1}.
-                </span>
-                <p className="text-secondary leading-relaxed">{prompt}</p>
-              </div>
-              <div className="ml-6">
-                <TextArea
-                  placeholder="Write your thoughts here... (saved automatically)"
-                  rows={3}
-                />
-              </div>
-            </div>
+              index={index}
+              prompt={prompt}
+              blockTypeIds={blockTypeIds}
+              getBlockTypeName={getBlockTypeName}
+            />
           ))}
         </div>
       )}
     </div>
+  );
+};
+
+// Individual reflection question with block type selector
+const ReflectionItem = ({
+  index,
+  prompt,
+  blockTypeIds,
+  getBlockTypeName,
+}: {
+  index: number;
+  prompt: string;
+  blockTypeIds: string[];
+  getBlockTypeName: (id: string) => string;
+}) => {
+  const [selectedBlock, setSelectedBlock] = useState<string>('');
+  return (
+    <div className="bg-liminal-surface rounded-lg p-4 border border-liminal-border">
+      <div className="flex items-start gap-3 mb-3">
+        <span className="text-accent font-semibold mt-1">{index + 1}.</span>
+        <p className="text-secondary leading-relaxed flex-1">{prompt}</p>
+      </div>
+      <div className="ml-6 space-y-2">
+        <TextArea
+          placeholder="Write your thoughts here... (saved automatically)"
+          rows={2}
+        />
+        <BlockTypeSelect
+          blockTypeIds={blockTypeIds}
+          selected={selectedBlock}
+          onChange={setSelectedBlock}
+          getBlockTypeName={getBlockTypeName}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Dropdown selector component using Headless UI Listbox
+const BlockTypeSelect = ({
+  blockTypeIds,
+  selected,
+  onChange,
+  getBlockTypeName,
+}: {
+  blockTypeIds: string[];
+  selected: string;
+  onChange: (val: string) => void;
+  getBlockTypeName: (id: string) => string;
+}) => {
+  return (
+    <Listbox value={selected} onChange={onChange}>
+      {({ open }) => (
+        <div className="relative">
+          <Listbox.Button className="w-full bg-void-800 border border-liminal-border text-secondary text-sm rounded-lg p-2 text-left">
+            {selected ? getBlockTypeName(selected) : 'Select block type…'}
+          </Listbox.Button>
+          {open && (
+            <Listbox.Options className="absolute mt-1 w-full bg-void-900 border border-liminal-border rounded-lg z-10 max-h-60 overflow-auto text-sm">
+              <Listbox.Option
+                value=""
+                disabled
+                className="cursor-default px-3 py-2 text-secondary/60"
+              >
+                Select block type…
+              </Listbox.Option>
+              {blockTypeIds.map((id) => (
+                <Listbox.Option
+                  key={id}
+                  value={id}
+                  className={({ active }) =>
+                    `cursor-pointer px-3 py-2 ${active ? 'bg-accent/20' : ''}`
+                  }
+                >
+                  {getBlockTypeName(id)}
+                </Listbox.Option>
+              ))}
+            </Listbox.Options>
+          )}
+        </div>
+      )}
+    </Listbox>
   );
 };
 const PersonalizedCardContent = ({
@@ -287,24 +373,21 @@ const PersonalizedCardContent = ({
         <div className="flex items-center gap-3 mb-4">
           <img src={robEmoji} alt="Rob" className="w-8 h-8" />
           <h2 className="text-2xl font-semibold text-breakthrough-300">
-            Rob's Personal Debugging Wisdom
+            Rob's Take
           </h2>
         </div>
+        {/* TODO: Generate Rob's take */}
         <p className="text-primary italic text-lg leading-relaxed mb-4">
           "{card.duck_wisdom}"
         </p>
-        <div className="bg-breakthrough-500/5 border border-breakthrough-500/20 rounded-lg p-4">
-          <p className="text-breakthrough-200 text-sm">
-            <strong>💭 Rob's personal note:</strong> Based on your journey, this
-            card often appears when you're ready to {card.name.toLowerCase()} in
-            new ways. Pay attention to how this resonates with your current
-            challenges.
-          </p>
-        </div>
       </div>
 
       {/* Interactive Reflection Questions */}
-      <ReflectionQuestions prompts={card.perspective_prompts} />
+      <ReflectionQuestions
+        prompts={card.perspective_prompts.slice(0, 3)}
+        blockTypeIds={Object.keys(card.block_applications)}
+        getBlockTypeName={getBlockTypeName}
+      />
 
       {/* Enhanced Tags with Personalization */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-8">
@@ -320,10 +403,6 @@ const PersonalizedCardContent = ({
               {tag}
             </span>
           ))}
-        </div>
-        <div className="text-xs text-secondary bg-liminal-surface p-3 rounded-lg">
-          💡 These tags connect to your reading themes. Click any tag to explore
-          related cards in your personalized library.
         </div>
       </div>
     </>
