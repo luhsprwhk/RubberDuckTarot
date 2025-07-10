@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import useCards from '../lib/cards/useCards';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
@@ -16,6 +17,7 @@ import robEmoji from '../assets/rob-emoji.png';
 import { type Card } from '@/src/interfaces';
 import { type User } from '@/src/interfaces';
 import { type ReactElement } from 'react';
+import getAdviceForUser from '../lib/user/get-advice-for-user';
 
 const PublicCardContent = ({
   card,
@@ -127,6 +129,42 @@ const PersonalizedCardContent = ({
   getBlockTypeIcon: (blockId: string) => ReactElement;
   getBlockTypeName: (blockId: string) => string;
 }) => {
+  const [blockAdvice, setBlockAdvice] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchAdvice = async () => {
+      setLoading(true);
+      try {
+        const blockTypes = Object.keys(card.block_applications);
+        const advicePromises = blockTypes.map(async (blockType) => {
+          const advice = await getAdviceForUser(card, blockType, user);
+          return { blockType, advice };
+        });
+
+        const results = await Promise.all(advicePromises);
+        const adviceMap = results.reduce(
+          (acc, { blockType, advice }) => {
+            acc[blockType] = advice;
+            return acc;
+          },
+          {} as Record<string, string>
+        );
+
+        setBlockAdvice(adviceMap);
+      } catch (error) {
+        console.error('Error fetching advice:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAdvice();
+  }, [card, user]);
+
+  if (loading) {
+    return <Loading text="Loading personalized guidance..." />;
+  }
+
   return (
     <>
       {/* User-specific insights banner */}
@@ -138,9 +176,9 @@ const PersonalizedCardContent = ({
           </h2>
         </div>
         <p className="text-primary text-lg leading-relaxed">
-          Welcome back{user.email ? `, ${user.email.split('@')[0]}` : ''}! This
-          card adapts to your journey and preferences. The insights below are
-          tailored specifically for you.
+          Rob remembers you now, which means he can stop being polite and start
+          being useful. This card is customized for your specific flavor of
+          chaos.
         </p>
       </div>
 
@@ -153,20 +191,24 @@ const PersonalizedCardContent = ({
           </h2>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
-          {Object.entries(card.block_applications).map(([blockId, advice]) => (
-            <div
-              key={blockId}
-              className="bg-gradient-to-br from-liminal-surface to-liminal-surface/50 rounded-lg p-4 border border-breakthrough-500/20"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                {getBlockTypeIcon(blockId)}
-                <h3 className="font-semibold text-accent">
-                  {getBlockTypeName(blockId)} - For You
-                </h3>
+          {Object.entries(card.block_applications).map(
+            ([blockId, fallbackAdvice]) => (
+              <div
+                key={blockId}
+                className="bg-gradient-to-br from-liminal-surface to-liminal-surface/50 rounded-lg p-4 border border-breakthrough-500/20"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  {getBlockTypeIcon(blockId)}
+                  <h3 className="font-semibold text-accent">
+                    {getBlockTypeName(blockId)}
+                  </h3>
+                </div>
+                <p className="text-secondary text-sm leading-relaxed">
+                  {blockAdvice[blockId] || fallbackAdvice}
+                </p>
               </div>
-              <p className="text-secondary text-sm leading-relaxed">{advice}</p>
-            </div>
-          ))}
+            )
+          )}
         </div>
       </div>
 
@@ -318,7 +360,7 @@ const CardDetail = () => {
       {user ? (
         <PersonalizedCardContent
           card={card}
-          user={user as unknown as User}
+          user={user}
           getBlockTypeIcon={getBlockTypeIcon}
           getBlockTypeName={getBlockTypeName}
         />

@@ -108,9 +108,24 @@ export const userBlocks = pgTable('user_blocks', {
     .defaultNow(),
 });
 
+export const userCardAdvice = pgTable('user_card_advice', {
+  id: serial('id').primaryKey(),
+  user_id: text('user_id').notNull(),
+  card_id: integer('card_id').notNull(),
+  block_type_id: text('block_type_id').notNull(),
+  advice: text('advice').notNull(),
+  generated_at: timestamp('generated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  last_updated: timestamp('last_updated', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
 export type Insight = typeof insights.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type UserProfile = typeof user_profiles.$inferSelect;
 export type UserBlock = typeof userBlocks.$inferSelect;
+export type UserCardAdvice = typeof userCardAdvice.$inferSelect;
