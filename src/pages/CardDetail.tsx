@@ -12,6 +12,7 @@ import {
   Briefcase,
   Users,
   Sparkles,
+  X,
 } from 'lucide-react';
 import robEmoji from '../assets/rob-emoji.png';
 import { type Card } from '@/src/interfaces';
@@ -130,6 +131,16 @@ const PersonalizedCardContent = ({
   getBlockTypeName: (blockId: string) => string;
 }) => {
   const [blockAdvice, setBlockAdvice] = useState<Record<string, string>>({});
+  // Banner visibility state (persisted in localStorage)
+  const [showBanner, setShowBanner] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true; // SSR safeguard
+    return localStorage.getItem('adaptiveCardBannerDismissed') !== 'true';
+  });
+
+  const dismissBanner = () => {
+    localStorage.setItem('adaptiveCardBannerDismissed', 'true');
+    setShowBanner(false);
+  };
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -167,20 +178,33 @@ const PersonalizedCardContent = ({
 
   return (
     <>
-      {/* User-specific insights banner */}
-      <div className="bg-gradient-to-r from-breakthrough-500/10 to-accent/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6">
-        <div className="flex items-center gap-3 mb-4">
-          <Sparkles className="w-6 h-6 text-breakthrough-300" />
-          <h2 className="text-2xl font-semibold text-breakthrough-300">
-            Your Adaptive Card Experience
-          </h2>
+      {/* User-specific insights banner (dismissable) */}
+      {showBanner && (
+        <div
+          id="user-specific-insights-banner"
+          className="relative bg-gradient-to-r from-breakthrough-500/10 to-accent/10 border border-breakthrough-500/30 rounded-xl p-6 mb-6"
+        >
+          {/* Dismiss button */}
+          <button
+            onClick={dismissBanner}
+            aria-label="Dismiss banner"
+            className="absolute top-3 right-3 text-breakthrough-300 hover:text-breakthrough-200"
+          >
+            <X className="w-5 h-5" />
+          </button>
+          <div className="flex items-center gap-3 mb-4">
+            <Sparkles className="w-6 h-6 text-breakthrough-300" />
+            <h2 className="text-2xl font-semibold text-breakthrough-300">
+              Your Adaptive Card Experience
+            </h2>
+          </div>
+          <p className="text-primary text-lg leading-relaxed">
+            Rob remembers you now, which means he can stop being polite and
+            start being useful. This card is customized for your specific flavor
+            of chaos.
+          </p>
         </div>
-        <p className="text-primary text-lg leading-relaxed">
-          Rob remembers you now, which means he can stop being polite and start
-          being useful. This card is customized for your specific flavor of
-          chaos.
-        </p>
-      </div>
+      )}
 
       {/* Personalized Block Applications */}
       <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
