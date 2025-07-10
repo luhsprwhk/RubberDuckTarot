@@ -12,7 +12,7 @@ import robEmoji from '../assets/rob-emoji.png';
 import { ArrowRight } from 'lucide-react';
 
 const insightPanelClass =
-  'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg';
+  'bg-liminal-surface shadow-breakthrough border border-default rounded-lg';
 const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
@@ -68,7 +68,7 @@ const Insights: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-liminal-overlay min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 min-h-screen">
       <div className="text-center mb-8">
         <div className="mb-4">
           <img src={robEmoji} alt="Rob" className="w-16 h-16 mx-auto" />
@@ -159,10 +159,10 @@ const Insights: React.FC = () => {
 
       <div className="text-center mt-8">
         <Link
-          to="/"
+          to="/new-insight"
           className="px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors"
         >
-          Get Another Insight
+          Get another insight
         </Link>
       </div>
     </div>
@@ -221,7 +221,7 @@ const InsightCardPreview: React.FC<InsightCardPreviewProps> = ({
   return (
     <div
       className={cn(
-        'relative flex-1 bg-void-gradient border border-default shadow-breakthrough border-liminal-border rounded-lg p-3 text-center cursor-pointer',
+        'relative flex-1 bg-void-gradient border border-default border-liminal-border rounded-lg p-3 text-center cursor-pointer',
         'hover:scale-[1.03] hover:shadow-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70',
         'active:scale-[0.98]'
       )}
