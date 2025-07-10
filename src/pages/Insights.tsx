@@ -87,7 +87,7 @@ const Insights: React.FC = () => {
           return (
             <div
               key={insight.id}
-              className="p-6 bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="p-6 bg-liminal-overlay border-l-4 border border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">

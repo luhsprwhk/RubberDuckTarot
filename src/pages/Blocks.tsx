@@ -83,7 +83,7 @@ const Blocks: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 rounded-lg min-h-screen mt-6">
       <div className="text-center mb-8">
         <div className="mb-4">
           <Target className="w-16 h-16 mx-auto text-breakthrough-400" />
@@ -99,12 +99,12 @@ const Blocks: React.FC = () => {
       {/* Blocks list ad */}
       <BlocksAd className="mb-6" />
 
-      <div className="space-y-6">
+      <div className="space-y-6 bg-liminal-surface shadow-breakthrough rounded-lg mt-6 mb-6 p-6 border-liminal-border border">
         {blocks.map((block, index) => (
           <React.Fragment key={block.id}>
             <Link
               to={`/blocks/${block.id}`}
-              className="block bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="block bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <div className="flex justify-between items-start mb-4">
