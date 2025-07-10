@@ -18,6 +18,7 @@ const NewInsightPage = () => {
   const locationState = location.state as {
     userBlockId?: number;
     blockName?: string;
+    cardId?: number;
   } | null;
 
   // Pre-populate form if coming from a specific block
@@ -37,6 +38,7 @@ const NewInsightPage = () => {
         selectedBlockTypeId: selectedBlockType || null,
         spreadType: selectedSpread,
         userContext: userContext,
+        selectedCardId: locationState?.cardId || null,
         existingUserBlockId: locationState?.userBlockId || null, // Pass existing block ID if available
       },
     });
@@ -49,6 +51,8 @@ const NewInsightPage = () => {
     setSelectedBlockType('');
     setUserContext('');
   };
+
+  console.log(locationState);
 
   return (
     <div className="min-h-screen bg-liminal-surface text-primary shadow-breakthrough border border-liminal-border max-w-2xl mx-auto">
@@ -64,6 +68,7 @@ const NewInsightPage = () => {
         userContext={userContext}
         hasUserBlock={Boolean(locationState?.userBlockId)}
         userBlockName={locationState?.blockName}
+        selectedCardId={locationState?.cardId}
       />
     </div>
   );

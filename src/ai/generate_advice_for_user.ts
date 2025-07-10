@@ -16,6 +16,10 @@ const generateAdviceForUser = async (
     const userProfile = await getUserProfile(user.id);
     const userBlocks = await getUserBlocks(user.id);
     const recentInsights = await getInsightsByBlockType(user.id, blockTypeId);
+    // Only include insights where this specific card appeared in the spread
+    const recentInsightsForCard = recentInsights.filter((insight) =>
+      insight.cards_drawn?.some((c) => c.id === card.id)
+    );
     const reflections = await getReflectionsByUserAndCard(user.id, card.id);
 
     const relevantBlocks = userBlocks.filter(
@@ -40,23 +44,25 @@ User Profile:
 Current ${blockTypeId} blocks:
 ${relevantBlocks.map((block) => `- ${block.name}: ${block.notes || 'No notes'}`).join('\n') || 'No current blocks'}
 
-Recent ${blockTypeId} insights history:
+Recent ${blockTypeId} insights history (for this card):
 ${
-  recentInsights
-    .map((insight) => {
-      const resonanceStatus = insight.resonated
-        ? '✅ Resonated'
-        : insight.resonated === false
-          ? "❌ Didn't resonate"
-          : '⏳ Pending';
-      const actionStatus = insight.took_action
-        ? '✅ Took action'
-        : insight.took_action === false
-          ? '❌ No action'
-          : '⏳ Pending';
-      return `- Context: "${insight.user_context || 'No context'}" | ${resonanceStatus} | ${actionStatus}`;
-    })
-    .join('\n') || 'No recent insights'
+  recentInsightsForCard.length > 0
+    ? recentInsightsForCard
+        .map((insight) => {
+          const resonanceStatus = insight.resonated
+            ? '✅ Resonated'
+            : insight.resonated === false
+              ? "❌ Didn't resonate"
+              : '⏳ Pending';
+          const actionStatus = insight.took_action
+            ? '✅ Took action'
+            : insight.took_action === false
+              ? '❌ No action'
+              : '⏳ Pending';
+          return `- Context: "${insight.user_context || 'No context'}" | ${resonanceStatus} | ${actionStatus}`;
+        })
+        .join('\n')
+    : 'No recent insights for this card'
 }
 
 Card Information:

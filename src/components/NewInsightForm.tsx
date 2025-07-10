@@ -2,6 +2,7 @@ import React from 'react';
 import { cn } from '@/src/lib/utils';
 import { type BlockType } from '@/src/interfaces';
 import robDivinationPic from '@/src/assets/rob-divination-pic.png';
+import useCards from '@/src/lib/cards/useCards';
 
 interface NewReadingProps {
   blockTypes: BlockType[];
@@ -15,9 +16,10 @@ interface NewReadingProps {
   hasUserBlock?: boolean;
   userBlockName?: string;
   userContextPlaceholder?: string;
+  selectedCardId?: number;
 }
 
-const NewReading: React.FC<NewReadingProps> = ({
+const NewInsightForm: React.FC<NewReadingProps> = ({
   blockTypes,
   selectedBlockType,
   userContext,
@@ -29,9 +31,12 @@ const NewReading: React.FC<NewReadingProps> = ({
   userContextPlaceholder,
   hasUserBlock = false,
   userBlockName = '',
+  selectedCardId,
 }) => {
   const [blockTypeLocked, setBlockTypeLocked] = React.useState(false);
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
+  const { cards } = useCards();
+  const selectedCard = cards.find((c) => c.id === selectedCardId);
 
   const handleBlockSelect = (id: string) => {
     onBlockSelect(id);
@@ -57,6 +62,9 @@ const NewReading: React.FC<NewReadingProps> = ({
         <p className="text-accent text-sm">
           {hasUserBlock ? `Block: ${userBlockName}` : "What's blocking you?"}
         </p>
+        {selectedCard && (
+          <p className="text-accent text-sm">Card: {selectedCard?.name}</p>
+        )}
       </div>
 
       {/* Block Type Selection */}
@@ -198,7 +206,7 @@ const DrawButton: React.FC<{ onNewReading: () => void }> = ({
   );
 };
 
-export default NewReading;
+export default NewInsightForm;
 
 const SpreadSelector: React.FC<{
   selectedSpread: string | null;

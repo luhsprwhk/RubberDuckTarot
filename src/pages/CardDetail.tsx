@@ -24,6 +24,7 @@ import { type ReactElement } from 'react';
 import getAdviceForUser from '../lib/user/get-advice-for-user';
 import { getUserBlocks } from '../lib/blocks/block-queries';
 import generateRobsTake from '../ai/generate_robs_take';
+import { getInsightsByUser } from '../lib/insights/insight-queries';
 import {
   saveReflection,
   getReflectionByUserCardPrompt,
@@ -336,6 +337,7 @@ const PersonalizedCardContent = ({
   getBlockTypeName: (blockId: string) => string;
 }) => {
   const [blockAdvice, setBlockAdvice] = useState<Record<string, string>>({});
+  const [hasInsightsForCard, setHasInsightsForCard] = useState<boolean>(true);
   const [robsTake, setRobsTake] = useState<string>('');
   // Banner visibility state (persisted in localStorage)
   const [showBanner, setShowBanner] = useState<boolean>(() => {
@@ -353,6 +355,19 @@ const PersonalizedCardContent = ({
     const fetchAdvice = async () => {
       setLoading(true);
       try {
+        // First check if the user has any insights involving this card
+        const userInsights = await getInsightsByUser(user.id);
+        const cardHasInsights = userInsights.some((insight) =>
+          insight.cards_drawn?.some((c) => c.id === card.id)
+        );
+
+        if (!cardHasInsights) {
+          setHasInsightsForCard(false);
+          return;
+        }
+
+        setHasInsightsForCard(true);
+
         const blockTypes = Object.keys(card.block_applications);
         const userBlocks = await getUserBlocks(user.id);
         const relevantBlocks = userBlocks.filter((block) =>
@@ -395,6 +410,17 @@ const PersonalizedCardContent = ({
 
   if (loading) {
     return <Loading text="Loading personalized guidance..." />;
+  }
+
+  if (!hasInsightsForCard) {
+    return (
+      <div className="bg-surface rounded-xl border border-liminal-border p-6 text-center">
+        <p className="text-secondary">
+          No insights from this card yet. Draw it in a reading to unlock
+          personalized guidance.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -586,10 +612,11 @@ const CardDetail = () => {
       )}
 
       {/* Action Buttons */}
-      <div className="text-center space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+      <div className="text-center space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center mt-6">
         {user && (
           <Link
-            to="/new-insight"
+            to={`/new-insight?cardId=${card.id}`}
+            state={{ cardId: card.id }}
             className="block sm:inline-block bg-breakthrough-400 text-void-900 px-6 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-colors"
           >
             Get an Insight with This Card
