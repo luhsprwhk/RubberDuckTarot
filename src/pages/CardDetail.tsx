@@ -143,6 +143,7 @@ const ReflectionQuestions = ({
   return (
     <div className="bg-surface rounded-xl border border-liminal-border p-6 mb-6">
       <button
+        type="button"
         onClick={toggle}
         className="flex items-center justify-between w-full text-left focus:outline-none"
       >
