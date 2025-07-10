@@ -22,6 +22,7 @@ import { type Card } from '@/src/interfaces';
 import { type User } from '@/src/interfaces';
 import { type ReactElement } from 'react';
 import getAdviceForUser from '../lib/user/get-advice-for-user';
+import { getUserBlocks } from '../lib/blocks/block-queries';
 
 const PublicCardContent = ({
   card,
@@ -281,9 +282,17 @@ const PersonalizedCardContent = ({
       setLoading(true);
       try {
         const blockTypes = Object.keys(card.block_applications);
-        const advicePromises = blockTypes.map(async (blockType) => {
-          const advice = await getAdviceForUser(card, blockType, user);
-          return { blockType, advice };
+        const userBlocks = await getUserBlocks(user.id);
+        const relevantBlocks = userBlocks.filter((block) =>
+          blockTypes.includes(block.block_type_id)
+        );
+        const advicePromises = relevantBlocks.map(async (block) => {
+          const advice = await getAdviceForUser(
+            card,
+            block.block_type_id,
+            user
+          );
+          return { blockType: block.block_type_id, advice };
         });
 
         const results = await Promise.all(advicePromises);
@@ -348,8 +357,9 @@ const PersonalizedCardContent = ({
           </h2>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
-          {Object.entries(card.block_applications).map(
-            ([blockId, fallbackAdvice]) => (
+          {Object.entries(card.block_applications)
+            .filter(([blockId]) => blockId in blockAdvice)
+            .map(([blockId, fallbackAdvice]) => (
               <div
                 key={blockId}
                 className="bg-gradient-to-br from-liminal-surface to-liminal-surface/50 rounded-lg p-4 border border-breakthrough-500/20"
@@ -364,8 +374,7 @@ const PersonalizedCardContent = ({
                   {blockAdvice[blockId] || fallbackAdvice}
                 </p>
               </div>
-            )
-          )}
+            ))}
         </div>
       </div>
 

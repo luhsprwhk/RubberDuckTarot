@@ -22,7 +22,7 @@ const generateAdviceForUser = async (
 
     const prompt = `Your task is to generate personalized advice for a specific
     user based on their profile and current blocks, adapting the generic card
-    advice to their specific situation.
+    advice to their specific situation. Keep it short. Around 140 characters. Like a tweet. Make it feel like a fortune cookie.
 
 User Profile:
 - Name: ${userProfile?.name || 'Unknown'}
@@ -74,7 +74,7 @@ The advice should feel like Rob knows this person and their specific challenges,
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
-      max_tokens: 250,
+      max_tokens: 100,
       system: systemPrompt,
       messages: [
         {
