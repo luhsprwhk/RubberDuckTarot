@@ -90,9 +90,10 @@ Generate personalized advice for this user's ${blockTypeId} area that:
 6. Focuses on actionable insights, not fortune telling
 7. Considers their insight history - what resonated, what didn't, what actions they took
 8. Avoids repeating patterns from insights that didn't resonate or lead to action
-9. IMPORTANT: Incorporates their reflections on this card - what they wrote shows their current thinking and perspective
+9. Incorporates their reflections on this card - what they wrote shows their current thinking and perspective
 10. Don't introduce yourself or your background. The user already knows who you are.
 11. Don't say the user's name. The user already knows who they are.
+12. The user's profile should inform your advice, but not be the focus of it.
 
 Example of ideal advice (format & tone):
 "Stop trying to guarantee success and start experimenting. Your next breakthrough might come from the project you think is 'just for fun'."
