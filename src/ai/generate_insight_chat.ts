@@ -17,6 +17,14 @@ export const CHAT_MESSAGE_LIMITS = {
   MAX_LINES: 10,
 } as const;
 
+// Conversation history limits for memory management
+export const CONVERSATION_LIMITS = {
+  MAX_MESSAGES_IN_MEMORY: 50, // Maximum messages to keep in component state
+  MAX_MESSAGES_FOR_CONTEXT: 6, // Maximum messages to send to AI for context
+  MAX_MESSAGE_AGE_HOURS: 24, // Maximum age of messages before cleanup
+  CLEANUP_INTERVAL_MS: 5 * 60 * 1000, // 5 minutes cleanup interval
+} as const;
+
 // Validation function for chat messages
 export const validateChatMessage = (
   message: string
@@ -43,6 +51,30 @@ export const validateChatMessage = (
   }
 
   return { isValid: true };
+};
+
+// Utility functions for conversation cleanup
+export const cleanupOldMessages = (messages: Message[]): Message[] => {
+  const now = new Date();
+  const cutoffTime = new Date(
+    now.getTime() - CONVERSATION_LIMITS.MAX_MESSAGE_AGE_HOURS * 60 * 60 * 1000
+  );
+
+  return messages.filter((message) => message.timestamp > cutoffTime);
+};
+
+export const trimMessageHistory = (messages: Message[]): Message[] => {
+  if (messages.length <= CONVERSATION_LIMITS.MAX_MESSAGES_IN_MEMORY) {
+    return messages;
+  }
+
+  // Keep the most recent messages up to the limit
+  return messages.slice(-CONVERSATION_LIMITS.MAX_MESSAGES_IN_MEMORY);
+};
+
+export const getContextMessages = (messages: Message[]): Message[] => {
+  // Get the last few messages for AI context, excluding the current user message
+  return messages.slice(-CONVERSATION_LIMITS.MAX_MESSAGES_FOR_CONTEXT);
 };
 
 interface Message {
@@ -131,9 +163,9 @@ const buildChatPrompt = (request: ChatRequest): string => {
     userProfile,
   } = request;
 
-  // Format conversation history
-  const chatHistory = conversationHistory
-    .slice(-6) // Keep last 6 messages for context
+  // Format conversation history using cleanup utility
+  const contextMessages = getContextMessages(conversationHistory);
+  const chatHistory = contextMessages
     .map((msg) => `${msg.role === 'user' ? 'Human' : 'Rob'}: ${msg.content}`)
     .join('\n');
 
