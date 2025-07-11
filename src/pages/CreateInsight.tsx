@@ -29,6 +29,7 @@ interface ReadingState {
   spreadType: 'quick-draw' | 'full-pond';
   userContext?: string;
   existingUserBlockId?: number; // If adding insight to existing block
+  selectedCardId?: number; // If adding specific card to insight
 }
 
 const CreateInsight: React.FC = () => {
@@ -43,6 +44,7 @@ const CreateInsight: React.FC = () => {
     selectedBlockTypeId,
     userContext = '',
     existingUserBlockId,
+    selectedCardId,
   } = state || {};
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -153,6 +155,18 @@ const CreateInsight: React.FC = () => {
           setSelectedBlock(blockType);
         }
 
+        // If a specific card was selected (e.g., from CardDetail), skip random drawing
+        if (selectedCardId) {
+          const chosen = cards.find((c) => c.id === selectedCardId);
+          if (chosen) {
+            if (isMounted) {
+              setDrawnCards([{ ...chosen, reversed: false }]);
+            }
+            // No need to randomly draw — proceed to reading generation
+            return;
+          }
+        }
+
         const numCardsToDraw = spreadType === 'quick-draw' ? 1 : 3;
         const availableCards = [...cards];
         const drawnCardsList = [];
@@ -193,6 +207,7 @@ const CreateInsight: React.FC = () => {
     cardsError,
     blockTypes,
     existingUserBlockId,
+    selectedCardId,
   ]);
 
   useEffect(() => {

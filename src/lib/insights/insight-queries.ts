@@ -119,3 +119,51 @@ export const getInsightsByUserBlockId = async (
     return data;
   }
 };
+
+export const getInsightsByBlockType = async (
+  userId: string,
+  blockTypeId: string
+): Promise<Insight[]> => {
+  const { data, error } = await supabase
+    .from('insights')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('block_type_id', blockTypeId)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error) throw error;
+
+  // Decrypt sensitive fields for all insights
+  try {
+    return await Promise.all(
+      data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt insights by block type:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
+};
+
+export const getInsightsByUser = async (userId: string): Promise<Insight[]> => {
+  const { data, error } = await supabase
+    .from('insights')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(10);
+
+  if (error) throw error;
+
+  // Decrypt sensitive fields for all insights
+  try {
+    return await Promise.all(
+      data.map((insight) => decryptObject(insight, ['user_context', 'reading']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt insights by user:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
+};

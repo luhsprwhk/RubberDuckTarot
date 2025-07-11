@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
 import { FaSpinner } from 'react-icons/fa';
 
@@ -18,7 +18,7 @@ import { createCardSlug } from '@/src/lib/cards/card-helpers';
 import { NotionService } from '@/src/lib/notion/notion-service';
 import { NotionOperations } from '@/src/lib/notion/notion-operations';
 import useAuth from '@/src/lib/hooks/useAuth';
-import useAlerts from '@/src/lib/hooks/useAlert';
+import useAlert from '@/src/lib/hooks/useAlert';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -34,7 +34,7 @@ interface InsightDisplayProps {
   isPremium: boolean;
 }
 
-const InsightDisplay: React.FC<InsightDisplayProps> = ({
+function InsightDisplay({
   selectedBlock,
   personalizedReading,
   loadingReading,
@@ -45,7 +45,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
   initialTookAction,
   userBlock,
   isPremium,
-}) => {
+}: InsightDisplayProps) {
   const navigate = useNavigate();
   const handleSentimentChange = async (
     insightId: number,
@@ -243,7 +243,7 @@ const InsightDisplay: React.FC<InsightDisplayProps> = ({
       <p className={cn('text-secondary')}>No insight data available.</p>
     </div>
   );
-};
+}
 
 type NextStepsProps = {
   actionSteps: string[];
@@ -253,14 +253,14 @@ type NextStepsProps = {
   drawnCards: Card[] | null;
 };
 
-const NextSteps: React.FC<NextStepsProps> = ({
+function NextSteps({
   actionSteps,
   isPremium,
   // personalizedReading,
   selectedBlock,
-}) => {
+}: NextStepsProps) {
   const { user } = useAuth();
-  const { showSuccess, showError } = useAlerts();
+  const { showSuccess, showError } = useAlert();
   const [isExporting, setIsExporting] = useState(false);
 
   const handleExportToNotion = async (stepIndex: number, step: string) => {
@@ -316,23 +316,23 @@ const NextSteps: React.FC<NextStepsProps> = ({
             </div>
             <button
               className={cn(
-                'px-2 py-1 text-xs rounded-md font-medium shadow-sm transition-colors shrink-0',
+                'px-2 py-1 cursor-pointer text-xs rounded-md font-medium shadow-sm transition-colors shrink-0',
                 isPremium
-                  ? 'bg-accent text-primary hover:bg-accent/90'
+                  ? 'bg-accent text-void-900 hover:bg-accent/90'
                   : 'bg-muted text-secondary cursor-not-allowed opacity-60'
               )}
               disabled={!isPremium || isExporting}
               title={
                 isPremium
-                  ? 'Export this step to Notion'
-                  : 'Upgrade to Premium to export to Notion'
+                  ? 'Send this step to Notion'
+                  : 'Upgrade to Premium to send to Notion'
               }
               onClick={() => handleExportToNotion(index, step)}
             >
               {isExporting ? (
                 <FaSpinner className="animate-spin" />
               ) : (
-                'Save to Notion'
+                'Send to Notion'
               )}
             </button>
           </li>
@@ -345,6 +345,6 @@ const NextSteps: React.FC<NextStepsProps> = ({
       )}
     </div>
   );
-};
+}
 
 export default InsightDisplay;

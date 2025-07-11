@@ -6,16 +6,45 @@
  */
 
 import { anthropic } from './index';
+import { sanitizeUserContext } from '../lib/ai-prompt-sanitization';
+import {
+  rateLimiter,
+  RateLimitError,
+  createRateLimitMessage,
+} from '../lib/rate-limiter';
 
 export const generateUserBlockName = async (
   blockTypeName?: string,
-  userContext?: string
+  userContext?: string,
+  userId?: string
 ): Promise<string> => {
   try {
+    // Check rate limit before processing
+    const rateLimitResult = await rateLimiter.checkLimit(
+      userId || 'anonymous',
+      'generateUserBlockName',
+      50 // estimated tokens
+    );
+
+    if (!rateLimitResult.allowed) {
+      const message = createRateLimitMessage(
+        'generateUserBlockName',
+        rateLimitResult
+      );
+      throw new RateLimitError(
+        message,
+        rateLimitResult.retryAfter || 0,
+        rateLimitResult.resetTime,
+        rateLimitResult.remainingRequests
+      );
+    }
+    // Sanitize user-provided context
+    const sanitizedContext = sanitizeUserContext(userContext);
+
     const prompt = `You are helping create a personalized name for a user's block tracker entry.
 
 Block Type: ${blockTypeName || 'Personal Challenge'}
-User Context: ${userContext || 'Working on personal growth'}
+User Context: ${sanitizedContext || 'Working on personal growth'}
 
 Generate a concise, personalized title (2-6 words) that captures the essence of this specific block. Make it actionable and personal. Examples:
 - "Breaking Through Creative Paralysis"

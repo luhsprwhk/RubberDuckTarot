@@ -1,7 +1,11 @@
 import React from 'react';
 import { cn } from '@/src/lib/utils';
 import { type BlockType } from '@/src/interfaces';
+import type { UserBlock } from '@/supabase/schema';
 import robDivinationPic from '@/src/assets/rob-divination-pic.png';
+import useCards from '@/src/lib/cards/useCards';
+import BlockAutocomplete from './BlockAutocomplete';
+import TextArea from './TextArea';
 
 interface NewReadingProps {
   blockTypes: BlockType[];
@@ -15,9 +19,12 @@ interface NewReadingProps {
   hasUserBlock?: boolean;
   userBlockName?: string;
   userContextPlaceholder?: string;
+  selectedCardId?: number;
+  selectedUserBlock?: UserBlock | null;
+  onUserBlockSelect?: (block: UserBlock | null) => void;
 }
 
-const NewReading: React.FC<NewReadingProps> = ({
+const NewInsightForm: React.FC<NewReadingProps> = ({
   blockTypes,
   selectedBlockType,
   userContext,
@@ -29,9 +36,16 @@ const NewReading: React.FC<NewReadingProps> = ({
   userContextPlaceholder,
   hasUserBlock = false,
   userBlockName = '',
+  selectedCardId,
+  selectedUserBlock,
+  onUserBlockSelect,
 }) => {
   const [blockTypeLocked, setBlockTypeLocked] = React.useState(false);
   const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
+  const { cards } = useCards();
+  const selectedCard = cards.find((c) => c.id === selectedCardId);
+  const [connectToExistingBlock, setConnectToExistingBlock] =
+    React.useState(false);
 
   const handleBlockSelect = (id: string) => {
     onBlockSelect(id);
@@ -42,6 +56,10 @@ const NewReading: React.FC<NewReadingProps> = ({
     onBlockSelect('');
     setBlockTypeLocked(false);
   };
+
+  const connectingBlockPlaceholder = connectToExistingBlock
+    ? `Add more details or updates about this block. What’s changed, or what else is important?`
+    : null;
 
   return (
     <div className="p-6">
@@ -57,89 +75,59 @@ const NewReading: React.FC<NewReadingProps> = ({
         <p className="text-accent text-sm">
           {hasUserBlock ? `Block: ${userBlockName}` : "What's blocking you?"}
         </p>
+        {selectedCard && (
+          <p className="text-accent text-sm">Card: {selectedCard?.name}</p>
+        )}
       </div>
 
       {/* Block Type Selection */}
-      {!hasUserBlock && (
+      {!hasUserBlock && !connectToExistingBlock && (
+        <BlockTypeSelector
+          blockTypes={blockTypes}
+          selectedBlockType={selectedBlockType}
+          blockTypeLocked={blockTypeLocked}
+          onBlockSelect={handleBlockSelect}
+          onUnlock={handleUnlockBlockType}
+        />
+      )}
+
+      {/* User Block Selection (Optional) */}
+      {!hasUserBlock && onUserBlockSelect && (
         <div className="mb-6">
-          {blockTypeLocked && selectedBlock ? (
+          <h2
+            onClick={() => setConnectToExistingBlock(!connectToExistingBlock)}
+            className="text-lg font-semibold mb-3 text-primary underline cursor-pointer"
+          >
+            {connectToExistingBlock
+              ? 'Start a new block'
+              : 'Or connect to an existing block'}
+          </h2>
+          <p
+            className={cn(
+              'text-sm text-secondary mb-3',
+              connectToExistingBlock ? 'text-primary' : 'text-secondary'
+            )}
+          >
+            {connectToExistingBlock
+              ? 'Link this insight to one of your existing blocks to track progress over time.'
+              : 'Link this insight to one of your existing blocks to track progress over time.'}
+          </p>
+          {connectToExistingBlock && (
             <>
-              <div className="grid grid-cols-1 mb-4">
-                <button
-                  key={selectedBlock.id}
-                  className={cn(
-                    'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-liminal-overlay'
-                  )}
-                  disabled
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{selectedBlock.emoji}</span>
-                    <div>
-                      <div className="font-medium text-primary">
-                        {selectedBlock.name}
-                      </div>
-                      <div className="text-sm text-secondary">
-                        {selectedBlock.description}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              </div>
-              <button
-                type="button"
-                className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
-                onClick={handleUnlockBlockType}
-              >
-                Pick a different block type
-              </button>
+              <BlockAutocomplete
+                selectedBlock={selectedUserBlock || null}
+                onBlockSelect={(block) => {
+                  onUserBlockSelect(block);
+                }}
+                placeholder="Search your blocks..."
+              />
             </>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {blockTypes.map((blockType) => (
-                <button
-                  key={blockType.id}
-                  onClick={() => handleBlockSelect(blockType.id)}
-                  className={cn(
-                    'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
-                    selectedBlockType === blockType.id
-                      ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
-                      : 'border-default hover:border-default'
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{blockType.emoji}</span>
-                    <div>
-                      <div
-                        className={cn(
-                          'font-medium',
-                          selectedBlockType === blockType.id
-                            ? 'text-void-800'
-                            : 'text-secondary'
-                        )}
-                      >
-                        {blockType.name}
-                      </div>
-                      <div
-                        className={cn(
-                          'text-sm',
-                          selectedBlockType === blockType.id
-                            ? 'text-void-800'
-                            : 'text-secondary'
-                        )}
-                      >
-                        {blockType.description}
-                      </div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-            </div>
           )}
         </div>
       )}
 
       {/* Select Spread */}
-      {hasUserBlock || selectedBlockType ? (
+      {hasUserBlock || selectedBlockType || selectedUserBlock ? (
         <SpreadSelector
           selectedSpread={selectedSpread}
           onSpreadSelect={onSpreadSelect}
@@ -152,17 +140,15 @@ const NewReading: React.FC<NewReadingProps> = ({
           <h2 className="text-xl font-semibold mb-4 text-primary">
             Tell the duck more:
           </h2>
-          <textarea
+          <TextArea
             value={userContext}
             onChange={(e) => onUserContextChange(e.target.value)}
             placeholder={
               userContextPlaceholder ||
+              connectingBlockPlaceholder ||
               `Describe your ${selectedBlock?.name.toLowerCase()} or ask a question`
             }
-            className={cn(
-              'w-full text-secondary p-4 border border-default rounded-lg resize-none focus:ring-2 focus:ring-breakthrough-400 focus:border-transparent',
-              'bg-liminal-overlay'
-            )}
+            className="bg-liminal-overlay"
             rows={4}
           />
         </div>
@@ -171,7 +157,7 @@ const NewReading: React.FC<NewReadingProps> = ({
       {/* Draw Button */}
       {(() => {
         const safeUserContext = userContext ?? '';
-        return hasUserBlock
+        return hasUserBlock || selectedUserBlock
           ? safeUserContext.trim() !== '' && (
               <DrawButton onNewReading={onNewReading} />
             )
@@ -198,7 +184,101 @@ const DrawButton: React.FC<{ onNewReading: () => void }> = ({
   );
 };
 
-export default NewReading;
+const BlockTypeSelector: React.FC<{
+  blockTypes: BlockType[];
+  selectedBlockType: string;
+  blockTypeLocked: boolean;
+  onBlockSelect: (id: string) => void;
+  onUnlock: () => void;
+}> = ({
+  blockTypes,
+  selectedBlockType,
+  blockTypeLocked,
+  onBlockSelect,
+  onUnlock,
+}) => {
+  const selectedBlock = blockTypes.find((bt) => bt.id === selectedBlockType);
+
+  return (
+    <div className="mb-6">
+      {blockTypeLocked && selectedBlock ? (
+        <>
+          <div className="grid grid-cols-1 mb-4">
+            <button
+              key={selectedBlock.id}
+              className={cn(
+                'p-4 rounded-lg border-2 text-left transition-all shadow-md border-breakthrough-400 bg-liminal-overlay'
+              )}
+              disabled
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{selectedBlock.emoji}</span>
+                <div>
+                  <div className="font-medium text-primary">
+                    {selectedBlock.name}
+                  </div>
+                  <div className="text-sm text-secondary">
+                    {selectedBlock.description}
+                  </div>
+                </div>
+              </div>
+            </button>
+          </div>
+          <button
+            type="button"
+            className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
+            onClick={onUnlock}
+          >
+            Pick a different block type
+          </button>
+        </>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          {blockTypes.map((blockType) => (
+            <button
+              key={blockType.id}
+              onClick={() => onBlockSelect(blockType.id)}
+              className={cn(
+                'p-4 rounded-lg border-2 text-left transition-all hover:shadow-md bg-liminal-overlay',
+                selectedBlockType === blockType.id
+                  ? 'border-breakthrough-400 bg-breakthrough-400 shadow-md'
+                  : 'border-default hover:border-default'
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">{blockType.emoji}</span>
+                <div>
+                  <div
+                    className={cn(
+                      'font-medium',
+                      selectedBlockType === blockType.id
+                        ? 'text-void-800'
+                        : 'text-secondary'
+                    )}
+                  >
+                    {blockType.name}
+                  </div>
+                  <div
+                    className={cn(
+                      'text-sm',
+                      selectedBlockType === blockType.id
+                        ? 'text-void-800'
+                        : 'text-secondary'
+                    )}
+                  >
+                    {blockType.description}
+                  </div>
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default NewInsightForm;
 
 const SpreadSelector: React.FC<{
   selectedSpread: string | null;

@@ -41,6 +41,7 @@ export const workContexts = [
   'Freelance/Consulting',
   'Between jobs',
   'Student',
+  'Other',
 ];
 
 export const debuggingModes = [

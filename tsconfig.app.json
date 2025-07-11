@@ -14,10 +14,12 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": false,
     "moduleDetection": "force",
+    "resolvePackageJsonExports": false,
     "noEmit": true,
     "jsx": "react-jsx",
 
@@ -29,5 +31,5 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["src", "db", "lib"]
+  "include": ["src", "db", "lib", "test"]
 }

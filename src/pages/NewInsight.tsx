@@ -2,6 +2,7 @@ import NewInsightForm from '../components/NewInsightForm';
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
+import type { UserBlock } from '@/supabase/schema';
 
 const NewInsightPage = () => {
   const { blockTypes } = useBlockTypes();
@@ -13,11 +14,15 @@ const NewInsightPage = () => {
   const [selectedSpread, setSelectedSpread] = useState<string | null>(null);
   const [userContextPlaceholder, setUserContextPlaceholder] =
     useState<string>('');
+  const [selectedUserBlock, setSelectedUserBlock] = useState<UserBlock | null>(
+    null
+  );
 
   // Get block data from navigation state if coming from BlockDetails
   const locationState = location.state as {
     userBlockId?: number;
     blockName?: string;
+    cardId?: number;
   } | null;
 
   // Pre-populate form if coming from a specific block
@@ -37,7 +42,9 @@ const NewInsightPage = () => {
         selectedBlockTypeId: selectedBlockType || null,
         spreadType: selectedSpread,
         userContext: userContext,
-        existingUserBlockId: locationState?.userBlockId || null, // Pass existing block ID if available
+        selectedCardId: locationState?.cardId || null,
+        existingUserBlockId:
+          locationState?.userBlockId || selectedUserBlock?.id || null, // Pass existing block ID if available
       },
     });
 
@@ -48,6 +55,7 @@ const NewInsightPage = () => {
     setSelectedSpread(null);
     setSelectedBlockType('');
     setUserContext('');
+    setSelectedUserBlock(null);
   };
 
   return (
@@ -64,6 +72,9 @@ const NewInsightPage = () => {
         userContext={userContext}
         hasUserBlock={Boolean(locationState?.userBlockId)}
         userBlockName={locationState?.blockName}
+        selectedCardId={locationState?.cardId}
+        selectedUserBlock={selectedUserBlock}
+        onUserBlockSelect={setSelectedUserBlock}
       />
     </div>
   );

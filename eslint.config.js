@@ -6,11 +6,20 @@ import tseslint from 'typescript-eslint';
 import prettierConfig from 'eslint-config-prettier';
 
 export default tseslint.config(
+  // Override for test files
+  {
+    files: ['**/*.test.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  },
+
   { ignores: ['dist'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
+      parser: tseslint.parser,
       ecmaVersion: 2020,
       globals: globals.browser,
     },

@@ -63,6 +63,16 @@ const OnBoarding = () => {
     spirit_animal: '',
   });
 
+  const [isCustomWorkContext, setIsCustomWorkContext] = useState(false);
+  const [customWorkContext, setCustomWorkContext] = useState('');
+
+  useEffect(() => {
+    if (profile.work_context && !workContexts.includes(profile.work_context)) {
+      setIsCustomWorkContext(true);
+      setCustomWorkContext(profile.work_context);
+    }
+  }, [profile.work_context]);
+
   const [robMessage, setRobMessage] = useState(
     "Welcome to the Rubber Duck Tarot. I'm Rob, a dead developer who got stuck in this rubber duck after avoiding one too many startup pitches. It's a long story. Anyway, now I help the living debug their life problems."
   );
@@ -199,8 +209,18 @@ const OnBoarding = () => {
             </label>
             <select
               className="w-full px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
-              value={profile.work_context}
-              onChange={(e) => updateProfile('work_context', e.target.value)}
+              value={isCustomWorkContext ? 'Other' : profile.work_context}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === 'Other') {
+                  setIsCustomWorkContext(true);
+                  setCustomWorkContext('');
+                  updateProfile('work_context', '');
+                } else {
+                  setIsCustomWorkContext(false);
+                  updateProfile('work_context', val);
+                }
+              }}
             >
               <option value="">Select your work context...</option>
               {workContexts.map((context) => (
@@ -209,6 +229,18 @@ const OnBoarding = () => {
                 </option>
               ))}
             </select>
+            {isCustomWorkContext && (
+              <input
+                type="text"
+                className="w-full mt-3 px-3 py-2 border text-primary border-liminal-border rounded-md focus:outline-none focus:ring-2 focus:border-breakthrough-400 focus:ring-breakthrough-400"
+                placeholder="Enter your work context"
+                value={customWorkContext}
+                onChange={(e) => {
+                  setCustomWorkContext(e.target.value);
+                  updateProfile('work_context', e.target.value);
+                }}
+              />
+            )}
           </div>
         </div>
       ),
@@ -413,13 +445,40 @@ const OnBoarding = () => {
         user_id: user.id,
         ...profile,
       };
-      // Add a 20 second timeout to the save operation
-      await withTimeout(saveUserProfile(dbProfile), 20000);
+
+      // Retry logic with increased timeout
+      const MAX_RETRIES = 3;
+      let retryCount = 0;
+
+      while (retryCount < MAX_RETRIES) {
+        try {
+          // Increase timeout to 60 seconds
+          await withTimeout(saveUserProfile(dbProfile), 60000);
+          break; // Success, exit retry loop
+        } catch (error) {
+          retryCount++;
+          console.warn(`Profile save attempt ${retryCount} failed:`, error);
+
+          if (retryCount >= MAX_RETRIES) {
+            throw error; // Final failure
+          }
+
+          // Wait 1 second before retry
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+      }
+
+      // Add small delay to ensure save is committed
+      await new Promise((resolve) => setTimeout(resolve, 500));
       navigate('/');
       window.location.reload();
     } catch (error) {
       // Log more context for debugging
-      console.error('Failed to save profile:', { error, user, profile });
+      console.error('Failed to save profile after retries:', {
+        error,
+        user,
+        profile,
+      });
       // Show a user-friendly error message
       if (error instanceof Error && error.message.includes('timed out')) {
         alert(

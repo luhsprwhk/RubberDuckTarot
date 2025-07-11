@@ -2,11 +2,42 @@ import type { ReadingRequest, PersonalizedReading } from './index';
 import { getContextMetaphors } from './profession-metaphors';
 import systemPrompt from './system-prompt.md?raw';
 import { anthropic } from './index';
+import {
+  sanitizeUserProfile,
+  sanitizeUserContext,
+  sanitizeBlockData,
+  sanitizeInsightsArray,
+} from '../lib/ai-prompt-sanitization';
+import {
+  rateLimiter,
+  RateLimitError,
+  createRateLimitMessage,
+} from '../lib/rate-limiter';
 
 export const generateInsight = async (
   request: ReadingRequest
 ): Promise<PersonalizedReading> => {
   try {
+    // Check rate limit before processing
+    const estimatedTokens = request.spreadType === 'quick-draw' ? 750 : 1400;
+    const rateLimitResult = await rateLimiter.checkLimit(
+      String(request.userProfile.id || 'anonymous'),
+      'generateInsight',
+      estimatedTokens
+    );
+
+    if (!rateLimitResult.allowed) {
+      const message = createRateLimitMessage(
+        'generateInsight',
+        rateLimitResult
+      );
+      throw new RateLimitError(
+        message,
+        rateLimitResult.retryAfter || 0,
+        rateLimitResult.resetTime,
+        rateLimitResult.remainingRequests
+      );
+    }
     const prompt = buildReadingPrompt(request);
 
     const message = await anthropic.messages.create({
@@ -45,10 +76,20 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     currentBlock,
   } = request;
 
+  // Sanitize all user-provided data before including in prompt
+  const sanitizedProfile = sanitizeUserProfile(userProfile);
+  const sanitizedContext = sanitizeUserContext(userContext);
+  const sanitizedCurrentBlock = currentBlock
+    ? sanitizeBlockData(currentBlock)
+    : null;
+  const sanitizedPreviousInsights = previousInsights
+    ? sanitizeInsightsArray(previousInsights as unknown[])
+    : null;
+
   // Get context-specific metaphor style
   const metaphorStyle = getContextMetaphors({
-    creative_identity: userProfile.creative_identity,
-    work_context: userProfile.work_context,
+    creative_identity: sanitizedProfile.creative_identity,
+    work_context: sanitizedProfile.work_context,
   });
 
   // Build card context with perspective prompts
@@ -74,26 +115,32 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     .join('\n\n');
 
   const clientProfile = `
-    Name: ${userProfile.name}
-    Creative Identity: ${userProfile.creative_identity}
-    Work Context: ${userProfile.work_context} - ${metaphorStyle.note}
-    Debugging Style: ${userProfile.debugging_mode}
-    Primary Block Pattern: ${userProfile.block_pattern}
-    Superpower: "${userProfile.superpower}"
-    Kryptonite: "${userProfile.kryptonite}"
-    Problem-solving Spirit: ${userProfile.spirit_animal}
-    Zodiac Sign: ${userProfile.zodiac_sign}
+    Name: ${sanitizedProfile.name}
+    Creative Identity: ${sanitizedProfile.creative_identity}
+    Work Context: ${sanitizedProfile.work_context} - ${metaphorStyle.note}
+    Debugging Style: ${sanitizedProfile.debugging_mode}
+    Primary Block Pattern: ${sanitizedProfile.block_pattern}
+    Superpower: "${sanitizedProfile.superpower}"
+    Kryptonite: "${sanitizedProfile.kryptonite}"
+    Problem-solving Spirit: ${sanitizedProfile.spirit_animal}
+    Zodiac Sign: ${sanitizedProfile.zodiac_sign}
   `;
 
   // Format previous insights for context
   const previousInsightsContext =
-    previousInsights && previousInsights.length > 0
-      ? formatPreviousInsights(previousInsights)
+    sanitizedPreviousInsights && sanitizedPreviousInsights.length > 0
+      ? formatPreviousInsights(
+          sanitizedPreviousInsights as NonNullable<
+            ReadingRequest['previousInsights']
+          >
+        )
       : null;
 
   // Format current block context
-  const currentBlockContext = currentBlock
-    ? formatCurrentBlock(currentBlock)
+  const currentBlockContext = sanitizedCurrentBlock
+    ? formatCurrentBlock(
+        sanitizedCurrentBlock as NonNullable<ReadingRequest['currentBlock']>
+      )
     : null;
 
   const basePrompt = `
@@ -102,7 +149,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     <consultation_details>
       Type: ${spreadType.replace('-', ' ')} consultation
       Block Category: ${blockType.name}
-      Client's Situation: "${userContext}"
+      Client's Situation: "${sanitizedContext}"
     </consultation_details>
 
     ${currentBlockContext ? `<current_block>${currentBlockContext}</current_block>` : ''}

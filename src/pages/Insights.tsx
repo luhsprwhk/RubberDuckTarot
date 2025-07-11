@@ -12,7 +12,7 @@ import robEmoji from '../assets/rob-emoji.png';
 import { ArrowRight } from 'lucide-react';
 
 const insightPanelClass =
-  'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg';
+  'bg-liminal-surface shadow-breakthrough border border-default rounded-lg';
 const Insights: React.FC = () => {
   const { user } = useAuth();
   const { cards } = useCards();
@@ -68,7 +68,7 @@ const Insights: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 min-h-screen">
       <div className="text-center mb-8">
         <div className="mb-4">
           <img src={robEmoji} alt="Rob" className="w-16 h-16 mx-auto" />
@@ -87,7 +87,7 @@ const Insights: React.FC = () => {
           return (
             <div
               key={insight.id}
-              className="p-6 bg-void-gradient border-l-4 border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
+              className="p-6 bg-liminal-overlay border-l-4 border border-liminal-border rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
@@ -159,10 +159,10 @@ const Insights: React.FC = () => {
 
       <div className="text-center mt-8">
         <Link
-          to="/"
+          to="/new-insight"
           className="px-6 py-3 bg-breakthrough-400 text-void-900 font-semibold rounded-lg hover:bg-breakthrough-300 transition-colors"
         >
-          Get Another Insight
+          Get another insight
         </Link>
       </div>
     </div>
@@ -191,7 +191,7 @@ const EmptyInsightsState = () => {
             </p>
             <Link
               to="/new-insight"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-void-900 font-semibold rounded-lg hover:from-breakthrough-300 hover:to-breakthrough-400 transition-all transform hover:scale-105 shadow-lg"
             >
               <MessageCircle className="w-5 h-5 mr-2" />
               Get your first insight
@@ -221,7 +221,7 @@ const InsightCardPreview: React.FC<InsightCardPreviewProps> = ({
   return (
     <div
       className={cn(
-        'relative flex-1 bg-void-gradient border border-default shadow-breakthrough border-liminal-border rounded-lg p-3 text-center cursor-pointer',
+        'relative flex-1 bg-void-gradient border border-default border-liminal-border rounded-lg p-3 text-center cursor-pointer',
         'hover:scale-[1.03] hover:shadow-lg transition focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70',
         'active:scale-[0.98]'
       )}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import type { BlockType } from '../interfaces';
@@ -83,7 +84,7 @@ const Blocks: React.FC = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
+    <div className="max-w-4xl mx-auto p-6 rounded-lg min-h-screen mt-6">
       <div className="text-center mb-8">
         <div className="mb-4">
           <Target className="w-16 h-16 mx-auto text-breakthrough-400" />
@@ -99,19 +100,22 @@ const Blocks: React.FC = () => {
       {/* Blocks list ad */}
       <BlocksAd className="mb-6" />
 
-      <div className="space-y-6">
+      <div className="space-y-6 bg-liminal-surface shadow-breakthrough rounded-lg mt-6 mb-6 p-6 border-liminal-border border">
         {blocks.map((block, index) => (
           <React.Fragment key={block.id}>
             <Link
               to={`/blocks/${block.id}`}
-              className="block bg-void-800 border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer"
+              className="block bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer hover:border-breakthrough-400"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
                     <span
-                      className={`text-xs font-medium px-2 py-1 rounded ${getStatusColor(block.status)}`}
+                      className={cn(
+                        'text-xs font-medium px-2 py-1 rounded',
+                        getStatusColor(block.status)
+                      )}
                     >
                       {block.status.charAt(0).toUpperCase() +
                         block.status.slice(1)}
@@ -182,8 +186,8 @@ const EmptyBlocksState = () => {
               goal.
             </p>
             <Link
-              to="/new-reading"
-              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 shadow-lg"
+              to="/new-insight"
+              className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-void-900 font-semibold rounded-lg hover:bg-gradient-to-br hover:from-breakthrough-300 hover:to-breakthrough-400 transition-all transform hover:scale-105 shadow-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Identify Your First Block
