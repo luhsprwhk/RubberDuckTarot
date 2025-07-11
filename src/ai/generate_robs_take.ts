@@ -12,9 +12,33 @@ import {
   sanitizeInsightsArray,
   sanitizeReflectionsArray,
 } from '../lib/ai-prompt-sanitization';
+import {
+  rateLimiter,
+  RateLimitError,
+  createRateLimitMessage,
+} from '../lib/rate-limiter';
 
 const generateRobsTake = async (card: Card, user: User): Promise<string> => {
   try {
+    // Check rate limit before processing
+    const rateLimitResult = await rateLimiter.checkLimit(
+      user.id,
+      'generateRobsTake',
+      400 // estimated tokens
+    );
+
+    if (!rateLimitResult.allowed) {
+      const message = createRateLimitMessage(
+        'generateRobsTake',
+        rateLimitResult
+      );
+      throw new RateLimitError(
+        message,
+        rateLimitResult.retryAfter || 0,
+        rateLimitResult.resetTime,
+        rateLimitResult.remainingRequests
+      );
+    }
     const userProfile = await getUserProfile(user.id);
     const userBlocks = await getUserBlocks(user.id);
     const recentInsights = await getInsightsByUser(user.id);

@@ -7,12 +7,37 @@
 
 import { anthropic } from './index';
 import { sanitizeUserContext } from '../lib/ai-prompt-sanitization';
+import {
+  rateLimiter,
+  RateLimitError,
+  createRateLimitMessage,
+} from '../lib/rate-limiter';
 
 export const generateUserBlockName = async (
   blockTypeName?: string,
-  userContext?: string
+  userContext?: string,
+  userId?: string
 ): Promise<string> => {
   try {
+    // Check rate limit before processing
+    const rateLimitResult = await rateLimiter.checkLimit(
+      userId || 'anonymous',
+      'generateUserBlockName',
+      50 // estimated tokens
+    );
+
+    if (!rateLimitResult.allowed) {
+      const message = createRateLimitMessage(
+        'generateUserBlockName',
+        rateLimitResult
+      );
+      throw new RateLimitError(
+        message,
+        rateLimitResult.retryAfter || 0,
+        rateLimitResult.resetTime,
+        rateLimitResult.remainingRequests
+      );
+    }
     // Sanitize user-provided context
     const sanitizedContext = sanitizeUserContext(userContext);
 

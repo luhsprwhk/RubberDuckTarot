@@ -8,11 +8,36 @@ import {
   sanitizeBlockData,
   sanitizeInsightsArray,
 } from '../lib/ai-prompt-sanitization';
+import {
+  rateLimiter,
+  RateLimitError,
+  createRateLimitMessage,
+} from '../lib/rate-limiter';
 
 export const generateInsight = async (
   request: ReadingRequest
 ): Promise<PersonalizedReading> => {
   try {
+    // Check rate limit before processing
+    const estimatedTokens = request.spreadType === 'quick-draw' ? 750 : 1400;
+    const rateLimitResult = await rateLimiter.checkLimit(
+      request.userProfile.id || 'anonymous',
+      'generateInsight',
+      estimatedTokens
+    );
+
+    if (!rateLimitResult.allowed) {
+      const message = createRateLimitMessage(
+        'generateInsight',
+        rateLimitResult
+      );
+      throw new RateLimitError(
+        message,
+        rateLimitResult.retryAfter || 0,
+        rateLimitResult.resetTime,
+        rateLimitResult.remainingRequests
+      );
+    }
     const prompt = buildReadingPrompt(request);
 
     const message = await anthropic.messages.create({
