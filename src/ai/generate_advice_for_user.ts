@@ -6,6 +6,12 @@ import { getInsightsByBlockType } from '../lib/insights/insight-queries';
 import { getReflectionsByUserAndCard } from '../lib/reflections/reflection-queries';
 import systemPrompt from './system-prompt.md?raw';
 import { anthropic } from './index';
+import {
+  sanitizeUserProfile,
+  sanitizeBlocksArray,
+  sanitizeInsightsArray,
+  sanitizeReflectionsArray,
+} from '../lib/ai-prompt-sanitization';
 
 const generateAdviceForUser = async (
   card: Card,
@@ -26,28 +32,34 @@ const generateAdviceForUser = async (
       (block) => block.block_type_id === blockTypeId
     );
 
+    // Sanitize all user-provided data before including in prompt
+    const sanitizedProfile = sanitizeUserProfile(userProfile);
+    const sanitizedBlocks = sanitizeBlocksArray(relevantBlocks);
+    const sanitizedInsights = sanitizeInsightsArray(recentInsightsForCard);
+    const sanitizedReflections = sanitizeReflectionsArray(reflections);
+
     const prompt = `Your task is to generate personalized advice for a specific
     user based on their profile and current blocks, adapting the generic card
     advice to their specific situation. Keep it short. Around 140 characters. Like a tweet. Make it feel like a fortune cookie.
 
 User Profile:
-- Name: ${userProfile?.name || 'Unknown'}
-- Creative Identity: ${userProfile?.creative_identity || 'Unknown'}
-- Work Context: ${userProfile?.work_context || 'Unknown'}
-- Debugging Mode: ${userProfile?.debugging_mode || 'Unknown'}
-- Block Pattern: ${userProfile?.block_pattern || 'Unknown'}
-- Superpower: ${userProfile?.superpower || 'Unknown'}
-- Kryptonite: ${userProfile?.kryptonite || 'Unknown'}
-- Zodiac Sign: ${userProfile?.zodiac_sign || 'Unknown'}
-- Spirit Animal: ${userProfile?.spirit_animal || 'Unknown'}
+- Name: ${sanitizedProfile.name || 'Unknown'}
+- Creative Identity: ${sanitizedProfile.creative_identity || 'Unknown'}
+- Work Context: ${sanitizedProfile.work_context || 'Unknown'}
+- Debugging Mode: ${sanitizedProfile.debugging_mode || 'Unknown'}
+- Block Pattern: ${sanitizedProfile.block_pattern || 'Unknown'}
+- Superpower: ${sanitizedProfile.superpower || 'Unknown'}
+- Kryptonite: ${sanitizedProfile.kryptonite || 'Unknown'}
+- Zodiac Sign: ${sanitizedProfile.zodiac_sign || 'Unknown'}
+- Spirit Animal: ${sanitizedProfile.spirit_animal || 'Unknown'}
 
 Current ${blockTypeId} blocks:
-${relevantBlocks.map((block) => `- ${block.name}: ${block.notes || 'No notes'}`).join('\n') || 'No current blocks'}
+${sanitizedBlocks.map((block) => `- ${block.name}: ${block.notes || 'No notes'}`).join('\n') || 'No current blocks'}
 
 Recent ${blockTypeId} insights history (for this card):
 ${
-  recentInsightsForCard.length > 0
-    ? recentInsightsForCard
+  sanitizedInsights.length > 0
+    ? sanitizedInsights
         .map((insight) => {
           const resonanceStatus = insight.resonated
             ? '✅ Resonated'
@@ -71,8 +83,8 @@ Card Information:
 
 User's reflections on this card:
 ${
-  reflections.length > 0
-    ? reflections
+  sanitizedReflections.length > 0
+    ? sanitizedReflections
         .map(
           (r, i) =>
             `${i + 1}. "${r.reflection_text}" ${r.block_type_id ? `(relates to ${r.block_type_id})` : ''}`

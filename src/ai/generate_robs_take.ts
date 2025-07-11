@@ -6,6 +6,12 @@ import { getInsightsByUser } from '../lib/insights/insight-queries';
 import { getReflectionsByUserAndCard } from '../lib/reflections/reflection-queries';
 import systemPrompt from './system-prompt.md?raw';
 import { anthropic } from './index';
+import {
+  sanitizeUserProfile,
+  sanitizeBlocksArray,
+  sanitizeInsightsArray,
+  sanitizeReflectionsArray,
+} from '../lib/ai-prompt-sanitization';
 
 const generateRobsTake = async (card: Card, user: User): Promise<string> => {
   try {
@@ -14,38 +20,45 @@ const generateRobsTake = async (card: Card, user: User): Promise<string> => {
     const recentInsights = await getInsightsByUser(user.id);
     const reflections = await getReflectionsByUserAndCard(user.id, card.id);
 
+    // Sanitize all user-provided data before including in prompt
+    const sanitizedProfile = sanitizeUserProfile(userProfile);
+    const sanitizedBlocks = sanitizeBlocksArray(userBlocks);
+    const sanitizedInsights = sanitizeInsightsArray(recentInsights.slice(0, 5));
+    const sanitizedReflections = sanitizeReflectionsArray(reflections);
+
     const prompt = `Your task is to generate Rob's personalized take on this tarot card for a specific user. This should be a holistic, perspective-shifting commentary about what this card means for this person's current life situation.
 
 User Profile:
-- Name: ${userProfile?.name || 'Unknown'}
-- Creative Identity: ${userProfile?.creative_identity || 'Unknown'}
-- Work Context: ${userProfile?.work_context || 'Unknown'}
-- Debugging Mode: ${userProfile?.debugging_mode || 'Unknown'}
-- Block Pattern: ${userProfile?.block_pattern || 'Unknown'}
-- Superpower: ${userProfile?.superpower || 'Unknown'}
-- Kryptonite: ${userProfile?.kryptonite || 'Unknown'}
+- Name: ${sanitizedProfile.name || 'Unknown'}
+- Creative Identity: ${sanitizedProfile.creative_identity || 'Unknown'}
+- Work Context: ${sanitizedProfile.work_context || 'Unknown'}
+- Debugging Mode: ${sanitizedProfile.debugging_mode || 'Unknown'}
+- Block Pattern: ${sanitizedProfile.block_pattern || 'Unknown'}
+- Superpower: ${sanitizedProfile.superpower || 'Unknown'}
+- Kryptonite: ${sanitizedProfile.kryptonite || 'Unknown'}
 
 Current blocks across all areas:
-${userBlocks.map((block) => `- ${block.name} (${block.block_type_id}): ${block.notes || 'No notes'}`).join('\n') || 'No current blocks'}
+${sanitizedBlocks.map((block) => `- ${block.name} (${block.block_type_id}): ${block.notes || 'No notes'}`).join('\n') || 'No current blocks'}
 
 Recent insights pattern:
 ${
-  recentInsights
-    .slice(0, 5)
-    .map((insight: Insight) => {
-      const resonanceStatus = insight.resonated
-        ? '✅ Resonated'
-        : insight.resonated === false
-          ? "❌ Didn't resonate"
-          : '⏳ Pending';
-      const actionStatus = insight.took_action
-        ? '✅ Took action'
-        : insight.took_action === false
-          ? '❌ No action'
-          : '⏳ Pending';
-      return `- Context: "${insight.user_context || 'No context'}" | ${resonanceStatus} | ${actionStatus}`;
-    })
-    .join('\n') || 'No recent insights'
+  sanitizedInsights.length > 0
+    ? sanitizedInsights
+        .map((insight: Insight) => {
+          const resonanceStatus = insight.resonated
+            ? '✅ Resonated'
+            : insight.resonated === false
+              ? "❌ Didn't resonate"
+              : '⏳ Pending';
+          const actionStatus = insight.took_action
+            ? '✅ Took action'
+            : insight.took_action === false
+              ? '❌ No action'
+              : '⏳ Pending';
+          return `- Context: "${insight.user_context || 'No context'}" | ${resonanceStatus} | ${actionStatus}`;
+        })
+        .join('\n')
+    : 'No recent insights'
 }
 
 Card Information:
@@ -56,8 +69,8 @@ Card Information:
 
 User's reflections on this card:
 ${
-  reflections.length > 0
-    ? reflections
+  sanitizedReflections.length > 0
+    ? sanitizedReflections
         .map(
           (r, i) =>
             `${i + 1}. "${r.reflection_text}" ${r.block_type_id ? `(relates to ${r.block_type_id})` : ''}`

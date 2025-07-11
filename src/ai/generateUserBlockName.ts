@@ -6,16 +6,20 @@
  */
 
 import { anthropic } from './index';
+import { sanitizeUserContext } from '../lib/ai-prompt-sanitization';
 
 export const generateUserBlockName = async (
   blockTypeName?: string,
   userContext?: string
 ): Promise<string> => {
   try {
+    // Sanitize user-provided context
+    const sanitizedContext = sanitizeUserContext(userContext);
+
     const prompt = `You are helping create a personalized name for a user's block tracker entry.
 
 Block Type: ${blockTypeName || 'Personal Challenge'}
-User Context: ${userContext || 'Working on personal growth'}
+User Context: ${sanitizedContext || 'Working on personal growth'}
 
 Generate a concise, personalized title (2-6 words) that captures the essence of this specific block. Make it actionable and personal. Examples:
 - "Breaking Through Creative Paralysis"
