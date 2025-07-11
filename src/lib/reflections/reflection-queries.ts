@@ -6,6 +6,7 @@ import {
   validateCardId,
   validatePromptIndex,
 } from '../input-sanitization';
+import { encryptForDatabase, decryptFromDatabase } from '../encryption';
 
 export const saveReflection = async (
   userId: string,
@@ -22,12 +23,17 @@ export const saveReflection = async (
     blockTypeId,
   });
 
+  // Encrypt the sensitive reflection text before storing
+  const encryptedReflectionText = await encryptForDatabase(
+    sanitizedInput.reflectionText
+  );
+
   const { error } = await supabase.from('user_card_reflections').upsert(
     {
       user_id: sanitizedInput.userId,
       card_id: sanitizedInput.cardId,
       prompt_index: sanitizedInput.promptIndex,
-      reflection_text: sanitizedInput.reflectionText,
+      reflection_text: encryptedReflectionText,
       block_type_id: sanitizedInput.blockTypeId,
       updated_at: new Date().toISOString(),
     },
@@ -55,7 +61,19 @@ export const getReflectionsByUserAndCard = async (
     .order('prompt_index', { ascending: true });
 
   if (error) throw error;
-  return data || [];
+
+  // Decrypt the reflection text for each reflection
+  const reflections = data || [];
+  const decryptedReflections = await Promise.all(
+    reflections.map(async (reflection) => ({
+      ...reflection,
+      reflection_text:
+        (await decryptFromDatabase(reflection.reflection_text)) ||
+        reflection.reflection_text,
+    }))
+  );
+
+  return decryptedReflections;
 };
 
 export const getReflectionsByUser = async (
@@ -71,7 +89,19 @@ export const getReflectionsByUser = async (
     .limit(20);
 
   if (error) throw error;
-  return data || [];
+
+  // Decrypt the reflection text for each reflection
+  const reflections = data || [];
+  const decryptedReflections = await Promise.all(
+    reflections.map(async (reflection) => ({
+      ...reflection,
+      reflection_text:
+        (await decryptFromDatabase(reflection.reflection_text)) ||
+        reflection.reflection_text,
+    }))
+  );
+
+  return decryptedReflections;
 };
 
 export const getReflectionByUserCardPrompt = async (
@@ -92,5 +122,16 @@ export const getReflectionByUserCardPrompt = async (
     .maybeSingle();
 
   if (error) throw error;
+
+  // Decrypt the reflection text if data exists
+  if (data) {
+    return {
+      ...data,
+      reflection_text:
+        (await decryptFromDatabase(data.reflection_text)) ||
+        data.reflection_text,
+    };
+  }
+
   return data;
 };

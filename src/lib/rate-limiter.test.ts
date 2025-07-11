@@ -83,10 +83,14 @@ describe('RateLimiter', () => {
   beforeEach(() => {
     store = new MemoryRateLimitStore();
     rateLimiter = new RateLimiter(store);
+
+    // Mock environment to enable rate limiting for tests
+    vi.stubEnv('VITE_ENABLE_RATE_LIMITING', 'true');
   });
 
   afterEach(() => {
     store.destroy();
+    vi.unstubAllEnvs();
   });
 
   it('should allow requests within limits', async () => {
@@ -97,7 +101,7 @@ describe('RateLimiter', () => {
     );
 
     expect(result.allowed).toBe(true);
-    expect(result.remainingRequests).toBe(49); // 50 - 1
+    expect(result.remainingRequests).toBe(499); // 500 - 1 (development limits)
     expect(result.totalRequests).toBe(1);
   });
 
