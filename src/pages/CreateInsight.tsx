@@ -21,6 +21,37 @@ import duckCardCatchMP4 from '../assets/duck-card-catch.mp4';
 import retroRobMP4 from '../assets/retro-rob.mp4';
 import ErrorState from '../components/ErrorState';
 
+// Occult/astral humor loading messages (shared across component instances)
+const astralMessagesBase = [
+  'Consulting the Akashic records…',
+  'Casting minor divinations…',
+  'Summoning the spirit of insight…',
+  'Shuffling the cosmic deck…',
+  'Peering through the veil…',
+  'Reading tea leaves in zero gravity…',
+  'Negotiating with astral bureaucrats…',
+  'Aligning the quantum tarot…',
+  'Waiting for the stars to answer…',
+  'Translating celestial whispers…',
+  'Contacting your higher duck…',
+  'Sacrificing RAM to the algorithm…',
+  'Unraveling the threads of fate…',
+  'Dowsing for digital wisdom…',
+  'Charging the insight crystals…',
+  'Decoding the cosmic punchline…',
+  // Extra fun!
+  'Syncing with cosmic Wi-Fi…',
+  'Rolling dice for destiny…',
+  'Tuning the astral radio…',
+  'Polishing the crystal ball…',
+  'Debugging the matrix…',
+  'Feeding ducks breadcrumbs of truth…',
+  'Recalibrating karmic scales…',
+  'Loading spirit emojis…',
+  'Compiling stardust shaders…',
+  'Bargaining with quantum quacks…',
+];
+
 // Use MP4 videos instead of GIFs for better performance
 const duckVideos = [duckCodingMP4, duckCardCatchMP4, retroRobMP4];
 
@@ -57,29 +88,31 @@ const CreateInsight: React.FC = () => {
   const [loadingReading, setLoadingReading] = useState(false);
 
   // Occult/astral humor loading messages
-  const astralMessages = [
-    'Consulting the Akashic records…',
-    'Casting minor divinations…',
-    'Summoning the spirit of insight…',
-    'Shuffling the cosmic deck…',
-    'Peering through the veil…',
-    'Reading tea leaves in zero gravity…',
-    'Negotiating with astral bureaucrats…',
-    'Aligning the quantum tarot…',
-    'Waiting for the stars to answer…',
-    'Translating celestial whispers…',
-    'Contacting your higher duck…',
-    'Sacrificing RAM to the algorithm…',
-    'Unraveling the threads of fate…',
-    'Dowsing for digital wisdom…',
-    'Charging the insight crystals…',
-    'Decoding the cosmic punchline…',
-  ];
+  // (shuffled fresh for each reading)
+
+  // Fisher-Yates shuffle helper
+  const shuffle = <T,>(arr: T[]): T[] => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  // Shuffled list used for the current reading
+  const [astralMessages, setAstralMessages] = useState<string[]>(() =>
+    shuffle([...astralMessagesBase])
+  );
   const [astralIndex, setAstralIndex] = useState(0);
 
-  // Rotate message every 2.5 seconds while loadingReading
+  // Reshuffle and rotate messages for each reading
   useEffect(() => {
     if (!loadingReading) return;
+
+    // Reshuffle for a fresh order & reset index
+    setAstralMessages(shuffle([...astralMessagesBase]));
+    setAstralIndex(0);
+
     const interval = setInterval(() => {
       setAstralIndex((i) => (i + 1) % astralMessages.length);
     }, 2500);

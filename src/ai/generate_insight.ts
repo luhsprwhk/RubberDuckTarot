@@ -185,10 +185,10 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     Respond in valid JSON format:
     {
       "interpretation": "Main reading combining the cards for their specific situation",
-      "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 3-4 key insights"'}],
-      "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 2-3 specific, actionable steps"'}],
+      "keyInsights": [${spreadType === 'quick-draw' ? '"One sharp, practical insight"' : '"Array of 2-3 key insights"'}],
+      "actionSteps": [${spreadType === 'quick-draw' ? '"One specific, actionable step"' : '"Array of 1-2 specific, actionable steps"'}],
       "robQuip": "Rob's signature sarcastic, but encouraging and highly empathetic closing line",
-      "reflectionPrompts": ["Questions to help them think deeper about the insights"]
+      "reflectionPrompts": ["Array of 1-2 questions to help them think deeper about the interpretation, action steps, and key insights"]
     }
     IMPORTANT: For quick-draw, ONLY return ONE key insight and ONE action and ONE reflection prompt in the arrays.
     </response_format>
