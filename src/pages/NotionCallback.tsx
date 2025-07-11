@@ -3,13 +3,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import { NotionService } from '../lib/notion/notion-service';
 import { NotionOperations } from '../lib/notion/notion-operations';
-import useAlerts from '../lib/hooks/useAlert';
+import useAlert from '../lib/hooks/useAlert';
 
 export default function NotionCallback() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { user, refreshUser } = useAuth();
-  const { showSuccess, showError } = useAlerts();
+  const { showSuccess, showError } = useAlert();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>(
     'loading'
   );
