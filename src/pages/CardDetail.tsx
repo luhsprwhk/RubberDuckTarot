@@ -1,4 +1,5 @@
-import { useState, useEffect, Component, ErrorInfo, ReactNode } from 'react';
+import { useState, useEffect, Component } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import TextArea from '../components/TextArea';
 import { Listbox } from '@headlessui/react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
@@ -437,7 +438,10 @@ const PersonalizedCardContent = ({
                 );
                 return {
                   blockType: block.block_type_id,
-                  advice: card.block_applications[block.block_type_id] || '',
+                  advice:
+                    card.block_applications[
+                      block.block_type_id as keyof typeof card.block_applications
+                    ] || '',
                 };
               }
             })

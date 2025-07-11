@@ -81,7 +81,7 @@ Generate Rob's personalized take on this card that:
 This should feel like Rob's overarching wisdom about what this card means for this specific person's journey.`;
 
     const message = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: import.meta.env.VITE_ANTHROPIC_MODEL ?? 'claude-sonnet-4-20250514',
       max_tokens: 400,
       system: systemPrompt,
       messages: [

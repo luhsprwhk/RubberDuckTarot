@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "noImplicitAny": false
+  },
+  "include": ["test"]
+}

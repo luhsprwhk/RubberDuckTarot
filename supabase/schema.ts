@@ -7,6 +7,7 @@ import {
   jsonb,
   timestamp,
   boolean,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
 
 export const cards = pgTable('cards', {
@@ -122,20 +123,31 @@ export const userCardAdvice = pgTable('user_card_advice', {
     .defaultNow(),
 });
 
-export const userCardReflections = pgTable('user_card_reflections', {
-  id: serial('id').primaryKey(),
-  user_id: text('user_id').notNull(),
-  card_id: integer('card_id').notNull(),
-  prompt_index: integer('prompt_index').notNull(), // Which reflection question (0, 1, 2, etc.)
-  reflection_text: text('reflection_text').notNull(),
-  block_type_id: text('block_type_id'), // Optional: which block type this reflection relates to
-  created_at: timestamp('created_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-  updated_at: timestamp('updated_at', { withTimezone: true })
-    .notNull()
-    .defaultNow(),
-});
+export const userCardReflections = pgTable(
+  'user_card_reflections',
+  {
+    id: serial('id').primaryKey(),
+    user_id: text('user_id').notNull(),
+    card_id: integer('card_id').notNull(),
+    prompt_index: integer('prompt_index').notNull(), // Which reflection question (0, 1, 2, etc.)
+    reflection_text: text('reflection_text').notNull(),
+    block_type_id: text('block_type_id'), // Optional: which block type this reflection relates to
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updated_at: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => ({
+    // Unique constraint to ensure one reflection per user, card, and prompt index
+    userCardPromptUnique: uniqueIndex('user_card_prompt_unique_idx').on(
+      table.user_id,
+      table.card_id,
+      table.prompt_index
+    ),
+  })
+);
 
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;

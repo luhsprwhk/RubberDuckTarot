@@ -1,5 +1,11 @@
 import { supabase } from '../supabase/supabase';
 import type { UserCardReflection } from '@/supabase/schema';
+import {
+  sanitizeReflectionInput,
+  validateUserId,
+  validateCardId,
+  validatePromptIndex,
+} from '../input-sanitization';
 
 export const saveReflection = async (
   userId: string,
@@ -8,17 +14,25 @@ export const saveReflection = async (
   reflectionText: string,
   blockTypeId?: string
 ): Promise<void> => {
+  const sanitizedInput = sanitizeReflectionInput({
+    userId,
+    cardId,
+    promptIndex,
+    reflectionText,
+    blockTypeId,
+  });
+
   const { error } = await supabase.from('user_card_reflections').upsert(
     {
-      user_id: userId,
-      card_id: cardId,
-      prompt_index: promptIndex,
-      reflection_text: reflectionText,
-      block_type_id: blockTypeId,
+      user_id: sanitizedInput.userId,
+      card_id: sanitizedInput.cardId,
+      prompt_index: sanitizedInput.promptIndex,
+      reflection_text: sanitizedInput.reflectionText,
+      block_type_id: sanitizedInput.blockTypeId,
       updated_at: new Date().toISOString(),
     },
     {
-      onConflict: 'user_id,card_id,prompt_index',
+      onConflict: 'user_card_prompt_unique_idx',
       ignoreDuplicates: false,
     }
   );
@@ -30,11 +44,14 @@ export const getReflectionsByUserAndCard = async (
   userId: string,
   cardId: number
 ): Promise<UserCardReflection[]> => {
+  const validatedUserId = validateUserId(userId);
+  const validatedCardId = validateCardId(cardId);
+
   const { data, error } = await supabase
     .from('user_card_reflections')
     .select('*')
-    .eq('user_id', userId)
-    .eq('card_id', cardId)
+    .eq('user_id', validatedUserId)
+    .eq('card_id', validatedCardId)
     .order('prompt_index', { ascending: true });
 
   if (error) throw error;
@@ -44,10 +61,12 @@ export const getReflectionsByUserAndCard = async (
 export const getReflectionsByUser = async (
   userId: string
 ): Promise<UserCardReflection[]> => {
+  const validatedUserId = validateUserId(userId);
+
   const { data, error } = await supabase
     .from('user_card_reflections')
     .select('*')
-    .eq('user_id', userId)
+    .eq('user_id', validatedUserId)
     .order('created_at', { ascending: false })
     .limit(20);
 
@@ -60,12 +79,16 @@ export const getReflectionByUserCardPrompt = async (
   cardId: number,
   promptIndex: number
 ): Promise<UserCardReflection | null> => {
+  const validatedUserId = validateUserId(userId);
+  const validatedCardId = validateCardId(cardId);
+  const validatedPromptIndex = validatePromptIndex(promptIndex);
+
   const { data, error } = await supabase
     .from('user_card_reflections')
     .select('*')
-    .eq('user_id', userId)
-    .eq('card_id', cardId)
-    .eq('prompt_index', promptIndex)
+    .eq('user_id', validatedUserId)
+    .eq('card_id', validatedCardId)
+    .eq('prompt_index', validatedPromptIndex)
     .maybeSingle();
 
   if (error) throw error;
