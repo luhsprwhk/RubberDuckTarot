@@ -108,6 +108,7 @@ const InsightPage: React.FC = () => {
       initialTookAction={insight.took_action}
       userBlock={userBlock}
       isPremium={user?.premium ?? false}
+      userContext={insight.user_context || ''}
     />
   );
 };

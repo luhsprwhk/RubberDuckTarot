@@ -71,6 +71,14 @@ const PRODUCTION_LIMITS: Record<string, RateLimitConfig> = {
     maxTokens: 2500, // 50 names * 50 tokens max
     blockDurationMs: 5 * 60 * 1000, // 5 minutes
   },
+
+  // Chat operations (medium-cost)
+  generateInsightChat: {
+    maxRequests: 25,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    maxTokens: 10000, // 25 messages * 400 tokens max
+    blockDurationMs: 5 * 60 * 1000, // 5 minutes
+  },
 } as const;
 
 // More lenient limits for development
@@ -100,6 +108,13 @@ const DEVELOPMENT_LIMITS: Record<string, RateLimitConfig> = {
     maxRequests: 500,
     windowMs: 60 * 60 * 1000, // 1 hour
     maxTokens: 25000, // 10x production
+    blockDurationMs: 60 * 1000, // 1 minute
+  },
+
+  generateInsightChat: {
+    maxRequests: 250,
+    windowMs: 60 * 60 * 1000, // 1 hour
+    maxTokens: 100000, // 10x production
     blockDurationMs: 60 * 1000, // 1 minute
   },
 } as const;
@@ -406,6 +421,7 @@ export function createRateLimitMessage(
     generateAdviceForUser: 'personalized advice',
     generateRobsTake: "Rob's commentary",
     generateUserBlockName: 'block names',
+    generateInsightChat: 'chat messages',
   };
 
   const operationName = operationNames[operation] || 'AI generations';
