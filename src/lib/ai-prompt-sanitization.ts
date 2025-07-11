@@ -319,7 +319,9 @@ export function sanitizeBlocksArray(
     return [];
   }
 
-  return blocks.map((block) => sanitizeBlockData(block));
+  return blocks.map((block) =>
+    sanitizeBlockData(block as Record<string, unknown>)
+  );
 }
 
 /**

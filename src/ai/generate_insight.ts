@@ -21,7 +21,7 @@ export const generateInsight = async (
     // Check rate limit before processing
     const estimatedTokens = request.spreadType === 'quick-draw' ? 750 : 1400;
     const rateLimitResult = await rateLimiter.checkLimit(
-      request.userProfile.id || 'anonymous',
+      String(request.userProfile.id || 'anonymous'),
       'generateInsight',
       estimatedTokens
     );
@@ -83,7 +83,7 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
     ? sanitizeBlockData(currentBlock)
     : null;
   const sanitizedPreviousInsights = previousInsights
-    ? sanitizeInsightsArray(previousInsights)
+    ? sanitizeInsightsArray(previousInsights as unknown[])
     : null;
 
   // Get context-specific metaphor style
@@ -129,12 +129,18 @@ const buildReadingPrompt = (request: ReadingRequest): string => {
   // Format previous insights for context
   const previousInsightsContext =
     sanitizedPreviousInsights && sanitizedPreviousInsights.length > 0
-      ? formatPreviousInsights(sanitizedPreviousInsights)
+      ? formatPreviousInsights(
+          sanitizedPreviousInsights as NonNullable<
+            ReadingRequest['previousInsights']
+          >
+        )
       : null;
 
   // Format current block context
   const currentBlockContext = sanitizedCurrentBlock
-    ? formatCurrentBlock(sanitizedCurrentBlock)
+    ? formatCurrentBlock(
+        sanitizedCurrentBlock as NonNullable<ReadingRequest['currentBlock']>
+      )
     : null;
 
   const basePrompt = `

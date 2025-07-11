@@ -120,7 +120,9 @@ describe('sanitizeUserProfile', () => {
   it('should handle null/undefined profile', () => {
     expect(sanitizeUserProfile(null)).toEqual({});
     expect(sanitizeUserProfile(undefined)).toEqual({});
-    expect(sanitizeUserProfile('not an object')).toEqual({});
+    expect(
+      sanitizeUserProfile('not an object' as unknown as Record<string, unknown>)
+    ).toEqual({});
   });
 
   it('should handle profile with missing fields', () => {

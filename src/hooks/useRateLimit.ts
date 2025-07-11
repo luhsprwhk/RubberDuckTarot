@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import {
   rateLimiter,
   RateLimitError,
-  RateLimitResult,
+  type RateLimitResult,
 } from '../lib/rate-limiter';
 
 interface UseRateLimitOptions {

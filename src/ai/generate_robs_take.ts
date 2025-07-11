@@ -1,4 +1,4 @@
-import { type User, type Insight } from '@/src/interfaces';
+import { type User } from '@/src/interfaces';
 import { type Card } from '@/supabase/schema';
 import { getUserProfile } from '../lib/userPreferences';
 import { getUserBlocks } from '../lib/blocks/block-queries';
@@ -68,7 +68,7 @@ Recent insights pattern:
 ${
   sanitizedInsights.length > 0
     ? sanitizedInsights
-        .map((insight: Insight) => {
+        .map((insight: Record<string, unknown>) => {
           const resonanceStatus = insight.resonated
             ? '✅ Resonated'
             : insight.resonated === false

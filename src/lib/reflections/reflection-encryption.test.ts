@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 // Mock modules
 vi.mock('../supabase/supabase', () => ({
@@ -59,7 +60,7 @@ describe('Reflection Encryption', () => {
       const mockUpsert = vi.fn().mockResolvedValue({ error: null });
       vi.mocked(supabase.from).mockReturnValue({
         upsert: mockUpsert,
-      } as unknown);
+      } as unknown as ReturnType<SupabaseClient['from']>);
 
       await saveReflection(
         'user-123',
@@ -135,7 +136,7 @@ describe('Reflection Encryption', () => {
 
       vi.mocked(supabase.from).mockReturnValue({
         select: mockSelect,
-      } as unknown);
+      } as unknown as ReturnType<SupabaseClient['from']>);
 
       const result = await getReflectionsByUserAndCard('user-123', 1);
 
@@ -184,7 +185,7 @@ describe('Reflection Encryption', () => {
 
       vi.mocked(supabase.from).mockReturnValue({
         select: mockSelect,
-      } as unknown);
+      } as unknown as ReturnType<SupabaseClient['from']>);
 
       const result = await getReflectionsByUserAndCard('user-123', 1);
 
@@ -211,7 +212,7 @@ describe('Reflection Encryption', () => {
 
       vi.mocked(supabase.from).mockReturnValue({
         select: mockSelect,
-      } as unknown);
+      } as unknown as ReturnType<SupabaseClient['from']>);
 
       const result = await getReflectionsByUserAndCard('user-123', 1);
 

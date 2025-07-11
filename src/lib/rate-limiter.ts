@@ -376,14 +376,21 @@ export const rateLimiter = new RateLimiter();
  * Rate limiting error class
  */
 export class RateLimitError extends Error {
+  public retryAfter: number;
+  public resetTime: number;
+  public remainingRequests: number;
+
   constructor(
     message: string,
-    public retryAfter: number,
-    public resetTime: number,
-    public remainingRequests: number
+    retryAfter: number,
+    resetTime: number,
+    remainingRequests: number
   ) {
     super(message);
     this.name = 'RateLimitError';
+    this.retryAfter = retryAfter;
+    this.resetTime = resetTime;
+    this.remainingRequests = remainingRequests;
   }
 }
 
@@ -409,7 +416,7 @@ export function createRateLimitMessage(
   }
 
   const resetDate = new Date(result.resetTime);
-  const resetTime = resetDate.toLocaleTimeString();
+  const resetTimeString = resetDate.toLocaleTimeString();
 
-  return `You've reached your hourly limit for ${operationName}. Your limit resets at ${resetTime}.`;
+  return `You've reached your hourly limit for ${operationName}. Your limit resets at ${resetTimeString}.`;
 }
