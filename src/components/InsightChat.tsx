@@ -3,8 +3,12 @@ import { cn } from '@/src/lib/utils';
 import { FaSpinner, FaTimes, FaPaperPlane } from 'react-icons/fa';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import type { PersonalizedReading } from '@/src/ai';
-import type { BlockType } from '@/src/interfaces';
-import { generateInsightChat } from '@/src/ai/generate_insight_chat';
+import type { BlockType, UserProfile } from '@/src/interfaces';
+import {
+  generateInsightChat,
+  validateChatMessage,
+  CHAT_MESSAGE_LIMITS,
+} from '@/src/ai/generate_insight_chat';
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
 
@@ -22,6 +26,7 @@ interface InsightChatProps {
   selectedBlock: BlockType | null;
   userContext: string;
   drawnCards: Array<{ name: string; emoji: string; reversed?: boolean }>;
+  userProfile?: UserProfile;
 }
 
 export default function InsightChat({
@@ -31,10 +36,12 @@ export default function InsightChat({
   selectedBlock,
   userContext,
   drawnCards,
+  userProfile,
 }: InsightChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [validationError, setValidationError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const { showError } = useAlert();
@@ -57,8 +64,30 @@ export default function InsightChat({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Validate input message in real-time
+  const validateInput = (message: string) => {
+    const validation = validateChatMessage(message);
+    setValidationError(validation.isValid ? null : validation.error || null);
+    return validation.isValid;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    setInputMessage(value);
+
+    // Clear validation error when user starts typing
+    if (validationError && value.trim().length > 0) {
+      setValidationError(null);
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading || !user) return;
+
+    // Validate before sending
+    if (!validateInput(inputMessage)) {
+      return;
+    }
 
     const userMessage: Message = {
       id: `user-${Date.now()}`,
@@ -80,6 +109,7 @@ export default function InsightChat({
         userContext,
         drawnCards,
         userId: user.id,
+        userProfile,
       });
 
       const assistantMessage: Message = {
@@ -104,6 +134,12 @@ export default function InsightChat({
       handleSendMessage();
     }
   };
+
+  // Calculate character count for UI
+  const charCount = inputMessage.length;
+  const isOverLimit = charCount > CHAT_MESSAGE_LIMITS.MAX_LENGTH;
+  const isValid =
+    inputMessage.trim().length > 0 && !isOverLimit && !validationError;
 
   if (!isOpen) return null;
 
@@ -181,25 +217,50 @@ export default function InsightChat({
           <div className="flex gap-2">
             <textarea
               value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
+              onChange={handleInputChange}
               onKeyPress={handleKeyPress}
               placeholder="Ask Rob anything about your reading..."
-              className="flex-1 bg-liminal-overlay border border-liminal-border rounded-lg px-3 py-2 text-primary placeholder-secondary resize-none min-h-[2.5rem] max-h-24"
+              className={cn(
+                'flex-1 bg-liminal-overlay border rounded-lg px-3 py-2 text-primary placeholder-secondary resize-none min-h-[2.5rem] max-h-24',
+                isOverLimit || validationError
+                  ? 'border-red-500 focus:border-red-500'
+                  : 'border-liminal-border focus:border-accent'
+              )}
               rows={1}
               disabled={isLoading}
+              maxLength={CHAT_MESSAGE_LIMITS.MAX_LENGTH}
             />
             <button
               onClick={handleSendMessage}
-              disabled={!inputMessage.trim() || isLoading}
+              disabled={!isValid || isLoading}
               className={cn(
                 'px-4 py-2 rounded-lg font-medium transition-colors',
-                inputMessage.trim() && !isLoading
+                isValid && !isLoading
                   ? 'bg-accent text-void-900 hover:bg-accent/90'
                   : 'bg-muted text-secondary cursor-not-allowed'
               )}
             >
               <FaPaperPlane />
             </button>
+          </div>
+
+          {/* Character count and validation */}
+          <div className="flex justify-between items-center mt-2">
+            <div className="text-xs text-secondary">
+              {validationError ? (
+                <span className="text-red-500">{validationError}</span>
+              ) : (
+                <span>Press Enter to send, Shift+Enter for new line</span>
+              )}
+            </div>
+            <div
+              className={cn(
+                'text-xs',
+                isOverLimit ? 'text-red-500' : 'text-secondary'
+              )}
+            >
+              {charCount}/{CHAT_MESSAGE_LIMITS.MAX_LENGTH}
+            </div>
           </div>
         </div>
       </div>

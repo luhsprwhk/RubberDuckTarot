@@ -6,7 +6,7 @@ const insightPanelClass = cn(
   'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg'
 );
 
-import type { Card, BlockType, UserBlock } from '@/src/interfaces';
+import type { Card, BlockType, UserBlock, UserProfile } from '@/src/interfaces';
 import type { PersonalizedReading } from '@/src/ai';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
@@ -34,6 +34,7 @@ interface InsightDisplayProps {
   userBlock?: UserBlock | null;
   isPremium: boolean;
   userContext?: string;
+  userProfile?: UserProfile;
 }
 
 function InsightDisplay({
@@ -48,6 +49,7 @@ function InsightDisplay({
   userBlock,
   isPremium,
   userContext = '',
+  userProfile,
 }: InsightDisplayProps) {
   const navigate = useNavigate();
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -181,12 +183,13 @@ function InsightDisplay({
                   onClick={() => setIsChatOpen(true)}
                   className={cn(
                     'px-3 py-1 text-sm rounded-md font-medium transition-colors',
-                    'bg-accent text-void-900 hover:bg-accent/90 flex items-center gap-2'
+                    'bg-accent text-void-900 hover:bg-accent/90 flex items-center gap-2',
+                    'cursor-pointer hover:text-primary'
                   )}
-                  title="Keep talking to Rob about this reading"
+                  title="Keep talking to Rob about this insight"
                 >
                   <FaComments />
-                  Keep Talking to Rob
+                  Chat with Rob
                 </button>
               </div>
               <ul className={cn('space-y-2 bullet-list')}>
@@ -236,6 +239,7 @@ function InsightDisplay({
             selectedBlock={selectedBlock}
             userContext={userContext}
             drawnCards={drawnCards}
+            userProfile={userProfile}
           />
         )}
 
