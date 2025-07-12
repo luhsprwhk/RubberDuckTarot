@@ -1,9 +1,21 @@
-import { useMemo, useState, useEffect, useRef } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import RobChat, { type RobChatConfig, type Message } from './RobChat';
 import type { UserBlock, BlockType, Insight } from '@/src/interfaces';
 import { generateBlockChat } from '@/src/ai/generate_block_chat';
 import { getInsightsByUserBlockId } from '@/src/lib/insights/insight-queries';
 import useAuth from '@/src/lib/hooks/useAuth';
+
+// Simple hash function to convert string to consistent number
+function hashStringToNumber(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash; // Convert to 32-bit integer
+  }
+  // Ensure positive number and avoid collision with insight IDs (which are typically < 1M)
+  return Math.abs(hash) + 10000000;
+}
 
 interface BlockRobChatProps {
   isOpen: boolean;
@@ -22,52 +34,51 @@ export default function BlockRobChat({
 }: BlockRobChatProps) {
   const { user } = useAuth();
   const [blockInsights, setBlockInsights] = useState<Insight[]>([]);
-  const isMountedRef = useRef(true);
 
   // Load block insights when modal opens (if not provided)
   useEffect(() => {
-    const loadBlockInsights = async () => {
-      if (!isOpen || !isMountedRef.current) return;
+    if (!isOpen) return;
 
+    const abortController = new AbortController();
+
+    const loadBlockInsights = async () => {
       // Use provided insights if available, otherwise load them
       if (initialBlockInsights.length > 0) {
-        setBlockInsights(initialBlockInsights);
+        if (!abortController.signal.aborted) {
+          setBlockInsights(initialBlockInsights);
+        }
       } else {
         try {
           const insights = await getInsightsByUserBlockId(userBlock.id);
-          if (isMountedRef.current) {
+          if (!abortController.signal.aborted) {
             setBlockInsights(insights);
           }
         } catch (error) {
-          console.error('Failed to load block insights:', error);
+          if (!abortController.signal.aborted) {
+            console.error('Failed to load block insights:', error);
+          }
         }
       }
     };
 
-    if (isOpen) {
-      loadBlockInsights();
-    }
-  }, [isOpen, userBlock.id, initialBlockInsights]);
+    loadBlockInsights();
 
-  // Cleanup on component unmount
-  useEffect(() => {
-    isMountedRef.current = true;
     return () => {
-      isMountedRef.current = false;
+      abortController.abort();
     };
-  }, []);
+  }, [isOpen, userBlock.id, initialBlockInsights]);
 
   // Reset insights when modal is closed
   useEffect(() => {
-    if (!isOpen && isMountedRef.current) {
+    if (!isOpen) {
       setBlockInsights([]);
     }
   }, [isOpen]);
 
   const config: RobChatConfig = useMemo(
     () => ({
-      // Use block ID + large number to avoid conflicts with insight IDs
-      chatId: userBlock.id + 1000000,
+      // Use composite key hashed to number to ensure unique chat ID
+      chatId: hashStringToNumber(`block-${userBlock.id}-${userBlock.user_id}`),
       title: 'Chat with Rob',
       subtitle: `about "${userBlock.name}"`,
       placeholderText: 'Tell Rob about this block...',
