@@ -19,41 +19,47 @@ import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import duckCodingMP4 from '../assets/wiz-duck-coding.mp4';
 import duckCardCatchMP4 from '../assets/duck-card-catch.mp4';
 import retroRobMP4 from '../assets/retro-rob.mp4';
+import magic8BallMP4 from '../assets/magic-8-ball-rob.mp4';
 import ErrorState from '../components/ErrorState';
 
 // Occult/astral humor loading messages (shared across component instances)
 const astralMessagesBase = [
-  'Consulting the Akashic records…',
-  'Casting minor divinations…',
-  'Summoning the spirit of insight…',
-  'Shuffling the cosmic deck…',
-  'Peering through the veil…',
-  'Reading tea leaves in zero gravity…',
-  'Negotiating with astral bureaucrats…',
-  'Aligning the quantum tarot…',
-  'Waiting for the stars to answer…',
-  'Translating celestial whispers…',
-  'Contacting your higher duck…',
-  'Sacrificing RAM to the algorithm…',
-  'Unraveling the threads of fate…',
-  'Dowsing for digital wisdom…',
-  'Charging the insight crystals…',
-  'Decoding the cosmic punchline…',
+  'Consulting the Akashic records',
+  'Casting minor divinations',
+  'Summoning the spirit of insight',
+  'Shuffling the cosmic deck',
+  'Peering through the veil',
+  'Reading tea leaves in zero gravity',
+  'Negotiating with astral bureaucrats',
+  'Aligning the quantum tarot',
+  'Waiting for the stars to answer',
+  'Translating celestial whispers',
+  'Contacting your higher duck',
+  'Sacrificing RAM to the algorithm',
+  'Unraveling the threads of fate',
+  'Dowsing for digital wisdom',
+  'Charging the insight crystals',
+  'Decoding the cosmic punchline',
   // Extra fun!
-  'Syncing with cosmic Wi-Fi…',
-  'Rolling dice for destiny…',
-  'Tuning the astral radio…',
-  'Polishing the crystal ball…',
-  'Debugging the matrix…',
-  'Feeding ducks breadcrumbs of truth…',
-  'Recalibrating karmic scales…',
-  'Loading spirit emojis…',
-  'Compiling stardust shaders…',
-  'Bargaining with quantum quacks…',
+  'Syncing with cosmic Wi-Fi',
+  'Rolling dice for destiny',
+  'Tuning the astral radio',
+  'Polishing the crystal ball',
+  'Debugging the matrix',
+  'Feeding ducks breadcrumbs of truth',
+  'Recalibrating karmic scales',
+  'Loading spirit emojis',
+  'Compiling stardust shaders',
+  'Bargaining with quantum quacks',
 ];
 
 // Use MP4 videos instead of GIFs for better performance
-const duckVideos = [duckCodingMP4, duckCardCatchMP4, retroRobMP4];
+const duckVideos = [
+  duckCodingMP4,
+  duckCardCatchMP4,
+  retroRobMP4,
+  magic8BallMP4,
+];
 
 interface ReadingState {
   selectedBlockTypeId: string;
