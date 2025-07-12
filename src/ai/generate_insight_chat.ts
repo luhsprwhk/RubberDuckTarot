@@ -109,7 +109,7 @@ export const generateInsightChat = async (
     const rateLimitResult = await rateLimiter.checkLimit(
       request.userId,
       'generateInsightChat',
-      400 // Smaller token limit for chat messages
+      600 // Smaller token limit for chat messages
     );
 
     if (!rateLimitResult.allowed) {

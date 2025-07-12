@@ -18,6 +18,10 @@ import {
   cleanupOldMessages,
   trimMessageHistory,
 } from '@/src/ai/generate_insight_chat';
+import {
+  ChatPersistenceService,
+  type ChatMessageData,
+} from '@/src/lib/chat/chat-persistence';
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
 
@@ -36,6 +40,7 @@ interface InsightChatProps {
   userContext: string;
   drawnCards: Array<{ name: string; emoji: string; reversed?: boolean }>;
   userProfile?: UserProfile;
+  insightId: number; // Add insightId for persistence
 }
 
 export default function InsightChat({
@@ -46,28 +51,94 @@ export default function InsightChat({
   userContext,
   drawnCards,
   userProfile,
+  insightId,
 }: InsightChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<number | null>(null);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const cleanupIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { user } = useAuth();
   const { showError } = useAlert();
 
-  // Initialize with a welcome message from Rob
+  // Load conversation history when modal opens
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      const welcomeMessage: Message = {
-        id: `rob-${Date.now()}`,
-        role: 'assistant',
-        content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMessage]);
-    }
-  }, [isOpen, messages.length]);
+    const loadConversationHistory = async () => {
+      if (!isOpen || !user || isLoadingHistory) return;
+
+      setIsLoadingHistory(true);
+      try {
+        // Try to load existing conversation
+        const conversation = await ChatPersistenceService.loadConversation(
+          insightId,
+          user.id
+        );
+
+        if (conversation && conversation.messages.length > 0) {
+          // Convert ChatMessageData to Message format
+          const loadedMessages: Message[] = conversation.messages.map(
+            (msg) => ({
+              id: msg.id,
+              role: msg.role,
+              content: msg.content,
+              timestamp: msg.timestamp,
+            })
+          );
+
+          setMessages(loadedMessages);
+          setConversationId(conversation.id);
+        } else {
+          // Initialize new conversation with welcome message
+          const conversationId =
+            await ChatPersistenceService.getOrCreateConversation(
+              insightId,
+              user.id
+            );
+          setConversationId(conversationId);
+
+          const welcomeMessage: Message = {
+            id: `rob-${Date.now()}`,
+            role: 'assistant',
+            content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
+            timestamp: new Date(),
+          };
+
+          setMessages([welcomeMessage]);
+
+          // Save welcome message to database
+          const welcomeMessageData: ChatMessageData = {
+            id: welcomeMessage.id,
+            role: welcomeMessage.role,
+            content: welcomeMessage.content,
+            timestamp: welcomeMessage.timestamp,
+          };
+
+          await ChatPersistenceService.saveMessage(
+            conversationId,
+            user.id,
+            welcomeMessageData
+          );
+        }
+      } catch (error) {
+        console.error('Failed to load conversation history:', error);
+        // Fall back to welcome message on error
+        const welcomeMessage: Message = {
+          id: `rob-${Date.now()}`,
+          role: 'assistant',
+          content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
+          timestamp: new Date(),
+        };
+        setMessages([welcomeMessage]);
+      } finally {
+        setIsLoadingHistory(false);
+      }
+    };
+
+    loadConversationHistory();
+  }, [isOpen, user, insightId, isLoadingHistory]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -121,6 +192,8 @@ export default function InsightChat({
       setInputMessage('');
       setValidationError(null);
       setIsLoading(false);
+      setConversationId(null);
+      setIsLoadingHistory(false);
     }
   }, [isOpen]);
 
@@ -161,6 +234,21 @@ export default function InsightChat({
     setIsLoading(true);
 
     try {
+      // Save user message to database
+      if (conversationId) {
+        const userMessageData: ChatMessageData = {
+          id: userMessage.id,
+          role: userMessage.role,
+          content: userMessage.content,
+          timestamp: userMessage.timestamp,
+        };
+        await ChatPersistenceService.saveMessage(
+          conversationId,
+          user.id,
+          userMessageData
+        );
+      }
+
       const response = await generateInsightChat({
         userMessage: inputMessage.trim(),
         conversationHistory: messages,
@@ -180,6 +268,21 @@ export default function InsightChat({
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
+
+      // Save assistant message to database
+      if (conversationId) {
+        const assistantMessageData: ChatMessageData = {
+          id: assistantMessage.id,
+          role: assistantMessage.role,
+          content: assistantMessage.content,
+          timestamp: assistantMessage.timestamp,
+        };
+        await ChatPersistenceService.saveMessage(
+          conversationId,
+          user.id,
+          assistantMessageData
+        );
+      }
     } catch (error) {
       console.error('Chat error:', error);
       showError('Failed to get response from Rob. Please try again.');
@@ -285,37 +388,48 @@ export default function InsightChat({
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((message) => (
-            <div
-              key={message.id}
-              className={cn(
-                'flex',
-                message.role === 'user' ? 'justify-end' : 'justify-start'
-              )}
-            >
-              <div
-                className={cn(
-                  'max-w-[80%] rounded-lg p-3',
-                  message.role === 'user'
-                    ? 'bg-accent text-void-900'
-                    : 'bg-liminal-overlay text-primary'
-                )}
-              >
-                {message.role === 'assistant' && (
-                  <div className="flex items-center gap-2 mb-1">
-                    <img src={robEmoji} alt="Rob" className="w-4 h-4" />
-                    <span className="text-xs text-accent font-medium">Rob</span>
-                  </div>
-                )}
-                <p className="whitespace-pre-wrap text-sm leading-relaxed">
-                  {message.content}
-                </p>
-                <div className="text-xs opacity-60 mt-1">
-                  {message.timestamp.toLocaleTimeString()}
-                </div>
+          {isLoadingHistory ? (
+            <div className="flex justify-center items-center py-8">
+              <div className="flex items-center gap-2 text-secondary">
+                <FaSpinner className="animate-spin" />
+                <span>Loading conversation history...</span>
               </div>
             </div>
-          ))}
+          ) : (
+            messages.map((message) => (
+              <div
+                key={message.id}
+                className={cn(
+                  'flex',
+                  message.role === 'user' ? 'justify-end' : 'justify-start'
+                )}
+              >
+                <div
+                  className={cn(
+                    'max-w-[80%] rounded-lg p-3',
+                    message.role === 'user'
+                      ? 'bg-accent text-void-900'
+                      : 'bg-liminal-overlay text-primary'
+                  )}
+                >
+                  {message.role === 'assistant' && (
+                    <div className="flex items-center gap-2 mb-1">
+                      <img src={robEmoji} alt="Rob" className="w-4 h-4" />
+                      <span className="text-xs text-accent font-medium">
+                        Rob
+                      </span>
+                    </div>
+                  )}
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {message.content}
+                  </p>
+                  <div className="text-xs opacity-60 mt-1">
+                    {message.timestamp.toLocaleTimeString()}
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
 
           {isLoading && (
             <div className="flex justify-start">

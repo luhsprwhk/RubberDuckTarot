@@ -237,9 +237,10 @@ function InsightDisplay({
             onClose={() => setIsChatOpen(false)}
             personalizedReading={personalizedReading}
             selectedBlock={selectedBlock}
-            userContext={userContext}
+            userContext={userContext || ''}
             drawnCards={drawnCards}
             userProfile={userProfile}
+            insightId={insightId || 0}
           />
         )}
 
