@@ -8,6 +8,7 @@ export const useUserProfile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
   const [hasProfile, setHasProfile] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const checkProfile = async () => {
@@ -23,10 +24,12 @@ export const useUserProfile = () => {
         const userProfile = await getUserProfile(user.id);
         setProfile(userProfile);
         setHasProfile(!!userProfile);
-      } catch (error) {
-        console.error('Failed to check user profile:', error);
+        setError(null);
+      } catch (err) {
+        console.error('Failed to check user profile:', err);
         setProfile(null);
         setHasProfile(false);
+        setError(err as Error);
       } finally {
         setProfileLoading(false);
       }
@@ -45,8 +48,10 @@ export const useUserProfile = () => {
       const userProfile = await getUserProfile(user.id);
       setProfile(userProfile);
       setHasProfile(!!userProfile);
-    } catch (error) {
-      console.error('Failed to refresh user profile:', error);
+      setError(null);
+    } catch (err) {
+      console.error('Failed to refresh user profile:', err);
+      setError(err as Error);
     } finally {
       setProfileLoading(false);
     }
@@ -56,6 +61,7 @@ export const useUserProfile = () => {
     profile,
     hasProfile,
     loading: authLoading || profileLoading,
+    error,
     refreshProfile,
   };
 };
