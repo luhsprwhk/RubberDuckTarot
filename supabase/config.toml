@@ -332,7 +332,8 @@ enabled = true
 client_id = "env(GOOGLE_CLIENT_ID)"
 secret = "env(GOOGLE_CLIENT_SECRET)"
 
+# TODO: Enable Twitter auth
 [auth.external.twitter]
-enabled = true
-client_id = "env(TWITTER_CLIENT_ID)"
-secret = "env(TWITTER_CLIENT_SECRET)"
+enabled = false
+# client_id = "env(TWITTER_CLIENT_ID)"
+# secret = "env(TWITTER_CLIENT_SECRET)"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import type { User } from '../../interfaces';
 import { supabase } from '../supabase/supabase';
@@ -21,6 +21,21 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [authModalMode, setAuthModalMode] = useState<'signIn' | 'signUp'>(
     'signIn'
   );
+
+  const subscribeToNewsletter = async (email: string) => {
+    const { error } = await resend.contacts.create({
+      email,
+      audienceId: 'c8cb077b-1d36-4b24-95e4-42ee7b5a59af',
+    });
+    return { error };
+  };
+
+  const handleNewsletterSubscription = useCallback(async (email: string) => {
+    const { error: newsletterError } = await subscribeToNewsletter(email);
+    if (newsletterError) {
+      console.error('Newsletter subscription failed:', newsletterError);
+    }
+  }, []);
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -58,17 +73,18 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     // Set up auth state change listener
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       try {
         setSession(session);
         if (session?.user) {
-          try {
-            const user = await getUserFromAuth(session.user.id);
-            setUser(user ?? null);
-          } catch (error) {
-            console.error('Failed to load user data:', error);
-            // Still set user to null but don't prevent the app from loading
-            setUser(null);
+          const userProfile = await getUserFromAuth(session.user.id);
+          setUser(userProfile ?? null);
+
+          // If the user just signed in and doesn't have a profile, they are a new user.
+          if (event === 'SIGNED_IN' && !userProfile) {
+            if (session.user.email) {
+              await handleNewsletterSubscription(session.user.email);
+            }
           }
         } else {
           setUser(null);
@@ -82,7 +98,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [handleNewsletterSubscription]);
 
   const signUpForWaitlist = async (
     email: string,
@@ -104,7 +120,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       options,
     });
     if (!error) {
-      await subscribeToNewsletter(email);
+      await handleNewsletterSubscription(email);
     }
     return { error };
   };
@@ -123,19 +139,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     });
     if (!error) {
       // Subscribe user to newsletter
-      const { error: newsletterError } = await subscribeToNewsletter(email);
-      if (newsletterError) {
-        console.error('Newsletter subscription failed:', newsletterError);
-      }
+      await handleNewsletterSubscription(email);
     }
-    return { error };
-  };
-
-  const subscribeToNewsletter = async (email: string) => {
-    const { error } = await resend.contacts.create({
-      email,
-      audienceId: 'c8cb077b-1d36-4b24-95e4-42ee7b5a59af',
-    });
     return { error };
   };
 
@@ -161,12 +166,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     return { error };
   };
 
-  const signInWithTwitter = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'twitter',
-    });
-    return { error };
-  };
+  // TODO: Enable Twitter auth
+  // const signInWithTwitter = async () => {
+  //   const { error } = await supabase.auth.signInWithOAuth({
+  //     provider: 'twitter',
+  //   });
+  //   return { error };
+  // };
 
   const signOut = async () => {
     await supabase.auth.signOut();
@@ -199,7 +205,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     signUpForWaitlist,
     signInWithMagicLink,
     signInWithGoogle,
-    signInWithTwitter,
+    // signInWithTwitter,
     signOut,
     refreshUser,
     isAuthModalOpen,
@@ -209,6 +215,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setAuthModalMode,
     signUpWithMagicLink,
     subscribeToNewsletter,
+    handleNewsletterSubscription,
   };
 
   return (

@@ -93,7 +93,7 @@ export const AuthModal = () => {
     signInWithMagicLink,
     signUpWithMagicLink,
     signInWithGoogle,
-    signInWithTwitter,
+    // signInWithTwitter,
   } = useAuth();
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
@@ -189,9 +189,10 @@ export const AuthModal = () => {
           ({ error: authError } = await signInWithGoogle());
           break;
 
-        case 'twitter':
-          ({ error: authError } = await signInWithTwitter());
-          break;
+        // TODO: Enable Twitter auth
+        // case 'twitter':
+        //   ({ error: authError } = await signInWithTwitter());
+        //   break;
       }
 
       if (authError) {
