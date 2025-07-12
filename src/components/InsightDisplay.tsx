@@ -19,7 +19,7 @@ import { NotionService } from '@/src/lib/notion/notion-service';
 import { NotionOperations } from '@/src/lib/notion/notion-operations';
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
-import InsightChat from './InsightChat';
+import InsightRobChat from './InsightRobChat';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -204,6 +204,7 @@ function InsightDisplay({
               </ul>
             </div>
           )}
+
           {/* Rob's Quip */}
           <div className="bg-liminal-overlay rounded-lg p-4 mt-6 mb-6 shadow-breakthrough border border-liminal-border">
             <h3 className="text-lg font-semibold text-accent mb-2">
@@ -232,7 +233,7 @@ function InsightDisplay({
 
         {/* Chat Component */}
         {personalizedReading && (
-          <InsightChat
+          <InsightRobChat
             isOpen={isChatOpen}
             onClose={() => setIsChatOpen(false)}
             personalizedReading={personalizedReading}
@@ -241,6 +242,7 @@ function InsightDisplay({
             drawnCards={drawnCards}
             userProfile={userProfile}
             insightId={insightId || 0}
+            reflectionPrompts={personalizedReading.reflectionPrompts}
           />
         )}
 

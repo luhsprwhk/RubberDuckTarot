@@ -482,7 +482,7 @@ const PricingCards = ({
                 Premium Duck
               </h3>
               <div className={cn('text-3xl font-bold text-primary mb-1')}>
-                $4.99
+                $5
               </div>
               <div className={cn('text-muted text-sm')}>per month (no ads)</div>
             </div>
