@@ -565,7 +565,7 @@ const Features = () => {
           <div className="container mx-auto px-4">
             <div className="max-w-6xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12 items-center">
-                {/* Left column – explanation */}
+                {/* Left column — explanation */}
                 <div id="chat-with-rob">
                   <div className="flex items-center gap-3 mb-6">
                     <MessageSquare className="w-12 h-12 text-breakthrough-400" />
@@ -580,8 +580,8 @@ const Features = () => {
 
                   <p className="text-secondary mb-6 leading-relaxed">
                     Rob is a ghostly developer trapped in a rubber duck. He
-                    remembers every card you’ve drawn, every block you’ve
-                    tracked, and every action you did (or didn’t). Open the chat
+                    remembers every card you've drawn, every block you've
+                    tracked, and every action you did (or didn't). Open the chat
                     and you get a context-aware partner who talks you through
                     the problem until the bug in your thinking surfaces.
                   </p>
@@ -594,8 +594,8 @@ const Features = () => {
                           Instant Context
                         </div>
                         <div className="text-sm text-secondary">
-                          Rob skims your entire Duck History before he says
-                          “hi,” so you never have to re-explain the issue.
+                          Rob skims your entire Duck History before he says "hi,
+                          " so you never have to re-explain the issue.
                         </div>
                       </div>
                     </div>
@@ -629,72 +629,82 @@ const Features = () => {
 
                   <div className="bg-breakthrough-500/10 p-4 rounded-lg border border-breakthrough-500/30">
                     <p className="text-secondary text-sm italic">
-                      "Say the risky idea out loud; I’ll just step through it
-                      until the logic holds."
+                      Say the risky idea out loud; I'll just step through it
+                      until the logic holds.
                     </p>
                     <div className="text-breakthrough-400 text-xs mt-2">
-                      — Rob Chen, Ethereal Consultant
+                      Rob Chen, Ethereal Consultant
                     </div>
                   </div>
                 </div>
 
-                {/* Right column – example chat */}
+                {/* Right column \u2013 example chats */}
                 <div className="flex flex-col gap-8">
+                  {/* Example 1 \u2013 Reclaiming Work Despite Health */}
                   <div className="bg-surface p-8 rounded-xl border border-liminal-border backdrop-blur-liminal">
                     <div className="text-center mb-6">
                       <div className="text-breakthrough-400 text-sm font-medium mb-2">
                         EXAMPLE CHAT
                       </div>
                       <div className="text-lg font-semibold text-primary">
-                        “I’ve rewritten this chorus ten times…”
+                        Reclaiming Work Despite Health
                       </div>
                     </div>
+
                     <div className="space-y-4">
                       <div className="p-4 bg-breakthrough-500/10 rounded-lg border border-breakthrough-500/30">
                         <div className="text-breakthrough-400 text-xs font-medium mb-2">
-                          ROB’S RETHINK
+                          ROB'S RETHINK
                         </div>
                         <div className="text-sm text-secondary mb-3">
-                          Sounds like a <strong>Delete Button</strong> moment.
-                          What’s one musical idea you can cut without mercy?
+                          Recovery isn't linear—some days you're running at full
+                          CPU, other days you're in power-saving mode. Let's map
+                          tomorrow's tasks to the energy you'll realistically
+                          have.
                         </div>
                       </div>
+
                       <div className="text-xs text-muted">
-                        <strong>Action prompt: </strong>Delete one redundant
-                        melody line and record a new take tonight.
+                        <strong>Action prompt:</strong> Match tomorrow's tasks
+                        to your expected energy level (full CPU vs
+                        power-saving).
                       </div>
                     </div>
                   </div>
 
+                  {/* Example 2 \u2013 Friday time-crunch feature */}
                   <div className="bg-surface p-8 rounded-xl border border-liminal-border backdrop-blur-liminal">
                     <div className="text-center mb-6">
                       <div className="text-breakthrough-400 text-sm font-medium mb-2">
                         EXAMPLE CHAT
                       </div>
                       <div className="text-lg font-semibold text-primary">
-                        “My manager just slapped a ‘quick’ feature on Friday’s
-                        release…”
+                        "My manager just slapped a 'quick' feature on Friday's
+                        release..."
                       </div>
                     </div>
+
                     <div className="space-y-4">
                       <div className="p-4 bg-breakthrough-500/10 rounded-lg border border-breakthrough-500/30">
                         <div className="text-breakthrough-400 text-xs font-medium mb-2">
-                          ROB’S RETHINK
+                          ROB'S RETHINK
                         </div>
                         <div className="text-sm text-secondary mb-3">
-                          Friday is 36 hours away. Let’s open your
+                          Friday is 36 hours away. Let's open your
                           <strong> Portable Charger</strong>: which backup task
                           can you postpone to free up four focused hours?
                         </div>
                       </div>
+
                       <div className="text-xs text-muted">
-                        <strong>Action prompt: </strong>Reschedule a
+                        <strong>Action prompt:</strong> Reschedule a
                         non-essential task to next week and block four hours for
                         the new feature.
                       </div>
                     </div>
                   </div>
                 </div>
+                {/* End right column */}
               </div>
             </div>
           </div>
@@ -716,21 +726,20 @@ const Features = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={() => showAuthModal('signUp')}
-                  className="bg-breakthrough-400 text-void-900 px-8 py-4 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 flex items-center justify-center gap-2 shadow-breakthrough"
+                  className="cursor-pointer bg-breakthrough-400 text-void-900 px-8 py-4 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 flex items-center justify-center gap-2 shadow-breakthrough"
                 >
                   {authEnabled ? 'Start Free' : 'Join Waitlist'}
                   <ArrowRight className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => navigate('/pricing')}
-                  className="border-2 border-breakthrough-400 text-breakthrough-400 px-8 py-4 rounded-lg font-medium hover:bg-breakthrough-400/10 transition-colors duration-200"
+                  className="cursor-pointer border-2 border-breakthrough-400 text-breakthrough-400 px-8 py-4 rounded-lg font-medium hover:bg-breakthrough-400/10 transition-colors duration-200"
                 >
                   View Pricing
                 </button>
               </div>
               <p className="text-sm text-muted mt-4">
-                * Premium removes limits and adds advanced features
-                ($4.99/month)
+                * Premium removes limits and adds advanced features ($5/month)
               </p>
             </div>
           </div>
