@@ -2,6 +2,7 @@ import { Check, X, Zap, Crown, Ghost, ArrowRight } from 'lucide-react';
 import Footer from '@/src/components/Footer';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { cn } from '@/src/lib/utils';
+import upgradeHero from '@/src/assets/upgrade-hero.png';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import { isWaitlistEnabled } from '@/src/lib/featureFlags';
 
@@ -17,18 +18,22 @@ const Upgrade = () => {
           <div className={cn('mb-8')}>
             <div
               className={cn(
-                'w-32 h-32 mx-auto',
+                'w-80 h-80 mx-auto',
                 'flex items-center justify-center mb-4 relative'
               )}
             >
               <div
                 id="upgrade-banner"
                 className={cn(
-                  'w-24 h-24 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full',
+                  'w-80 h-80 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500',
                   'flex items-center justify-center animate-pulse-glow shadow-glow'
                 )}
               >
-                <img src={robEmoji} alt="Rob" className="w-20 h-20" />
+                <img
+                  src={upgradeHero}
+                  alt="Rubber Duck"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div
                 className={cn(
