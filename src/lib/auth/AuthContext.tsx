@@ -21,6 +21,9 @@ interface AuthContextType {
     captchaToken?: string | null,
     shouldCreateUser?: boolean
   ) => Promise<{ error: AuthError | null }>;
+  signInWithGoogle: () => Promise<{ error: AuthError | null }>;
+  signInWithGitHub: () => Promise<{ error: AuthError | null }>;
+  signInWithApple: () => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
   isAuthModalOpen: boolean;

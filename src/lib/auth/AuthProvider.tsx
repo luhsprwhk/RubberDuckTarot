@@ -154,6 +154,36 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     return { error };
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
+      },
+    });
+    return { error };
+  };
+
+  const signInWithGitHub = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
+      },
+    });
+    return { error };
+  };
+
+  const signInWithApple = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'apple',
+      options: {
+        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
+      },
+    });
+    return { error };
+  };
+
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -184,6 +214,9 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     loading,
     signUpForWaitlist,
     signInWithMagicLink,
+    signInWithGoogle,
+    signInWithGitHub,
+    signInWithApple,
     signOut,
     refreshUser,
     isAuthModalOpen,
