@@ -7,6 +7,7 @@ import { getInsightsByUserBlockId } from '../lib/insights/insight-queries';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { Plus, Lightbulb, Calendar } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
@@ -85,13 +86,31 @@ const BlockDetails: React.FC = () => {
               ? `${blockType.emoji} ${blockType.name}`
               : block.block_type_id}
           </h1>
-          <button
-            onClick={handleNewInsight}
-            className="cursor-pointer bg-breakthrough-400 text-void-900 px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300 transition-colors duration-200 flex items-center gap-2"
-          >
-            <Plus className="w-4 h-4 " />
-            New Insight
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={handleNewInsight}
+              className={cn(
+                'cursor-pointer bg-breakthrough-400 text-void-900',
+                'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
+                'transition-colors duration-200 flex items-center gap-2 text-xs',
+                block.status === 'resolved'
+                  ? 'opacity-60 cursor-not-allowed'
+                  : ''
+              )}
+            >
+              <Plus className="w-4 h-4 " />
+              New Insight
+            </button>
+            <button
+              className={cn(
+                'cursor-pointer bg-breakthrough-400 text-void-900',
+                'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
+                'transition-colors duration-200 text-xs'
+              )}
+            >
+              Chat with Rob
+            </button>
+          </div>
         </div>
 
         <div className="mb-4 text-lg font-semibold text-primary">
