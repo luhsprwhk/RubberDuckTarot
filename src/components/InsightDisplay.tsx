@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { cn } from '@/src/lib/utils';
-import { FaSpinner } from 'react-icons/fa';
+import { FaSpinner, FaComments } from 'react-icons/fa';
 
 const insightPanelClass = cn(
   'bg-liminal-surface border-liminal-overlay shadow-breakthrough border border-liminal-border rounded-lg'
 );
 
-import type { Card, BlockType, UserBlock } from '@/src/interfaces';
+import type { Card, BlockType, UserBlock, UserProfile } from '@/src/interfaces';
 import type { PersonalizedReading } from '@/src/ai';
 import robEmoji from '@/src/assets/rob-emoji.png';
 import AdBanner from './AdBanner';
@@ -19,6 +19,7 @@ import { NotionService } from '@/src/lib/notion/notion-service';
 import { NotionOperations } from '@/src/lib/notion/notion-operations';
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
+import InsightChat from './InsightChat';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -32,6 +33,8 @@ interface InsightDisplayProps {
   initialTookAction?: boolean;
   userBlock?: UserBlock | null;
   isPremium: boolean;
+  userContext?: string;
+  userProfile?: UserProfile;
 }
 
 function InsightDisplay({
@@ -45,8 +48,12 @@ function InsightDisplay({
   initialTookAction,
   userBlock,
   isPremium,
+  userContext = '',
+  userProfile,
 }: InsightDisplayProps) {
   const navigate = useNavigate();
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const handleSentimentChange = async (
     insightId: number,
     resonated?: boolean,
@@ -167,10 +174,24 @@ function InsightDisplay({
           {/* Reflection Prompts */}
           {(personalizedReading?.reflectionPrompts ?? []).length > 0 && (
             <div className="bg-liminal-overlay rounded-lg p-4 mt-6 mb-6 shadow-breakthrough border border-liminal-border">
-              <h3 className="text-lg font-semibold text-accent mb-2">
-                <span className={cn('text-xl mr-2')}>🪞</span>
-                Explore Further
-              </h3>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold text-accent">
+                  <span className={cn('text-xl mr-2')}>🪞</span>
+                  Explore Further
+                </h3>
+                <button
+                  onClick={() => setIsChatOpen(true)}
+                  className={cn(
+                    'px-3 py-1 text-sm rounded-md font-medium transition-colors',
+                    'bg-accent text-void-900 hover:bg-accent/90 flex items-center gap-2',
+                    'cursor-pointer hover:text-primary'
+                  )}
+                  title="Keep talking to Rob about this insight"
+                >
+                  <FaComments />
+                  Chat with Rob
+                </button>
+              </div>
               <ul className={cn('space-y-2 bullet-list')}>
                 {personalizedReading?.reflectionPrompts?.map(
                   (prompt, index) => (
@@ -208,6 +229,20 @@ function InsightDisplay({
             />
           )}
         </div>
+
+        {/* Chat Component */}
+        {personalizedReading && (
+          <InsightChat
+            isOpen={isChatOpen}
+            onClose={() => setIsChatOpen(false)}
+            personalizedReading={personalizedReading}
+            selectedBlock={selectedBlock}
+            userContext={userContext || ''}
+            drawnCards={drawnCards}
+            userProfile={userProfile}
+            insightId={insightId || 0}
+          />
+        )}
 
         {/* View User Block */}
         {userBlock && (

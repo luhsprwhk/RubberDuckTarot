@@ -149,6 +149,40 @@ export const userCardReflections = pgTable(
   })
 );
 
+// Chat conversations linked to specific insights
+export const insightConversations = pgTable('insight_conversations', {
+  id: serial('id').primaryKey(),
+  insight_id: integer('insight_id').notNull(), // Foreign key to insights table
+  user_id: text('user_id').notNull(), // For easier querying and permission checks
+  started_at: timestamp('started_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  last_message_at: timestamp('last_message_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  message_count: integer('message_count').notNull().default(0),
+  is_active: boolean('is_active').notNull().default(true), // Can be set to false to archive
+});
+
+// Individual chat messages (encrypted for privacy)
+export const chatMessages = pgTable('chat_messages', {
+  id: serial('id').primaryKey(),
+  conversation_id: integer('conversation_id').notNull(), // Foreign key to insight_conversations
+  user_id: text('user_id').notNull(), // For easier permission checks
+  role: text('role').notNull(), // 'user' | 'assistant'
+  content: text('content').notNull(), // Encrypted message content
+  metadata: jsonb('metadata').$type<{
+    // Optional metadata for analytics (not encrypted)
+    token_count?: number;
+    response_time_ms?: number;
+    user_sentiment?: 'positive' | 'neutral' | 'negative';
+    topics?: string[]; // Extracted topics for analytics
+  }>(),
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
 export type Card = typeof cards.$inferSelect;
 export type BlockType = typeof blockTypes.$inferSelect;
 export type Insight = typeof insights.$inferSelect;
@@ -157,3 +191,24 @@ export type UserProfile = typeof user_profiles.$inferSelect;
 export type UserBlock = typeof userBlocks.$inferSelect;
 export type UserCardAdvice = typeof userCardAdvice.$inferSelect;
 export type UserCardReflection = typeof userCardReflections.$inferSelect;
+export type InsightConversation = typeof insightConversations.$inferSelect;
+export type ChatMessage = typeof chatMessages.$inferSelect;
+
+// User privacy settings for chat data
+export const userChatPrivacySettings = pgTable('user_chat_privacy_settings', {
+  id: serial('id').primaryKey(),
+  user_id: text('user_id').notNull().unique(), // Foreign key to users table
+  retention_period_days: integer('retention_period_days').notNull().default(30), // -1 means never delete
+  automatic_cleanup: boolean('automatic_cleanup').notNull().default(true),
+  analytics_opt_in: boolean('analytics_opt_in').notNull().default(false), // Privacy-first: opt-in
+  export_enabled: boolean('export_enabled').notNull().default(true),
+  created_at: timestamp('created_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type UserChatPrivacySettings =
+  typeof userChatPrivacySettings.$inferSelect;

@@ -22,6 +22,20 @@
       "when": 1751847000000,
       "tag": "0002_add_notion_integration",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751847000001,
+      "tag": "0003_create_update_conversation_metadata_function",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1751847000002,
+      "tag": "0004_create_user_chat_privacy_settings",
+      "breakpoints": true
     }
   ]
 }

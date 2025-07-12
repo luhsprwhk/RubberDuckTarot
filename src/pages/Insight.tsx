@@ -4,16 +4,18 @@ import { getInsightById } from '@/src/lib/insights/insight-queries';
 import { getCardById } from '@/src/lib/cards/card-queries';
 import { getBlockTypeById } from '@/src/lib/blocktypes/blocktype-queries';
 import Loading from '../components/Loading';
-import type { Insight, Card, BlockType } from '@/src/interfaces';
+import type { Insight, Card, BlockType, UserProfile } from '@/src/interfaces';
 import ErrorState from '../components/ErrorState';
 import InsightDisplay from '../components/InsightDisplay';
 import useAuth from '@/src/lib/hooks/useAuth';
 import { getUserBlockById } from '@/src/lib/blocks/block-queries';
 import type { UserBlock } from '@/src/interfaces';
+import { getUserProfile } from '@/src/lib/userPreferences';
 
 const InsightPage: React.FC = () => {
   const { user } = useAuth();
   const [userBlock, setUserBlock] = useState<UserBlock | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const { id } = useParams<{ id: string }>();
   const [insight, setInsight] = useState<Insight | null>(null);
   const [cards, setCards] = useState<Card[]>([]);
@@ -68,6 +70,17 @@ const InsightPage: React.FC = () => {
           insightData.block_type_id
         );
         setBlockType(fetchedBlockType);
+
+        // Fetch user profile if user is available
+        if (user) {
+          try {
+            const profile = await getUserProfile(user.id);
+            setUserProfile(profile);
+          } catch (err) {
+            console.error('Failed to fetch user profile:', err);
+            setUserProfile(null);
+          }
+        }
       } catch (err) {
         setError('Failed to fetch insight data.');
         console.error(err);
@@ -77,7 +90,7 @@ const InsightPage: React.FC = () => {
     };
 
     fetchInsightData();
-  }, [id]);
+  }, [id, user]);
 
   if (loading) {
     return <Loading text="Loading insight..." />;
@@ -108,6 +121,8 @@ const InsightPage: React.FC = () => {
       initialTookAction={insight.took_action}
       userBlock={userBlock}
       isPremium={user?.premium ?? false}
+      userContext={insight.user_context || ''}
+      userProfile={userProfile || undefined}
     />
   );
 };
