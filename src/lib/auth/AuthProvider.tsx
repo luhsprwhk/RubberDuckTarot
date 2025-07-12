@@ -157,29 +157,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
-      },
     });
     return { error };
   };
 
-  const signInWithGitHub = async () => {
+  const signInWithTwitter = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: {
-        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
-      },
-    });
-    return { error };
-  };
-
-  const signInWithApple = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'apple',
-      options: {
-        redirectTo: import.meta.env.VITE_EMAIL_WELCOME_URL,
-      },
+      provider: 'twitter',
     });
     return { error };
   };
@@ -215,8 +199,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     signUpForWaitlist,
     signInWithMagicLink,
     signInWithGoogle,
-    signInWithGitHub,
-    signInWithApple,
+    signInWithTwitter,
     signOut,
     refreshUser,
     isAuthModalOpen,
