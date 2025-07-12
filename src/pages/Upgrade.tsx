@@ -450,7 +450,7 @@ const Upgrade = () => {
               <button
                 onClick={() => showAuthModal('signUp')}
                 className={cn(
-                  'bg-breakthrough-400 text-void-900 px-8 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough'
+                  'cursor-pointer bg-breakthrough-400 text-void-900 px-8 py-3 rounded-lg font-semibold hover:bg-breakthrough-300 transition-all duration-200 shadow-breakthrough'
                 )}
               >
                 {waitlistEnabled
