@@ -19,7 +19,8 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "supabase:seed": "tsx supabase/seed.ts",
-    "convert-gifs": "node scripts/convert-gifs.cjs"
+    "convert-gifs": "node scripts/convert-gifs.cjs",
+    "supabase:restart": "supabase stop && supabase start"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [
