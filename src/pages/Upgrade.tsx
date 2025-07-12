@@ -22,6 +22,7 @@ const Upgrade = () => {
               )}
             >
               <div
+                id="upgrade-banner"
                 className={cn(
                   'w-24 h-24 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full',
                   'flex items-center justify-center animate-pulse-glow shadow-glow'
