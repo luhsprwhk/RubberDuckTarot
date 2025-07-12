@@ -15,7 +15,9 @@ import {
   blockPatterns,
   spiritAnimals,
 } from '../lib/userProfileValues';
+import Loading from '@/src/components/Loading';
 import { NotionService } from '../lib/notion/notion-service';
+import { cn } from '../lib/utils';
 
 const Preferences = () => {
   const { user } = useAuth();
@@ -123,8 +125,8 @@ const Preferences = () => {
 
   if (loading && !loadingTimeoutExceeded) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className={cn('flex items-center justify-center min-h-screen')}>
+        <Loading />
       </div>
     );
   }
