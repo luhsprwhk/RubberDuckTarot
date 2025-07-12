@@ -15,17 +15,30 @@ import {
   blockPatterns,
   spiritAnimals,
 } from '../lib/userProfileValues';
+import Loading from '@/src/components/Loading';
 import { NotionService } from '../lib/notion/notion-service';
+import { cn } from '../lib/utils';
 
 const Preferences = () => {
   const { user } = useAuth();
-  const { profile, loading, refreshProfile } = useUserProfile();
+  const { profile, loading, error, refreshProfile } = useUserProfile();
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
   const [formData, setFormData] = useState<Partial<UserProfile>>({});
   const [customSuperpower, setCustomSuperpower] = useState('');
   const [customKryptonite, setCustomKryptonite] = useState('');
   const [connectingNotion, setConnectingNotion] = useState(false);
+  const [loadingTimeoutExceeded, setLoadingTimeoutExceeded] = useState(false);
+
+  // If loading takes longer than 10 seconds, show fallback UI
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setLoadingTimeoutExceeded(true), 10000);
+      return () => clearTimeout(timer);
+    } else {
+      setLoadingTimeoutExceeded(false);
+    }
+  }, [loading]);
 
   useEffect(() => {
     if (profile) {
@@ -110,11 +123,17 @@ const Preferences = () => {
   const isNotionConnected =
     user?.notion_access_token && user?.notion_workspace_id;
 
-  if (loading) {
+  if (loading && !loadingTimeoutExceeded) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className={cn('flex items-center justify-center min-h-screen')}>
+        <Loading />
       </div>
+    );
+  }
+
+  if (error || loadingTimeoutExceeded) {
+    return (
+      <ErrorState message="Failed to load profile." onRetry={refreshProfile} />
     );
   }
 
@@ -463,3 +482,27 @@ const NoProfileFound = () => {
 };
 
 export default Preferences;
+
+// --- Helper components ---
+
+interface ErrorStateProps {
+  message: string;
+  onRetry: () => void;
+}
+
+const ErrorState = ({ message, onRetry }: ErrorStateProps) => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen text-center space-y-4">
+      <p className="text-lg text-secondary max-w-sm">{message}</p>
+      <button
+        onClick={onRetry}
+        className="cursor-pointer px-4 py-2 bg-breakthrough-500 text-primary rounded-lg hover:bg-breakthrough-600 transition"
+      >
+        Retry
+      </button>
+      <Link to="/" className="text-breakthrough-500 hover:underline">
+        Go Home
+      </Link>
+    </div>
+  );
+};
