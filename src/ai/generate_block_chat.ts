@@ -35,14 +35,19 @@ interface GenerateBlockChatParams {
 }
 
 const formatRelevantInsights = (insights: Insight[]): string => {
-  if (!insights || insights.length === 0) {
+  // Defensive check for null/undefined insights array
+  if (!insights || !Array.isArray(insights) || insights.length === 0) {
     return 'No previous insights with positive feedback yet.';
   }
 
   // Only include insights that resonated or where user took action
-  const relevantInsights = insights.filter(
-    (insight) => insight.resonated || insight.took_action
-  );
+  // Add defensive checks for null insights and missing properties
+  const relevantInsights = insights.filter((insight) => {
+    if (!insight || typeof insight !== 'object') {
+      return false;
+    }
+    return Boolean(insight.resonated) || Boolean(insight.took_action);
+  });
 
   if (relevantInsights.length === 0) {
     return 'No previous insights with positive feedback yet.';
@@ -50,21 +55,83 @@ const formatRelevantInsights = (insights: Insight[]): string => {
 
   return relevantInsights
     .map((insight, index) => {
-      const timeAgo = new Date(insight.created_at).toLocaleDateString();
+      // Defensive check for insight object and created_at
+      if (!insight || typeof insight !== 'object') {
+        return `${index + 1}. Invalid insight data`;
+      }
+
+      // Safe date handling with fallback
+      let timeAgo = 'Unknown date';
+      try {
+        if (insight.created_at) {
+          const date = new Date(insight.created_at);
+          if (!isNaN(date.getTime())) {
+            timeAgo = date.toLocaleDateString();
+          }
+        }
+      } catch (error) {
+        console.warn('Invalid date in insight:', insight.created_at, error);
+      }
+
+      // Safe feedback array construction
       const feedback = [];
-      if (insight.resonated) feedback.push('resonated');
-      if (insight.took_action) feedback.push('took action');
+      if (insight.resonated === true) feedback.push('resonated');
+      if (insight.took_action === true) feedback.push('took action');
 
+      // Defensive reading data access
       const reading = insight.reading as PersonalizedReading;
-      const keyInsights = Array.isArray(reading?.keyInsights)
-        ? reading.keyInsights
-        : [];
-      const interpretation = reading?.interpretation || '';
 
-      return `${index + 1}. ${timeAgo} (${feedback.join(', ')}):
-   ${keyInsights.length > 0 ? `Key Insights: ${keyInsights.join(', ')}` : ''}
-   ${interpretation ? `Rob's Take: ${interpretation.substring(0, 200)}${interpretation.length > 200 ? '...' : ''}` : ''}`;
+      // Safe key insights extraction with multiple fallbacks
+      let keyInsights: string[] = [];
+      try {
+        if (reading && typeof reading === 'object' && reading.keyInsights) {
+          if (Array.isArray(reading.keyInsights)) {
+            keyInsights = reading.keyInsights.filter(
+              (insight) => insight && typeof insight === 'string'
+            );
+          }
+        }
+      } catch (error) {
+        console.warn('Error accessing keyInsights:', error);
+      }
+
+      // Safe interpretation extraction with null checks
+      let interpretation = '';
+      try {
+        if (reading && typeof reading === 'object' && reading.interpretation) {
+          interpretation = String(reading.interpretation).trim();
+        }
+      } catch (error) {
+        console.warn('Error accessing interpretation:', error);
+      }
+
+      // Build the insight string with defensive formatting
+      const feedbackStr =
+        feedback.length > 0 ? feedback.join(', ') : 'positive feedback';
+      const keyInsightsStr =
+        keyInsights.length > 0 ? `Key Insights: ${keyInsights.join(', ')}` : '';
+
+      let interpretationStr = '';
+      if (interpretation) {
+        // Safe substring with bounds checking
+        const maxLength = 200;
+        if (interpretation.length > maxLength) {
+          interpretationStr = `Rob's Take: ${interpretation.substring(0, maxLength)}...`;
+        } else {
+          interpretationStr = `Rob's Take: ${interpretation}`;
+        }
+      }
+
+      // Construct the final string with safe joins
+      const parts = [
+        `${index + 1}. ${timeAgo} (${feedbackStr}):`,
+        keyInsightsStr,
+        interpretationStr,
+      ].filter((part) => part.trim() !== '');
+
+      return parts.join('\n   ');
     })
+    .filter((entry) => entry && entry.trim() !== '') // Remove any empty entries
     .join('\n\n');
 };
 
@@ -77,6 +144,23 @@ export async function generateBlockChat({
   blockInsights = [],
 }: GenerateBlockChatParams): Promise<string> {
   try {
+    // Defensive parameter validation
+    if (!userMessage || typeof userMessage !== 'string') {
+      throw new Error('Invalid user message provided');
+    }
+
+    if (!userId || typeof userId !== 'string') {
+      throw new Error('Invalid user ID provided');
+    }
+
+    if (!userBlock || typeof userBlock !== 'object') {
+      throw new Error('Invalid user block data provided');
+    }
+
+    if (!blockType || typeof blockType !== 'object') {
+      throw new Error('Invalid block type data provided');
+    }
+
     // Apply rate limiting
     const rateLimitResult = await rateLimiter.checkLimit(
       userId,
@@ -97,42 +181,99 @@ export async function generateBlockChat({
     }
 
     // Get context metaphors for more relatable language - use block type as fallback context
+    // Defensive access to blockType.name
+    const blockTypeName = blockType?.name
+      ? String(blockType.name).toLowerCase()
+      : 'general';
     const contextMetaphors = getContextMetaphors({
       creative_identity: 'general',
-      work_context: blockType.name.toLowerCase(),
+      work_context: blockTypeName,
     });
 
     // Trim conversation history to recent messages for context
-    const recentHistory = conversationHistory
+    // Defensive check for conversation history
+    const safeConversationHistory = Array.isArray(conversationHistory)
+      ? conversationHistory
+      : [];
+    const recentHistory = safeConversationHistory
+      .filter(
+        (msg) => msg && typeof msg === 'object' && msg.role && msg.content
+      ) // Filter out invalid messages
       .slice(-6) // Keep last 6 messages for context
       .map((msg) => ({
-        role: msg.role,
-        content: msg.content,
+        role: String(msg.role),
+        content: String(msg.content),
       }));
 
-    // Format relevant insights
-    const relevantInsights = formatRelevantInsights(blockInsights);
+    // Format relevant insights with defensive array check
+    const safeBlockInsights = Array.isArray(blockInsights) ? blockInsights : [];
+    const relevantInsights = formatRelevantInsights(safeBlockInsights);
 
-    // Build the prompt for block discussion
+    // Build the prompt for block discussion with defensive data access
+    const blockName = userBlock?.name
+      ? String(userBlock.name)
+      : 'Unnamed Block';
+    const blockTypeNameDisplay = blockType?.name
+      ? String(blockType.name)
+      : 'General';
+    const blockTypeEmoji = blockType?.emoji ? String(blockType.emoji) : '🎯';
+    const blockStatus = userBlock?.status
+      ? String(userBlock.status)
+      : 'unknown';
+    const blockNotes = userBlock?.notes
+      ? String(userBlock.notes)
+      : 'No notes yet';
+
+    // Safe date handling for created_at
+    let createdDate = 'Unknown date';
+    try {
+      if (userBlock?.created_at) {
+        const date = new Date(userBlock.created_at);
+        if (!isNaN(date.getTime())) {
+          createdDate = date.toLocaleDateString();
+        }
+      }
+    } catch (error) {
+      console.warn(
+        'Invalid created_at date in userBlock:',
+        userBlock?.created_at,
+        error
+      );
+    }
+
+    // Safe context metaphors access
+    const metaphorStyle = contextMetaphors?.style
+      ? String(contextMetaphors.style)
+      : 'General advice approach';
+    const metaphorNote = contextMetaphors?.note
+      ? String(contextMetaphors.note)
+      : '';
+
+    // Safe conversation history formatting
+    const conversationHistoryStr =
+      recentHistory.length > 0
+        ? recentHistory.map((msg) => `${msg.role}: ${msg.content}`).join('\n')
+        : '';
+
     const prompt = `You are Rob, a wise and experienced consultant helping someone work through a personal block they're tracking. Here's the context:
 
 BLOCK DETAILS:
-- Block Name: "${userBlock.name}"
-- Block Category: ${blockType.name} (${blockType.emoji})
-- Block Status: ${userBlock.status}
-- Block Notes: ${userBlock.notes || 'No notes yet'}
-- Created: ${new Date(userBlock.created_at).toLocaleDateString()}
+- Block Name: "${blockName}"
+- Block Category: ${blockTypeNameDisplay} (${blockTypeEmoji})
+- Block Status: ${blockStatus}
+- Block Notes: ${blockNotes}
+- Created: ${createdDate}
 
 RELEVANT PAST INSIGHTS (only insights that resonated or where user took action):
 ${relevantInsights}
 
 CONTEXT METAPHORS (use these to make advice more relatable):
-${contextMetaphors.style} - ${contextMetaphors.note}
+${metaphorStyle}${metaphorNote ? ` - ${metaphorNote}` : ''}
 
 CONVERSATION HISTORY:
-${recentHistory.map((msg) => `${msg.role}: ${msg.content}`).join('\n')}
+${conversationHistoryStr}
 
-USER'S CURRENT MESSAGE: "${userMessage}"
+USER'S CURRENT MESSAGE: "${userMessage.trim()}"
 
 Respond as Rob with practical, empathetic advice about this block. Focus on:
 1. Understanding the specific situation they're dealing with
@@ -168,6 +309,11 @@ Keep your response conversational, insightful, and under 300 words. Don't repeat
     return content.text.trim();
   } catch (error) {
     if (error instanceof RateLimitError) {
+      throw error;
+    }
+
+    // Re-throw validation errors as-is
+    if (error instanceof Error && error.message.includes('Invalid')) {
       throw error;
     }
 
