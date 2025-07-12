@@ -6,6 +6,7 @@ import { Fragment } from 'react';
 import useAuth from '../lib/hooks/useAuth';
 import useAlert from '../lib/hooks/useAlert';
 import { isWaitlistEnabled } from '../lib/featureFlags';
+import robEmoji from '../assets/rob-emoji.png';
 
 const EmailAuthForm = ({
   handleSubmit,
@@ -22,7 +23,7 @@ const EmailAuthForm = ({
   error: string;
   isSignUp: boolean;
 }) => (
-  <form onSubmit={handleSubmit} className="space-y-4 mt-6">
+  <form onSubmit={handleSubmit} className="space-y-4">
     <div>
       <label className="block text-sm font-medium text-primary mb-2">
         Email Address
@@ -232,7 +233,7 @@ export const AuthModal = () => {
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel className="bg-surface rounded-lg max-w-md w-full p-6 text-left align-middle shadow-xl transform transition-all">
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex justify-between items-center">
                   <Dialog.Title className="text-2xl font-bold text-primary">
                     {isSignIn
                       ? 'Sign In'
@@ -257,6 +258,11 @@ export const AuthModal = () => {
                         ref={captchaRef}
                         theme="dark"
                       />
+                      <img
+                        src={robEmoji}
+                        alt=""
+                        className="w-20 h-20 mb-6 mx-auto"
+                      />
                     </div>
                   ) : (
                     <>
@@ -269,18 +275,16 @@ export const AuthModal = () => {
                         isSignUp={isSignUp}
                       />
 
-                      {!isSignUp && (
-                        <div className="relative mt-6">
-                          <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300" />
-                          </div>
-                          <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-surface text-accent font-semibold">
-                              Or continue with social
-                            </span>
-                          </div>
+                      <div className="relative mt-6">
+                        <div className="absolute inset-0 flex items-center">
+                          <div className="w-full border-t border-gray-300" />
                         </div>
-                      )}
+                        <div className="relative flex justify-center text-sm">
+                          <span className="px-2 bg-surface text-accent font-semibold">
+                            Or continue with social
+                          </span>
+                        </div>
+                      </div>
 
                       {/* Social Auth Buttons */}
                       <div className="space-y-3 mb-6 mt-6">
@@ -309,7 +313,7 @@ export const AuthModal = () => {
                           </svg>
                           Continue with Google
                         </SocialButton>
-                        <SocialButton
+                        {/*                         <SocialButton
                           provider="twitter"
                           onClick={handleSocialAuth}
                           loading={loading}
@@ -322,7 +326,7 @@ export const AuthModal = () => {
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                           </svg>
                           Continue with X
-                        </SocialButton>
+                        </SocialButton> */}
                       </div>
                     </>
                   )}
