@@ -105,7 +105,7 @@ const Blocks: React.FC = () => {
           <React.Fragment key={block.id}>
             <Link
               to={`/blocks/${block.id}`}
-              className="block bg-liminal-overlay border-l-4 border-liminal-border rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer hover:border-breakthrough-400"
+              className="block bg-liminal-overlay border border-default rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow cursor-pointer hover:border-breakthrough-400"
               style={{ textDecoration: 'none', color: 'inherit' }}
             >
               <div className="flex justify-between items-start mb-4">

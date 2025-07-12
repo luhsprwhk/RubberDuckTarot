@@ -41,6 +41,7 @@ interface InsightChatProps {
   drawnCards: Array<{ name: string; emoji: string; reversed?: boolean }>;
   userProfile?: UserProfile;
   insightId: number; // Add insightId for persistence
+  reflectionPrompts?: string[];
 }
 
 export default function InsightChat({
@@ -52,6 +53,7 @@ export default function InsightChat({
   drawnCards,
   userProfile,
   insightId,
+  reflectionPrompts,
 }: InsightChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
@@ -61,13 +63,14 @@ export default function InsightChat({
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const cleanupIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isMountedRef = useRef(true);
   const { user } = useAuth();
   const { showError } = useAlert();
 
   // Load conversation history when modal opens
   useEffect(() => {
     const loadConversationHistory = async () => {
-      if (!isOpen || !user || isLoadingHistory) return;
+      if (!isOpen || !user || !isMountedRef.current) return;
 
       setIsLoadingHistory(true);
       try {
@@ -78,6 +81,9 @@ export default function InsightChat({
         );
 
         if (conversation && conversation.messages.length > 0) {
+          // Check if component is still mounted before updating state
+          if (!isMountedRef.current) return;
+
           // Convert ChatMessageData to Message format
           const loadedMessages: Message[] = conversation.messages.map(
             (msg) => ({
@@ -97,12 +103,24 @@ export default function InsightChat({
               insightId,
               user.id
             );
+
+          if (!isMountedRef.current) return;
+
           setConversationId(conversationId);
 
           const welcomeMessage: Message = {
             id: `rob-${Date.now()}`,
             role: 'assistant',
-            content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
+            content:
+              reflectionPrompts && reflectionPrompts.length > 0
+                ? reflectionPrompts.length === 1
+                  ? `I see you want to explore the reflection prompt. Here it is again for you:\n\n* ${reflectionPrompts[0]}\n\nWould you like to discuss this, or do you have another question?`
+                  : `I see you want to explore some of the reflection prompts. Here they are again for you:\n\n${reflectionPrompts
+                      .map((p) => `* ${p}`)
+                      .join(
+                        '\n'
+                      )}\n\nWhich one would you like to discuss? Or do you have another question?`
+                : `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
             timestamp: new Date(),
           };
 
@@ -125,20 +143,33 @@ export default function InsightChat({
       } catch (error) {
         console.error('Failed to load conversation history:', error);
         // Fall back to welcome message on error
+        if (!isMountedRef.current) return;
+
         const welcomeMessage: Message = {
           id: `rob-${Date.now()}`,
           role: 'assistant',
-          content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
+          content:
+            reflectionPrompts && reflectionPrompts.length > 0
+              ? reflectionPrompts.length === 1
+                ? `I see you want to explore the reflection prompt. Here it is again for you:\n\n* ${reflectionPrompts[0]}\n\nWould you like to discuss this, or do you have another question?`
+                : `I see you want to explore some of the reflection prompts. Here they are again for you:\n\n${reflectionPrompts
+                    .map((p) => `* ${p}`)
+                    .join(
+                      '\n'
+                    )}\n\nWhich one would you like to discuss? Or do you have another question?`
+              : `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
           timestamp: new Date(),
         };
         setMessages([welcomeMessage]);
       } finally {
-        setIsLoadingHistory(false);
+        if (isMountedRef.current) {
+          setIsLoadingHistory(false);
+        }
       }
     };
 
     loadConversationHistory();
-  }, [isOpen, user, insightId, isLoadingHistory]);
+  }, [isOpen, user, insightId, reflectionPrompts]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -176,7 +207,9 @@ export default function InsightChat({
 
   // Cleanup on component unmount
   useEffect(() => {
+    isMountedRef.current = true;
     return () => {
+      isMountedRef.current = false;
       if (cleanupIntervalRef.current) {
         clearInterval(cleanupIntervalRef.current);
         cleanupIntervalRef.current = null;
@@ -186,7 +219,7 @@ export default function InsightChat({
 
   // Reset conversation state when modal is closed
   useEffect(() => {
-    if (!isOpen) {
+    if (!isOpen && isMountedRef.current) {
       // Clear state when modal is closed to prevent memory leaks
       setMessages([]);
       setInputMessage('');
@@ -317,7 +350,16 @@ export default function InsightChat({
     const welcomeMessage: Message = {
       id: `rob-${Date.now()}`,
       role: 'assistant',
-      content: `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
+      content:
+        reflectionPrompts && reflectionPrompts.length > 0
+          ? reflectionPrompts.length === 1
+            ? `I see you want to explore the reflection prompt. Here it is again for you:\n\n* ${reflectionPrompts[0]}\n\nWould you like to discuss this, or do you have another question?`
+            : `I see you want to explore some of the reflection prompts. Here they are again for you:\n\n${reflectionPrompts
+                .map((p) => `* ${p}`)
+                .join(
+                  '\n'
+                )}\n\nWhich one would you like to discuss? Or do you have another question?`
+          : `Hey there! I see you want to dig deeper into this reading. I'm here to help you debug whatever's still bouncing around in your head. What's your follow-up question?`,
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
@@ -328,6 +370,11 @@ export default function InsightChat({
   const isOverLimit = charCount > CHAT_MESSAGE_LIMITS.MAX_LENGTH;
   const isValid =
     inputMessage.trim().length > 0 && !isOverLimit && !validationError;
+
+  const placeholderText =
+    reflectionPrompts && reflectionPrompts.length > 0
+      ? 'Discuss a prompt or ask another question...'
+      : 'Ask Rob anything about your insight...';
 
   if (!isOpen) return null;
 
@@ -456,7 +503,7 @@ export default function InsightChat({
               value={inputMessage}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              placeholder="Ask Rob anything about your reading..."
+              placeholder={placeholderText}
               className={cn(
                 'flex-1 bg-liminal-overlay border rounded-lg px-3 py-2 text-primary placeholder-secondary resize-none min-h-[2.5rem] max-h-24',
                 isOverLimit || validationError
