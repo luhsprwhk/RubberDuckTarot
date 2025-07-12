@@ -9,14 +9,21 @@ vi.mock('@/src/lib/rate-limiter', () => ({
     checkLimit: vi.fn(),
   },
   RateLimitError: class RateLimitError extends Error {
+    retryAfter: number;
+    resetTime: number;
+    remainingRequests: number;
+
     constructor(
       message: string,
-      public retryAfter: number,
-      public resetTime: number,
-      public remainingRequests: number
+      retryAfter: number,
+      resetTime: number,
+      remainingRequests: number
     ) {
       super(message);
       this.name = 'RateLimitError';
+      this.retryAfter = retryAfter;
+      this.resetTime = resetTime;
+      this.remainingRequests = remainingRequests;
     }
   },
   createRateLimitMessage: vi.fn().mockReturnValue('Rate limit exceeded'),
@@ -53,7 +60,7 @@ describe('generateBlockChat', () => {
     vi.clearAllMocks();
 
     // Set environment variable for model
-    vi.stubEnv('VITE_ANTHROPIC_MODEL', 'claude-sonnet-4-20250514');
+    import.meta.env.VITE_ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
 
     mockUserBlock = {
       id: 1,
@@ -71,9 +78,6 @@ describe('generateBlockChat', () => {
       name: 'Creative',
       emoji: '🎨',
       description: 'Creative blocks and artistic challenges',
-      prompts: ['What inspires you most?'],
-      created_at: new Date(),
-      updated_at: new Date(),
     };
 
     mockInsights = [
@@ -86,7 +90,6 @@ describe('generateBlockChat', () => {
         user_context: 'Stuck on new novel',
         cards_drawn: [{ id: 1, reversed: false }],
         reading: {
-          summary: 'Breaking through creative barriers',
           interpretation: 'You need to trust your instincts and start writing',
           keyInsights: [
             'Trust your creative process',
@@ -109,7 +112,6 @@ describe('generateBlockChat', () => {
         user_context: "Writer's block",
         cards_drawn: [{ id: 2, reversed: true }],
         reading: {
-          summary: 'Overcoming perfectionism',
           interpretation:
             'Your perfectionism is holding you back from creating',
           keyInsights: ['Progress over perfection'],
@@ -126,13 +128,13 @@ describe('generateBlockChat', () => {
     mockConversationHistory = [
       {
         id: 'msg-1',
-        role: 'user',
+        role: 'user' as const,
         content: "I'm struggling with this creative block",
         timestamp: new Date(),
       },
       {
         id: 'msg-2',
-        role: 'assistant',
+        role: 'assistant' as const,
         content: 'Tell me more about what specifically is blocking you',
         timestamp: new Date(),
       },
@@ -157,6 +159,7 @@ describe('generateBlockChat', () => {
         {
           type: 'text',
           text: 'I understand your creative writing block. Based on your previous insights that resonated, it seems like trusting your creative process and starting small worked well for you before. What specific aspect of writing is feeling stuck right now?',
+          citations: [],
         },
       ],
       id: 'msg-123',
@@ -353,7 +356,7 @@ describe('generateBlockChat', () => {
     // Create a long conversation history (more than 6 messages)
     const longHistory = Array.from({ length: 10 }, (_, i) => ({
       id: `msg-${i}`,
-      role: i % 2 === 0 ? 'user' : 'assistant',
+      role: (i % 2 === 0 ? 'user' : 'assistant') as 'user' | 'assistant',
       content: `Message ${i}`,
       timestamp: new Date(),
     }));
