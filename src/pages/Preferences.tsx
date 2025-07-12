@@ -494,7 +494,7 @@ const ErrorState = ({ message, onRetry }: ErrorStateProps) => {
       <p className="text-lg text-secondary max-w-sm">{message}</p>
       <button
         onClick={onRetry}
-        className="px-4 py-2 bg-breakthrough-500 text-primary rounded-lg hover:bg-breakthrough-600 transition"
+        className="cursor-pointer px-4 py-2 bg-breakthrough-500 text-primary rounded-lg hover:bg-breakthrough-600 transition"
       >
         Retry
       </button>
