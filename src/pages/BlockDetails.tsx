@@ -7,7 +7,9 @@ import { getInsightsByUserBlockId } from '../lib/insights/insight-queries';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { Plus, Lightbulb, Calendar } from 'lucide-react';
+import { FaComments } from 'react-icons/fa';
 import { cn } from '../lib/utils';
+import BlockChat from '../components/BlockChat';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
@@ -17,6 +19,7 @@ const BlockDetails: React.FC = () => {
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const fetchBlockData = async () => {
@@ -102,12 +105,14 @@ const BlockDetails: React.FC = () => {
               New Insight
             </button>
             <button
+              onClick={() => setIsChatOpen(true)}
               className={cn(
                 'cursor-pointer bg-breakthrough-400 text-void-900',
                 'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
-                'transition-colors duration-200 text-xs'
+                'transition-colors duration-200 text-xs flex items-center gap-2'
               )}
             >
+              <FaComments className="w-4 h-4" />
               Chat with Rob
             </button>
           </div>
@@ -250,6 +255,17 @@ const BlockDetails: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Block Chat Component */}
+      {block && blockType && (
+        <BlockChat
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+          userBlock={block}
+          blockType={blockType}
+          blockInsights={insights}
+        />
+      )}
     </div>
   );
 };
