@@ -19,7 +19,7 @@ import { NotionService } from '@/src/lib/notion/notion-service';
 import { NotionOperations } from '@/src/lib/notion/notion-operations';
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
-import InsightChat from './InsightChat';
+import InsightRobChat from './InsightRobChat';
 
 interface InsightDisplayProps {
   selectedBlock: BlockType | null;
@@ -233,7 +233,7 @@ function InsightDisplay({
 
         {/* Chat Component */}
         {personalizedReading && (
-          <InsightChat
+          <InsightRobChat
             isOpen={isChatOpen}
             onClose={() => setIsChatOpen(false)}
             personalizedReading={personalizedReading}

@@ -8,16 +8,13 @@ import {
   FaBroom,
 } from 'react-icons/fa';
 import robEmoji from '@/src/assets/rob-emoji.png';
-import type { UserBlock, BlockType, Insight } from '@/src/interfaces';
-import { getInsightsByUserBlockId } from '@/src/lib/insights/insight-queries';
 import {
-  generateBlockChat,
   validateChatMessage,
   CHAT_MESSAGE_LIMITS,
   CONVERSATION_LIMITS,
   cleanupOldMessages,
   trimMessageHistory,
-} from '@/src/ai/generate_block_chat';
+} from '@/src/ai/generate_insight_chat';
 import {
   ChatPersistenceService,
   type ChatMessageData,
@@ -25,69 +22,43 @@ import {
 import useAuth from '@/src/lib/hooks/useAuth';
 import useAlert from '@/src/lib/hooks/useAlert';
 
-interface Message {
+export interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
 }
 
-interface BlockChatProps {
-  isOpen: boolean;
-  onClose: () => void;
-  userBlock: UserBlock;
-  blockType: BlockType;
-  blockInsights?: Insight[];
+export interface RobChatConfig {
+  chatId: number;
+  title: string;
+  subtitle?: string;
+  placeholderText: string;
+  generateWelcomeMessage: () => string;
+  generateResponse: (
+    userMessage: string,
+    conversationHistory: Message[]
+  ) => Promise<string>;
 }
 
-export default function BlockChat({
-  isOpen,
-  onClose,
-  userBlock,
-  blockType,
-  blockInsights: initialBlockInsights = [],
-}: BlockChatProps) {
+interface RobChatProps {
+  isOpen: boolean;
+  onClose: () => void;
+  config: RobChatConfig;
+}
+
+export default function RobChat({ isOpen, onClose, config }: RobChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<number | null>(null);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-  const [blockInsights, setBlockInsights] = useState<Insight[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const cleanupIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isMountedRef = useRef(true);
   const { user } = useAuth();
   const { showError } = useAlert();
-
-  // Use block ID as insight ID for persistence (blocks have their own conversation threads)
-  // Adding a large number to avoid conflicts with actual insight IDs
-  const blockChatId = userBlock.id + 1000000;
-
-  // Load block insights when modal opens (if not provided)
-  useEffect(() => {
-    const loadBlockInsights = async () => {
-      if (!isOpen || !isMountedRef.current) return;
-
-      // Use provided insights if available, otherwise load them
-      if (initialBlockInsights.length > 0) {
-        setBlockInsights(initialBlockInsights);
-      } else {
-        try {
-          const insights = await getInsightsByUserBlockId(userBlock.id);
-          if (isMountedRef.current) {
-            setBlockInsights(insights);
-          }
-        } catch (error) {
-          console.error('Failed to load block insights:', error);
-        }
-      }
-    };
-
-    if (isOpen) {
-      loadBlockInsights();
-    }
-  }, [isOpen, userBlock.id, initialBlockInsights]);
 
   // Load conversation history when modal opens
   useEffect(() => {
@@ -96,9 +67,9 @@ export default function BlockChat({
 
       setIsLoadingHistory(true);
       try {
-        // Try to load existing conversation for this block
+        // Try to load existing conversation
         const conversation = await ChatPersistenceService.loadConversation(
-          blockChatId,
+          config.chatId,
           user.id
         );
 
@@ -121,7 +92,7 @@ export default function BlockChat({
           // Initialize new conversation with welcome message
           const conversationId =
             await ChatPersistenceService.getOrCreateConversation(
-              blockChatId,
+              config.chatId,
               user.id
             );
 
@@ -132,7 +103,7 @@ export default function BlockChat({
           const welcomeMessage: Message = {
             id: `rob-${Date.now()}`,
             role: 'assistant',
-            content: `Hey! Let's talk about your "${userBlock.name}" block. I see this is about ${blockType.name.toLowerCase()}. What's been going on with this situation? What would you like to explore or work through?`,
+            content: config.generateWelcomeMessage(),
             timestamp: new Date(),
           };
 
@@ -160,7 +131,7 @@ export default function BlockChat({
         const welcomeMessage: Message = {
           id: `rob-${Date.now()}`,
           role: 'assistant',
-          content: `Hey! Let's talk about your "${userBlock.name}" block. I see this is about ${blockType.name.toLowerCase()}. What's been going on with this situation? What would you like to explore or work through?`,
+          content: config.generateWelcomeMessage(),
           timestamp: new Date(),
         };
         setMessages([welcomeMessage]);
@@ -174,7 +145,7 @@ export default function BlockChat({
     if (isOpen) {
       loadConversationHistory();
     }
-  }, [isOpen, user, blockChatId, userBlock.name, blockType.name]);
+  }, [isOpen, user, config.chatId, config.generateWelcomeMessage]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -232,7 +203,6 @@ export default function BlockChat({
       setIsLoading(false);
       setConversationId(null);
       setIsLoadingHistory(false);
-      setBlockInsights([]);
     }
   }, [isOpen]);
 
@@ -288,14 +258,10 @@ export default function BlockChat({
         );
       }
 
-      const response = await generateBlockChat({
-        userMessage: inputMessage.trim(),
-        conversationHistory: messages,
-        userBlock,
-        blockType,
-        userId: user.id,
-        blockInsights,
-      });
+      const response = await config.generateResponse(
+        inputMessage.trim(),
+        messages
+      );
 
       const assistantMessage: Message = {
         id: `rob-${Date.now()}`,
@@ -321,7 +287,7 @@ export default function BlockChat({
         );
       }
     } catch (error) {
-      console.error('Block chat error:', error);
+      console.error('Chat error:', error);
       showError('Failed to get response from Rob. Please try again.');
     } finally {
       setIsLoading(false);
@@ -354,7 +320,7 @@ export default function BlockChat({
     const welcomeMessage: Message = {
       id: `rob-${Date.now()}`,
       role: 'assistant',
-      content: `Hey! Let's talk about your "${userBlock.name}" block. I see this is about ${blockType.name.toLowerCase()}. What's been going on with this situation? What would you like to explore or work through?`,
+      content: config.generateWelcomeMessage(),
       timestamp: new Date(),
     };
     setMessages([welcomeMessage]);
@@ -375,10 +341,12 @@ export default function BlockChat({
         <div className="flex items-center justify-between p-4 border-b border-liminal-border">
           <div className="flex items-center gap-2">
             <img src={robEmoji} alt="Rob" className="w-6 h-6" />
-            <h3 className="text-lg font-semibold text-accent">Chat with Rob</h3>
-            <span className="text-xs text-secondary">
-              about "{userBlock.name}"
-            </span>
+            <h3 className="text-lg font-semibold text-accent">
+              {config.title}
+            </h3>
+            {config.subtitle && (
+              <span className="text-xs text-secondary">{config.subtitle}</span>
+            )}
           </div>
           <div className="flex items-center gap-2">
             {messages.length > 10 && (
@@ -493,7 +461,7 @@ export default function BlockChat({
               value={inputMessage}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              placeholder="Tell Rob about this block..."
+              placeholder={config.placeholderText}
               className={cn(
                 'flex-1 bg-liminal-overlay border rounded-lg px-3 py-2 text-primary placeholder-secondary resize-none min-h-[2.5rem] max-h-24',
                 isOverLimit || validationError

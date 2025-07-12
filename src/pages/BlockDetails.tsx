@@ -9,7 +9,7 @@ import ErrorState from '../components/ErrorState';
 import { Plus, Lightbulb, Calendar } from 'lucide-react';
 import { FaComments } from 'react-icons/fa';
 import { cn } from '../lib/utils';
-import BlockChat from '../components/BlockChat';
+import BlockRobChat from '../components/BlockRobChat';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
@@ -258,7 +258,7 @@ const BlockDetails: React.FC = () => {
 
       {/* Block Chat Component */}
       {block && blockType && (
-        <BlockChat
+        <BlockRobChat
           isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
           userBlock={block}
