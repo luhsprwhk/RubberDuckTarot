@@ -41,8 +41,13 @@ const mockIsProfileComplete = vi.mocked(isProfileComplete);
 
 const mockUser = {
   id: 'test-user-id',
+  created_at: new Date(),
+  preferences: null,
   email: 'test@example.com',
+  premium: false,
   auth_uid: 'test-auth-uid',
+  notion_access_token: null,
+  notion_workspace_id: null,
 };
 
 const mockProfile = {
@@ -59,8 +64,8 @@ const mockProfile = {
   superpower: 'Focus',
   kryptonite: 'Distractions',
   spirit_animal: 'Owl',
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
+  created_at: new Date(),
+  updated_at: new Date(),
 };
 
 const mockBlockTypes = [
@@ -68,8 +73,25 @@ const mockBlockTypes = [
   { id: '2', name: 'Creativity', emoji: '🎨', description: 'Creativity block' },
 ];
 
-const mockDb = {
+import type { DatabaseAdapter } from '../../src/lib/database-adapter';
+import type { Mocked } from 'vitest';
+
+const mockDb: Mocked<DatabaseAdapter> = {
+  // Cards
+  getAllCards: vi.fn().mockResolvedValue([]),
+  getCardById: vi.fn().mockResolvedValue(null),
+
+  // Block Types
   getAllBlockTypes: vi.fn().mockResolvedValue(mockBlockTypes),
+  getBlockTypeById: vi.fn().mockResolvedValue(null),
+
+  // Readings
+  createReading: vi.fn().mockResolvedValue({} as never),
+  getUserReadings: vi.fn().mockResolvedValue([]),
+  getReadingById: vi.fn().mockResolvedValue(null),
+
+  // Sentiment tracking
+  updateInsightSentiment: vi.fn().mockResolvedValue(undefined),
 };
 
 const renderDashboard = () => {
