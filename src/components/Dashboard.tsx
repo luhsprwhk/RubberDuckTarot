@@ -6,7 +6,6 @@ import BlockTracker from './BlockTracker';
 import { useUserBlocks } from '../lib/blocks/useUserBlocks';
 import { Link } from 'react-router-dom';
 import { getDb } from '@/src/lib/database-provider';
-import type { DatabaseAdapter } from '@/src/lib/database-adapter';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType, UserProfile } from '@/src/interfaces';
 import Loading from './Loading';
@@ -52,46 +51,35 @@ export default function Dashboard() {
       if (user) {
         setLoading(true);
 
-        try {
-          // Set a timeout to prevent indefinite loading
-          const timeoutPromise = new Promise((_, reject) => {
-            timeoutId = setTimeout(() => {
-              reject(new Error('Dashboard data fetch timeout'));
-            }, 10000); // 10 second timeout
-          });
+        const MAX_RETRIES = 3;
+        const INITIAL_DELAY_MS = 1000;
 
-          // Define the expected data structure type
-          type DashboardData = {
-            db: DatabaseAdapter;
-            profile: UserProfile | null;
-            loadedBlockTypes: BlockType[];
-          };
+        let attempt = 0;
+        while (attempt <= MAX_RETRIES) {
+          try {
+            // Set a timeout to prevent indefinite loading
+            const timeoutPromise = new Promise<never>((_, reject) => {
+              timeoutId = setTimeout(() => {
+                reject(new Error('Dashboard data fetch timeout'));
+              }, 10000); // 10 second timeout
+            });
 
-          const dataPromise: Promise<DashboardData> = Promise.all([
-            getDb(),
-            getUserProfile(user.id),
-          ]).then(async ([db, profile]) => {
-            const loadedBlockTypes = await db.getAllBlockTypes();
-            return { db, profile, loadedBlockTypes };
-          });
+            const dataPromise = Promise.all([
+              getDb(),
+              getUserProfile(user.id),
+            ]).then(async ([db, profile]) => {
+              const loadedBlockTypes = await db.getAllBlockTypes();
+              return { profile, loadedBlockTypes };
+            });
 
-          // Type guard function
-          const isDashboardData = (data: unknown): data is DashboardData => {
-            return (
-              typeof data === 'object' &&
-              data !== null &&
-              'profile' in data &&
-              'loadedBlockTypes' in data &&
-              Array.isArray(
-                (data as { loadedBlockTypes: unknown }).loadedBlockTypes
-              )
-            );
-          };
+            const { profile, loadedBlockTypes } = (await Promise.race([
+              dataPromise,
+              timeoutPromise,
+            ])) as {
+              profile: UserProfile | null;
+              loadedBlockTypes: BlockType[];
+            };
 
-          const result = await Promise.race([dataPromise, timeoutPromise]);
-
-          if (isDashboardData(result)) {
-            const { profile, loadedBlockTypes } = result;
             clearTimeout(timeoutId);
 
             if (isMounted) {
@@ -102,19 +90,31 @@ export default function Dashboard() {
                 navigate('/onboarding');
               }
             }
-          } else {
-            throw new Error(
-              'Invalid data structure returned from dashboard fetch'
+
+            // Successful fetch; exit loop
+            break;
+          } catch (error) {
+            if (timeoutId) clearTimeout(timeoutId);
+
+            // If we've exhausted retries, log and exit
+            if (attempt === MAX_RETRIES) {
+              console.error('Error fetching user data after retries:', error);
+              break;
+            }
+
+            // Exponential backoff delay
+            const delay = INITIAL_DELAY_MS * 2 ** attempt;
+            console.warn(
+              `Dashboard fetch failed (attempt ${attempt + 1}). Retrying in ${delay} ms...`,
+              error
             );
+            await new Promise((res) => setTimeout(res, delay));
+            attempt += 1;
           }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-          clearTimeout(timeoutId);
-          // Force loading to false on any error to prevent infinite loading
-        } finally {
-          if (isMounted) {
-            setLoading(false);
-          }
+        }
+
+        if (isMounted) {
+          setLoading(false);
         }
       } else {
         setLoading(false);
