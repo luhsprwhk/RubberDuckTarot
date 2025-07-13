@@ -23,6 +23,9 @@ export default defineConfig({
       '@': resolve(__dirname, '.'),
     },
   },
+  esbuild: {
+    drop: ['console', 'debugger'],
+  },
   // Asset handling
   build: {
     assetsInlineLimit: 4096, // Inline small assets (4KB), keep larger ones separate
