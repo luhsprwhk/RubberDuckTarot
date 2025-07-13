@@ -39,30 +39,42 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
+      let timeoutId: NodeJS.Timeout | undefined;
+
       try {
         setLoading(true);
 
-        // Get initial session
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+        // Add timeout to prevent auth hanging
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          timeoutId = setTimeout(() => {
+            reject(new Error('Auth initialization timeout'));
+          }, 15000); // 15 second timeout for auth
+        });
 
-        setSession(session);
-        if (session?.user) {
-          try {
-            const user = await getUserFromAuth(session.user.id);
-            setUser(user ?? null);
-          } catch (error) {
-            console.error('Failed to load initial user data:', error);
-            // Still set user to null but don't prevent the app from loading
-            setUser(null);
-          }
-        } else {
-          setUser(null);
-        }
+        const authPromise = supabase.auth
+          .getSession()
+          .then(async ({ data: { session } }) => {
+            setSession(session);
+            if (session?.user) {
+              try {
+                const user = await getUserFromAuth(session.user.id);
+                return user ?? null;
+              } catch (error) {
+                console.error('Failed to load initial user data:', error);
+                return null;
+              }
+            }
+            return null;
+          });
+
+        const user = await Promise.race([authPromise, timeoutPromise]);
+        if (timeoutId) clearTimeout(timeoutId);
+        setUser(user);
       } catch (error) {
+        if (timeoutId) clearTimeout(timeoutId);
         console.error('Error initializing auth:', error);
         setUser(null);
+        setSession(null);
       } finally {
         setLoading(false);
       }

@@ -7,7 +7,7 @@ import { useUserBlocks } from '../lib/blocks/useUserBlocks';
 import { Link } from 'react-router-dom';
 import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
-import type { BlockType } from '@/src/interfaces';
+import type { BlockType, UserProfile } from '@/src/interfaces';
 import Loading from './Loading';
 import { DashboardAd, NativeContentAd } from './ads/SmartAd';
 import { cn } from '../lib/utils';
@@ -26,9 +26,18 @@ export default function Dashboard() {
   const { blocks, loading: blocksLoading, fetchUserBlocks } = useUserBlocks();
 
   // Logging for debugging
+  useEffect(() => {
+    console.log('Dashboard: Loading states -', {
+      authLoading: loading,
+      blocksLoading,
+      user: !!user,
+      blocksCount: blocks?.length || 0,
+    });
+  }, [loading, blocksLoading, user, blocks]);
 
   useEffect(() => {
     if (user) {
+      console.log('Dashboard: Fetching user blocks for user:', user.id);
       fetchUserBlocks(user.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,31 +45,76 @@ export default function Dashboard() {
 
   useEffect(() => {
     let isMounted = true;
+    let timeoutId: NodeJS.Timeout;
 
     const fetchUserData = async () => {
       if (user) {
         setLoading(true);
 
-        try {
-          const [db, profile] = await Promise.all([
-            getDb(),
-            getUserProfile(user.id),
-          ]);
-          const loadedBlockTypes = await db.getAllBlockTypes();
-          if (isMounted) {
-            setBlockTypes(loadedBlockTypes);
+        const MAX_RETRIES = 3;
+        const INITIAL_DELAY_MS = 1000;
 
-            // Navigate to onboarding if profile is incomplete
-            if (!isProfileComplete(profile)) {
-              navigate('/onboarding');
+        let attempt = 0;
+        while (attempt <= MAX_RETRIES) {
+          try {
+            // Set a timeout to prevent indefinite loading
+            const timeoutPromise = new Promise<never>((_, reject) => {
+              timeoutId = setTimeout(() => {
+                reject(new Error('Dashboard data fetch timeout'));
+              }, 10000); // 10 second timeout
+            });
+
+            const dataPromise = Promise.all([
+              getDb(),
+              getUserProfile(user.id),
+            ]).then(async ([db, profile]) => {
+              const loadedBlockTypes = await db.getAllBlockTypes();
+              return { profile, loadedBlockTypes };
+            });
+
+            const { profile, loadedBlockTypes } = (await Promise.race([
+              dataPromise,
+              timeoutPromise,
+            ])) as {
+              profile: UserProfile | null;
+              loadedBlockTypes: BlockType[];
+            };
+
+            clearTimeout(timeoutId);
+
+            if (isMounted) {
+              setBlockTypes(loadedBlockTypes);
+
+              // Navigate to onboarding if profile is incomplete
+              if (!isProfileComplete(profile)) {
+                navigate('/onboarding');
+              }
             }
+
+            // Successful fetch; exit loop
+            break;
+          } catch (error) {
+            if (timeoutId) clearTimeout(timeoutId);
+
+            // If we've exhausted retries, log and exit
+            if (attempt === MAX_RETRIES) {
+              console.error('Error fetching user data after retries:', error);
+              break;
+            }
+
+            // Exponential backoff delay
+            const delay = INITIAL_DELAY_MS * 2 ** attempt;
+            console.warn(
+              `Dashboard fetch failed (attempt ${attempt + 1}). Retrying in ${delay} ms...`,
+              error
+            );
+            await new Promise((res) => setTimeout(res, delay));
+            attempt += 1;
           }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        } finally {
-          if (isMounted) {
-            setLoading(false);
-          }
+        }
+
+        if (isMounted) {
+          setLoading(false);
         }
       } else {
         setLoading(false);
@@ -71,6 +125,9 @@ export default function Dashboard() {
 
     return () => {
       isMounted = false;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [user, navigate]);
 
