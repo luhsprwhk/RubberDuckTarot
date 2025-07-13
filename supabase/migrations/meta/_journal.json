@@ -69,7 +69,7 @@
       "idx": 9,
       "version": "7",
       "when": 1751847000007,
-      "tag": "0009_add_insight_id_to_user_card_advice_and_reflections",
+      "tag": "0009_align_user_card_reflections_and_advice",
       "breakpoints": true
     }
   ]
