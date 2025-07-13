@@ -43,6 +43,34 @@
       "when": 1751847000003,
       "tag": "0005_create_insight_conversations_and_chat_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1751847000004,
+      "tag": "0006_make_insight_id_nullable",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1751847000005,
+      "tag": "0007_create_user_card_advice_and_reflections",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1751847000006,
+      "tag": "0008_add_indexes_to_user_card_tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1751847000007,
+      "tag": "0009_align_user_card_reflections_block_type_fk",
+      "breakpoints": true
     }
   ]
 }
