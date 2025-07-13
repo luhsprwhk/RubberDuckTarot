@@ -10,13 +10,32 @@ export const useUserBlocks = () => {
   const fetchUserBlocks = useCallback(async (userId?: string) => {
     setLoading(true);
     setError(null);
-    try {
-      const userBlocks = await getUserBlocks(userId);
 
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    try {
+      // Create timeout promise
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        timeoutId = setTimeout(() => {
+          reject(new Error('User blocks fetch timeout'));
+        }, 8000); // 8 second timeout
+      });
+
+      // Race between actual fetch and timeout
+      const userBlocks = await Promise.race([
+        getUserBlocks(userId),
+        timeoutPromise,
+      ]);
+
+      if (timeoutId) clearTimeout(timeoutId);
       setBlocks(userBlocks || []); // Always set to an array
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to fetch blocks');
+      if (timeoutId) clearTimeout(timeoutId);
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch blocks';
+      setError(errorMessage);
       setBlocks([]); // Ensure blocks is always an array on error
+      console.error('useUserBlocks error:', errorMessage);
     } finally {
       setLoading(false);
     }

@@ -7,7 +7,7 @@ import { useUserBlocks } from '../lib/blocks/useUserBlocks';
 import { Link } from 'react-router-dom';
 import { getDb } from '@/src/lib/database-provider';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
-import type { BlockType } from '@/src/interfaces';
+import type { BlockType, UserProfile } from '@/src/interfaces';
 import Loading from './Loading';
 import { DashboardAd, NativeContentAd } from './ads/SmartAd';
 import { cn } from '../lib/utils';
@@ -26,9 +26,18 @@ export default function Dashboard() {
   const { blocks, loading: blocksLoading, fetchUserBlocks } = useUserBlocks();
 
   // Logging for debugging
+  useEffect(() => {
+    console.log('Dashboard: Loading states -', {
+      authLoading: loading,
+      blocksLoading,
+      user: !!user,
+      blocksCount: blocks?.length || 0,
+    });
+  }, [loading, blocksLoading, user, blocks]);
 
   useEffect(() => {
     if (user) {
+      console.log('Dashboard: Fetching user blocks for user:', user.id);
       fetchUserBlocks(user.id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -36,27 +45,58 @@ export default function Dashboard() {
 
   useEffect(() => {
     let isMounted = true;
+    let timeoutId: NodeJS.Timeout;
 
     const fetchUserData = async () => {
       if (user) {
         setLoading(true);
 
         try {
-          const [db, profile] = await Promise.all([
+          // Set a timeout to prevent indefinite loading
+          const timeoutPromise = new Promise((_, reject) => {
+            timeoutId = setTimeout(() => {
+              reject(new Error('Dashboard data fetch timeout'));
+            }, 10000); // 10 second timeout
+          });
+
+          const dataPromise = Promise.all([
             getDb(),
             getUserProfile(user.id),
-          ]);
-          const loadedBlockTypes = await db.getAllBlockTypes();
-          if (isMounted) {
-            setBlockTypes(loadedBlockTypes);
+          ]).then(async ([db, profile]) => {
+            const loadedBlockTypes = await db.getAllBlockTypes();
+            return { db, profile, loadedBlockTypes };
+          });
 
-            // Navigate to onboarding if profile is incomplete
-            if (!isProfileComplete(profile)) {
-              navigate('/onboarding');
+          const result = await Promise.race([dataPromise, timeoutPromise]);
+
+          if (
+            typeof result === 'object' &&
+            result &&
+            'profile' in result &&
+            'loadedBlockTypes' in result
+          ) {
+            const { profile, loadedBlockTypes } = result as {
+              db: never;
+              profile: UserProfile | null;
+              loadedBlockTypes: BlockType[];
+            };
+            clearTimeout(timeoutId);
+
+            if (isMounted) {
+              setBlockTypes(loadedBlockTypes);
+
+              // Navigate to onboarding if profile is incomplete
+              if (!isProfileComplete(profile)) {
+                navigate('/onboarding');
+              }
             }
+          } else {
+            throw new Error('Invalid data structure returned');
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
+          clearTimeout(timeoutId);
+          // Force loading to false on any error to prevent infinite loading
         } finally {
           if (isMounted) {
             setLoading(false);
@@ -71,6 +111,9 @@ export default function Dashboard() {
 
     return () => {
       isMounted = false;
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, [user, navigate]);
 
