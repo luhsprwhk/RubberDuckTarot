@@ -6,6 +6,7 @@ import BlockTracker from './BlockTracker';
 import { useUserBlocks } from '../lib/blocks/useUserBlocks';
 import { Link } from 'react-router-dom';
 import { getDb } from '@/src/lib/database-provider';
+import type { DatabaseAdapter } from '@/src/lib/database-adapter';
 import { getUserProfile, isProfileComplete } from '../lib/userPreferences';
 import type { BlockType, UserProfile } from '@/src/interfaces';
 import Loading from './Loading';
@@ -59,7 +60,14 @@ export default function Dashboard() {
             }, 10000); // 10 second timeout
           });
 
-          const dataPromise = Promise.all([
+          // Define the expected data structure type
+          type DashboardData = {
+            db: DatabaseAdapter;
+            profile: UserProfile | null;
+            loadedBlockTypes: BlockType[];
+          };
+
+          const dataPromise: Promise<DashboardData> = Promise.all([
             getDb(),
             getUserProfile(user.id),
           ]).then(async ([db, profile]) => {
@@ -67,19 +75,23 @@ export default function Dashboard() {
             return { db, profile, loadedBlockTypes };
           });
 
+          // Type guard function
+          const isDashboardData = (data: unknown): data is DashboardData => {
+            return (
+              typeof data === 'object' &&
+              data !== null &&
+              'profile' in data &&
+              'loadedBlockTypes' in data &&
+              Array.isArray(
+                (data as { loadedBlockTypes: unknown }).loadedBlockTypes
+              )
+            );
+          };
+
           const result = await Promise.race([dataPromise, timeoutPromise]);
 
-          if (
-            typeof result === 'object' &&
-            result &&
-            'profile' in result &&
-            'loadedBlockTypes' in result
-          ) {
-            const { profile, loadedBlockTypes } = result as {
-              db: never;
-              profile: UserProfile | null;
-              loadedBlockTypes: BlockType[];
-            };
+          if (isDashboardData(result)) {
+            const { profile, loadedBlockTypes } = result;
             clearTimeout(timeoutId);
 
             if (isMounted) {
@@ -91,7 +103,9 @@ export default function Dashboard() {
               }
             }
           } else {
-            throw new Error('Invalid data structure returned');
+            throw new Error(
+              'Invalid data structure returned from dashboard fetch'
+            );
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
