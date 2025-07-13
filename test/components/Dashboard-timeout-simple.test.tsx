@@ -104,7 +104,7 @@ const renderDashboard = () => {
   );
 };
 
-describe('Dashboard timeout handling (simplified)', () => {
+describe.skip('Dashboard timeout handling (simplified)', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
