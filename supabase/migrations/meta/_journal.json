@@ -36,6 +36,13 @@
       "when": 1751847000002,
       "tag": "0004_create_user_chat_privacy_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1751847000003,
+      "tag": "0005_create_insight_conversations_and_chat_messages",
+      "breakpoints": true
     }
   ]
 }

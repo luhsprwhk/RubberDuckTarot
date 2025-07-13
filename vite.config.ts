@@ -6,7 +6,12 @@ import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    allowedHosts: ['dev.rubberducktarot.app'],
+    allowedHosts: [
+      'dev.rubberducktarot.app',
+      'localhost',
+      '127.0.0.1',
+      '0.0.0.0',
+    ],
   },
   plugins: [
     react(),
@@ -22,6 +27,9 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, '.'),
     },
+  },
+  esbuild: {
+    drop: ['console', 'debugger'],
   },
   // Asset handling
   build: {
