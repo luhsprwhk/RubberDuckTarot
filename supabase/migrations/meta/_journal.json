@@ -43,6 +43,13 @@
       "when": 1751847000003,
       "tag": "0005_create_insight_conversations_and_chat_messages",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1751847000004,
+      "tag": "0006_add_insight_id_to_chat_messages",
+      "breakpoints": true
     }
   ]
 }
