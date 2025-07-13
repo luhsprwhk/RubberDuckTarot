@@ -152,7 +152,7 @@ export const userCardReflections = pgTable(
 // Chat conversations linked to specific insights
 export const insightConversations = pgTable('insight_conversations', {
   id: serial('id').primaryKey(),
-  insight_id: integer('insight_id').notNull(), // Foreign key to insights table
+  insight_id: integer('insight_id'), // Foreign key to insights table (nullable for block conversations)
   user_id: text('user_id').notNull(), // For easier querying and permission checks
   started_at: timestamp('started_at', { withTimezone: true })
     .notNull()
