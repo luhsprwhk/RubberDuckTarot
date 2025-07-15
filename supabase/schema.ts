@@ -212,3 +212,49 @@ export const userChatPrivacySettings = pgTable('user_chat_privacy_settings', {
 
 export type UserChatPrivacySettings =
   typeof userChatPrivacySettings.$inferSelect;
+
+// Intelligence Engine Analysis Results
+export const intelligenceAnalysisResults = pgTable(
+  'intelligence_analysis_results',
+  {
+    id: serial('id').primaryKey(),
+    user_id: text('user_id').notNull(),
+    analysis_data: text('analysis_data').notNull(), // Encrypted JSON of AnalysisResult
+    created_at: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  }
+);
+
+// Individual Epistemological Blockers (for Rob's dashboard)
+export const epistemologicalBlockers = pgTable('epistemological_blockers', {
+  id: text('id').primaryKey(),
+  user_id: text('user_id').notNull(),
+  blocker_type: text('blocker_type').notNull(),
+  title: text('title').notNull(),
+  description: text('description').notNull(),
+  severity: text('severity').notNull(), // 'low' | 'medium' | 'high' | 'critical'
+  confidence: integer('confidence').notNull(), // 0-100
+  patterns_data: text('patterns_data').notNull(), // Encrypted JSON of patterns
+  occurrences: integer('occurrences').notNull().default(1),
+  block_type_ids: jsonb('block_type_ids').$type<string[]>().notNull(),
+  insight_ids: jsonb('insight_ids').$type<number[]>().notNull(),
+  conversation_ids: jsonb('conversation_ids').$type<number[]>().notNull(),
+  recommendations: jsonb('recommendations').$type<string[]>().notNull(),
+  status: text('status').notNull().default('active'), // 'active' | 'acknowledged' | 'resolved' | 'archived'
+  admin_notes: text('admin_notes'), // Rob's notes
+  first_detected: timestamp('first_detected', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  last_detected: timestamp('last_detected', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updated_at: timestamp('updated_at', { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
+
+export type IntelligenceAnalysisResult =
+  typeof intelligenceAnalysisResults.$inferSelect;
+export type EpistemologicalBlockerRecord =
+  typeof epistemologicalBlockers.$inferSelect;

@@ -61,7 +61,7 @@ export default function Dashboard() {
             const timeoutPromise = new Promise<never>((_, reject) => {
               timeoutId = setTimeout(() => {
                 reject(new Error('Dashboard data fetch timeout'));
-              }, 10000); // 10 second timeout
+              }, 5000); // 5 second timeout
             });
 
             const dataPromise = Promise.all([

@@ -33,7 +33,7 @@ const Preferences = () => {
   // If loading takes longer than 10 seconds, show fallback UI
   useEffect(() => {
     if (loading) {
-      const timer = setTimeout(() => setLoadingTimeoutExceeded(true), 10000);
+      const timer = setTimeout(() => setLoadingTimeoutExceeded(true), 3000);
       return () => clearTimeout(timer);
     } else {
       setLoadingTimeoutExceeded(false);
