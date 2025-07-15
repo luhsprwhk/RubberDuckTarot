@@ -11,7 +11,6 @@ export {
   BlocksAd,
   CardDetailAd,
   NativeContentAd,
-  useInterstitialAd,
 } from '../../components/ads/SmartAd';
 export {
   BannerAd,

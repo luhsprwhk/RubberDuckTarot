@@ -145,7 +145,7 @@ export default function RobChat({ isOpen, onClose, config }: RobChatProps) {
     if (isOpen) {
       loadConversationHistory();
     }
-  }, [isOpen, user, config.chatId, config.generateWelcomeMessage]);
+  }, [isOpen, user, config]);
 
   // Auto-scroll to bottom
   useEffect(() => {

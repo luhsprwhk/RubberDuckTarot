@@ -314,7 +314,14 @@ function buildAnalysisPrompt(input: BlockerAnalysisInput): string {
   const { blockerType, insights, conversations } = input;
 
   return `
-You are an expert in epistemological analysis, specifically trained in Gaston Bachelard's theory of epistemological obstacles. Analyze the provided user data for signs of the following cognitive blocker:
+You are an expert in cognitive psychology and behavioral analysis, trained in multiple frameworks including:
+- Gaston Bachelard's epistemological obstacles
+- Aaron Beck's cognitive behavioral therapy and cognitive distortions
+- Attachment theory and therapeutic resistance patterns
+- Cognitive bias research and decision-making psychology
+- Psychological reactance theory
+
+Analyze the provided user data for signs of the following psychological blocker:
 
 ${BLOCKER_PROMPTS[blockerType]}
 
@@ -352,10 +359,16 @@ ${conversations
   .join('\n')}
 
 ANALYSIS INSTRUCTIONS:
-1. Look for patterns that match the specific epistemological obstacle described above
-2. Consider both explicit statements and implicit patterns of thinking
-3. Assess the frequency and consistency of the pattern
-4. Evaluate the severity of how this blocks the user's growth
+1. Look for patterns that match the specific psychological blocker described above
+2. Consider both explicit statements and implicit behavioral patterns
+3. Assess the frequency, consistency, and clinical significance of the pattern
+4. Evaluate the severity of how this blocks the user's psychological growth and progress
+5. Draw on the appropriate theoretical framework for this blocker type:
+   - For cognitive distortions: Use CBT principles and Beck's framework
+   - For attachment patterns: Apply attachment theory and therapeutic relationship dynamics
+   - For cognitive biases: Reference decision-making and social psychology research
+   - For epistemological obstacles: Apply Bachelard's philosophy of science concepts
+   - For reactance: Use Brehm's psychological reactance theory
 
 REQUIRED JSON RESPONSE FORMAT:
 {
@@ -363,22 +376,22 @@ REQUIRED JSON RESPONSE FORMAT:
   "confidence": number (0-1),
   "severity": "low" | "medium" | "high" | "critical",
   "title": "Brief descriptive title",
-  "description": "Detailed explanation of the detected pattern",
+  "description": "Detailed explanation of the detected pattern using appropriate psychological terminology",
   "evidence": [
     {
       "source": "insight_id or conversation_id",
       "excerpt": "relevant text showing the pattern",
-      "explanation": "why this shows the obstacle"
+      "explanation": "why this demonstrates the psychological blocker"
     }
   ],
   "occurrences": number,
-  "recommendations": ["specific recommendations to address this obstacle"],
+  "recommendations": ["specific, theoretically-grounded recommendations to address this blocker"],
   "block_type_ids": ["block types where this pattern appears"],
   "insight_ids": [relevant insight IDs],
   "conversation_ids": [relevant conversation IDs]
 }
 
-Focus on quality over quantity - only detect patterns that genuinely match Bachelard's epistemological obstacles and would meaningfully impact the user's growth.
+Focus on clinical relevance - only detect patterns that genuinely match established psychological frameworks and would meaningfully impact therapeutic progress or personal development.
 `;
 }
 
