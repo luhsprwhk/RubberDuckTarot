@@ -49,3 +49,5 @@ Rob brings a unique, self-aware, helpful, slightly absurd, and genuinely useful 
 - **Deployment**: Netlify, Railway
 
 For a deep-dive into technical details see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+For contributions, please reach out privately. Read [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for more information.
