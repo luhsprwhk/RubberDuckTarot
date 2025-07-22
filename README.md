@@ -12,6 +12,8 @@ This is a solo project created for portfolio and "show-and-tell" purposes. It is
 
 Rubber Duck Tarot is a unique decision-making tool disguised as divination cards, featuring Rob Chen, a deceased full-stack developer whose soul is now trapped in a rubber duck wearing a wizard hat. Rob's mission from beyond the grave is to help creative people debug their lives and break through mental blocks when they're stuck.
 
+![Rubber Duck Tarot Screenshot](docs/screenshot1.png)
+
 ### Core Concept: Debugging for Creative Minds
 
 The project transforms the traditional Lenormand card system into a practical "blocker stopper" tool, inspired by Brian Eno’s Oblique Strategies. Users consult Rob (the duck) when facing creative blocks, tough decisions, or mental loops, receiving randomized perspective prompts that trigger lateral thinking to break thought patterns.
