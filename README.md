@@ -1,5 +1,7 @@
 # Rubber Duck Tarot: Your Personal Perspective Debugger
 
+[![CI](https://github.com/luhsprwhk/rdt-web/actions/workflows/ci.yml/badge.svg)](https://github.com/luhsprwhk/rdt-web/actions/workflows/ci.yml)
+
 **[➡️ Live Demo: rubberducktarot.app](https://rubberducktarot.app)**
 
 ---
