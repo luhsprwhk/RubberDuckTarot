@@ -1,5 +1,15 @@
 # Rubber Duck Tarot: Your Personal Perspective Debugger
 
+**[➡️ Live Demo: rubberducktarot.app](https://rubberducktarot.app)**
+
+---
+
+### A Note on This Repository
+
+This is a solo project created for portfolio and "show-and-tell" purposes. It is not actively seeking open-source contributions. If you are interested in collaborating, please reach out privately.
+
+---
+
 Rubber Duck Tarot is a unique decision-making tool disguised as divination cards, featuring Rob Chen, a deceased full-stack developer whose soul is now trapped in a rubber duck wearing a wizard hat. Rob's mission from beyond the grave is to help creative people debug their lives and break through mental blocks when they're stuck.
 
 ### Core Concept: Debugging for Creative Minds
@@ -25,74 +35,13 @@ Rob brings a unique, self-aware, helpful, slightly absurd, and genuinely useful 
 - **Notion Export:** A premium feature allowing users to export Rob's action steps directly to Notion, bridging the gap between insight and execution and transforming advice into actionable life infrastructure.
 - **Blocker Surfacer:** A psychological discovery mechanism that helps users identify unconscious blocks through card-based pattern recognition and guided dialogue. It uses projective testing and cognitive load optimization to transform vague dissatisfaction into actionable block identification.
 
-### Project Goals
-
-Rubber Duck Tarot is primarily a portfolio project to demonstrate technical and product skills, with the potential to generate side income. The ultimate success includes technical demonstration (full-stack app with AI integration, clean code, good UX), product thinking, and proving the ability to ship a complete product. Monetary success, even with a small number of paying users, validates product-market fit and provides contract leverage.
-
 ### Tech Stack
 
 - **Frontend**: React 19, TypeScript, Vite
+- **Backend**: Node.js, Express, TypeScript Microservices
 - **Styling**: Tailwind CSS 4
 - **AI**: Anthropic Claude API
 - **Database**: Drizzle ORM with Supabase (PostgreSQL) for production and SQLite for local development.
 - **Authentication**: Supabase Auth
 - **Build Tools**: Vite + SWC for a fast and modern development experience.
-
-### Getting Started Locally
-
-#### 1. Clone the Repository
-
-```bash
-git clone https://github.com/luhsprwhk/rdt-web.git
-cd rdt-web
-```
-
-#### 2. Install Dependencies
-
-```bash
-npm install
-```
-
-#### 3. Set Up Environment Variables
-
-Copy the example environment file:
-
-```bash
-cp .env.example .env
-```
-
-Now, open the new `.env` file and add your own keys. You will need:
-
-- `VITE_ANTHROPIC_API_KEY`: Your API key for the Claude AI.
-- Supabase credentials (if you want to connect to a live database).
-
-#### 4. Set Up the Database
-
-You can run this project with a local SQLite database or connect to a Supabase instance.
-
-**To use the local SQLite database (recommended for quick setup):**
-
-1.  Make sure your `.env` file has `VITE_DATABASE_TYPE="sqlite"`.
-2.  Generate, migrate, and seed the database:
-
-    ```bash
-    npm run db:generate
-    npm run db:migrate
-    npm run db:seed
-    ```
-
-**To use Supabase:**
-
-1.  Make sure your `.env` file has `VITE_DATABASE_TYPE="supabase"` and all the necessary Supabase keys.
-2.  Seed the remote database:
-    ```bash
-    npm run supabase:seed
-    ```
-
-#### 5. Run the Development Server
-
-```bash
-npm run dev
-```
-
-The application should now be running on `http://localhost:5173`.
+- **Deployment**: Netlify, Railway
