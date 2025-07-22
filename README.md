@@ -47,3 +47,5 @@ Rob brings a unique, self-aware, helpful, slightly absurd, and genuinely useful 
 - **Authentication**: Supabase Auth
 - **Build Tools**: Vite + SWC for a fast and modern development experience.
 - **Deployment**: Netlify, Railway
+
+For a deep-dive into technical details see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
