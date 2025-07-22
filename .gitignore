@@ -22,7 +22,7 @@ dist-ssr
 *.sw?
 
 # Local config and temp files
-.vscode/*
+.vscode
 .claude/
 tmp/
 *.docx
