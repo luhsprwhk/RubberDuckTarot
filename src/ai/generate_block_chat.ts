@@ -66,7 +66,7 @@ const formatRelevantInsights = (insights: Insight[]): string => {
         if (insight.created_at) {
           const date = new Date(insight.created_at);
           if (!isNaN(date.getTime())) {
-            timeAgo = date.toLocaleDateString();
+            timeAgo = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
           }
         }
       } catch (error) {
@@ -124,12 +124,12 @@ const formatRelevantInsights = (insights: Insight[]): string => {
 
       // Construct the final string with safe joins
       const parts = [
-        `${index + 1}. ${timeAgo} (${feedbackStr}):`,
+        `${timeAgo} (${feedbackStr}):`,
         keyInsightsStr,
         interpretationStr,
       ].filter((part) => part.trim() !== '');
 
-      return parts.join('\n   ');
+      return `${index + 1}. ${parts.join('\n   ')}`;
     })
     .filter((entry) => entry && entry.trim() !== '') // Remove any empty entries
     .join('\n\n');
@@ -230,7 +230,7 @@ export async function generateBlockChat({
       if (userBlock?.created_at) {
         const date = new Date(userBlock.created_at);
         if (!isNaN(date.getTime())) {
-          createdDate = date.toLocaleDateString();
+          createdDate = `${date.getUTCMonth() + 1}/${date.getUTCDate()}/${date.getUTCFullYear()}`;
         }
       }
     } catch (error) {
