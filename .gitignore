@@ -22,11 +22,11 @@ dist-ssr
 *.sw?
 
 # Local config and temp files
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 .claude/
 tmp/
 *.docx
-
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
