@@ -69,9 +69,12 @@ function arrayBufferToHex(buffer: ArrayBuffer): string {
  * Converts hex string to ArrayBuffer
  */
 function hexToArrayBuffer(hex: string): ArrayBuffer {
+  if (hex.length % 2 !== 0) {
+    throw new Error('Invalid hex string');
+  }
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
   return bytes.buffer;
 }
