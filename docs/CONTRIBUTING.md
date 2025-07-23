@@ -24,7 +24,7 @@ npm install
 Copy the example environment file:
 
 ```bash
-cp .env.example .env
+cp `${rootDir}/.env.example ${rootDir}/.env
 ```
 
 Now, open the new `.env` file and add your own keys. You will need:
@@ -34,22 +34,9 @@ Now, open the new `.env` file and add your own keys. You will need:
 
 ### 4. Set Up the Database
 
-You can run this project with a local SQLite database or connect to a Supabase instance.
-
-**To use the local SQLite database (recommended for quick setup):**
-
-1.  Make sure your `.env` file has `VITE_DATABASE_TYPE="sqlite"`.
-2.  Generate, migrate, and seed the database:
-
-    ```bash
-    npm run db:generate
-    npm run db:migrate
-    npm run db:seed
-    ```
-
 **To use Supabase:**
 
-1.  Make sure your `.env` file has `VITE_DATABASE_TYPE="supabase"` and all the necessary Supabase keys.
+1.  Make sure your `.env` file has all the necessary Supabase keys.
 2.  Seed the remote database:
     ```bash
     npm run supabase:seed
