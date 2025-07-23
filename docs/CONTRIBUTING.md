@@ -30,7 +30,9 @@ cp `${rootDir}/.env.example ${rootDir}/.env
 Now, open the new `.env` file and add your own keys. You will need:
 
 - `VITE_ANTHROPIC_API_KEY`: Your API key for the Claude AI.
-- Supabase credentials (if you want to connect to a live database).
+- Supabase credentials.
+- `VITE_ENCRYPTION_MASTER_KEY`: A 32-byte hex string used for encrypting sensitive data.
+- Any other variables that are required for your specific use case.
 
 ### 4. Set Up the Database
 
