@@ -30,7 +30,7 @@ async function deriveKey(
     {
       name: 'PBKDF2',
       salt,
-      iterations: 50000, // Reduced from 100000 for better performance while maintaining security
+      iterations: 100000,
       hash: 'SHA-256',
     },
     keyMaterial,
@@ -69,11 +69,15 @@ function arrayBufferToHex(buffer: ArrayBuffer): string {
  * Converts hex string to ArrayBuffer
  */
 function hexToArrayBuffer(hex: string): ArrayBuffer {
+  if (hex.length % 2 !== 0) {
+    throw new Error('Invalid hex string');
+  }
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substr(i, 2), 16);
+    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
-  return bytes.buffer;
+  // Ensure we return a proper ArrayBuffer, not just a buffer view
+  return bytes.buffer.slice(0);
 }
 
 /**
@@ -117,8 +121,10 @@ export async function decrypt(
   if (!encryptedData) return null;
 
   const masterKey = getMasterKey();
-  const salt = new Uint8Array(hexToArrayBuffer(encryptedData.salt));
-  const iv = new Uint8Array(hexToArrayBuffer(encryptedData.iv));
+  const saltBuffer = hexToArrayBuffer(encryptedData.salt);
+  const ivBuffer = hexToArrayBuffer(encryptedData.iv);
+  const salt = new Uint8Array(saltBuffer);
+  const iv = new Uint8Array(ivBuffer);
   const key = await deriveKey(masterKey, salt);
 
   const encryptedBuffer = hexToArrayBuffer(encryptedData.encrypted);

@@ -237,7 +237,7 @@ describe('generateBlockChat', () => {
     expect(prompt).toContain(
       'Block Notes: Struggling to find inspiration for new stories'
     );
-    expect(prompt).toContain('Created: 12/31/2023');
+    expect(prompt).toContain('Created: 1/1/2024');
   });
 
   it('should include relevant insights that resonated or led to action', async () => {
@@ -267,7 +267,7 @@ describe('generateBlockChat', () => {
     const prompt = callArgs.messages[0].content;
 
     // Should include the insight that resonated and led to action
-    expect(prompt).toContain('12/31/2023 (resonated, took action)');
+    expect(prompt).toContain('1/1/2024 (resonated, took action)');
     expect(prompt).toContain('Trust your creative process');
     expect(prompt).toContain('Start small and build momentum');
     expect(prompt).toContain(

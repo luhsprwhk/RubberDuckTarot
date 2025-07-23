@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import {
   encrypt,
   decrypt,
@@ -8,11 +8,7 @@ import {
   decryptObject,
 } from '@/src/lib/encryption';
 
-// Mock the import.meta.env
-vi.stubEnv(
-  'VITE_ENCRYPTION_MASTER_KEY',
-  '5500607ff009f88a605de68d6ddc06810c3c05372707d11cc7f6bfe0cb33b72d'
-);
+// The encryption master key is already set in test/setup.ts
 
 describe('Encryption', () => {
   it('should encrypt and decrypt a string correctly', async () => {
