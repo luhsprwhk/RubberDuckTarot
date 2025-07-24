@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getUserBlockById } from '../lib/blocks/block-queries';
+import {
+  getUserBlockById,
+  archiveUserBlock,
+} from '../lib/blocks/block-queries';
 import type { UserBlock, BlockType, Insight } from '@/supabase/schema';
 import { getBlockTypeById } from '../lib/blocktypes/blocktype-queries';
 import { getInsightsByUserBlockId } from '../lib/insights/insight-queries';
+import { checkAndAwardBlockBadges } from '../lib/user/badges';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { Plus, Lightbulb, Calendar } from 'lucide-react';
 import { FaComments } from 'react-icons/fa';
 import { cn } from '../lib/utils';
 import BlockRobChat from '../components/BlockRobChat';
+import { BlockResolvedModal } from '../components/BlockResolvedModal';
+import useAuth from '../lib/hooks/useAuth';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [block, setBlock] = useState<UserBlock | null>(null);
   const [blockType, setBlockType] = useState<BlockType | null>(null);
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isFirstBlockResolved, setIsFirstBlockResolved] = useState(false);
 
   useEffect(() => {
     const fetchBlockData = async () => {
@@ -130,13 +139,21 @@ const BlockDetails: React.FC = () => {
               className={`cursor-pointer px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
               disabled={block.status === 'resolved'}
               onClick={async () => {
-                if (!block) return;
+                if (!block || !user) return;
                 try {
+                  // First mark as resolved in database
                   await import('../lib/blocks/block-queries').then(
                     ({ updateUserBlockStatus }) =>
                       updateUserBlockStatus(block.id, 'resolved')
                   );
+
+                  // Check if this will be their first block resolved
+                  const newBadges = await checkAndAwardBlockBadges(user.id);
+                  const isFirst = newBadges.includes('first-block-resolved');
+
+                  setIsFirstBlockResolved(isFirst);
                   setBlock({ ...block, status: 'resolved' });
+                  setIsSuccessModalOpen(true);
                 } catch (err) {
                   alert('Failed to update status');
                   console.error(err);
@@ -255,6 +272,30 @@ const BlockDetails: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Block Resolved Success Modal */}
+      {block && (
+        <BlockResolvedModal
+          isOpen={isSuccessModalOpen}
+          onClose={async (reflection?: string) => {
+            if (!block) return;
+
+            try {
+              // Archive the block with optional reflection
+              await archiveUserBlock(block.id, reflection);
+
+              // Close modal and navigate back to blocks list
+              setIsSuccessModalOpen(false);
+              navigate('/blocks');
+            } catch (err) {
+              console.error('Failed to archive block:', err);
+              alert('Failed to archive block');
+            }
+          }}
+          blockName={block.name}
+          isFirstBlockResolved={isFirstBlockResolved}
+        />
+      )}
 
       {/* Block Chat Component */}
       {block && blockType && (

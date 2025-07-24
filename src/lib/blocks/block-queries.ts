@@ -7,7 +7,11 @@ export const createUserBlock = async (
   userBlock: Omit<UserBlock, 'id' | 'created_at' | 'updated_at'>
 ): Promise<UserBlock> => {
   // Encrypt sensitive fields before saving
-  const encryptedUserBlock = await encryptObject(userBlock, ['name', 'notes']);
+  const encryptedUserBlock = await encryptObject(userBlock, [
+    'name',
+    'notes',
+    'resolution_reflection',
+  ]);
 
   const { data, error } = await supabase
     .from('user_blocks')
@@ -19,7 +23,11 @@ export const createUserBlock = async (
 
   try {
     // Decrypt the returned data for the client
-    return await decryptObject(data, ['name', 'notes']);
+    return await decryptObject(data, [
+      'name',
+      'notes',
+      'resolution_reflection',
+    ]);
   } catch (error) {
     console.error('Failed to decrypt user block:', error);
     // Return with encrypted fields if decryption fails
@@ -27,7 +35,10 @@ export const createUserBlock = async (
   }
 };
 
-export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
+export const getUserBlocks = async (
+  userId?: string,
+  includeArchived: boolean = false
+): Promise<UserBlock[]> => {
   let query = supabase
     .from('user_blocks')
     .select('*')
@@ -39,6 +50,11 @@ export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
     query = query.is('user_id', null);
   }
 
+  // Exclude archived blocks by default
+  if (!includeArchived) {
+    query = query.neq('status', 'archived');
+  }
+
   const { data, error } = await query;
 
   if (error) throw error;
@@ -46,7 +62,9 @@ export const getUserBlocks = async (userId?: string): Promise<UserBlock[]> => {
   // Decrypt sensitive fields for all user blocks
   try {
     return await Promise.all(
-      data.map((block) => decryptObject(block, ['name', 'notes']))
+      data.map((block) =>
+        decryptObject(block, ['name', 'notes', 'resolution_reflection'])
+      )
     );
   } catch (error) {
     console.error('Failed to decrypt user blocks:', error);
@@ -73,7 +91,11 @@ export const getUserBlockById = async (
 
   try {
     // Decrypt sensitive fields before returning
-    return await decryptObject(data, ['name', 'notes']);
+    return await decryptObject(data, [
+      'name',
+      'notes',
+      'resolution_reflection',
+    ]);
   } catch (error) {
     console.error('Failed to decrypt user block by ID:', error);
     // Return with encrypted fields if decryption fails
@@ -84,21 +106,36 @@ export const getUserBlockById = async (
 export const updateUserBlockStatus = async (
   blockId: number,
   status: string,
-  notes?: string
+  notes?: string,
+  reflection?: string
 ): Promise<void> => {
   const updates: {
     status: string;
     notes?: string;
+    resolution_reflection?: string;
     updated_at: string;
   } = {
     status,
     updated_at: new Date().toISOString(),
   };
 
+  // Handle encryption for fields that need it
+  const fieldsToEncrypt: { [key: string]: string } = {};
+
   if (notes !== undefined) {
-    // Encrypt notes if provided
-    const encryptedUpdates = await encryptObject({ notes }, ['notes']);
-    updates.notes = encryptedUpdates.notes;
+    fieldsToEncrypt.notes = notes;
+  }
+
+  if (reflection !== undefined) {
+    fieldsToEncrypt.resolution_reflection = reflection;
+  }
+
+  if (Object.keys(fieldsToEncrypt).length > 0) {
+    const encryptedUpdates = await encryptObject(
+      fieldsToEncrypt,
+      Object.keys(fieldsToEncrypt)
+    );
+    Object.assign(updates, encryptedUpdates);
   }
 
   const { error } = await supabase
@@ -107,6 +144,13 @@ export const updateUserBlockStatus = async (
     .eq('id', blockId);
 
   if (error) throw error;
+};
+
+export const archiveUserBlock = async (
+  blockId: number,
+  reflection?: string
+): Promise<void> => {
+  await updateUserBlockStatus(blockId, 'archived', undefined, reflection);
 };
 
 export const deleteUserBlock = async (blockId: number): Promise<void> => {
