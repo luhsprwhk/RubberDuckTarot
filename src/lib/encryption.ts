@@ -30,7 +30,7 @@ async function deriveKey(
     {
       name: 'PBKDF2',
       salt,
-      iterations: 100000,
+      iterations: 50000,
       hash: 'SHA-256',
     },
     keyMaterial,
@@ -76,8 +76,10 @@ function hexToArrayBuffer(hex: string): ArrayBuffer {
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
-  // Ensure we return a proper ArrayBuffer, not just a buffer view
-  return bytes.buffer.slice(0);
+  // Create a new ArrayBuffer with the exact size needed
+  const result = new ArrayBuffer(bytes.length);
+  new Uint8Array(result).set(bytes);
+  return result;
 }
 
 /**
@@ -124,7 +126,6 @@ export async function decrypt(
   const saltBuffer = hexToArrayBuffer(encryptedData.salt);
   const ivBuffer = hexToArrayBuffer(encryptedData.iv);
   const salt = new Uint8Array(saltBuffer);
-  const iv = new Uint8Array(ivBuffer);
   const key = await deriveKey(masterKey, salt);
 
   const encryptedBuffer = hexToArrayBuffer(encryptedData.encrypted);
@@ -132,7 +133,7 @@ export async function decrypt(
   const decryptedBuffer = await crypto.subtle.decrypt(
     {
       name: ALGORITHM,
-      iv,
+      iv: ivBuffer,
     },
     key,
     encryptedBuffer
