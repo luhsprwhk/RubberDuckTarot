@@ -101,7 +101,7 @@ export async function encrypt(
   const encryptedBuffer = await crypto.subtle.encrypt(
     {
       name: ALGORITHM,
-      iv,
+      iv: iv.buffer,
     },
     key,
     data
@@ -126,7 +126,6 @@ export async function decrypt(
   const saltBuffer = hexToArrayBuffer(encryptedData.salt);
   const ivBuffer = hexToArrayBuffer(encryptedData.iv);
   const salt = new Uint8Array(saltBuffer);
-  const iv = new Uint8Array(ivBuffer);
   const key = await deriveKey(masterKey, salt);
 
   const encryptedBuffer = hexToArrayBuffer(encryptedData.encrypted);
@@ -134,7 +133,7 @@ export async function decrypt(
   const decryptedBuffer = await crypto.subtle.decrypt(
     {
       name: ALGORITHM,
-      iv,
+      iv: ivBuffer,
     },
     key,
     encryptedBuffer
