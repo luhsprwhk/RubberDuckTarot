@@ -7,43 +7,46 @@ export const useUserBlocks = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchUserBlocks = useCallback(async (userId?: string) => {
-    setLoading(true);
-    setError(null);
+  const fetchUserBlocks = useCallback(
+    async (userId?: string, includeArchived: boolean = false) => {
+      setLoading(true);
+      setError(null);
 
-    let timeoutId: NodeJS.Timeout | undefined;
+      let timeoutId: NodeJS.Timeout | undefined;
 
-    try {
-      // Create timeout promise
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        timeoutId = setTimeout(() => {
-          reject(new Error('User blocks fetch timeout'));
-        }, 8000); // 8 second timeout
-      });
+      try {
+        // Create timeout promise
+        const timeoutPromise = new Promise<never>((_, reject) => {
+          timeoutId = setTimeout(() => {
+            reject(new Error('User blocks fetch timeout'));
+          }, 8000); // 8 second timeout
+        });
 
-      // Race between actual fetch and timeout
-      const userBlocks = await Promise.race([
-        getUserBlocks(userId),
-        timeoutPromise,
-      ]);
+        // Race between actual fetch and timeout
+        const userBlocks = await Promise.race([
+          getUserBlocks(userId, includeArchived),
+          timeoutPromise,
+        ]);
 
-      if (timeoutId) clearTimeout(timeoutId);
-      setBlocks(userBlocks || []); // Always set to an array
-    } catch (err) {
-      if (timeoutId) clearTimeout(timeoutId);
-      const errorMessage =
-        err instanceof Error ? err.message : 'Failed to fetch blocks';
-      setError(errorMessage);
-      setBlocks([]); // Ensure blocks is always an array on error
-      console.error('useUserBlocks error:', errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+        if (timeoutId) clearTimeout(timeoutId);
+        setBlocks(userBlocks || []); // Always set to an array
+      } catch (err) {
+        if (timeoutId) clearTimeout(timeoutId);
+        const errorMessage =
+          err instanceof Error ? err.message : 'Failed to fetch blocks';
+        setError(errorMessage);
+        setBlocks([]); // Ensure blocks is always an array on error
+        console.error('useUserBlocks error:', errorMessage);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
   const refreshBlocks = useCallback(
-    async (userId?: string) => {
-      await fetchUserBlocks(userId);
+    async (userId?: string, includeArchived: boolean = false) => {
+      await fetchUserBlocks(userId, includeArchived);
     },
     [fetchUserBlocks]
   );

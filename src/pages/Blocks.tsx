@@ -3,7 +3,7 @@ import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import type { BlockType } from '../interfaces';
-import { Target, Plus } from 'lucide-react';
+import { Target, Plus, Archive, EyeOff } from 'lucide-react';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { useUserBlocks } from '../lib/blocks/useUserBlocks';
@@ -29,6 +29,7 @@ const Blocks: React.FC = () => {
   const error = blocksError || blockTypesError;
 
   const [initialLoading, setInitialLoading] = React.useState(true);
+  const [showArchived, setShowArchived] = React.useState(true);
 
   React.useEffect(() => {
     if (!blocksLoading && !blockTypesLoading) {
@@ -38,11 +39,11 @@ const Blocks: React.FC = () => {
 
   React.useEffect(() => {
     if (user?.id) {
-      fetchUserBlocks(user.id);
+      fetchUserBlocks(user.id, showArchived);
       refreshBlockTypes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [user?.id, showArchived]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
@@ -66,6 +67,8 @@ const Blocks: React.FC = () => {
         return 'text-green-400 bg-green-400/20';
       case 'paused':
         return 'text-yellow-400 bg-yellow-400/20';
+      case 'archived':
+        return 'text-gray-400 bg-gray-400/20';
       default:
         return 'text-accent bg-accent/20';
     }
@@ -79,7 +82,44 @@ const Blocks: React.FC = () => {
     return <ErrorState error={error} />;
   }
 
+  // Only show empty state if there are no blocks when showing all (archived + active)
+  // or if we're only showing active blocks and there are none
   if (blocks.length === 0) {
+    // If we're showing archived and have no results, show a "no archived blocks" message
+    if (showArchived) {
+      return (
+        <div className="max-w-4xl mx-auto p-6 rounded-lg min-h-screen mt-6">
+          <div className="text-center mb-8">
+            <div className="mb-4">
+              <Target className="w-16 h-16 mx-auto text-breakthrough-400" />
+            </div>
+            <h1 className="text-3xl font-bold text-primary mb-2">
+              Your Block Tracker
+            </h1>
+          </div>
+
+          <div className="flex justify-center mb-6">
+            <button
+              onClick={() => setShowArchived(!showArchived)}
+              className="inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700"
+            >
+              <EyeOff className="w-4 h-4 mr-2" />
+              Hide Archived
+            </button>
+          </div>
+
+          <div className="text-center py-12">
+            <Archive className="w-16 h-16 mx-auto text-gray-400 mb-4" />
+            <h2 className="text-xl font-semibold text-secondary mb-2">
+              No Archived Blocks
+            </h2>
+            <p className="text-accent">
+              You don't have any archived blocks yet.
+            </p>
+          </div>
+        </div>
+      );
+    }
     return <EmptyBlocksState />;
   }
 
@@ -95,6 +135,30 @@ const Blocks: React.FC = () => {
         <p className="text-accent">
           {blocks.length} block{blocks.length !== 1 ? 's' : ''} being tracked
         </p>
+      </div>
+
+      <div className="flex justify-center mb-6">
+        <button
+          onClick={() => setShowArchived(!showArchived)}
+          className={cn(
+            'inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors',
+            showArchived
+              ? 'bg-gray-600 text-white hover:bg-gray-700'
+              : 'bg-liminal-surface text-secondary hover:bg-liminal-overlay border border-liminal-border'
+          )}
+        >
+          {showArchived ? (
+            <>
+              <EyeOff className="w-4 h-4 mr-2" />
+              Hide Archived
+            </>
+          ) : (
+            <>
+              <Archive className="w-4 h-4 mr-2" />
+              Show Archived
+            </>
+          )}
+        </button>
       </div>
 
       {/* Blocks list ad */}
