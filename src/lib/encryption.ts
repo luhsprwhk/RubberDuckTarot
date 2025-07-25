@@ -76,8 +76,11 @@ function hexToArrayBuffer(hex: string): ArrayBuffer {
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
-  // Ensure we return a proper ArrayBuffer, not just a buffer view
-  return bytes.buffer.slice(0);
+  // Return a properly sized ArrayBuffer by copying the bytes
+  return bytes.buffer.slice(
+    bytes.byteOffset,
+    bytes.byteOffset + bytes.byteLength
+  );
 }
 
 /**
