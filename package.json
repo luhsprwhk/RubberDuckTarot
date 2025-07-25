@@ -20,7 +20,8 @@
     "db:studio": "drizzle-kit studio",
     "supabase:seed": "tsx supabase/seed.ts",
     "convert-gifs": "node scripts/convert-gifs.cjs",
-    "supabase:restart": "supabase stop && supabase start"
+    "supabase:restart": "supabase stop && supabase start",
+    "ci:local": "./scripts/run-ci-locally.sh"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [

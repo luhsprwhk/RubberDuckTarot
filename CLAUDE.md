@@ -68,7 +68,7 @@ This is a React + TypeScript + Vite application for a tarot card reading service
 - `src/lib/encryption.ts` - Encryption utilities with PBKDF2 key derivation
 - Encrypts user emails, names, birthdays, birth places
 - Encrypts insight contexts and readings
-- Uses 100,000 PBKDF2 iterations for key derivation
+- Uses 50,000 PBKDF2 iterations for key derivation
 
 ### Database Schema
 
