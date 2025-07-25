@@ -6,6 +6,7 @@ import OnBoarding from './pages/OnBoarding';
 import Upgrade from './pages/Upgrade';
 import Insights from './pages/Insights';
 import Blocks from './pages/Blocks';
+import ArchivedBlocks from './pages/ArchivedBlocks';
 import ProtectedRoute from './components/ProtectedRoute';
 import Pricing from './pages/Pricing';
 import Features from './pages/Features';
@@ -46,6 +47,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <Blocks />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/blocks/archived"
+      element={
+        <ProtectedRoute>
+          <ArchivedBlocks />
         </ProtectedRoute>
       }
     />

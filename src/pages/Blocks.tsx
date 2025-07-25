@@ -3,7 +3,7 @@ import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import type { BlockType } from '../interfaces';
-import { Target, Plus, Archive, EyeOff } from 'lucide-react';
+import { Target, Plus, Archive } from 'lucide-react';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { useUserBlocks } from '../lib/blocks/useUserBlocks';
@@ -20,30 +20,36 @@ const Blocks: React.FC = () => {
     fetchUserBlocks,
   } = useUserBlocks();
   const {
+    blocks: allBlocks,
+    loading: allBlocksLoading,
+    error: allBlocksError,
+    fetchUserBlocks: fetchAllUserBlocks,
+  } = useUserBlocks();
+  const {
     blockTypes,
     loading: blockTypesLoading,
     error: blockTypesError,
     refreshBlockTypes,
   } = useBlockTypes();
 
-  const error = blocksError || blockTypesError;
+  const error = blocksError || blockTypesError || allBlocksError;
 
   const [initialLoading, setInitialLoading] = React.useState(true);
-  const [showArchived, setShowArchived] = React.useState(true);
 
   React.useEffect(() => {
-    if (!blocksLoading && !blockTypesLoading) {
+    if (!blocksLoading && !blockTypesLoading && !allBlocksLoading) {
       setInitialLoading(false);
     }
-  }, [blocksLoading, blockTypesLoading]);
+  }, [blocksLoading, blockTypesLoading, allBlocksLoading]);
 
   React.useEffect(() => {
     if (user?.id) {
-      fetchUserBlocks(user.id, showArchived);
+      fetchUserBlocks(user.id, false); // Don't include archived blocks
+      fetchAllUserBlocks(user.id, true); // Get all blocks to check if any exist
       refreshBlockTypes();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, showArchived]);
+  }, [user?.id]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
@@ -82,45 +88,10 @@ const Blocks: React.FC = () => {
     return <ErrorState error={error} />;
   }
 
-  // Only show empty state if there are no blocks when showing all (archived + active)
-  // or if we're only showing active blocks and there are none
   if (blocks.length === 0) {
-    // If we're showing archived and have no results, show a "no archived blocks" message
-    if (showArchived) {
-      return (
-        <div className="max-w-4xl mx-auto p-6 rounded-lg min-h-screen mt-6">
-          <div className="text-center mb-8">
-            <div className="mb-4">
-              <Target className="w-16 h-16 mx-auto text-breakthrough-400" />
-            </div>
-            <h1 className="text-3xl font-bold text-primary mb-2">
-              Your Block Tracker
-            </h1>
-          </div>
-
-          <div className="flex justify-center mb-6">
-            <button
-              onClick={() => setShowArchived(!showArchived)}
-              className="inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors bg-gray-600 text-white hover:bg-gray-700"
-            >
-              <EyeOff className="w-4 h-4 mr-2" />
-              Hide Archived
-            </button>
-          </div>
-
-          <div className="text-center py-12">
-            <Archive className="w-16 h-16 mx-auto text-gray-400 mb-4" />
-            <h2 className="text-xl font-semibold text-secondary mb-2">
-              No Archived Blocks
-            </h2>
-            <p className="text-accent">
-              You don't have any archived blocks yet.
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return <EmptyBlocksState />;
+    // Check if user has any blocks at all (including archived)
+    const hasArchivedBlocks = allBlocks.length > 0;
+    return <EmptyBlocksState hasArchivedBlocks={hasArchivedBlocks} />;
   }
 
   return (
@@ -138,27 +109,13 @@ const Blocks: React.FC = () => {
       </div>
 
       <div className="flex justify-center mb-6">
-        <button
-          onClick={() => setShowArchived(!showArchived)}
-          className={cn(
-            'inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors',
-            showArchived
-              ? 'bg-gray-600 text-white hover:bg-gray-700'
-              : 'bg-liminal-surface text-secondary hover:bg-liminal-overlay border border-liminal-border'
-          )}
+        <Link
+          to="/blocks/archived"
+          className="inline-flex items-center px-4 py-2 rounded-lg font-medium transition-colors bg-liminal-surface text-secondary hover:bg-liminal-overlay border border-liminal-border hover:border-gray-400"
         >
-          {showArchived ? (
-            <>
-              <EyeOff className="w-4 h-4 mr-2" />
-              Hide Archived
-            </>
-          ) : (
-            <>
-              <Archive className="w-4 h-4 mr-2" />
-              Show Archived
-            </>
-          )}
-        </button>
+          <Archive className="w-4 h-4 mr-2" />
+          View Archived Blocks
+        </Link>
       </div>
 
       {/* Blocks list ad */}
@@ -228,7 +185,56 @@ const Blocks: React.FC = () => {
   );
 };
 
-const EmptyBlocksState = () => {
+const EmptyBlocksState = ({
+  hasArchivedBlocks,
+}: {
+  hasArchivedBlocks: boolean;
+}) => {
+  if (hasArchivedBlocks) {
+    // User has archived blocks but no active ones
+    return (
+      <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
+          <div className="max-w-3xl w-full mx-auto bg-surface p-8 rounded-xl border border-liminal-border shadow-lg">
+            <div className="flex flex-col items-center gap-6">
+              <div className="w-20 h-20 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 rounded-full flex items-center justify-center shadow-glow mb-2">
+                <img src={robEmoji} alt="Rob" className="w-16 h-16" />
+              </div>
+              <h2 className="text-3xl font-bold text-primary mb-2">
+                No Active Blocks
+              </h2>
+              <p className="text-secondary mb-2">
+                <strong>Rob here.</strong> Looks like you've been productive!
+                All your blocks have been archived, which means you've either
+                resolved them or moved them out of active tracking.
+              </p>
+              <p className="text-secondary mb-6 font-medium">
+                Ready to identify and tackle some new challenges?
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  to="/new-insight"
+                  className="inline-flex items-center px-8 py-3 bg-gradient-to-br from-breakthrough-400 to-breakthrough-500 text-void-900 font-semibold rounded-lg hover:bg-gradient-to-br hover:from-breakthrough-300 hover:to-breakthrough-400 transition-all transform hover:scale-105 shadow-lg"
+                >
+                  <Target className="w-5 h-5 mr-2" />
+                  Identify New Blocks
+                </Link>
+                <Link
+                  to="/blocks/archived"
+                  className="inline-flex items-center px-8 py-3 bg-liminal-surface text-secondary border border-liminal-border rounded-lg hover:bg-liminal-overlay transition-colors"
+                >
+                  <Archive className="w-5 h-5 mr-2" />
+                  View Archived Blocks
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // User has no blocks at all (first time user)
   return (
     <div className="max-w-4xl mx-auto p-6 bg-void-gradient min-h-screen">
       <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
