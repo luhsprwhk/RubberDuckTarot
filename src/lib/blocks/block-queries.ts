@@ -161,3 +161,36 @@ export const deleteUserBlock = async (blockId: number): Promise<void> => {
 
   if (error) throw error;
 };
+
+export const getArchivedUserBlocks = async (
+  userId?: string
+): Promise<UserBlock[]> => {
+  let query = supabase
+    .from('user_blocks')
+    .select('*')
+    .eq('status', 'archived') // Only fetch archived blocks
+    .order('created_at', { ascending: false });
+
+  if (userId) {
+    query = query.eq('user_id', userId);
+  } else {
+    query = query.is('user_id', null);
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+
+  // Decrypt sensitive fields for all user blocks
+  try {
+    return await Promise.all(
+      data.map((block) =>
+        decryptObject(block, ['name', 'notes', 'resolution_reflection'])
+      )
+    );
+  } catch (error) {
+    console.error('Failed to decrypt archived user blocks:', error);
+    // Return with encrypted fields if decryption fails
+    return data;
+  }
+};

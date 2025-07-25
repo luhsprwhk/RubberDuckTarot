@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import { X, Share2, Trophy } from 'lucide-react';
@@ -23,6 +23,32 @@ export const BlockResolvedModal = ({
     'celebration'
   );
   const [reflectionAnswer, setReflectionAnswer] = useState('');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Reset state when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      // Clear any pending timeouts to prevent race conditions
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+
+      // Reset to initial state
+      setCurrentStep('celebration');
+      setShowConfetti(true);
+      setReflectionAnswer('');
+    }
+  }, [isOpen]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleContinue = () => {
     setShowConfetti(false);
@@ -32,12 +58,7 @@ export const BlockResolvedModal = ({
   const handleFinish = () => {
     const reflection = reflectionAnswer.trim() || undefined;
     onClose(reflection);
-    // Reset state for next time
-    setTimeout(() => {
-      setCurrentStep('celebration');
-      setShowConfetti(true);
-      setReflectionAnswer('');
-    }, 300);
+    // State will be reset when modal reopens via useEffect
   };
 
   const handleShare = () => {
@@ -55,6 +76,15 @@ export const BlockResolvedModal = ({
     }
   };
 
+  const handleClose = () => {
+    onClose();
+    setTimeout(() => {
+      setCurrentStep('celebration');
+      setShowConfetti(true);
+      setReflectionAnswer('');
+    }, 300);
+  };
+
   return (
     <>
       {showConfetti && isOpen && (
@@ -68,7 +98,7 @@ export const BlockResolvedModal = ({
       )}
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50" onClose={() => {}}>
+        <Dialog as="div" className="relative z-50" onClose={handleClose}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

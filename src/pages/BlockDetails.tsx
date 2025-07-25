@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   getUserBlockById,
   archiveUserBlock,
+  updateUserBlockStatus,
 } from '../lib/blocks/block-queries';
 import type { UserBlock, BlockType, Insight } from '@/supabase/schema';
 import { getBlockTypeById } from '../lib/blocktypes/blocktype-queries';
@@ -16,11 +17,13 @@ import { cn } from '../lib/utils';
 import BlockRobChat from '../components/BlockRobChat';
 import { BlockResolvedModal } from '../components/BlockResolvedModal';
 import useAuth from '../lib/hooks/useAuth';
+import useAlert from '../lib/hooks/useAlert';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { showError, showSuccess } = useAlert();
   const [block, setBlock] = useState<UserBlock | null>(null);
   const [blockType, setBlockType] = useState<BlockType | null>(null);
   const [insights, setInsights] = useState<Insight[]>([]);
@@ -72,6 +75,44 @@ const BlockDetails: React.FC = () => {
         blockName: block.name,
       },
     });
+  };
+
+  const handleMarkAsResolved = async () => {
+    if (!block || !user) return;
+
+    try {
+      // First mark as resolved in database
+      await updateUserBlockStatus(block.id, 'resolved');
+
+      // Check if this will be their first block resolved
+      const newBadges = await checkAndAwardBlockBadges(user.id);
+      const isFirst = newBadges.includes('first-block-resolved');
+
+      setIsFirstBlockResolved(isFirst);
+      setBlock({ ...block, status: 'resolved' });
+      setIsSuccessModalOpen(true);
+      showSuccess('Block marked as resolved! 🎉', 'Success');
+    } catch (err) {
+      console.error('Failed to mark block as resolved:', err);
+      showError('Failed to update block status. Please try again.', 'Error');
+    }
+  };
+
+  const handleTogglePauseStatus = async () => {
+    if (!block) return;
+
+    const newStatus = block.status === 'paused' ? 'active' : 'paused';
+    const statusText = newStatus === 'paused' ? 'paused' : 'activated';
+
+    try {
+      await updateUserBlockStatus(block.id, newStatus);
+
+      setBlock({ ...block, status: newStatus });
+      showSuccess(`Block ${statusText} successfully!`, 'Success');
+    } catch (err) {
+      console.error('Failed to update block status:', err);
+      showError('Failed to update block status. Please try again.', 'Error');
+    }
   };
 
   if (loading) return <Loading text="Loading block details..." />;
@@ -144,49 +185,13 @@ const BlockDetails: React.FC = () => {
                 <button
                   className={`cursor-pointer px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
                   disabled={block.status === 'resolved'}
-                  onClick={async () => {
-                    if (!block || !user) return;
-                    try {
-                      // First mark as resolved in database
-                      await import('../lib/blocks/block-queries').then(
-                        ({ updateUserBlockStatus }) =>
-                          updateUserBlockStatus(block.id, 'resolved')
-                      );
-
-                      // Check if this will be their first block resolved
-                      const newBadges = await checkAndAwardBlockBadges(user.id);
-                      const isFirst = newBadges.includes(
-                        'first-block-resolved'
-                      );
-
-                      setIsFirstBlockResolved(isFirst);
-                      setBlock({ ...block, status: 'resolved' });
-                      setIsSuccessModalOpen(true);
-                    } catch (err) {
-                      alert('Failed to update status');
-                      console.error(err);
-                    }
-                  }}
+                  onClick={handleMarkAsResolved}
                 >
                   Mark as Resolved
                 </button>
                 <button
                   className={`cursor-pointer px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
-                  onClick={async () => {
-                    if (!block) return;
-                    const newStatus =
-                      block.status === 'paused' ? 'active' : 'paused';
-                    try {
-                      await import('../lib/blocks/block-queries').then(
-                        ({ updateUserBlockStatus }) =>
-                          updateUserBlockStatus(block.id, newStatus)
-                      );
-                      setBlock({ ...block, status: newStatus });
-                    } catch (err) {
-                      console.error(err);
-                      alert('Failed to update status.');
-                    }
-                  }}
+                  onClick={handleTogglePauseStatus}
                 >
                   {block.status === 'paused' ? 'Mark as Active' : 'Pause'}
                 </button>
@@ -299,7 +304,7 @@ const BlockDetails: React.FC = () => {
               navigate('/blocks');
             } catch (err) {
               console.error('Failed to archive block:', err);
-              alert('Failed to archive block');
+              showError('Failed to archive block. Please try again.', 'Error');
             }
           }}
           blockName={block.name}

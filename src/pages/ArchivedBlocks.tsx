@@ -1,23 +1,21 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
-import type { BlockType } from '../interfaces';
+import type { BlockType, UserBlock } from '../interfaces';
 import { Archive, ArrowLeft } from 'lucide-react';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
-import { useUserBlocks } from '../lib/blocks/useUserBlocks';
+import { getArchivedUserBlocks } from '../lib/blocks/block-queries';
 import useBlockTypes from '../lib/blocktypes/useBlockTypes';
 import { NativeContentAd } from '../components/ads/SmartAd';
 
 const ArchivedBlocks: React.FC = () => {
   const { user } = useAuth();
-  const {
-    blocks,
-    loading: blocksLoading,
-    error: blocksError,
-    fetchUserBlocks,
-  } = useUserBlocks();
+  const [archivedBlocks, setArchivedBlocks] = useState<UserBlock[]>([]);
+  const [blocksLoading, setBlocksLoading] = useState(false);
+  const [blocksError, setBlocksError] = useState<string | null>(null);
+
   const {
     blockTypes,
     loading: blockTypesLoading,
@@ -27,7 +25,7 @@ const ArchivedBlocks: React.FC = () => {
 
   const error = blocksError || blockTypesError;
 
-  const [initialLoading, setInitialLoading] = React.useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   React.useEffect(() => {
     if (!blocksLoading && !blockTypesLoading) {
@@ -35,13 +33,29 @@ const ArchivedBlocks: React.FC = () => {
     }
   }, [blocksLoading, blockTypesLoading]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    const fetchArchivedBlocks = async () => {
+      if (!user?.id) return;
+
+      setBlocksLoading(true);
+      setBlocksError(null);
+
+      try {
+        const blocks = await getArchivedUserBlocks(user.id);
+        setArchivedBlocks(blocks);
+      } catch (err) {
+        console.error('Failed to fetch archived blocks:', err);
+        setBlocksError('Failed to load archived blocks');
+      } finally {
+        setBlocksLoading(false);
+      }
+    };
+
     if (user?.id) {
-      fetchUserBlocks(user.id, true); // Always include archived blocks
+      fetchArchivedBlocks();
       refreshBlockTypes();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id]);
+  }, [user?.id, refreshBlockTypes]);
 
   const getBlockTypeName = (blockTypeId: string): string => {
     const blockType = blockTypes.find((bt: BlockType) => bt.id === blockTypeId);
@@ -71,9 +85,6 @@ const ArchivedBlocks: React.FC = () => {
         return 'text-accent bg-accent/20';
     }
   };
-
-  // Filter to only show archived blocks
-  const archivedBlocks = blocks.filter((block) => block.status === 'archived');
 
   if (initialLoading) {
     return <Loading text="Loading archived blocks..." />;

@@ -103,7 +103,7 @@ export const checkAndAwardBlockBadges = async (
     // Count resolved blocks for this user
     const { count: resolvedCount, error: countError } = await supabase
       .from('user_blocks')
-      .select('*', { count: 'exact', head: true })
+      .select('id', { count: 'exact', head: true })
       .eq('user_id', userId)
       .eq('status', 'resolved');
 
