@@ -2,12 +2,16 @@ import React, { useState, useCallback } from 'react';
 import type { InsightContextType } from './InsightContext';
 import { InsightContext } from './InsightContext';
 import type { Insight } from '../../interfaces';
-import { getUserInsights } from './insight-queries';
+import { getUserInsightsWithBlocks } from './insight-queries';
 
 const InsightProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [insights, setInsights] = useState<Insight[]>([]);
+  const [insights, setInsights] = useState<
+    (Insight & {
+      associatedBlock?: { id: number; name: string; status: string };
+    })[]
+  >([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -15,7 +19,7 @@ const InsightProvider: React.FC<{ children: React.ReactNode }> = ({
     setLoading(true);
     setError(null);
     try {
-      const data = await getUserInsights(userId);
+      const data = await getUserInsightsWithBlocks(userId);
       setInsights(Array.isArray(data) ? data : []);
     } catch {
       setError('Failed to fetch insights');

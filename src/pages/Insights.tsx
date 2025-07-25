@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../lib/hooks/useAuth';
 import useCards from '../lib/cards/useCards';
 import type { BlockType } from '../interfaces';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, CheckCircle2, Archive, Clock } from 'lucide-react';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { useInsights } from '../lib/insights/useInsights';
@@ -55,6 +55,35 @@ const Insights: React.FC = () => {
     return blockType ? `${blockType.emoji} ${blockType.name}` : blockTypeId;
   };
 
+  // Helper function to get block status indicator
+  const getBlockStatusIndicator = (status: string) => {
+    switch (status) {
+      case 'resolved':
+        return {
+          icon: CheckCircle2,
+          color: 'text-green-400 bg-green-400/20',
+          label: '🏆 Resolved',
+          message: 'This insight helped you resolve a block!',
+        };
+      case 'archived':
+        return {
+          icon: Archive,
+          color: 'text-gray-400 bg-gray-400/20',
+          label: '📦 Archived',
+          message: 'From archived block',
+        };
+      case 'paused':
+        return {
+          icon: Clock,
+          color: 'text-yellow-400 bg-yellow-400/20',
+          label: '⏸️ Paused',
+          message: 'From paused block',
+        };
+      default:
+        return null;
+    }
+  };
+
   if (initialLoading) {
     return <Loading text="Loading your insights..." />;
   }
@@ -84,6 +113,10 @@ const Insights: React.FC = () => {
 
       <div className={`space-y-6 p-6 ${insightPanelClass}`}>
         {insights.map((insight) => {
+          const blockStatus = insight.associatedBlock
+            ? getBlockStatusIndicator(insight.associatedBlock.status)
+            : null;
+
           return (
             <div
               key={insight.id}
@@ -96,6 +129,26 @@ const Insights: React.FC = () => {
                     createdAt={insight.created_at}
                     onView={() => navigate(`/insights/${insight.id}`)}
                   />
+
+                  {/* Block status indicator */}
+                  {blockStatus && (
+                    <div className="flex items-center gap-2 mb-2">
+                      <span
+                        className={`text-xs font-medium px-2 py-1 rounded ${blockStatus.color}`}
+                      >
+                        {blockStatus.label}
+                      </span>
+                      <span className="text-xs text-accent">
+                        {blockStatus.message}
+                      </span>
+                      {insight.associatedBlock && (
+                        <span className="text-xs text-secondary">
+                          • {insight.associatedBlock.name}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   <h3 className="text-lg font-semibold text-secondary mb-1">
                     {getBlockTypeName(insight.block_type_id)}
                   </h3>
