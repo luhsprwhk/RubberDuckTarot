@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { cn } from '@/src/lib/utils';
 import { type BlockType } from '@/src/interfaces';
 import type { UserBlock } from '@/supabase/schema';
@@ -224,13 +225,21 @@ const BlockTypeSelector: React.FC<{
               </div>
             </button>
           </div>
-          <button
-            type="button"
-            className="mt-2 px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
-            onClick={onUnlock}
-          >
-            Pick a different block type
-          </button>
+          <div className="flex gap-2 mt-2">
+            <button
+              type="button"
+              className="px-4 py-2 rounded border border-default text-sm text-secondary hover:bg-default transition-colors"
+              onClick={onUnlock}
+            >
+              Pick a different block type
+            </button>
+            <Link
+              to="/blocks/discover"
+              className="px-4 py-2 rounded border border-breakthrough-400 text-sm text-breakthrough-400 hover:bg-breakthrough-400 hover:text-white transition-colors"
+            >
+              Discover Block
+            </Link>
+          </div>
         </>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

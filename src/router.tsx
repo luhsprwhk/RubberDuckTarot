@@ -17,6 +17,7 @@ import NewInsight from './pages/NewInsight';
 import Cards from './pages/Cards';
 import CardDetail from './pages/CardDetail';
 import BlockDetails from './pages/BlockDetails';
+import BlockSurfacer from './pages/BlockSurfacer';
 import NotionCallback from './pages/NotionCallback';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -63,6 +64,14 @@ const AppRoutes = () => (
       element={
         <ProtectedRoute>
           <BlockDetails />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/blocks/discover"
+      element={
+        <ProtectedRoute>
+          <BlockSurfacer />
         </ProtectedRoute>
       }
     />
