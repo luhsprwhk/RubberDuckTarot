@@ -167,3 +167,84 @@ export const getInsightsByUser = async (userId: string): Promise<Insight[]> => {
     return data;
   }
 };
+
+// Enhanced function to get insights with their associated block information
+export const getUserInsightsWithBlocks = async (
+  userId?: string
+): Promise<
+  (Insight & {
+    associatedBlock?: { id: number; name: string; status: string };
+  })[]
+> => {
+  // First, fetch all insights
+  const insights = await getUserInsights(userId);
+
+  // Get unique block IDs from insights that have them
+  const blockIds = [
+    ...new Set(
+      insights
+        .filter(
+          (insight) =>
+            insight.user_block_id !== null &&
+            insight.user_block_id !== undefined
+        )
+        .map((insight) => insight.user_block_id)
+    ),
+  ];
+
+  // If no blocks to fetch, return insights as-is
+  if (blockIds.length === 0) {
+    return insights.map((insight) => ({
+      ...insight,
+      associatedBlock: undefined,
+    }));
+  }
+
+  // Fetch associated blocks with proper decryption
+  const { data: blocksData, error: blocksError } = await supabase
+    .from('user_blocks')
+    .select('id, name, status')
+    .in('id', blockIds);
+
+  if (blocksError) {
+    console.error('Failed to fetch associated blocks:', blocksError);
+    // Return insights without block data if block fetch fails
+    return insights.map((insight) => ({
+      ...insight,
+      associatedBlock: undefined,
+    }));
+  }
+
+  // Decrypt the block names
+  let blocks;
+  try {
+    blocks = await Promise.all(
+      blocksData.map((block) => decryptObject(block, ['name']))
+    );
+  } catch (error) {
+    console.error('Failed to decrypt block names:', error);
+    // Return with encrypted names if decryption fails
+    blocks = blocksData;
+  }
+
+  // Create a map of block ID to block data for quick lookup
+  const blockMap = new Map(blocks.map((block) => [block.id, block]));
+
+  // Combine insights with their associated block data
+  return insights.map((insight) => {
+    const result: Insight & {
+      associatedBlock?: { id: number; name: string; status: string };
+    } = { ...insight };
+
+    if (insight.user_block_id && blockMap.has(insight.user_block_id)) {
+      const block = blockMap.get(insight.user_block_id)!;
+      result.associatedBlock = {
+        id: block.id,
+        name: block.name,
+        status: block.status,
+      };
+    }
+
+    return result;
+  });
+};

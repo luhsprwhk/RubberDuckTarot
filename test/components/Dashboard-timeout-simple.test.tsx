@@ -45,6 +45,7 @@ const mockUser = {
   id: 'test-user-id',
   created_at: new Date(),
   preferences: null,
+  badges: [],
   email: 'test@example.com',
   premium: false,
   auth_uid: 'test-auth-uid',

@@ -65,6 +65,7 @@ export const users = pgTable('users', {
     favorite_block_types?: string[];
     reading_history_enabled?: boolean;
   }>(),
+  badges: jsonb('badges').$type<string[]>().default([]),
   email: text('email').notNull().unique(),
   premium: boolean('premium').notNull().default(false),
   auth_uid: text('auth_uid').notNull().unique(),
@@ -99,8 +100,9 @@ export const userBlocks = pgTable('user_blocks', {
   user_id: text('user_id'),
   block_type_id: text('block_type_id').notNull(),
   name: text('name').notNull(),
-  status: text('status').notNull().default('active'), // 'active', 'resolved', 'paused'
+  status: text('status').notNull().default('active'), // 'active', 'resolved', 'paused', 'archived'
   notes: text('notes'),
+  resolution_reflection: text('resolution_reflection'), // User's reflection on what helped them breakthrough
   created_at: timestamp('created_at', { withTimezone: true })
     .notNull()
     .defaultNow(),

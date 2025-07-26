@@ -286,6 +286,7 @@ const CreateInsight: React.FC = () => {
               ),
               status: 'active',
               notes: null,
+              resolution_reflection: null,
             };
 
             const userBlock = await createUserBlock(userBlockPayload);

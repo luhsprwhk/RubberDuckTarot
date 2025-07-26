@@ -69,6 +69,7 @@ describe('generateBlockChat', () => {
       name: 'Creative Writing Block',
       status: 'active',
       notes: 'Struggling to find inspiration for new stories',
+      resolution_reflection: null,
       created_at: new Date('2024-01-01'),
       updated_at: new Date('2024-01-02'),
     };

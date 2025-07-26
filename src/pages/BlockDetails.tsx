@@ -1,25 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { getUserBlockById } from '../lib/blocks/block-queries';
+import {
+  getUserBlockById,
+  archiveUserBlock,
+  updateUserBlockStatus,
+} from '../lib/blocks/block-queries';
 import type { UserBlock, BlockType, Insight } from '@/supabase/schema';
 import { getBlockTypeById } from '../lib/blocktypes/blocktype-queries';
 import { getInsightsByUserBlockId } from '../lib/insights/insight-queries';
+import { checkAndAwardBlockBadges } from '../lib/user/badges';
 import Loading from '../components/Loading';
 import ErrorState from '../components/ErrorState';
 import { Plus, Lightbulb, Calendar } from 'lucide-react';
 import { FaComments } from 'react-icons/fa';
 import { cn } from '../lib/utils';
 import BlockRobChat from '../components/BlockRobChat';
+import { BlockResolvedModal } from '../components/BlockResolvedModal';
+import useAuth from '../lib/hooks/useAuth';
+import useAlert from '../lib/hooks/useAlert';
 
 const BlockDetails: React.FC = () => {
   const { blockId } = useParams<{ blockId: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { showError, showSuccess } = useAlert();
   const [block, setBlock] = useState<UserBlock | null>(null);
   const [blockType, setBlockType] = useState<BlockType | null>(null);
   const [insights, setInsights] = useState<Insight[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [isFirstBlockResolved, setIsFirstBlockResolved] = useState(false);
 
   useEffect(() => {
     const fetchBlockData = async () => {
@@ -65,6 +77,44 @@ const BlockDetails: React.FC = () => {
     });
   };
 
+  const handleMarkAsResolved = async () => {
+    if (!block || !user) return;
+
+    try {
+      // First mark as resolved in database
+      await updateUserBlockStatus(block.id, 'resolved');
+
+      // Check if this will be their first block resolved
+      const newBadges = await checkAndAwardBlockBadges(user.id);
+      const isFirst = newBadges.includes('first-block-resolved');
+
+      setIsFirstBlockResolved(isFirst);
+      setBlock({ ...block, status: 'resolved' });
+      setIsSuccessModalOpen(true);
+      showSuccess('Block marked as resolved! 🎉', 'Success');
+    } catch (err) {
+      console.error('Failed to mark block as resolved:', err);
+      showError('Failed to update block status. Please try again.', 'Error');
+    }
+  };
+
+  const handleTogglePauseStatus = async () => {
+    if (!block) return;
+
+    const newStatus = block.status === 'paused' ? 'active' : 'paused';
+    const statusText = newStatus === 'paused' ? 'paused' : 'activated';
+
+    try {
+      await updateUserBlockStatus(block.id, newStatus);
+
+      setBlock({ ...block, status: newStatus });
+      showSuccess(`Block ${statusText} successfully!`, 'Success');
+    } catch (err) {
+      console.error('Failed to update block status:', err);
+      showError('Failed to update block status. Please try again.', 'Error');
+    }
+  };
+
   if (loading) return <Loading text="Loading block details..." />;
   if (error) return <ErrorState error={error} />;
   if (!block)
@@ -90,31 +140,35 @@ const BlockDetails: React.FC = () => {
               : block.block_type_id}
           </h1>
           <div className="flex gap-2">
-            <button
-              onClick={handleNewInsight}
-              className={cn(
-                'cursor-pointer bg-breakthrough-400 text-void-900',
-                'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
-                'transition-colors duration-200 flex items-center gap-2 text-xs',
-                block.status === 'resolved'
-                  ? 'opacity-60 cursor-not-allowed'
-                  : ''
-              )}
-            >
-              <Plus className="w-4 h-4 " />
-              New Insight
-            </button>
-            <button
-              onClick={() => setIsChatOpen(true)}
-              className={cn(
-                'cursor-pointer bg-breakthrough-400 text-void-900',
-                'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
-                'transition-colors duration-200 text-xs flex items-center gap-2'
-              )}
-            >
-              <FaComments className="w-4 h-4" />
-              Chat with Rob
-            </button>
+            {block.status !== 'archived' && (
+              <>
+                <button
+                  onClick={handleNewInsight}
+                  className={cn(
+                    'cursor-pointer bg-breakthrough-400 text-void-900',
+                    'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
+                    'transition-colors duration-200 flex items-center gap-2 text-xs',
+                    block.status === 'resolved'
+                      ? 'opacity-60 cursor-not-allowed'
+                      : ''
+                  )}
+                >
+                  <Plus className="w-4 h-4 " />
+                  New Insight
+                </button>
+                <button
+                  onClick={() => setIsChatOpen(true)}
+                  className={cn(
+                    'cursor-pointer bg-breakthrough-400 text-void-900',
+                    'px-4 py-2 rounded-lg font-medium hover:bg-breakthrough-300',
+                    'transition-colors duration-200 text-xs flex items-center gap-2'
+                  )}
+                >
+                  <FaComments className="w-4 h-4" />
+                  Chat with Rob
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -126,45 +180,23 @@ const BlockDetails: React.FC = () => {
           <span className="font-semibold text-secondary">Status:</span>{' '}
           <span className="text-primary">{block.status}</span>
           <div className="flex gap-2 mt-2">
-            <button
-              className={`cursor-pointer px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
-              disabled={block.status === 'resolved'}
-              onClick={async () => {
-                if (!block) return;
-                try {
-                  await import('../lib/blocks/block-queries').then(
-                    ({ updateUserBlockStatus }) =>
-                      updateUserBlockStatus(block.id, 'resolved')
-                  );
-                  setBlock({ ...block, status: 'resolved' });
-                } catch (err) {
-                  alert('Failed to update status');
-                  console.error(err);
-                }
-              }}
-            >
-              Mark as Resolved
-            </button>
-            <button
-              className={`cursor-pointer px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
-              onClick={async () => {
-                if (!block) return;
-                const newStatus =
-                  block.status === 'paused' ? 'active' : 'paused';
-                try {
-                  await import('../lib/blocks/block-queries').then(
-                    ({ updateUserBlockStatus }) =>
-                      updateUserBlockStatus(block.id, newStatus)
-                  );
-                  setBlock({ ...block, status: newStatus });
-                } catch (err) {
-                  console.error(err);
-                  alert('Failed to update status.');
-                }
-              }}
-            >
-              {block.status === 'paused' ? 'Mark as Active' : 'Pause'}
-            </button>
+            {block.status !== 'archived' && (
+              <>
+                <button
+                  className={`cursor-pointer px-3 py-1 rounded bg-breakthrough-400 text-void-900 text-xs font-semibold hover:bg-breakthrough-300 transition-colors ${block.status === 'resolved' ? 'opacity-60 cursor-not-allowed' : ''}`}
+                  disabled={block.status === 'resolved'}
+                  onClick={handleMarkAsResolved}
+                >
+                  Mark as Resolved
+                </button>
+                <button
+                  className={`cursor-pointer px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${block.status === 'paused' ? 'bg-green-500 hover:bg-green-600' : 'bg-yellow-500 hover:bg-yellow-600'}`}
+                  onClick={handleTogglePauseStatus}
+                >
+                  {block.status === 'paused' ? 'Mark as Active' : 'Pause'}
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -255,6 +287,30 @@ const BlockDetails: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* Block Resolved Success Modal */}
+      {block && (
+        <BlockResolvedModal
+          isOpen={isSuccessModalOpen}
+          onClose={async (reflection?: string) => {
+            if (!block) return;
+
+            try {
+              // Archive the block with optional reflection
+              await archiveUserBlock(block.id, reflection);
+
+              // Close modal and navigate back to blocks list
+              setIsSuccessModalOpen(false);
+              navigate('/blocks');
+            } catch (err) {
+              console.error('Failed to archive block:', err);
+              showError('Failed to archive block. Please try again.', 'Error');
+            }
+          }}
+          blockName={block.name}
+          isFirstBlockResolved={isFirstBlockResolved}
+        />
+      )}
 
       {/* Block Chat Component */}
       {block && blockType && (
