@@ -206,7 +206,10 @@ describe('BlockResolvedModal', () => {
     });
 
     it('should fallback to clipboard when navigator.share is not available', async () => {
-      navigator.share = undefined;
+      Object.defineProperty(navigator, 'share', {
+        writable: true,
+        value: undefined,
+      });
 
       render(
         <BlockResolvedModal
